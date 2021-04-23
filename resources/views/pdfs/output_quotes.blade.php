@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Pedido: {{ $model->id }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
+	<title>Cotización: {{ $model->id }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
 	<link rel="stylesheet" href="./css/order_pdf.css">
 </head>
 <body>
