@@ -78,9 +78,9 @@
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
   'montserrat' => array(
-    'normal' => $fontDir . '/montserrat-normal_99765fdb334a0a22a804b94acf422542',
+    'normal' => $fontDir . '/montserrat-normal_95631f121df281371204da95a2043b71',
   ),
   'roboto' => array(
-    'normal' => $fontDir . '/roboto-normal_cf99a9d56c411ce3fa8a2fc49c520e74',
+    'normal' => $fontDir . '/roboto-normal_fb1c39737fd1d39aafe418d6240e4770',
   ),
 ) ?>

@@ -42,7 +42,7 @@ class CreateOrdersTable extends Migration
             $table->dateTime('invoiced_at')->nullable();
             $table->dateTime('sent_at')->nullable();
             $table->dateTime('canceled_at')->nullable();
-            $table->string('status_id');
+            $table->string('status');
             $table->boolean('with_tax');
             $table->decimal('gross_value', 12,2);
             $table->decimal('discount', 12,2);

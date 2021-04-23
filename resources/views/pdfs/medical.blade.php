@@ -82,18 +82,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($model->details as $key => $detail)
-				<tr>
-					<td class="border center">{{ $key + 1 }}</td>
-					<td class="border">
-						<div><strong>{{ $detail->product->name }}</strong></div>
-						@if(trim($detail->product->model)!="")
-					</td>
-					<td class="border center">{{ $detail->quantity }}</td>
-					<td class="border center">{{ $detail->price }}</td>
-					<td class="border center">{{ $detail->total }}</td>
-				</tr>
-				@endforeach
 			</tbody>
 		</table>
 		<table class="table-total">

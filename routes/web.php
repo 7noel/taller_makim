@@ -109,7 +109,7 @@ Route::group(['prefix'=>'storage', 'middleware'=>['auth', 'permissions'], 'names
 
 Route::group(['prefix'=>'humanresources', 'middleware'=>['auth', 'permissions']], function(){
 	Route::resource('employees','Finances\CompanyController');
-	Route::resource('jobs','Base\TableController');
+	Route::resource('jobs','Admin\TableController');
 });
 
 Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Operations'], function(){
