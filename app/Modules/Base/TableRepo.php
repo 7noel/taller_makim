@@ -21,8 +21,9 @@ class TableRepo extends BaseRepo{
 
 	public function getListType($type, $campo='name', $id='id')
 	{
-		dd(session('my_company'));
-		return Table::where('my_company', session('my_company')->id)->where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
+		//dd(session('my_company'));
+		// return Table::where('my_company', session('my_company')->id)->where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
+		return Table::where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
 	}
 
 	public function getListGroupType($type, $group, $config=1, $campo='name', $id='id')
