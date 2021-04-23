@@ -1,0 +1,140 @@
+<?php namespace App\Http\Controllers\Storage;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+use App\Modules\Base\TableRepo;
+use App\Modules\Storage\ProductRepo;
+use App\Modules\Storage\StockRepo;
+use App\Modules\Storage\Product;
+use App\Modules\Storage\MoveRepo;
+use App\Modules\Storage\WarehouseRepo;
+
+use App\Http\Requests\Logistics\FormProductRequest;
+
+class ProductsController extends Controller {
+
+	protected $repo;
+	protected $stockRepo;
+	protected $tableRepo;
+	protected $moveRepo;
+	protected $warehouseRepo;
+
+	public function __construct(ProductRepo $repo, StockRepo $stockRepo, TableRepo $tableRepo, MoveRepo $moveRepo, WarehouseRepo $warehouseRepo) {
+		$this->repo = $repo;
+		$this->stockRepo = $stockRepo;
+		$this->tableRepo = $tableRepo;
+		$this->moveRepo = $moveRepo;
+		$this->warehouseRepo = $warehouseRepo;
+	}
+
+	public function index()
+	{
+		$models = $this->repo->index('name', \Request::get('name'));
+		return view('partials.index',compact('models'));
+	}
+
+	public function create()
+	{
+		$warehouses = $this->warehouseRepo->all();
+		$sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
+		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
+		$brands = $this->tableRepo->getListType('brands', 'name', 'name');
+		
+		return view('partials.create', compact('sub_categories', 'units', 'brands', 'warehouses'));
+	}
+
+	public function store(FormProductRequest $request)
+	{
+		$this->repo->save(\Request::all());
+		return \Redirect::route('products.index');
+	}
+
+	public function show($id)
+	{
+		$warehouses = $this->warehouseRepo->all();
+		$model = $this->repo->findOrFail($id);
+		$sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
+		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
+		$brands = $this->tableRepo->getListType('brands', 'name', 'name');
+		return view('partials.show', compact('model', 'sub_categories', 'units', 'brands', 'warehouses'));
+	}
+
+	public function edit($id)
+	{
+		$warehouses = $this->warehouseRepo->all();
+		$model = $this->repo->findOrFail($id);
+		$sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
+		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
+		$brands = $this->tableRepo->getListType('brands', 'name', 'name');
+		return view('partials.edit', compact('model', 'sub_categories', 'units', 'brands', 'warehouses'));
+	}
+
+	public function update($id, FormProductRequest $request)
+	{
+		$data = $request->all();
+		$data['id']=$id;
+		$data = $this->repo->prepareData($data);
+		$this->repo->save($data,$id);
+		//dd($data);
+		return \Redirect::route('products.index');
+	}
+
+	public function destroy($id)
+	{
+		$model = $this->repo->destroy($id);
+		if (\Request::ajax()) {	return $model; }
+		return redirect()->route('products.index');
+	}
+
+	public function ajaxAutocomplete()
+	{
+		$term = request()->get('term');
+		ini_set('memory_limit','1024M');
+		$models = $this->repo->autocomplete($term);
+		$result=[];
+		foreach ($models as $model) {
+			$result[]=[
+				'value' => $model->name,
+				'id' => $model,
+				'label' => $model->intern_code.'  '.$model->name
+			];
+		}
+		return \Response::json($result);
+	}
+
+	public function ajaxAutocomplete2($warehouse_id = 1)
+	{
+		$term = request()->get('term');
+		ini_set('memory_limit','1024M');
+		$models = $this->stockRepo->autocomplete($warehouse_id, $term);
+		// dd($models);
+		$result=[];
+		foreach ($models as $model) {
+			$result[]=[
+				'value' => $model->product->name,
+				'id' => $model,
+				'label' => $model->product->intern_code.' | '.$model->product->name
+			];
+		}
+		return \Response::json($result);
+	}
+	public function ajaxGetData($warehouse_id, $product_id)
+	{
+		$term = request()->get('term');
+		$result = $this->repo->ajaxGetData($warehouse_id,$product_id);
+		return \Response::json($result);
+	}
+	public function ajaxGetById($id)
+	{
+		$result = $this->repo->getById($id);
+		return \Response::json($result);
+	}
+	public function kardex($id)
+	{
+		$models = $this->moveRepo->kardex($id);
+		// dd($models);
+		return view('storage.products.kardex', compact('models'));
+	}
+}
