@@ -337,14 +337,14 @@ class ComposerServiceProvider extends ServiceProvider
                 'edit.delete'=>'Eliminar Cotización',
             ],
             'output_orders' => [
-                'index'=>'Pedidos',
-                'index.create'=>'Crear Pedido',
-                'create'=>'Nuevo Pedido',
-                'create.create'=>'Crear Pedido',
-                'show'=>'Vizualizando Pedido:',
-                'edit'=>'Editar Pedido: ',
-                'edit.update'=>'Actualizar Pedido',
-                'edit.delete'=>'Eliminar Pedido',
+                'index'=>'Ordenes de Trabajo',
+                'index.create'=>'Crear Orden de Trabajo',
+                'create'=>'Nueva Orden de Trabajo',
+                'create.create'=>'Crear Orden de Trabajo',
+                'show'=>'Vizualizando Orden de Trabajo:',
+                'edit'=>'Editar Orden de Trabajo: ',
+                'edit.update'=>'Actualizar Orden de Trabajo',
+                'edit.delete'=>'Eliminar Orden de Trabajo',
             ],
 
             'input_quotes' => [

@@ -47,12 +47,6 @@
 	<div class="col-sm-2">
 		{!! Field::date('birth', ['label' => 'Nacimiento', 'class'=>'form-control-sm']) !!}
 	</div>
-	<div class="col-sm-2">
-		{!! Field::text('bank_bcp', ['label' => 'Banco Bcp', 'class'=>'form-control-sm']) !!}
-	</div>
-	<div class="col-sm-2">
-		{!! Field::text('bank_other', ['label' => 'Otro Banco', 'class'=>'form-control-sm']) !!}
-	</div>
 </div>
 
 @isset($model)

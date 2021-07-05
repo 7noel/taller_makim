@@ -25,8 +25,6 @@ class BrandRepo extends BaseRepo{
 	}
 	public function save($data, $id=0){
 		$data = $this->prepareData($data);
-		//dd($data);
-		$colorRepo= new ColorRepo;
 		$modeloRepo= new ModeloRepo;
 		$model = parent::save($data, $id);
 		if (isset($data['modelos'])) {

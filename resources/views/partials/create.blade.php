@@ -29,6 +29,6 @@
 
 @section('scripts')
 
-
+@include( $views['scripts'] )
 
 @endsection

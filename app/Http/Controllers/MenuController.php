@@ -69,9 +69,9 @@ class MenuController extends Controller
                 ['name' => 'Tipo de Cambio', 'route' => 'exchanges.index'],
                 ['name' => 'Control de Documentos', 'route' => 'document_controls.index'],
             ],
-            'Ventas'=>[
+            'Taller'=>[
                 ['name' => 'Cotizaciones', 'route' => 'output_quotes.index'],
-                ['name' => 'Pedidos', 'route' => 'output_orders.index'],
+                ['name' => 'Ordenes', 'route' => 'output_orders.index'],
                 ['name' => 'Facturación', 'route' => 'output_vouchers.index'],
                 ['name' => 'Marcas', 'route' => 'brands.index', 'div' => '1'],
                 ['name' => 'Vehículos', 'route' => 'cars.index'],

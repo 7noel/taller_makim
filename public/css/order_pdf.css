@@ -57,3 +57,10 @@ body{
 .table-total{
 	font-size: 15px;
 }
+
+.item-left{
+	float: left;
+}
+.header{
+	margin: 20px 0;
+}

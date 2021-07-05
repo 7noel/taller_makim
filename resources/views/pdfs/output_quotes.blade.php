@@ -6,7 +6,18 @@
 	<link rel="stylesheet" href="./css/order_pdf.css">
 </head>
 <body>
-	<h1 class="center">COTIZACION: {{ str_pad($model->id, 3, '0', STR_PAD_LEFT) }} - {{ $model->created_at->formatLocalized('%Y') }}</h1>
+	<div class="header">
+		<div class="item-left">
+			
+			<img src="./img/logo_makim_doc.jpg" alt="" width="180px">
+		</div>
+		<div>
+			<h1 class="center">
+				COTIZACION: {{ str_pad($model->id, 3, '0', STR_PAD_LEFT) }} - {{ $model->created_at->formatLocalized('%Y') }}
+			</h1>
+			
+		</div>
+	</div>
 	<div>
 		<div>
 			<strong class="label">Señor(a):</strong>{{ $model->company->company_name }}
@@ -18,10 +29,13 @@
 			<strong class="label">Dirección:</strong>{{ $model->company->address . ' ' . $model->company->ubigeo->departamento . '-' . $model->company->ubigeo->provincia . '-' . $model->company->ubigeo->distrito }}
 		</div>
 		<div>
-			<strong class="label">Condiciones:</strong>{{ $model->payment_condition_id }}
+			<strong class="label">Condiciones:</strong>{{ config('options.payment_conditions.'.$model->payment_condition_id) }}
 		</div>
 		<div>
-			<strong class="label">Asesor:</strong>{{ $model->seller_id.' '.$model->seller->full_name }}
+			<strong class="label">Asesor:</strong>{{ '('.$model->seller_id.') '.$model->seller->company_name }}
+		</div>
+		<div>
+			<strong class="label">F. de emisión:</strong>{{ $model->created_at->format('d/m/Y') }}
 		</div>
 		@if(trim($model->comment)!="")
 		<div>
@@ -52,28 +66,13 @@
 				@endforeach
 			</tbody> 
 		</table>
+
+		<br>
 		<table class="table-total">
 			<tbody>
-				<tr>
-					<td class="th1"></td>
-					<td class="th2"></td>
-					<td class="th3"></td>
-					<td class="th4 border right">SubTot.:</td>
-					<td class="th5 border center">{{ $model->subtotal }}</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td class="border right">IGV:</td>
-					<td class="border center">{{ $model->tax }}</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td class="border right">Total:</td>
-					<td class="border center">{{ $model->total }}</td>
+					<td class="left">SUB TOTAL {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->subtotal }}</td>
+					<td class="left">IGV (18%) {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->tax }}</td>
+					<td class="left">TOTAL {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total }}</td>
 				</tr>
 			</tbody>
 		</table>

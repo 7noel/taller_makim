@@ -36,7 +36,7 @@
 		{!! Field::text('year', ['label' => 'Año', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::date('f_revision', ['label' => 'Rev_Tecnica', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::date('f_revision', ['label' => 'Pro_Rev_T', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
 	<div class="col-sm-2">
 		<div class="custom-control custom-checkbox">
