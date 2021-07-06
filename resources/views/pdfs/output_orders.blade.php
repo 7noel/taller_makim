@@ -13,7 +13,7 @@
 		</div>
 		<div>
 			<h1 class="center">
-				PRE-LIQUIDACIÓN: {{ str_pad($model->id, 3, '0', STR_PAD_LEFT) }} - {{ $model->created_at->formatLocalized('%Y') }}
+				PRE-LIQUIDACIÓN: {{ str_pad($model->sn, 3, '0', STR_PAD_LEFT) }} - {{ $model->created_at->formatLocalized('%Y') }}
 			</h1>
 			
 		</div>

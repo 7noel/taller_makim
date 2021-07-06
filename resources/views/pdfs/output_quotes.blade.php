@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<link rel="icon" type="image/jpeg" href="./img/logo_makim_01.jpg" />
+
 	<title>Cotización: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
 	<link rel="stylesheet" href="./css/order_pdf.css">
 </head>
@@ -13,7 +15,7 @@
 		</div>
 		<div>
 			<h1 class="center">
-				COTIZACION: {{ str_pad($model->id, 3, '0', STR_PAD_LEFT) }} - {{ $model->created_at->formatLocalized('%Y') }}
+				COTIZACION: {{ str_pad($model->sn, 3, '0', STR_PAD_LEFT) }} - {{ $model->created_at->formatLocalized('%Y') }}
 			</h1>
 			
 		</div>
