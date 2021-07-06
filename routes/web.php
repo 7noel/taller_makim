@@ -117,7 +117,7 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::resource('cars','CarsController');
 	Route::get('cars/create_by_client/{client_id}', ['as' => 'cars.create_by_client', 'uses' => 'CarsController@createByClient']);
 
-	Route::get('input_orders/by_quote/{order_id}', ['as' => 'orders.by_quote', 'uses' => 'OrdersController@byQuote']);
+	Route::get('output_orders/by_quote/{order_id}', ['as' => 'orders.by_quote', 'uses' => 'OrdersController@byQuote']);
 	// Route::get('quotes/filter', ['as' => 'quotes.filter','uses' => 'OrdersController@filter']);
 	// Route::post('quotes/filter', ['as' => 'quotes.filter','uses' => 'OrdersController@filter']);
 	// Route::get('orders/filter', ['as' => 'orders.filter','uses' => 'OrdersController@filter']);

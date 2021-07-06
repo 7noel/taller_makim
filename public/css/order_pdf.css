@@ -17,10 +17,6 @@ body{
 	font-size: 22px;
 	font-weight: bold;
 }
-.label{
-	display: inline-block;
-	width: 15%;
-}
 .border{
 	border: solid 1px black;
 }
@@ -38,29 +34,20 @@ body{
 	border-collapse:collapse;
 	border: none;
 }
-.th1{
-	width: 8%;
-}
-.th2{
-	width: 60%;
-}
-.th3{
-	width: 8%;
-}
-.th4{
-	width: 12%;
-}
-.th5{
-	width: 12%;
-}
-
 .table-total{
 	font-size: 15px;
 }
-
 .item-left{
 	float: left;
 }
-.header{
-	margin: 20px 0;
+.label{
+	display: inline-block;
+	width: 15%;
+}
+.data-header{
+	display: inline-block;
+}
+.data-header-1{
+	display: inline-block;
+	width: 30%;
 }

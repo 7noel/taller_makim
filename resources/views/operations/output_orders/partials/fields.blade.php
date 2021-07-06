@@ -1,6 +1,8 @@
 {!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
-{!! Form::hidden('with_tax', 0, ['id'=>'with_tax']) !!}
+{!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
 {!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
+{!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
+{!! Form::hidden('sn', null, ['id'=>'sn']) !!}
 <div class="form-row">
 	<div class="col-md-1 col-sm-2">
 		{!! Form::label('sn', 'Nro') !!}
@@ -16,16 +18,18 @@
 		{!! Form::label('quote_sn', 'Cotiz') !!}
 		{!! Form::text('quote_sn', $quote->sn, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
 	</div>
-	<div class="col-md-2 col-sm-4">
-		{!! Field::text('txtCompany', ((isset($model->company_id)) ? $model->company->company_name : null), ['label' => 'Cliente', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
-	</div>
-	@else
-	<div class="col-md-3 col-sm-4">
-		{!! Field::text('txtCompany', ((isset($model->company_id)) ? $model->company->company_name : null), ['label' => 'Cliente', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
-	</div>
 	@endif
+	<div class="col-md-1 col-sm-2">
+		{!! Field::text('placa', null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+	</div>
+	<div class="col-sm-1">
+		{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
+	</div>
 	<div class="col-sm-2">
-		{!! Field::select('branch_id', $bs, ['empty'=>'Seleccionar', 'label'=>'Sucursal', 'class'=>'form-control-sm']) !!}
+		{!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
+	</div>
+	<div class="col-sm-1 d-none">
+		{!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-md-2 col-sm-4">
 		@if(isset(\Auth::user()->employee->job_id) and (\Auth::user()->employee->job_id == 8 or \Auth::user()->id==3))
@@ -35,20 +39,10 @@
 		@endif
 	</div>
 	<div class="col-sm-2">
-		{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
-	</div>
-	<div class="col-sm-2">
 		{!! Field::select('payment_condition_id', config('options.payment_conditions'), (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-md-2 col-sm-4">
 		{!! Field::text('condition', ['label' => 'Detalle Cond P.', 'class'=>'form-control-sm text-uppercase']) !!}
-	</div>
-	<div class="col-md-2 col-sm-4">
-		{!! Form::hidden('shipper_id', null, ['id'=>'shipper_id']) !!}
-		{!! Field::text('txtShipper', ((isset($model) and $model->shipper_id>0) ? $model->shipper->company_name : null), ['label' => 'Transportista', 'class'=>'form-control-sm text-uppercase']) !!}
-	</div>
-	<div class="col-sm-2">
-		{!! Field::select('branch_shipper_id', $bs_shipper, ['empty'=>'Seleccionar', 'label'=>'Agencia', 'class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-md-2 col-sm-4">
 		{!! Field::text('attention', ['label' => 'Atención', 'class'=>'form-control-sm text-uppercase']) !!}

@@ -671,6 +671,7 @@ function getCar() {
         $.get(url, function(data){
             if (data) {
                 console.log(data)
+                $('#car_id').val(data.id)
                 $('#company_id').val(data.company_id)
                 $('#my_company').val(data.my_company)
                 $('#attention').val(data.contact_name)

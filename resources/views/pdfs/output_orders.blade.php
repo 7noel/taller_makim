@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Cotización: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
+	<title>Pre-Liquidación: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
 	<link rel="stylesheet" href="./css/order_pdf.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
 		</div>
 		<div>
 			<h1 class="center">
-				COTIZACION: {{ str_pad($model->id, 3, '0', STR_PAD_LEFT) }} - {{ $model->created_at->formatLocalized('%Y') }}
+				PRE-LIQUIDACIÓN: {{ str_pad($model->id, 3, '0', STR_PAD_LEFT) }} - {{ $model->created_at->formatLocalized('%Y') }}
 			</h1>
 			
 		</div>

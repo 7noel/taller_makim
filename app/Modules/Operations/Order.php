@@ -11,7 +11,7 @@ class Order extends Model implements Auditable
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['company_id', 'order_type', 'branch_id', 'shipper_id', 'shipper_branch_id', 'my_company', 'document_type_id', 'payment_condition_id', 'currency_id', 'seller_id', 'attention', 'matter', 'approved_at', 'checked_at', 'invoiced_at', 'sent_at', 'canceled_at', 'gross_value', 'discount', 'discount_items', 'subtotal', 'tax', 'total', 'amortization', 'exchange', 'exchange_sunat', 'comment', 'status', 'delivery_period', 'installation_period', 'delivery_place', 'offer_period', 'mov', 'type_op', 'proof_id', 'user_id', 'sn', 'order_id'];
+	protected $fillable = ['company_id', 'order_type', 'car_id', 'placa', 'type_service', 'preventivo', 'branch_id', 'shipper_id', 'shipper_branch_id', 'my_company', 'document_type_id', 'payment_condition_id', 'currency_id', 'seller_id', 'attention', 'matter', 'approved_at', 'checked_at', 'invoiced_at', 'sent_at', 'canceled_at', 'gross_value', 'discount', 'discount_items', 'subtotal', 'tax', 'total', 'amortization', 'exchange', 'exchange_sunat', 'comment', 'status', 'delivery_period', 'installation_period', 'delivery_place', 'offer_period', 'mov', 'type_op', 'proof_id', 'user_id', 'sn', 'order_id'];
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {
@@ -38,6 +38,10 @@ class Order extends Model implements Auditable
 	public function company()
 	{
 		return $this->belongsTo('App\Modules\Finances\Company', 'company_id');
+	}
+	public function car()
+	{
+		return $this->belongsTo('App\Modules\Operations\Car', 'car_id');
 	}
 	public function shipper()
 	{

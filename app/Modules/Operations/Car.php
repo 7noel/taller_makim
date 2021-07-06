@@ -21,4 +21,8 @@ class Car extends Model implements Auditable
 	{
 		return $this->belongsto('App\Modules\Operations\Modelo');
 	}
+	public function brand()
+	{
+		return $this->belongsto('App\Modules\Operations\Brand');
+	}
 }

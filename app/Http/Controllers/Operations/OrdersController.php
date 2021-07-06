@@ -39,13 +39,14 @@ class OrdersController extends Controller {
 	public function byQuote($quote_id)
 	{
 		$model = $this->repo->findOrFail($quote_id);
+		//dd($model);
 		$quote = $model;
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->toArray() : [];
-		return view('operations.input_orders.create_by_quote', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote'));
+		return view('operations.output_orders.create_by_quote', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote'));
 	}
 
 	public function index2()
