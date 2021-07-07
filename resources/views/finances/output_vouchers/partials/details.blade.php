@@ -70,7 +70,7 @@
 							</div>
 							{!! Form::label('currency_cost','Costo expresado en:', ['class'=>'col-sm-2 col-sm-offset-2 control-label isImport']) !!}
 							<div class="col-sm-2">
-								{!! Form::select('currency_cost',$currencies , ((isset($model)) ? $model->currency_id : 2), ['class'=>'form-control input-sm isImport', 'id'=>'currency_cost']) !!}
+								{!! Form::select('currency_cost', config('options.table_sunat.moneda'), ((isset($model)) ? $model->currency_id : 2), ['class'=>'form-control input-sm isImport', 'id'=>'currency_cost']) !!}
 							</div>
 							{!! Form::label('factor','Factor', ['class'=>'col-sm-2 control-label isImport']) !!}
 							<div class="col-sm-2">

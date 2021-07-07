@@ -21,7 +21,7 @@
 			<td>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total}} </td>
 			<td>
 				@if($model->proof_id == 0)
-				<a href="{{ route('orders.by_quote', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Generar Venta">{!! $icons['invoice'] !!}</a>
+				<a href="{{ route('output_vouchers.by_order', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Generar Venta">{!! $icons['invoice'] !!}</a>
 				@else
 				<a href="{{ route('output_orders.show', $model->id) }}" class="btn btn-outline-default btn-sm" title="Ver Pedido">{!! $icons['invoice'] !!}</a>
 				@endif
