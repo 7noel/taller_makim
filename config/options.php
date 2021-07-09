@@ -58,8 +58,18 @@ return array(
 	'proof_types' => ['Ninguno', 'issuance_vouchers', 'reception_vouchers', 'issuance_letters', 'reception_letters'],
 	'mov' => ['Salida', 'Entrada'],
 	'proof_status' => ['REGISTRADO', 'SUNAT', 'ANULADO', 'CANCELADO', 'CANJEADO'],
-	'quote_status' => ['REGISTRADO', 'PROCESADO', '6'=>'ANULADO'],
-	'order_status' => ['REGISTRADO', 'VERIFICADO', 'APROBADO', 'FACTURADO', 'ENVIADO', 'CANCELADO', 'ANULADO'],
+	'quote_status' => [
+		'PEND' => ['PEND', 'APROB', 'CANC'],
+		'APROB' => ['APROB', 'PEND'],
+		'CANC' => ['CANC'],
+		'CERR' => ['CERR'],
+	],
+	'order_status' => [
+		'ENPRG' => ['ENPRG', 'COMP', 'CANC'],
+		'COMP' => ['COMP', 'ENPRG'],
+		'CANC' => ['CANC'],
+		'CERR' => ['CERR']
+	],
 	'tax' => ['igv' => 18],
 	'table_sunat' => [
 		'tipo_comprobante' => [

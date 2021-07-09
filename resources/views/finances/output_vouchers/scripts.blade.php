@@ -1,1 +1,1 @@
-{!! Html::script('js/finances/proofs.js') !!}
+{{-- Html::script('js/finances/proofs.js') --}}

@@ -1,11 +1,10 @@
+{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
+
 {!! Form::hidden('sunat_transaction', $sunat_transaction, ['class'=>'form-control']) !!}
 {!! Form::hidden('igv_code', 1, ['class'=>'form-control']) !!}
 
 <div class="form-row">
-	<div class="col-sm-2">
-		{!! Form::label('my_company','Mi Empresa:', ['class'=>'control-label']) !!}
-		{!! Form::select('my_company', $my_companies, null, ['class'=>'form-control']) !!}
-	</div>
 	<div class="col-sm-2">
 		<label class="checkbox-inline">
 			{!! Form::checkbox('send_sunat', '1', null,['class'=>'checkbox']) !!} Enviar a SUNAT
@@ -16,7 +15,6 @@
 	<div class="col-sm-4">
 	{!! Form::label('txtcompany','Compañía:', ['class'=>'control-label']) !!}
 		@if(isset($company))
-			{!! Form::hidden('with_tax', 0, ['id'=>'with_tax']) !!}
 			{!! Form::hidden('company_id', $company->id, ['id'=>'company_id']) !!}
 			@if($is_issuance == 0 and $is_proof == 1)
 			{!! Form::hidden('is_import', (($company->country_id==1465) ? 0 : 1), ['id'=>'is_import']) !!}
@@ -25,7 +23,6 @@
 			@endif
 			{!! Form::text('company', $company->company_name, ['class'=>'form-control', 'id'=>'txtCompany', 'required']) !!}
 		@else
-			{!! Form::hidden('with_tax', null, ['id'=>'with_tax']) !!}
 			{!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
 			{!! Form::hidden('is_import', null, ['id'=>'is_import']) !!}
 			{!! Form::text('company', ((isset($model->company_id)) ? $model->company->company_name : null), ['class'=>'form-control', 'id'=>'txtCompany', 'required']) !!}

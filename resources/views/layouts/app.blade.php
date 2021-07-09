@@ -228,10 +228,12 @@ $(document).ready(function () {
         minLength: 4,
         select: function(event, ui){
             $('#company_id').val(ui.item.id)
-            if ($('#contact_name').val().trim() == '') {$('#contact_name').val(ui.item.company_name)}
-            if ($('#contact_email').val().trim() == '') {$('#contact_email').val(ui.item.email)}
-            if ($('#contact_phone').val().trim() == '') {$('#contact_phone').val(ui.item.phone)}
-            if ($('#contact_mobile').val().trim() == '') {$('#contact_mobile').val(ui.item.mobile)}
+            if ($('#contact_name').val() !== undefined) {
+                if ($('#contact_name').val().trim() == '') {$('#contact_name').val(ui.item.company_name)}
+                if ($('#contact_email').val().trim() == '') {$('#contact_email').val(ui.item.email)}
+                if ($('#contact_phone').val().trim() == '') {$('#contact_phone').val(ui.item.phone)}
+                if ($('#contact_mobile').val().trim() == '') {$('#contact_mobile').val(ui.item.mobile)}
+            }
             $('#branch_id').empty()
             $('#branch_id').append(`<option value=''>Seleccionar</option>`)
             ui.item.branches.forEach(function (b) {

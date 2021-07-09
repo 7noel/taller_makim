@@ -14,7 +14,7 @@
 					<input type="hidden" name="last_page" value="{{ URL::previous() }}">
 					@endif
 
-					@include('finances.proofs.partials.fields')
+					@include('finances.output_vouchers.partials.fields')
 					
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
