@@ -167,7 +167,10 @@ class OrderRepo extends BaseRepo{
 		$order_type = explode('.', \Request::route()->getName())[0];
 		$q = Order::where('my_company', session('my_company')->id)->where('order_type', $order_type);
 		if ($filter->sn > 0) {
-			return Order::where('sn', $filter->sn)->orderBy('sn', 'desc')->get();
+			return $q->where('sn', $filter->sn)->orderBy('sn', 'desc')->get();
+		} elseif (trim($filter->placa) != '') {
+			return $q->where('placa', $filter->placa)->orderBy('sn', 'desc')->get();
+			//return Order::where('placa', $filter->placa)->orderBy('sn', 'desc')->get();
 		} else {
 			$q->where('created_at', '>=', $filter->f1)->where('created_at', '<=', $filter->f2.' 23:59:59');
 			if(isset($filter->seller_id) && $filter->seller_id != '') {

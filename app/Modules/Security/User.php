@@ -7,7 +7,8 @@ use Illuminate\Notifications\Notifiable;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable implements Auditable, MustVerifyEmail {
+class User extends Authenticatable implements Auditable {
+// class User extends Authenticatable implements Auditable, MustVerifyEmail {
 
     use Notifiable;
     use \OwenIt\Auditing\Auditable;

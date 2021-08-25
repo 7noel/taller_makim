@@ -26,6 +26,7 @@ class OrdersController extends Controller {
 		$filter = (object) request()->all();
 		if( !((array) $filter) ) {
 			$filter->sn = '';
+			$filter->placa = '';
 			$filter->seller_id = '';
 			$filter->status = '';
 			$filter->f1 = date('Y-m-d', strtotime('first day of this month'));

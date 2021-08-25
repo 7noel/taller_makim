@@ -14,8 +14,8 @@
 		@foreach($models as $model)
 		<tr data-id="{{ $model->id }}">
 			<td>{{ $model->sn }}</td>
-			<td>{{ $model->placa }}</td>
 			<td>{{ $model->created_at->formatLocalized('%d/%m/%Y') }}</td>
+			<td>{{ $model->placa }}</td>
 			<td>{{ $model->company->company_name }} </td>
 			<td>{{ $model->status }}</td>
 			<td>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total}} </td>
