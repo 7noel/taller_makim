@@ -361,7 +361,20 @@ $(document).ready(function () {
         }
     })
    // $("#type_detail_p").prop("checked", true);
+    $(".send_cpe").submit(function(e) {
+        e.preventDefault()
+        var form = $(this)
+        //console.log(form.serializeArray()[0].value)
+        console.log(form.serialize())
+        var url = "/send_cpe?"+form.serialize();
+        console.log(url)
+        $('.dropdown-toggle').dropdown('hide')
+        $.get(url, function(data){
+            console.log(data)
+        });
 
+
+    })
 })
 
 function calcTotal () {

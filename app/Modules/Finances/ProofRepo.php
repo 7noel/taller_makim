@@ -3,7 +3,7 @@
 use App\Modules\Base\BaseRepo;
 use App\Modules\Base\DocumentControlRepo;
 use App\Modules\Finances\Proof;
-use App\Modules\Sales\Order;
+use App\Modules\Operations\Order;
 use App\Modules\Finances\ProofDetailRepo;
 use App\Modules\Base\ExpenseRepo;
 use App\Modules\Storage\MoveRepo;
@@ -66,7 +66,7 @@ class ProofRepo extends BaseRepo{
 				$mov->saveAll($model, 1);
 			}
 		}
-		$this->saveExpenses($data, $model);
+		// $this->saveExpenses($data, $model);
 		if (isset($data['send_sunat']) and $data['send_sunat'] == 1 and $data['proof_type'] == 1) {
 			$respuesta = $this->generarComprobante($model);
 			$model->response_sunat = $respuesta;
@@ -103,7 +103,7 @@ class ProofRepo extends BaseRepo{
 			$data['type_op'] = '02'; //2136
 		}
 
-		if ($data['proof_type'] == 1 and $data['sn'] == '') {
+		if ($data['proof_type'] == 1 and (!isset($data['sn']) or $data['sn'] == '')) {
 			// $nextNumber = DocumentControlRepo::getNextNumber($data['document_type_id'], $data['my_company'], $data['reference_id']);
 			//dd($nextNumber);
 			$sn = $this->getNextNumber($data['document_type_id'], $data['my_company']);
@@ -284,75 +284,62 @@ class ProofRepo extends BaseRepo{
 	public function prepareCpe($model)
 	{
 		$data = array(
-		    "operacion"				=> "generar_comprobante",
-		    "tipo_de_comprobante"               => $model->document_type->code,
-		    "serie"                             => $model->series,
-		    "numero"				=> $model->number,
-		    "sunat_transaction"			=> $model->sunat_transaction,
-		    "cliente_tipo_de_documento"		=> $model->company->id_type->code,
-		    "cliente_numero_de_documento"	=> $model->company->doc,
-		    "cliente_denominacion"              => $model->company->company_name,
-		    "cliente_direccion"                 => $model->company->address.' '. $model->company->ubigeo->distrito.'-'.$model->company->ubigeo->provincia.'-'.$model->company->ubigeo->departamento,
-		    "cliente_email"                     => $model->email,
-		    "cliente_email_1"                   => $model->email_1,
-		    "cliente_email_2"                   => $model->email_2,
-		    "fecha_de_emision"                  => date('d-m-Y'),
-		    "fecha_de_vencimiento"              => "",
-		    "moneda"                            => $model->currency->code,
-		    "tipo_de_cambio"                    => "",
-		    "porcentaje_de_igv"                 => "18.00",
-		    "descuento_global"                  => "",
-		    "descuento_global"                  => "",
-		    "total_descuento"                   => "",
-		    "total_anticipo"                    => "",
-		    "total_gravada"                     => $model->subtotal,
-		    "total_inafecta"                    => "",
-		    "total_exonerada"                   => "",
-		    "total_igv"                         => $model->tax,
-		    "total_gratuita"                    => "",
-		    "total_otros_cargos"                => "",
-		    "total"                             => $model->total,
-		    "percepcion_tipo"                   => "",
-		    "percepcion_base_imponible"         => "",
-		    "total_percepcion"                  => "",
-		    "total_incluido_percepcion"         => "",
-		    "detraccion"                        => "false",
-		    "observaciones"                     => "",
-		    "documento_que_se_modifica_tipo"    => "",
-		    "documento_que_se_modifica_serie"   => "",
-		    "documento_que_se_modifica_numero"  => "",
-		    "tipo_de_nota_de_credito"           => "",
-		    "tipo_de_nota_de_debito"            => "",
-		    "enviar_automaticamente_a_la_sunat" => "true",
-		    "enviar_automaticamente_al_cliente" => "true",
-		    "codigo_unico"                      => "",
-		    "condiciones_de_pago"               => "",
-		    "medio_de_pago"                     => "",
-		    "placa_vehiculo"                    => "",
-		    "orden_compra_servicio"             => "",
-		    "tabla_personalizada_codigo"        => "",
-		    "formato_de_pdf"                    => "",
+		    "serie_documento" => $model->series,
+		    "numero_documento" => $model->number,
+		    "fecha_de_emision" => date('Y-m-d'),
+		    "hora_de_emision" => date('H:i:s'),
+		    "codigo_tipo_operacion" => "0101",
+		    "codigo_tipo_documento" => '0'.$model->document_type_id,
+		    "codigo_tipo_moneda" => "PEN",
+		    "fecha_de_vencimiento" => date('Y-m-d'),
+			"numero_orden_de_compra" => "",
+			"nombre_almacen" => "Almacen 1",
+			"datos_del_emisor" => array(
+				"codigo_del_domicilio_fiscal" => "0000"
+			),
+			"datos_del_cliente_o_receptor" => array(
+				"codigo_tipo_documento_identidad" => $model->company->id_type,
+				"numero_documento" => $model->company->doc,
+				"apellidos_y_nombres_o_razon_social" => $model->company->company_name,
+				"codigo_pais" => $model->company->country,
+				"ubigeo" => $model->company->ubigeo_code,
+				"direccion" => $model->company->address,
+				"correo_electronico" => $model->company->email,
+				"telefono" => $model->company->mobile
+			),
+			"totales" => array(
+				"total_exportacion" => 0.00,
+				"total_operaciones_gravadas" => $model->subtotal,
+				"total_operaciones_inafectas" => 0.00,
+				"total_operaciones_exoneradas" => 0.00,
+				"total_operaciones_gratuitas" => 0.00,
+				"total_igv" => $model->tax,
+				"total_impuestos" => $model->tax,
+				"total_valor" => $model->subtotal,
+				"total_venta" => $model->total
+			),
 		);
 		foreach ($model->details as $key => $detail) {
 			$subtotal = $detail->quantity*$detail->value-$detail->discount;
 			$total = round($subtotal*1.18, 2);
 			$igv = $total - $subtotal;
 			$data['items'][] = array(
-				"unidad_de_medida"          => 'NIU',
 				// "unidad_de_medida"          => $detail->product->unit->code,
-				"codigo"                    => $detail->product->intern_code,
+				"codigo_interno"            => $detail->product->intern_code,
 				"descripcion"               => $detail->product->name,
+				"codigo_producto_sunat"     => '',
+				"unidad_de_medida"          => 'NIU',
 				"cantidad"                  => $detail->quantity,
 				"valor_unitario"            => $detail->value,
+				"codigo_tipo_precio"        => '01',
 				"precio_unitario"           => $detail->price,
-				"descuento"                 => $detail->discount,
-				"subtotal"                  => $subtotal,
-				"tipo_de_igv"               => $detail->igv_code,
-				"igv"                       => $igv,
-				"total"                     => $total,
-				"anticipo_regularizacion"   => "false",
-				"anticipo_documento_serie"  => "",
-				"anticipo_documento_numero" => ""
+				"codigo_tipo_afectacion_igv" => '10',
+				"total_base_igv"                 => $subtotal,
+				"porcentaje_igv"                       => 18.00,
+				"total_igv"                       => $igv,
+				"total_impuestos"                       => $igv,
+				"total_valor_item"                  => $subtotal,
+				"total_item"                     => $total,
 			);
 		}
 		//dd($data);
@@ -368,18 +355,15 @@ class ProofRepo extends BaseRepo{
 	public function send($data)
 	{
 		$data_json = json_encode($data);
-		// RUTA para enviar documentos
-		$ruta = "https://api.nubefact.com/api/v1/8e91b7c2-437a-41b8-b8f3-3b17dceb7c7d";
+		//dd($data_json);
+		$ruta = "https://makim.facturandola.app/api/documents";
+		$token = "lWWhDWAG2ngODxODuZc8lCulb73x3AfCeMww8RgxddUcjAKd8P";
 
-		//TOKEN para enviar documentos
-		$token = "dce7ee606a1c4164ac289ff95405e27bbf5f60418957425c8ffe916e95aea464";
-
-		//Invocamos el servicio de NUBEFACT
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $ruta);
 		curl_setopt(
 			$ch, CURLOPT_HTTPHEADER, array(
-			'Authorization: Token token="'.$token.'"',
+			'Authorization: Bearer '.$token,
 			'Content-Type: application/json',
 			)
 		);
@@ -389,7 +373,6 @@ class ProofRepo extends BaseRepo{
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$respuesta  = curl_exec($ch);
 		curl_close($ch);
-
 		return $respuesta;
 	}
 

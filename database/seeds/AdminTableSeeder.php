@@ -35,20 +35,12 @@ class AdminTableSeeder extends Seeder {
 
     public function run()
     {
-        Company::create(['company_name'=>'IMPORTACIONES MIRALDI S.A.C.', 'id_type'=>'6', 'doc'=>'20601787700', 'address'=>'AV. LAS VEGAS MZA. A LOTE. 19B URB. INDUSTRIAL (CRUCE AV PEDRO MIOTTA Y BELISARIO SUAREZ)', 'ubigeo_code'=>'150133', 'country' => 'PE', 'entity_type' => 'my_company']);
+        Company::create(['company_name'=>'MULTISERVICIOS MAKIM-MAKIM E.I.R.L.', 'id_type'=>'6', 'doc'=>'20601157480', 'address'=>'AV. SEPARADORA INDUSTRIAL NRO. 3598 URB. MAYORAZGO', 'ubigeo_code'=>'150103', 'country' => 'PE', 'entity_type' => 'my_company']);
 
         User::create(['name' => 'Noel', 'email' => 'noel.logan@gmail.com', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'JUAN MIRANDA', 'email' => 'juanmiranda@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'HUGO MIRANDA', 'email' => 'hugomiranda@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'NERIDA ESPINOZA', 'email' => 'neridaespinoza@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'YESENIA HUACCALLO', 'email' => 'yeseniahuaccallo@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'KARITO BECERRA', 'email' => 'karitobecerra@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'YESSICA INOÑAN', 'email' => 'yessicainonan@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'KATYA MORAN', 'email' => 'katyamoran@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'RANDI TUCTO', 'email' => 'randitucto@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'VICTOR LA ROSA', 'email' => 'victorlarosa@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'JOSEPH TUCTO', 'email' => 'joseptucto@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
-        User::create(['name' => 'DAVID ESPINOZA', 'email' => 'davidespinoza@miraldi.com.pe', 'password' => '123', 'is_superuser' => true]);
+        User::create(['name' => 'JAVIER POLO', 'email' => 'jpolo@makim.pe', 'password' => '123', 'is_superuser' => true]);
+        User::create(['name' => 'Usuario', 'email' => 'usuario@makim.pe', 'password' => '123', 'is_superuser' => true]);
+        
 
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 1, 'name'=>'F001', 'value_1'=>0]); // 1
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 2, 'name'=>'B001', 'value_1'=>0]); // 2
@@ -438,7 +430,7 @@ class AdminTableSeeder extends Seeder {
         // Permission::create(['name' => 'Medios de Pago Eliminar', 'action' => '.destroy', 'permission_group_id' => '4']);
 
 
-        Warehouse::create(['my_company' => 1, 'name' => 'ALMACEN IMPORTACIONES', 'ubigeo_code' => 150135, 'address' => 'DIRECCION']);
+        Warehouse::create(['my_company' => 1, 'name' => 'ALMACEN PRINCIPAL', 'ubigeo_code' => 150103, 'address' => 'DIRECCION']);
         // Warehouse::create(['my_company' => 1, 'name' => 'ALMACEN HERRAMAX', 'ubigeo' => 150135, 'address' => 'DIRECCION']);
         // Warehouse::create(['my_company' => 1, 'name' => 'ALMACEN MIRALDI', 'ubigeo' => 150135, 'address' => 'DIRECCION']);
 

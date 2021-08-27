@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Alerts e.g. approaching your limit</title>
+<title>Envío de Comprobante de Pago Electrónico</title>
 
 <style type="text/css">
    img {
@@ -64,42 +64,37 @@
               <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                 
                 <tr style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-                  <td class="alert alert-warning" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; margin: 0; padding: 0 0 20px;" align="center" valign="top">
-                    <img src="{{ $message->embed(public_path('img/logo_honda_masaki.jpg')) }}" alt="" />
+                  <td class="alert alert-warning" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: right; border-radius: 3px 3px 0 0; margin: 0; padding: 0 0 20px;" align="right" valign="top">
+                    <img src="{{ $message->embed(public_path('img/logo_makim_doc.jpg')) }}" alt="" />
                   </td>
                 </tr>
                 <tr style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; padding: 0 0 40px;">
-                  <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 60px;" valign="top">
+                  <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 0px;" valign="top">
                     <p>Estimado Cliente:</p>
-                    <p><h4><strong> {{$vehicle->NombreRaz}} </strong></h4></p>
+                    <h4><strong> {{ $model->company->company_name }} </strong></h4>
                   </td>
                 </tr>
                 <tr style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                   <td class="content-block" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 60px;" valign="top">
-                  <p>De acuerdo a nuestro historial de servicios y pensando en el cuidado y mantenimiento de su vehículo HONDA <strong>{{$vehicle->Modelo}}</strong> placa <strong>{{$vehicle->Placa}}</strong> MASAKI le recuerda que su unidad está próxima a cumplir <strong>{{ number_format($vehicle->nextkm) }} Km</strong>.</p><br /><br />
-                  <p>Lo invitamos a reservar una cita llamando al 612-7511 y/o 981-204-673 o escribiendo a <a href="mailto:citas@masaki.com.pe">citas@masaki.com.pe</a>.</p>
-                  @if($checks)
-                    @if($checks['check_warning'] and count($checks['check_warning']) > 0)
-                      <br>De acuerdo a su última visita, consultar con su Asesor sobre las siguientes observaciones:<br>
-                      @foreach($checks['check_warning'] as $item)
-                      {{$item->checkitem_group->name}} / {{$item->name}} <br>
-                      @endforeach
-                    @endif
-                    @if($checks['check_danger'] and count($checks['check_danger']) > 0)
-                      <br>Como un tema de Urgencia, consultar con su Asesor sobre las siguientes observaciones:<br>
-                      @foreach($checks['check_danger'] as $item)
-                      {{$item->checkitem_group->name}} / {{$item->name}} <br>
-                      @endforeach
-                    @endif
-                  @endif
+                  <p>Informamos que su comprobante electrónico ha sido emitido exitosamente.</p>
+                  <ul>
+                    <li>{{ config('options.table_sunat.tipo_comprobante.'.$model->document_type_id)." ".$model->sn }}</li>
+                    <li>Fecha de emisión: {{ date('d/m/Y', strtotime($model->issued_at)) }}</li>
+                    <li>Total: {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id) .' '.$model->total }}</li>
+                  </ul>
+                  <p>Puede descargar su comprobante en los formatos pdf y xml desde los siguientes enlaces:
+                    <a href="{{ $r->links->pdf }}" class="btn btn-outline-secondary">{!! $icons['pdf'] !!} PDF</a>
+                    <a href="{{ $r->links->xml }}" class="btn btn-outline-secondary">{!! $icons['xml'] !!} XML</a>
+                  </p>
+
                   <br />
                   <p>Atentamente,</p>
-                  <p>Gerencia de Post Venta</p>
+                  <p>Servicio al cliente</p>
                   </td>
                 </tr>
                 <tr style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                   <td class="alert alert-warning" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; color: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0; margin: 0; padding: 0px;" align="center" valign="top">
-                    <img src="{{ $message->embed(public_path('img/2email.jpg')) }}" alt="" />
+                    <img src="" alt="" />
                   </td>
                 </tr>
               </table>

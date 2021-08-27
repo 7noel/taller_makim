@@ -48,7 +48,7 @@ class ProofsController extends Controller {
 			$filter->f2 = date('Y-m-d', strtotime('last day of this month'));
 		}
 		$models = $this->repo->filter($filter, $proof_type);
-
+		
 		$sellers = $this->companyRepo->getListSellers();
 		$payment_conditions = [];
 		return view('partials.filter',compact('models', 'filter', 'sellers'));
@@ -75,13 +75,15 @@ class ProofsController extends Controller {
 	public function byOrder($order_id)
 	{
 		$model = $this->orderRepo->findOrFail($order_id);
+		$order = $model;
+		//dd($model);
 		$my_companies = $this->companyRepo->getListMyCompany();
 
 		$sunat_transaction = 1;
 		$igv_code = 1;
 		$proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
-		return view('partials.create', compact('model', 'order_id', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code'));
+		return view('partials.create', compact('model', 'order_id', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'order'));
 	}
 
 	public function index2()
@@ -112,13 +114,13 @@ class ProofsController extends Controller {
 	public function edit($id)
 	{
 		$model = $this->repo->findOrFail($id);
-		$my_companies = $this->companyRepo->getListMyCompany();
+		//$my_companies = $this->companyRepo->getListMyCompany();
 
 		$sunat_transaction = $model->sunat_transaction;
 		$igv_code = $model->igv_code;
 		$proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
-		return view('partials.edit', compact('model', 'warehouses', 'items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code'));
+		return view('partials.edit', compact('model', 'sellers', 'warehouses', 'items', 'proof_type', 'sunat_transaction', 'igv_code'));
 	}
 
 	public function update($id)
@@ -166,5 +168,36 @@ class ProofsController extends Controller {
 			];
 		}
 		return \Response::json($result);
+	}
+	public function print($id)
+	{
+		$model = $this->repo->findOrFail($id);
+		//dd(json_decode($model->response_sunat)->links);
+		$r = json_decode($model->response_sunat);
+		return response(file_get_contents($r->links->pdf), 200, [
+			'Content-Type' => 'application/pdf',
+			'Content-Disposition' => 'inline; filename="'.$r->data->filename.".pdf".'"'
+		]);
+	}
+	public function send_email_cpe()
+	{
+		$data = \Request::all();
+		$id = $data['cpe'];
+		$email = $data['email'];
+		$model = $this->repo->findOrFail($id);
+		$r = json_decode($model->response_sunat);
+		$data['model'] = $model;
+		$data['r'] = $r;
+		// dd($email);
+		// return 'correo enviado x';
+		\Mail::send('emails.message', $data, function($message) use ($model, $r,$email)
+		{
+			$message->to($email, $model->company->company_name);
+			$message->sender(env('CONTACT_MAIL'));
+			$message->subject('Envio de Comprobante de Pago Electrónico');
+			$message->from(env('CONTACT_MAIL'), env('CONTACT_NAME'));
+		});
+		echo $icons['pdf'];
+		return 'correo enviado';
 	}
 }

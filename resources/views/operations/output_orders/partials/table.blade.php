@@ -23,14 +23,14 @@
 				@if($model->proof_id == 0)
 				<a href="{{ route('output_vouchers.by_order', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Generar Venta">{!! $icons['invoice'] !!}</a>
 				@else
-				<a href="{{ route('output_orders.show', $model->id) }}" class="btn btn-outline-default btn-sm" title="Ver Pedido">{!! $icons['invoice'] !!}</a>
+				<a href="{{ route('output_orders.show', $model->id) }}" class="btn btn-outline-default btn-sm" title="Ver OT">{!! $icons['view'] !!}</a>
 				@endif
 				@if(1==1)
 				<a href="{{ route( 'print_order' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="Imprimir">{!! $icons['printer'] !!}</a>
 				@else
 				<a href="#" class="btn btn-outline-success btn-sm" title="Imprimir" disabled="disabled">{!! $icons['printer'] !!}</a>
 				@endif
-				<a href="{{ route( 'output_orders.show' , $model) }}" class="btn btn-outline-info btn-sm" title="Editar">{!! $icons['view'] !!}</a>
+				<a href="{{ route( 'output_orders.show' , $model) }}" class="btn btn-outline-info btn-sm" title="Ver OT">{!! $icons['view'] !!}</a>
 				<a href="{{ route( 'output_orders.edit' , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
 				<a href="#" class="btn-delete btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>
 			</td>

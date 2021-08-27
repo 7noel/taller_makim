@@ -76,9 +76,9 @@ return array(
 	'table_sunat' => [
 		'tipo_comprobante' => [
 			'1' => 'FACTURA',
-			'2' => 'BOLETA',
-			'3' => 'NOTA DE CRÉDITO',
-			'4' => 'NOTA DE DÉBITO',
+			'3' => 'BOLETA',
+			'7' => 'NOTA DE CRÉDITO',
+			'8' => 'NOTA DE DÉBITO',
 		],
 		'sunat_transaction' => [
 			'1' => 'VENTA INTERNA',
@@ -116,6 +116,11 @@ return array(
 			'1' => 'S/',
 			'2' => 'US$',
 			'3' => '€',
+		],
+		'moneda_sunat' => [
+			'1' => 'PEN',
+			'2' => 'USD',
+			'3' => 'EUR',
 		],
 		'percepcion_tipo'=>[
 			'1' => 'PERCEPCIÓN VENTA INTERNA - TASA 2%',

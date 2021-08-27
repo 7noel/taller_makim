@@ -28,6 +28,7 @@ Route::get('listarProvincias/{departamento}', ['as' => 'ajaxprovincias', 'uses' 
 Route::get('listarDistritos/{departamento}/{provincia}', ['as' => 'ajaxdistritos','uses' => 'Admin\UbigeosController@ajaxDistritos']);
 
 Route::group(['middleware'=>['auth']], function(){
+	Route::get('send_cpe', ['as' => 'output_vouchers.send_email_cpe', 'uses' => 'Finances\ProofsController@send_email_cpe']);
 	Route::get('getCar/{placa}', ['as' => 'getCar', 'uses' => 'Operations\CarsController@getCar']);
 	Route::get('colorsByModelo/{modelo_id}', ['as' => 'colorsByModelo', 'uses' => 'Logistics\BrandsController@colorsByModelo']);
 	Route::get('modelosByWarehouse/{warehouse_id}', ['as' => 'modelosByWarehouse', 'uses' => 'Logistics\BrandsController@modelosByWarehouse']);
@@ -70,6 +71,7 @@ Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'name
 	Route::resource('providers','CompanyController');
 	Route::resource('payment_conditions','PaymentConditionsController');
 
+	Route::get('output_vouchers/print/{id}', ['as' => 'output_vouchers.print', 'uses' => 'ProofsController@print']);
 	Route::get('output_vouchers/by_order/{order_id}', ['as' => 'output_vouchers.by_order', 'uses' => 'ProofsController@byOrder']);
 	Route::resource('output_vouchers','ProofsController');
 	Route::resource('input_vouchers','ProofsController');
