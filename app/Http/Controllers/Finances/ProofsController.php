@@ -8,6 +8,7 @@ use App\Modules\Finances\ProofRepo;
 use App\Modules\Finances\CompanyRepo;
 use App\Modules\Storage\WarehouseRepo;
 use App\Modules\Operations\OrderRepo;
+use App\Modules\Base\TableRepo;
 
 class ProofsController extends Controller {
 
@@ -18,12 +19,14 @@ class ProofsController extends Controller {
 
 	protected $proof_type;
 	protected $doc;
+	protected $tableRepo;
 
-	public function __construct(ProofRepo $repo, CompanyRepo $companyRepo, WarehouseRepo $warehouseRepo, OrderRepo $orderRepo) {
+	public function __construct(ProofRepo $repo, CompanyRepo $companyRepo, WarehouseRepo $warehouseRepo, OrderRepo $orderRepo, TableRepo $tableRepo) {
 		$this->repo = $repo;
 		$this->companyRepo = $companyRepo;
 		$this->warehouseRepo = $warehouseRepo;
 		$this->orderRepo = $orderRepo;
+		$this->tableRepo = $tableRepo;
 
 		$this->getType();
 	}
@@ -68,7 +71,8 @@ class ProofsController extends Controller {
 		$sunat_transaction = 1;
 		$igv_code = 1;
 		$sellers = $this->companyRepo->getListSellers();
-		return view('partials.create', compact('proof_type', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code'));
+		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
+		return view('partials.create', compact('proof_type', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'documents'));
 	}
 
 
@@ -83,7 +87,8 @@ class ProofsController extends Controller {
 		$igv_code = 1;
 		$proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
-		return view('partials.create', compact('model', 'order_id', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'order'));
+		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
+		return view('partials.create', compact('model', 'order_id', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents'));
 	}
 
 	public function index2()
@@ -108,7 +113,8 @@ class ProofsController extends Controller {
 		$igv_code = $model->igv_code;
 		$proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
-		return view('partials.show', compact('model', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code'));
+		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
+		return view('partials.show', compact('model', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'documents'));
 	}
 
 	public function edit($id)
@@ -120,7 +126,8 @@ class ProofsController extends Controller {
 		$igv_code = $model->igv_code;
 		$proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
-		return view('partials.edit', compact('model', 'sellers', 'warehouses', 'items', 'proof_type', 'sunat_transaction', 'igv_code'));
+		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
+		return view('partials.edit', compact('model', 'sellers', 'warehouses', 'items', 'proof_type', 'sunat_transaction', 'igv_code', 'documents'));
 	}
 
 	public function update($id)
@@ -141,7 +148,8 @@ class ProofsController extends Controller {
 		$currencies = $this->currencyRepo->getList('symbol');
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$company = $this->companyRepo->findOrFail($company_id);
-		return view('partials.create', compact('document_types', 'currencies', 'payment_conditions', 'company'));
+		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
+		return view('partials.create', compact('document_types', 'currencies', 'payment_conditions', 'company', 'documents'));
 	}
 	public function getType()
 	{

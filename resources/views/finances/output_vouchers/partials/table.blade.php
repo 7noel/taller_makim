@@ -2,6 +2,7 @@
 	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
 			<th>Fecha</th>
+			<th>Placa</th>
 			<th>Documento</th>
 			<th>Empresa</th>
 			<th>Total</th>
@@ -13,12 +14,13 @@
 		<?php $r = json_decode($model->response_sunat) ?>
 		<tr data-id="{{ $model->id }}">
 			<td>{{ date('d/m/Y', strtotime($model->issued_at)) }} </td>
-			<td>{{ config('options.table_sunat.tipo_comprobante.'.$model->document_type_id)." ".$model->sn }} </td>
+			<td>placa</td>
+			<td>{{ $model->document_type->description." ".$model->sn }} </td>
 			<td>{{ $model->company->company_name }} </td>
 			<td>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id) .' '.$model->total }}</td>
 			<td>
 				<div class="btn-group">
-				@if(isset($r))
+				@if(isset($r->links))
 				<a href="{{ route('output_vouchers.print', $model->id) }}" class="btn btn-outline-success btn-sm" title="Imprimir" target="popup" onClick="window.open(this.href, this.target, 'toolbar=0 , location=1 , status=0 , menubar=1 , scrollbars=0 , resizable=1 , left=150pt, top=100pt, width=800px, height=700px'); return false;">{!! $icons['printer'] !!}</a>
 				@else
 				<a href="{{ route( str_replace('index', 'edit', Request::route()->getAction()['as']) , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>

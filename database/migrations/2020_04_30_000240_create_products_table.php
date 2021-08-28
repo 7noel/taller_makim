@@ -30,10 +30,11 @@ class CreateProductsTable extends Migration {
 			$table->decimal('profit_margin', 10, 2);
 			$table->decimal('admin_expense', 10, 2);
 			$table->decimal('value', 15, 2);
+			$table->decimal('price', 15, 2);
 			$table->boolean('use_set_value');
 			$table->boolean('is_downloadable');
 			$table->boolean('is_variable');
-			$table->integer('status')->unsigned()->default(1);
+			$table->boolean('is_visible');
             $table->bigInteger('my_company')->unsigned();
 
             $table->foreign('my_company')->references('id')->on('companies');

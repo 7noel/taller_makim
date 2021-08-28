@@ -2,10 +2,10 @@
 	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
 			<th>#</th>
-			<th>Empresa</th>
-			<th>Documento</th>
+			<th>Descripción</th>
+			<th>Código</th>
 			<th>Serie</th>
-			<th>Numero</th>
+			<th>Número</th>
 			<th>Acciones</th>
 		</tr>
 	</thead>
@@ -13,13 +13,13 @@
 		@foreach($models as $model)
 		<tr data-id="{{ $model->id }}">
 			<td>{{ $model->id }}</td>
-			<td>{{ $model->company->company_name }} </td>
-			<td>{{ $model->document_type->name }} </td>
-			<td>{{ $model->series }} </td>
-			<td>{{ $model->number }} </td>
+			<td>{{ $model->description }} </td>
+			<td>{{ $model->code }} </td>
+			<td>{{ $model->name }} </td>
+			<td>{{ $model->value_1 }} </td>
 			<td>
-				<a href="{{ route( $routes['edit'] , $model) }}" class="btn btn-primary btn-sm" title="Editar">{!! config('options.icons.edit') !!} </a>
-				<a href="#" class="btn-delete btn btn-danger btn-sm" title="Eliminar">{!! config('options.icons.remove') !!} </a>
+				<a href="{{ route( $routes['edit'] , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!} </a>
+				<a href="#" class="btn-delete btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!} </a>
 			</td>
 		</tr>
 		@endforeach

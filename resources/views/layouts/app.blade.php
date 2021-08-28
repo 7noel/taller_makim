@@ -175,6 +175,14 @@
     </div>
     <script>
 $(document).ready(function () {
+    $('#p_value').change(function () {
+        x = Math.round($('#p_value').val()*118)/100
+        $('#p_price').val(x)
+    })
+    $('#p_price').change(function () {
+        x = Math.round($('#p_price').val()*10000/118)/100
+        $('#p_value').val(x)
+    })
     if ($('#with_tax').val() == 1) {
         $('.withTax').show()
         $('.withoutTax').hide()
@@ -207,7 +215,7 @@ $(document).ready(function () {
                     $($this).parent().parent().find('.txtProduct').val($p.name)
                     $($this).parent().parent().find('.unitId').val($p.unit_id)
                     $($this).parent().parent().find('.txtValue').val($p.value)
-                    $($this).parent().parent().find('.txtPrecio').val(($p.value*1.18).toFixed(2))
+                    $($this).parent().parent().find('.txtPrecio').val($p.price)
                     $($this).parent().parent().find('.txtDscto').val(window.descuento1)
                     $($this).parent().parent().find('.txtDscto2').val(window.descuento2)
                     $($this).parent().parent().find('.intern_code').text($p.intern_code)
@@ -447,6 +455,10 @@ function validateItem (myElement, id) {
 }
 
 function calcTotalItem (myElement) {
+    var with_tax = false
+    if ($('#with_tax').val() == 1) {
+        with_tax = true
+    }
     cantidad = validateItem(myElement,'.txtCantidad')
     precio = validateItem(myElement,'.txtPrecio')
     value = validateItem(myElement,'.txtValue')
@@ -459,11 +471,21 @@ function calcTotalItem (myElement) {
         $(myElement).parent().parent().find('.txtPrecio').val( (value*1.18).toFixed(2) )
         precio = validateItem(myElement,'.txtPrecio')
     }
+    if (with_tax) {
+        price_item = Math.round((cantidad*precio)*(100-dscto)*(100-dscto2)/100)/100;
+        total = Math.round(price_item*10000/118)/100
+    } else {
+        total = Math.round((cantidad*value)*(100-dscto)*(100-dscto2)/100)/100;
+        price_item = Math.round(total*118)/100
+    }
+    console.log("with_tax: "+with_tax)
+    console.log("Valor Item: "+total)
+    console.log("Precio Item: "+price_item)
     // D = Math.round(cantidad * value * dscto) / 100;
-    total = Math.round((cantidad*value)*(100-dscto)*(100-dscto2)/100)/100;
     D = Math.round(cantidad * value - total) / 100
     // total = Math.round((cantidad*value-D)*100)/100;
     $(myElement).parent().parent().find('.txtTotal').text( total.toFixed(2) )
+    $(myElement).parent().parent().find('.txtPriceItem').text( price_item.toFixed(2) )
 }
 
 function addRowProduct(data='') {

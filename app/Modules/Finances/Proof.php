@@ -30,7 +30,7 @@ class Proof extends Model implements Auditable {
 	}
 	public function document_type()
 	{
-		return $this->hasOne('App\Modules\Base\DocumentType','id','document_type_id');
+		return $this->belongsTo('App\Modules\Base\Table','document_type_id');
 	}
 	public function mycompany()
 	{

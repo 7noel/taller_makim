@@ -1,3 +1,23 @@
+<div class="form-row mb-3">
+	<div class="col-sm-2">
+		<div class="custom-control custom-switch">
+			{!! Form::checkbox('visible', '1', null,['class'=>'custom-control-input', 'id'=>'is_visible']) !!}
+			<label class="custom-control-label" for="is_visible">Visible</label>
+		</div>
+	</div>
+	<div class="col-sm-2">
+		<div class="custom-control custom-switch">
+			{!! Form::checkbox('is_downloadable', '1', null,['class'=>'custom-control-input', 'id'=>'is_downloadable']) !!}
+			<label class="custom-control-label" for="is_downloadable">Descargable</label>
+		</div>
+	</div>
+	<div class="col-sm-2 d-none">
+		<div class="custom-control custom-switch">
+			{!! Form::checkbox('is_variable', '1', null,['class'=>'custom-control-input', 'id'=>'is_variable']) !!}
+			<label class="custom-control-label" for="is_variable">Variable</label>
+		</div>
+	</div>
+</div>
 <div class="form-row">
 	<div class="col-sm-4">
 		{!! Field::text('name', ['label' => 'Nombre', 'class'=>'form-control-sm', 'required']) !!}
@@ -22,14 +42,8 @@
 	<div class="col-sm-2">
 		{!! Field::select('unit_id', $units, (isset($model) ? null : '7'), ['empty'=>'Seleccionar', 'label'=>'Unidad', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
-	<div class="col-sm-2">
-		{!! Field::select('status', config('options.product_status'), (isset($model) ? null : '1'), ['empty'=>'Seleccionar', 'label'=>'Status', 'class'=>'form-control-sm', 'required']) !!}
-	</div>
 </div>
 <div class="form-row">
-	<div class="col-sm-2">
-		{!! Field::select('is_downloadable', ['1' => 'SI', '0' => 'NO'], ['empty'=>'Seleccionar', 'label'=>'Descargable', 'class'=>'form-control-sm', 'required']) !!}
-	</div>
 	<div class="col-sm-2">
 		{!! Field::select('brand', $brands, ['empty'=>'Seleccionar', 'label'=>'Marca', 'class'=>'form-control-sm']) !!}
 	</div>
@@ -40,10 +54,10 @@
 		{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? null : '1'), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::number('price', (isset($model) ? round($model->value * (100+config('options.tax.igv'))/100, 2) : ''), ['label' => 'Precio', 'class'=>'form-control-sm col']) !!}
+		{!! Field::number('value', ['label' => 'V Venta', 'class'=>'form-control-sm col', 'id'=>'p_value']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::number('value', ['label' => 'V Venta', 'class'=>'form-control-sm col']) !!}
+		{!! Field::number('price', ['label' => 'Precio', 'class'=>'form-control-sm col', 'id'=>'p_price']) !!}
 	</div>
 </div>
 

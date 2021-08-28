@@ -42,12 +42,12 @@ class AdminTableSeeder extends Seeder {
         User::create(['name' => 'Usuario', 'email' => 'usuario@makim.pe', 'password' => '123', 'is_superuser' => true]);
         
 
-        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 1, 'name'=>'F001', 'value_1'=>0]); // 1
-        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 2, 'name'=>'B001', 'value_1'=>0]); // 2
-        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 3, 'name'=>'FC01', 'value_1'=>0]); // 3
-        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 3, 'name'=>'BC01', 'value_1'=>0]); // 4
-        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 4, 'name'=>'FD01', 'value_1'=>0]); // 5
-        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 4, 'name'=>'BD01', 'value_1'=>0]); // 6
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 1, 'description'=>'FACTURA', 'name'=>'F001', 'value_1'=>0]); // 1
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 2, 'description'=>'BOLETA', 'name'=>'B001', 'value_1'=>0]); // 2
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 3, 'description'=>'NOTA DE CRÉDITO', 'name'=>'FC01', 'value_1'=>0]); // 3
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 3, 'description'=>'NOTA DE CRÉDITO', 'name'=>'BC01', 'value_1'=>0]); // 4
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 4, 'description'=>'NOTA DE DÉBITO', 'name'=>'FD01', 'value_1'=>0]); // 5
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 4, 'description'=>'NOTA DE DÉBITO', 'name'=>'BD01', 'value_1'=>0]); // 6
         
         Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'UNIDAD', 'symbol' => 'und', 'relation_id' => 0, 'value_1' => 1, 'code' => 'NIU']); // 7
         Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'PARES', 'symbol' => 'prs', 'relation_id' => 0, 'value_1' => 2, 'code' => 'NIU']); // 8

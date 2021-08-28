@@ -26,6 +26,7 @@ class CreateOrderDetailsTable extends Migration
             $table->decimal('d1',15,2);
             $table->decimal('d2',15,2);
             $table->decimal('total',15,2);
+            $table->decimal('price_item',15,2);
             $table->text('comment');
             $table->bigInteger('my_company')->unsigned();
 

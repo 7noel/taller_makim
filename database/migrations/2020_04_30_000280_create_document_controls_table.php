@@ -19,7 +19,6 @@ class CreateDocumentControlsTable extends Migration {
 			$table->bigInteger('company_id')->unsigned();
 			$table->string('series', 10);
 			$table->bigInteger('number')->unsigned();
-            $table->foreign('document_type_id')->references('id')->on('document_types');
             $table->bigInteger('my_company')->unsigned();
 
             $table->foreign('my_company')->references('id')->on('companies');

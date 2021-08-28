@@ -27,6 +27,7 @@ class CreateProofDetailsTable extends Migration
             $table->decimal('d2',15,2);
             $table->decimal('cost', 15, 2);
             $table->decimal('total',15,2);
+            $table->decimal('price_item',15,2);
             $table->integer('igv_code')->unsigned();
             $table->text('comment');
             $table->bigInteger('my_company')->unsigned();

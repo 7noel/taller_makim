@@ -26,7 +26,7 @@
 	@endif
 	<div class="col-sm-2">
 		{!! Form::label('document_type_id','Documento', ['class'=>'control-label']) !!}
-		{!! Form::select('document_type_id', config('options.table_sunat.tipo_comprobante'), null, ['class'=>'form-control']) !!}
+		{!! Form::select('document_type_id', $documents, null, ['class'=>'form-control form-control-sm']) !!}
 	</div>
 	<div class="col-md-1 col-sm-2">
 		{!! Field::text('placa', ((isset($model->placa)) ? $model->placa : null), ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
@@ -40,11 +40,11 @@
 			else
 			{!! Form::hidden('is_import', null, ['id'=>'is_import']) !!}
 			@endif
-			{!! Form::text('company', $company->company_name, ['class'=>'form-control', 'id'=>'txtCompany', 'required']) !!}
+			{!! Form::text('company', $company->company_name, ['class'=>'form-control form-control-sm', 'id'=>'txtCompany', 'required']) !!}
 		@else
 			{!! Form::hidden('company_id', ((isset($model)) ? $model->company_id : null), ['id'=>'company_id']) !!}
 			{!! Form::hidden('is_import', null, ['id'=>'is_import']) !!}
-			{!! Form::text('company', ((isset($model->company_id)) ? $model->company->company_name : null), ['class'=>'form-control', 'id'=>'txtCompany', 'required']) !!}
+			{!! Form::text('company', ((isset($model->company_id)) ? $model->company->company_name : null), ['class'=>'form-control form-control-sm', 'id'=>'txtCompany', 'required']) !!}
 		@endif
 	</div>
 	<div class="col-md-2 col-sm-4">

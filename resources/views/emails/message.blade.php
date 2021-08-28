@@ -78,7 +78,7 @@
                   <td class="content-block" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 60px;" valign="top">
                   <p>Informamos que su comprobante electrónico ha sido emitido exitosamente.</p>
                   <ul>
-                    <li>{{ config('options.table_sunat.tipo_comprobante.'.$model->document_type_id)." ".$model->sn }}</li>
+                    <li>{{ $model->document_type->description." ".$model->sn }}</li>
                     <li>Fecha de emisión: {{ date('d/m/Y', strtotime($model->issued_at)) }}</li>
                     <li>Total: {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id) .' '.$model->total }}</li>
                   </ul>

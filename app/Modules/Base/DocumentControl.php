@@ -20,8 +20,4 @@ class DocumentControl extends Model implements Auditable {
 	{
 		return $this->hasOne('App\Modules\Finances\Company','id','company_id');
 	}
-	public function document_type()
-	{
-		return $this->hasOne('App\Modules\Base\DocumentType','id','document_type_id');
-	}
 }

@@ -41,4 +41,11 @@ class TableRepo extends BaseRepo{
 		}
 		return $r;
 	}
+	public function getListDoc($type, $campo='name', $id='id', $serie='')
+	{
+		if ($serie=='') {
+			return Table::where('type', $type)->where('value_3',1)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
+		}
+		return Table::where('type', $type)->where('value_3',0)->where('name', $serie)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
+	}
 }

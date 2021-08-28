@@ -10,7 +10,7 @@ class Product extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['name', 'intern_code', 'provider_code', 'manufacturer_code', 'description', 'sub_category_id', 'unit_id', 'currency_id', 'country', 'brand', 'last_purchase', 'profit_margin', 'admin_expense', 'value', 'use_set_value', 'is_downloadable', 'my_company'];
+	protected $fillable = ['name', 'intern_code', 'provider_code', 'manufacturer_code', 'description', 'sub_category_id', 'unit_id', 'currency_id', 'country', 'brand', 'last_purchase', 'profit_margin', 'admin_expense', 'value', 'price', 'use_set_value', 'is_downloadable', 'my_company'];
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {

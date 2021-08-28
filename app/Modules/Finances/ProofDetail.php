@@ -11,7 +11,7 @@ class ProofDetail extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['proof_id', 'product_id', 'stock_id', 'unit_id', 'quantity', 'discount', 'price', 'total', 'cost', 'value', 'd1', 'd2', 'igv_code', 'my_company'];
+	protected $fillable = ['proof_id', 'product_id', 'stock_id', 'unit_id', 'quantity', 'discount', 'price', 'total', 'price_item', 'cost', 'value', 'd1', 'd2', 'igv_code', 'my_company'];
 
 	public function parent()
 	{
