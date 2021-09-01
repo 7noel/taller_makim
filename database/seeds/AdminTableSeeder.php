@@ -42,8 +42,8 @@ class AdminTableSeeder extends Seeder {
         User::create(['name' => 'Usuario', 'email' => 'usuario@makim.pe', 'password' => '123', 'is_superuser' => true]);
         
 
-        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 1, 'description'=>'FACTURA', 'name'=>'F001', 'value_1'=>0]); // 1
-        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 2, 'description'=>'BOLETA', 'name'=>'B001', 'value_1'=>0]); // 2
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 1, 'description'=>'FACTURA', 'name'=>'F001', 'value_1'=>0, 'value_3'=>1, 'code'=>'01']); // 1
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 2, 'description'=>'BOLETA', 'name'=>'B001', 'value_1'=>0, 'value_3'=>1, 'code'=>'03']); // 2
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 3, 'description'=>'NOTA DE CRÉDITO', 'name'=>'FC01', 'value_1'=>0]); // 3
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 3, 'description'=>'NOTA DE CRÉDITO', 'name'=>'BC01', 'value_1'=>0]); // 4
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 4, 'description'=>'NOTA DE DÉBITO', 'name'=>'FD01', 'value_1'=>0]); // 5

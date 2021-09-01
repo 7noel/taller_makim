@@ -4,20 +4,30 @@
 			<th>Fecha</th>
 			<th>Placa</th>
 			<th>Documento</th>
-			<th>Empresa</th>
+			<th>Cliente</th>
+			<th>Estado</th>
 			<th>Total</th>
+			<th>OT</th>
 			<th>Acciones</th>
 		</tr>
 	</thead>
 	<tbody>
 		@foreach($models as $model)
 		<?php $r = json_decode($model->response_sunat) ?>
-		<tr data-id="{{ $model->id }}">
+		<tr data-id="{{ $model->id }}" data-tipo="Comprobante">
 			<td>{{ date('d/m/Y', strtotime($model->issued_at)) }} </td>
-			<td>placa</td>
+			<td>{{ $model->placa }}</td>
 			<td>{{ $model->document_type->description." ".$model->sn }} </td>
 			<td>{{ $model->company->company_name }} </td>
+			<td>{{ $model->status_sunat }} </td>
 			<td>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id) .' '.$model->total }}</td>
+			<td>
+				@forelse($model->orders as $order)
+				<a href="{{ '/operations/output_orders?sn='.$order->sn }}" class="btn btn-link btn-sm" title="Ver OT">{{ $order->sn }}</a>
+				@empty
+				SIN OT
+				@endforelse
+			</td>
 			<td>
 				<div class="btn-group">
 				@if(isset($r->links))
@@ -28,7 +38,7 @@
 				<div class="dropdown">
 					<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{!! $icons['config'] !!}</button>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-						@if(isset($r))
+						@if(isset($r->links))
 						<a href="{{ $r->links->pdf }}" class="dropdown-item btn btn-outline-info btn-sm" title="Pdf">{!! $icons['pdf'] !!} PDF</a>
 						<a href="{{ $r->links->xml }}" class="dropdown-item btn btn-outline-info btn-sm" title="XML">{!! $icons['xml'] !!} XML</a>
 						@else

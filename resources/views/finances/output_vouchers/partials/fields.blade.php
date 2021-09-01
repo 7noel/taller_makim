@@ -4,8 +4,6 @@
 {!! Form::hidden('sunat_transaction', $sunat_transaction, ['class'=>'form-control']) !!}
 {!! Form::hidden('igv_code', 1, ['class'=>'form-control']) !!}
 {!! Form::hidden('issued_at', ((isset($model->issued_at)) ? $model->issued_at : date('Y-m-d')), ['class'=>'form-control']) !!}
-{!! Form::hidden('proof_type', 1, ['class'=>'form-control']) !!}
-{!! Form::hidden('proof_type', 1, ['class'=>'form-control']) !!}
 {!! Form::hidden('sn', ((isset($model->sn) and !isset($order))? $model->sn : ''), ['id'=>'sn']) !!}
 
 <div class="form-row mb-3">
@@ -49,9 +47,9 @@
 	</div>
 	<div class="col-md-2 col-sm-4">
 		@if(isset(\Auth::user()->employee->job_id) and (\Auth::user()->employee->job_id == 8 or \Auth::user()->id==3))
-		{!! Field::select('seller_id', [\Auth::user()->employee->id => \Auth::user()->employee->full_name], ['empty'=>'Seleccionar', 'label'=>'Vendedor', 'class'=>'form-control-sm', 'required']) !!}
+		{!! Field::select('seller_id', [\Auth::user()->employee->id => \Auth::user()->employee->full_name], ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
 		@else
-		{!! Field::select('seller_id', $sellers, ['empty'=>'Seleccionar', 'label'=>'Vendedor', 'class'=>'form-control-sm', 'required']) !!}
+		{!! Field::select('seller_id', $sellers, ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
 		@endif
 	</div>
 	<div class="col-sm-1">
@@ -76,12 +74,9 @@
 	<div class="col-sm-2">
 		{!! Field::select('payment_condition_id', config('options.payment_conditions'), (isset($model) ? $model->payment_condition_id : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
-	<div class="col-sm-2 due_date">
-		{!! Field::date('due_date', ['label' => 'Vencimiento', 'class'=>'form-control-sm']) !!}
+	<div class="col-sm-2 expired_at">
+		{!! Field::date('expired_at', ['label' => 'Vencimiento', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 </div>
-
-
-
 
 @include('finances.output_vouchers.partials.details')

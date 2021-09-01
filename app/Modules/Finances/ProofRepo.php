@@ -1,7 +1,7 @@
 <?php namespace App\Modules\Finances;
 
 use App\Modules\Base\BaseRepo;
-use App\Modules\Base\DocumentControlRepo;
+use App\Modules\Base\Table;
 use App\Modules\Finances\Proof;
 use App\Modules\Operations\Order;
 use App\Modules\Finances\ProofDetailRepo;
@@ -15,20 +15,24 @@ class ProofRepo extends BaseRepo{
 		return new Proof;
 	}
 
-	public function filter($filter, $proof_type)
+	public function filter($filter)
 	{
+		$proof_type = explode('.', \Request::route()->getName())[0];
+		// dd($proof_type);
 		$q = Proof::where('my_company', session('my_company')->id)->where('proof_type', $proof_type);
-		if ($filter->sn > 0) {
-			return Proof::where('sn', $filter->sn)->get();
+		if (trim($filter->sn) != '') {
+			return $q->where('sn', $filter->sn)->orderBy('sn', 'desc')->get();
+		} elseif (trim($filter->placa) != '') {
+			return $q->where('placa', $filter->placa)->orderBy('sn', 'desc')->get();
 		} else {
 			$q->where('created_at', '>=', $filter->f1)->where('created_at', '<=', $filter->f2.' 23:59:59');
 			if(isset($filter->seller_id) && $filter->seller_id != '') {
 				$q->where('seller_id', $filter->seller_id);
 			}
 			if(isset($filter->status_id) && $filter->status_id != '') {
-				$q->where('status_id', $filter->status_id);
+				$q->where('status_sunat', $filter->status_id);
 			}
-			return $q->get();
+			return $q->orderBy('created_at', 'desc')->get();
 		}
 	}
 
@@ -47,13 +51,28 @@ class ProofRepo extends BaseRepo{
 
 	public function save($data, $id=0)
 	{
+		if ($id == 0) {
+			$data['proof_type'] = explode('.', \Request::route()->getName())[0];
+			if ($data['proof_type'] == 'output_vouchers' and (!isset($data['sn']) or $data['sn'] == '')) {
+				$data['status_sunat'] = 'PEND';
+				// $nextNumber = DocumentControlRepo::getNextNumber($data['document_type_id'], $data['my_company'], $data['reference_id']);
+				//dd($nextNumber);
+				$sn = $this->getNextNumber($data['document_type_id'], $data['my_company']);
+				$data['series'] = $sn['series'];
+				$data['number'] = $sn['number'];
+				$data['sn'] = $sn['series'] . '-' . $sn['number'];
+				$data['control_id'] = $sn['id'];
+			}
+
+		}
+		// dd(explode('.', \Request::route()->getName())[0]);
 		$data = $this->prepareData($data);
 		$model = parent::save($data, $id);
-		if (isset($data['order_id'])) {
-			$ot = Order::where('id', $data['order_id'])->update(['proof_id' => $model->id, 'invoiced_at' => date('Y-m-d H:i:s'), 'status' => config('options.order_status.3')]);
+		if (isset($data['order_id']) and isset($data['action']) and $data['action']=='generar') {
+			$ot = Order::where('id', $data['order_id'])->update(['proof_id' => $model->id, 'invoiced_at' => date('Y-m-d H:i:s'), 'status' => 'CERR']);
 		}
 		if (isset($data['control_id'])) {
-			DocumentControlRepo::nextNumber($data['control_id']);
+			// DocumentControlRepo::nextNumber($data['control_id']);
 		}
 		// Registra Movimientos
 		if (isset($data['details'])) {
@@ -67,8 +86,15 @@ class ProofRepo extends BaseRepo{
 			}
 		}
 		// $this->saveExpenses($data, $model);
-		if (isset($data['send_sunat']) and $data['send_sunat'] == 1 and $data['proof_type'] == 1) {
+		if (isset($data['send_sunat']) and $data['send_sunat'] == 1 and $model->proof_type == 'output_vouchers') {
 			$respuesta = $this->generarComprobante($model);
+			$r = json_decode($respuesta);
+			if (isset($r->success) and $r->success) {
+				$model->status_sunat = 'SUNAT';
+			} else {
+				$model->status_sunat = 'ERROR';
+			}
+			
 			$model->response_sunat = $respuesta;
 			$model->save();
 		}
@@ -77,12 +103,12 @@ class ProofRepo extends BaseRepo{
 
 	public function getNextNumber($document_type_id, $my_company = 1)
 	{
-		$doc = DocumentControlRepo::getNextNumber($document_type_id, $my_company);
-		$last = Proof::where('my_company', $my_company)->where('document_type_id', $document_type_id)->where('series', $doc->series)->orderBy('number', 'desc')->first();
+		$doc = Table::where('id', $document_type_id)->where('my_company', $my_company)->first();
+		$last = Proof::where('my_company', $my_company)->where('document_type_id', $document_type_id)->where('series', $doc->name)->orderBy('number', 'desc')->first();
 		if ($last) {
-			return ['id' => $doc->id, 'series' => $doc->series, 'number'=> ($last->number + 1)];
+			return ['id' => $doc->id, 'series' => $doc->name, 'number'=> ($last->number + 1)];
 		} else {
-			return ['id' => $doc->id, 'series' => $doc->series, 'number'=> 1];
+			return ['id' => $doc->id, 'series' => $doc->name, 'number'=> 1];
 		}
 	}
 
@@ -103,15 +129,16 @@ class ProofRepo extends BaseRepo{
 			$data['type_op'] = '02'; //2136
 		}
 
-		if ($data['proof_type'] == 1 and (!isset($data['sn']) or $data['sn'] == '')) {
-			// $nextNumber = DocumentControlRepo::getNextNumber($data['document_type_id'], $data['my_company'], $data['reference_id']);
-			//dd($nextNumber);
-			$sn = $this->getNextNumber($data['document_type_id'], $data['my_company']);
-			$data['series'] = $sn['series'];
-			$data['number'] = $sn['number'];
-			$data['sn'] = $sn['series'] . '-' . $sn['number'];
-			$data['control_id'] = $sn['id'];
-		}
+		// if ($data['proof_type'] == 'output_vouchers' and (!isset($data['sn']) or $data['sn'] == '')) {
+		// 	$data['status_sunat'] = 'PEND';
+		// 	// $nextNumber = DocumentControlRepo::getNextNumber($data['document_type_id'], $data['my_company'], $data['reference_id']);
+		// 	//dd($nextNumber);
+		// 	$sn = $this->getNextNumber($data['document_type_id'], $data['my_company']);
+		// 	$data['series'] = $sn['series'];
+		// 	$data['number'] = $sn['number'];
+		// 	$data['sn'] = $sn['series'] . '-' . $sn['number'];
+		// 	$data['control_id'] = $sn['id'];
+		// }
 		
 		
 		if (!isset($data['warehouse_id']) or $data['warehouse_id'] == '' or $data['warehouse_id'] == '0') {
@@ -151,12 +178,13 @@ class ProofRepo extends BaseRepo{
 					$d2 = isset($detail['d2']) ? $detail['d2'] : 0 ;
 					$p = $v * (100 + config('options.tax.igv')) / 100;
 					$vt = round( $v * $q * (100-$d1) * (100-$d2) / 100 )/100;
-					$t = $q * round($vt/$q * (100 + config('options.tax.igv'))) /100;
+					$t = round( $detail['price'] * $detail['quantity'] * (100-$detail['d1']) * (100-$detail['d2']) / 100 )/100;
 					// dd($t);
 					$discount = $v*$q - $vt;
 					$data['details'][$key]['price'] = round($p, 2);
 					$data['details'][$key]['discount'] = round($discount, 2);
 					$data['details'][$key]['total'] = round($vt, 2);
+					$data['details'][$key]['price_item'] = round($t, 2);
 
 					$d_items += $discount;
 					$gross_value += $v * $q;
@@ -178,7 +206,7 @@ class ProofRepo extends BaseRepo{
 		$data['total'] = $total;
 		$data['tax'] = $data['total'] - $data['subtotal'];
 		//cacular factor
-		if ($data['proof_type'] == 2) {
+		if (isset($data['proof_type']) and $data['proof_type'] == 'input_vouchers') {
 			$factor = 1;
 			if ($gross_value>0) {
 				$factor = ($gross_value + $expenses) / $gross_value;
@@ -193,10 +221,10 @@ class ProofRepo extends BaseRepo{
 			}
 			if ($factor != 1) {
 				$data['gross_value'] = $gross_value;
-				$data['discount_items'] = $d_items;
-				$data['subtotal'] = $gross_value + $expenseCif;
+				$data['discount_items'] = round($d_items, 2);
+				$data['subtotal'] = round($gross_value + $expenseCif, 2);
 				$data['total'] = round($data['subtotal'] * (100 + config('options.tax.igv')) / 100, 2);
-				$data['tax'] = $data['total'] - $data['subtotal'];
+				$data['tax'] = round($data['total'] - $data['subtotal'], 2);
 			}
 		}
 
@@ -286,12 +314,12 @@ class ProofRepo extends BaseRepo{
 		$data = array(
 		    "serie_documento" => $model->series,
 		    "numero_documento" => $model->number,
-		    "fecha_de_emision" => date('Y-m-d'),
+		    "fecha_de_emision" => $model->issued_at,
 		    "hora_de_emision" => date('H:i:s'),
 		    "codigo_tipo_operacion" => "0101",
-		    "codigo_tipo_documento" => '0'.$model->document_type_id,
-		    "codigo_tipo_moneda" => "PEN",
-		    "fecha_de_vencimiento" => date('Y-m-d'),
+		    "codigo_tipo_documento" => $model->document_type->code,
+		    "codigo_tipo_moneda" => config('options.table_sunat.moneda_sunat.'.$model->currency_id),
+		    "fecha_de_vencimiento" => $model->expired_at,
 			"numero_orden_de_compra" => "",
 			"nombre_almacen" => "Almacen 1",
 			"datos_del_emisor" => array(
@@ -309,20 +337,22 @@ class ProofRepo extends BaseRepo{
 			),
 			"totales" => array(
 				"total_exportacion" => 0.00,
-				"total_operaciones_gravadas" => $model->subtotal,
+				"total_operaciones_gravadas" => round($model->subtotal, 2),
 				"total_operaciones_inafectas" => 0.00,
 				"total_operaciones_exoneradas" => 0.00,
 				"total_operaciones_gratuitas" => 0.00,
-				"total_igv" => $model->tax,
-				"total_impuestos" => $model->tax,
-				"total_valor" => $model->subtotal,
-				"total_venta" => $model->total
+				"total_igv" => round($model->tax, 2),
+				"total_impuestos" => round($model->tax, 2),
+				"total_valor" => round($model->subtotal, 2),
+				"total_venta" => round($model->total, 2),
 			),
+			"additional_information" => "Placa: $model->placa<br>Otra linea",
 		);
 		foreach ($model->details as $key => $detail) {
-			$subtotal = $detail->quantity*$detail->value-$detail->discount;
+			$base = round($detail->quantity*$detail->value, 2);
+			$subtotal = round($detail->quantity*$detail->value-$detail->discount, 2);
 			$total = round($subtotal*1.18, 2);
-			$igv = $total - $subtotal;
+			$igv = round($total - $subtotal, 2);
 			$data['items'][] = array(
 				// "unidad_de_medida"          => $detail->product->unit->code,
 				"codigo_interno"            => $detail->product->intern_code,
@@ -333,13 +363,27 @@ class ProofRepo extends BaseRepo{
 				"valor_unitario"            => $detail->value,
 				"codigo_tipo_precio"        => '01',
 				"precio_unitario"           => $detail->price,
-				"codigo_tipo_afectacion_igv" => '10',
-				"total_base_igv"                 => $subtotal,
-				"porcentaje_igv"                       => 18.00,
-				"total_igv"                       => $igv,
-				"total_impuestos"                       => $igv,
-				"total_valor_item"                  => $subtotal,
-				"total_item"                     => $total,
+				"codigo_tipo_afectacion_igv"=> '10',
+				"total_base_igv"            => $subtotal,
+				"porcentaje_igv"            => 18.00,
+				"total_igv"                 => $igv,
+				"total_impuestos"           => $igv,
+				"total_valor_item"          => $subtotal,
+				"total_item"                => $total,
+				"descuentos" => array([
+					"codigo" => '00',
+					"descripcion" => 'Descuento',
+					"porcentaje" => $detail->d1,
+					"monto" => $detail->discount,
+					"base" => $base,
+				])
+			);
+		}
+		if ($model->expired_at>$model->issued_at) {
+			$data['venta_al_credito'][] = array(
+				"cuota" => "Cuota001",
+				"fecha_de_pago" => $model->expired_at,
+				"importe" => $model->total,
 			);
 		}
 		//dd($data);
@@ -355,7 +399,7 @@ class ProofRepo extends BaseRepo{
 	public function send($data)
 	{
 		$data_json = json_encode($data);
-		//dd($data_json);
+		// dd($data_json);
 		$ruta = "https://makim.facturandola.app/api/documents";
 		$token = "lWWhDWAG2ngODxODuZc8lCulb73x3AfCeMww8RgxddUcjAKd8P";
 
@@ -420,7 +464,17 @@ class ProofRepo extends BaseRepo{
 
 	public function autocomplete2($term, $company_id)
 	{
-		return Proof::where('sn','like',"%$term%")->where('company_id', $company_id)->where('status_id', 0)->where('payment_condition_id', 3)->whereIn('proof_type', [2, 4])->with('document_type', 'currency')->get();
+		return Proof::where('sn','like',"%$term%")->where('company_id', $company_id)->where('status', 0)->where('payment_condition_id', 3)->whereIn('proof_type', [2, 4])->with('document_type', 'currency')->get();
+	}
+
+	public function cancel($id)
+	{
+		$model = Proof::find($id);
+		$model->canceled_at = date('Y-m-d H:i:s');
+		$model->status_sunat = 'ANUL';
+		$model->save();
+		// Order::where('order_type', 'output_orders')->where('proof_id', $model->id)->update(['status'=>'APROB', 'proof_id'=>0, 'invoiced_at'=>NULL]);
+		return $model;
 	}
 
 }

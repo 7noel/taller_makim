@@ -25,7 +25,7 @@
 			<?php 
 			$audits = $model->audits()->with('user')->get();
 			 ?>
-			@if($audits)
+			@if($audits->isNotEmpty())
 			<br>
 			<div>
 				<a class="btn btn-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">

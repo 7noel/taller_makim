@@ -33,27 +33,19 @@ class ProofsController extends Controller {
 
 	public function index()
 	{
-		if (explode('.', \Request::route()->getName())[0] == 'reception_letters') {
-			$proof_type = 4;
-		} elseif (explode('.', \Request::route()->getName())[0] == 'issuance_letters') {
-			$proof_type = 3;
-		} elseif (explode('.', \Request::route()->getName())[0] == 'reception_vouchers') {
-			$proof_type = 2;
-		} else {
-			$proof_type = 1;
-		}
-		$filter = (object) \Request::all();
+		$filter = (object) request()->all();
 		if( !((array) $filter) ) {
 			$filter->sn = '';
+			$filter->placa = '';
 			$filter->seller_id = '';
-			$filter->status_id = '';
+			$filter->status = '';
 			$filter->f1 = date('Y-m-d', strtotime('first day of this month'));
 			$filter->f2 = date('Y-m-d', strtotime('last day of this month'));
 		}
-		$models = $this->repo->filter($filter, $proof_type);
-		
+		$models = $this->repo->filter($filter);
+		// dd(json_decode($models[1]->response_sunat)->success);
+
 		$sellers = $this->companyRepo->getListSellers();
-		$payment_conditions = [];
 		return view('partials.filter',compact('models', 'filter', 'sellers'));
 	}
 
@@ -65,19 +57,21 @@ class ProofsController extends Controller {
 
 	public function create()
 	{
+		$action = "create";
 		// dd(\Request::route()->action['as']);
 		$my_companies = $this->companyRepo->getListMyCompany();
-		$proof_type = $this->proof_type;
+		// $proof_type = $this->proof_type;
 		$sunat_transaction = 1;
 		$igv_code = 1;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.create', compact('proof_type', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'documents'));
+		return view('partials.create', compact('proof_type', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'action'));
 	}
 
 
 	public function byOrder($order_id)
 	{
+		$action = "generar";
 		$model = $this->orderRepo->findOrFail($order_id);
 		$order = $model;
 		//dd($model);
@@ -85,10 +79,10 @@ class ProofsController extends Controller {
 
 		$sunat_transaction = 1;
 		$igv_code = 1;
-		$proof_type = $this->proof_type;
+		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.create', compact('model', 'order_id', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents'));
+		return view('partials.create', compact('model', 'order_id', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'action'));
 	}
 
 	public function index2()
@@ -106,25 +100,28 @@ class ProofsController extends Controller {
 
 	public function show($id)
 	{
+		$action = "show";
 		$model = $this->repo->findOrFail($id);
 		$my_companies = $this->companyRepo->getListMyCompany();
 
 		$sunat_transaction = $model->sunat_transaction;
 		$igv_code = $model->igv_code;
-		$proof_type = $this->proof_type;
+		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.show', compact('model', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'documents'));
+		return view('partials.show', compact('model', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'action'));
 	}
 
 	public function edit($id)
 	{
+		$action = "edit";
 		$model = $this->repo->findOrFail($id);
+		// dd($model->document_type->code);
 		//$my_companies = $this->companyRepo->getListMyCompany();
 
 		$sunat_transaction = $model->sunat_transaction;
 		$igv_code = $model->igv_code;
-		$proof_type = $this->proof_type;
+		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
 		return view('partials.edit', compact('model', 'sellers', 'warehouses', 'items', 'proof_type', 'sunat_transaction', 'igv_code', 'documents'));
@@ -138,9 +135,10 @@ class ProofsController extends Controller {
 
 	public function destroy($id)
 	{
-		$model = $this->repo->destroy($id);
+		$model = $this->repo->cancel($id);
+		// $model = $this->repo->destroy($id);
 		if (\Request::ajax()) {	return $model; }
-		return redirect()->route($this->doc.'.index');
+		return redirect()->route(explode('.', \Request::route()->getName())[0].'.index');
 	}
 	public function createByCompany($company_id)
 	{

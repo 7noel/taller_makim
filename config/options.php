@@ -57,13 +57,13 @@ return array(
 	'product_status' => [''=>'Status', '1'=>'Activo', '3'=>'A pedido', '2'=>'Inactivo'],
 	'proof_types' => ['Ninguno', 'issuance_vouchers', 'reception_vouchers', 'issuance_letters', 'reception_letters'],
 	'mov' => ['Salida', 'Entrada'],
-	'proof_status' => ['REGISTRADO', 'SUNAT', 'ANULADO', 'CANCELADO', 'CANJEADO'],
-	'quote_status' => ['PEND' => 'PEND', 'APROB' => 'APROB', 'CANC' => 'CANC', 'CERR' => 'CERR'],
-	'order_status' => ['ENPRG' => 'ENPRG', 'COMP' => 'COMP', 'CANC' => 'CANC', 'CERR' => 'CERR'],
+	'proof_status' => ['PEND' => 'PEND', 'ERROR' => 'ERROR', 'SUNAT' => 'SUNAT', 'PANUL' => 'PANUL', 'ANUL' => 'ANUL'],
+	'quote_status' => ['PEND' => 'PEND', 'APROB' => 'APROB', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
+	'order_status' => ['ENPRG' => 'ENPRG', 'COMP' => 'COMP', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
 	'quote_status_next' => [
-		'PEND' => ['PEND', 'APROB', 'CANC'],
+		'PEND' => ['PEND', 'APROB', 'ANUL'],
 		'APROB' => ['APROB', 'PEND'],
-		'CANC' => ['CANC'],
+		'ANUL' => ['ANUL'],
 		'CERR' => ['CERR'],
 	],
 	'order_status_next' => [

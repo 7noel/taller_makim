@@ -29,6 +29,10 @@
 		</div>
 	</div>
 </div>
+
+{!! Form::open(['route'=> [$routes['delete'], ':_ID'], 'method'=>'DELETE', 'id'=>'form-delete']) !!}
+{!! Form::close() !!}
+
 @endsection
 
 @section('scripts')

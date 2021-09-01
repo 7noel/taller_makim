@@ -54,10 +54,10 @@
 		{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? null : '1'), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::number('value', ['label' => 'V Venta', 'class'=>'form-control-sm col', 'id'=>'p_value']) !!}
+		{!! Field::number('value', ['label' => 'V Venta', 'class'=>'form-control-sm col', 'id'=>'p_value', 'step'=>"0.01"]) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::number('price', ['label' => 'Precio', 'class'=>'form-control-sm col', 'id'=>'p_price']) !!}
+		{!! Field::number('price', ['label' => 'Precio', 'class'=>'form-control-sm col', 'id'=>'p_price', 'step'=>"0.01"]) !!}
 	</div>
 </div>
 

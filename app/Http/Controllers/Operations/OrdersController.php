@@ -39,6 +39,7 @@ class OrdersController extends Controller {
 	}
 	public function byQuote($quote_id)
 	{
+		$action = "generar";
 		$model = $this->repo->findOrFail($quote_id);
 		//dd($model);
 		$quote = $model;
@@ -47,7 +48,7 @@ class OrdersController extends Controller {
 		$sellers = $this->companyRepo->getListSellers();
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->toArray() : [];
-		return view('operations.output_orders.create_by_quote', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote'));
+		return view('operations.output_orders.create_by_quote', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
 	}
 
 	public function index2()
@@ -58,12 +59,13 @@ class OrdersController extends Controller {
 
 	public function create()
 	{
+		$action = "create";
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
 		$bs = ['' => 'Seleccionar'];
 		$bs_shipper = ['' => 'Seleccionar'];
-		return view('partials.create', compact('payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper'));
+		return view('partials.create', compact('payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'action'));
 	}
 
 	public function store()
@@ -75,17 +77,20 @@ class OrdersController extends Controller {
 
 	public function show($id)
 	{
+		$action = "show";
 		$model = $this->repo->findOrFail($id);
+		$quote = $model->quote;
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
 		$bs = $model->company->branches->pluck('name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
-		return view('partials.show', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper'));
+		return view('partials.show', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
 	}
 
 	public function edit($id)
 	{
+		$action = "edit";
 		$model = $this->repo->findOrFail($id);
 		$quote = $model->quote;
 		$my_companies = $this->companyRepo->getListMyCompany();
@@ -93,7 +98,7 @@ class OrdersController extends Controller {
 		$sellers = $this->companyRepo->getListSellers();
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
-		return view('partials.edit', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote'));
+		return view('partials.edit', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
 	}
 
 	public function update($id)
@@ -104,7 +109,8 @@ class OrdersController extends Controller {
 
 	public function destroy($id)
 	{
-		$model = $this->repo->destroy($id);
+		$model = $this->repo->cancel($id);
+		//$model = $this->repo->destroy($id);
 		if (\Request::ajax()) {	return $model; }
 		return redirect()->route(explode('.', \Request::route()->getName())[0].'.index');
 	}
@@ -141,10 +147,11 @@ class OrdersController extends Controller {
 	}
 	public function createByCompany($company_id)
 	{
+		$action = "edit";
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$currencies = $this->currencyRepo->getList('symbol');
 		$sellers = $this->employeeRepo->getListSellers();
 		$company = $this->companyRepo->findOrFail($company_id);
-		return view('partials.create', compact('payment_conditions', 'currencies', 'sellers', 'company'));
+		return view('partials.create', compact('payment_conditions', 'currencies', 'sellers', 'company', 'action'));
 	}
 }

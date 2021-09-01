@@ -24,7 +24,6 @@ class CreateTicketsTable extends Migration
             $table->bigInteger('my_company')->unsigned();
 
             $table->foreign('my_company')->references('id')->on('companies');
-            $table->foreign('document_type_id')->references('id')->on('document_types');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
             $table->softDeletes();

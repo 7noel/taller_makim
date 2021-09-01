@@ -18,9 +18,10 @@ class CreateProofsTable extends Migration
             $table->id();
             $table->date('issued_at'); // fecha de emision
             $table->boolean('is_import'); // true si es una importacion
-            $table->integer('proof_type')->unsigned(); // typo de documento
+            $table->string('proof_type'); // typo de documento
             $table->boolean('mov'); // 1 ingresa mercaderia, 0 sale mercaderia
             $table->string('type_op'); // segun ello afecta el valor promedio
+            $table->string('placa');
             $table->bigInteger('company_id')->unsigned();
             $table->bigInteger('my_company')->unsigned();
             $table->integer('sunat_transaction')->unsigned();
@@ -61,9 +62,11 @@ class CreateProofsTable extends Migration
             $table->bigInteger('swap_id')->unsigned(); // id del canje para las letras
             $table->bigInteger('reference_id')->unsigned(); // referencia id de guia (para FA y BO), de FA BO (para las NC y ND)
             $table->integer('status_id')->unsigned();
-            $table->integer('status_sunat')->unsigned();
+            $table->string('status_sunat');
             $table->boolean('send_sunat');
             $table->text('response_sunat');
+            $table->text('response_voided');
+            $table->text('ticket_voided');
             $table->string('email');
             $table->string('email_1');
             $table->string('email_2');

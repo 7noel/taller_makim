@@ -17,7 +17,8 @@ class OrderRepo extends BaseRepo{
 	public function getModel(){
 		return new Order;
 	}
-	public function findOrFail($id){
+	public function findOrFail($id)
+	{
 		return Order::with('details.product', 'details.product.accessories.accessory.sub_category')->findOrFail($id);
 	}
 	public function save($data, $id=0)
@@ -39,8 +40,8 @@ class OrderRepo extends BaseRepo{
 				$mov->saveAll($model, 0);
 			}
 		}
-		if (isset($data['quote_id'])) {
-			Order::where('id', $data['quote_id'])->update(['order_id' => $model->id, 'approved_at' => date('Y-m-d H:i:s'), 'status_id' => 1]);
+		if (isset($data['order_id']) and isset($data['quote_sn'])) {
+			Order::where('id', $data['order_id'])->update(['order_id' => $model->id, 'invoiced_at' => date('Y-m-d H:i:s'), 'status' => 'CERR']);
 		}
 		return $model;
 	}
@@ -74,6 +75,7 @@ class OrderRepo extends BaseRepo{
 		
 		//Calculando totales
 		$gross_value = 0;
+		$gross_precio = 0;
 		$subtotal = 0;
 		$d_items = 0;
 		$total = 0;
@@ -82,18 +84,29 @@ class OrderRepo extends BaseRepo{
 				if (!isset($detail['is_deleted'])) {
 					$p = $detail['value'] * (100 + config('options.tax.igv')) / 100;
 					$vt = round( $detail['value'] * $detail['quantity'] * (100-$detail['d1']) * (100-$detail['d2']) / 100 )/100;
-					$t = round($vt * (100 + config('options.tax.igv')) / 100, 2);
+					$t = round( $detail['price'] * $detail['quantity'] * (100-$detail['d1']) * (100-$detail['d2']) / 100 )/100;
+					// $t = round($vt * (100 + config('options.tax.igv')) / 100, 2);
 					$discount = $detail['value']*$detail['quantity'] - $vt;
 					$data['details'][$key]['price'] = round($p, 2);
 					$data['details'][$key]['discount'] = round($discount, 2);
 					$data['details'][$key]['total'] = round($vt, 2);
+					$data['details'][$key]['price_item'] = round($t, 2);
 
 					$d_items += $discount;
 					$gross_value += $detail['value'] * $detail['quantity'];
+					$gross_precio += $detail['price'] * $detail['quantity'];
 					$subtotal += round($vt, 2);
 					$total += round($t, 2);
 					
 				}
+				if (isset($data['with_tax']) and $data['with_tax'] == 1) {
+					$subtotal = round($total*100/(100 + config('options.tax.igv')),2);
+					$gross_value = round($gross_precio*100/(100 + config('options.tax.igv')),2);
+					$d_items = $gross_value - $subtotal;
+				} else {
+					$total = round($subtotal*(100 + config('options.tax.igv'))/100, 2);
+				}
+				
 
 				// Obteniendo el stock_id
 				if (!isset($detail['stock_id']) and isset($data['sent_at']) ) {
@@ -113,7 +126,13 @@ class OrderRepo extends BaseRepo{
 		}
 
 		// Actualizando Status
-		$data['status'] = config('options.order_status.0');
+		if (explode('.', \Request::route()->getName())[0] == 'output_orders') {
+			$arr_status = config('options.order_status');
+		} else {
+			$arr_status = config('options.quote_status');
+		}
+		
+		$data['status'] = 'PEND';
 		if (isset($data['checked_at'])) {
 			if ($data['checked_at'] == "on") {
 				$data['checked_at'] = date('Y-m-d H:i:s');
@@ -127,7 +146,7 @@ class OrderRepo extends BaseRepo{
 			if ($data['approved_at'] == "on") {
 				$data['approved_at'] = date('Y-m-d H:i:s');
 			}
-			$data['status_id'] = '2';
+			$data['status'] = 'APROB';
 			// $data['status'] = config('options.order_status.2');
 		} else {
 			$data['approved_at'] = null;
@@ -136,7 +155,7 @@ class OrderRepo extends BaseRepo{
 			if ($data['invoiced_at'] == "on") {
 				$data['invoiced_at'] = date('Y-m-d H:i:s');
 			}
-			$data['status_id'] = '3';
+			$data['status'] = 'CERR';
 			// $data['status'] = config('options.order_status.3');
 		} else {
 			$data['invoiced_at'] = null;
@@ -177,10 +196,22 @@ class OrderRepo extends BaseRepo{
 				$q->where('seller_id', $filter->seller_id);
 			}
 			if(isset($filter->status_id) && $filter->status_id != '') {
-				$q->where('status_id', $filter->status_id);
+				$q->where('status', $filter->status_id);
 			}
 			return $q->orderBy('sn', 'desc')->get();
 		}
+	}
+
+	public function cancel($id)
+	{
+		$model = Order::find($id);
+		$model->canceled_at = date('Y-m-d H:i:s');
+		$model->status = 'ANUL';
+		$model->save();
+		if ($model->order_type == 'output_orders') {
+			Order::where('order_type', 'output_quotes')->where('order_id', $model->id)->update(['status'=>'APROB', 'order_id'=>0, 'invoiced_at'=>NULL]);
+		}
+		return $model;
 	}
 
 }

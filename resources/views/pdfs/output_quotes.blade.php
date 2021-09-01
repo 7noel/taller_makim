@@ -67,7 +67,7 @@
 					<td class="border">{{ $detail->product->intern_code.' '.$detail->product->name }}</td>
 					<td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
 					<td class="border center">{{ $detail->price }}</td>
-					<td class="border center">{{ number_format($detail->price*$detail->quantity,2) }}</td>
+					<td class="border center">{{ $detail->price_item }}</td>
 				</tr>
 				@endforeach
 			</tbody> 

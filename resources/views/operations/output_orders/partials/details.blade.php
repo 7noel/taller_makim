@@ -9,7 +9,7 @@
 			<th class="withTax" width="100px">Precio</th>
 			<th class="withoutTax" width="100px">Valor</th>
 			<th width="100px">Dscto1(%)</th>
-			<th width="100px">Dscto2(%)</th>
+			<th width="100px" class="d-none">Dscto2(%)</th>
 			<th class="withoutTax" width="100px">V.Total</th>
 			<th class="withTax" width="100px">P.Total</th>
 			<th>Acciones</th>
@@ -29,9 +29,9 @@
 			<td class="withTax">{!! Form::text("details[$i][price]", $detail->price, ['class'=>'form-control form-control-sm txtPrecio text-right', 'data-precio'=>'', 'readonly'=>'readonly']) !!}</td>
 			<td class="withoutTax">{!! Form::text("details[$i][value]", $detail->value, ['class'=>'form-control form-control-sm txtValue text-right', 'data-value'=>'', 'readonly'=>'readonly']) !!}</td>
 			<td>{!! Form::text("details[$i][d1]", $detail->d1, ['class'=>'form-control form-control-sm txtDscto text-right', 'data-dscto'=>'']) !!}</td>
-			<td>{!! Form::text("details[$i][d2]", $detail->d2, ['class'=>'form-control form-control-sm txtDscto2 text-right', 'data-dscto'=>'']) !!}</td>
-			<td> <span class='form-control form-control-sm txtTotal text-right' data-total>{{ $detail->total }}</span> </td>
-			<td> <span class='form-control form-control-sm txtPriceTotal text-right' data-price_item>{{ $detail->price_item }}</span> </td>
+			<td class="d-none">{!! Form::text("details[$i][d2]", $detail->d2, ['class'=>'form-control form-control-sm txtDscto2 text-right', 'data-dscto'=>'']) !!}</td>
+			<td class="withoutTax"> <span class='form-control form-control-sm txtTotal text-right' data-total>{{ $detail->total }}</span> </td>
+			<td class="withTax"> <span class='form-control form-control-sm txtPriceItem text-right' data-price_item>{{ $detail->price_item }}</span> </td>
 			<td class="text-center form-inline">
 				<a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar">{!! $icons['remove'] !!}</a>
 				<input type="checkbox" name="details[{{$i}}][is_deleted]" data-isdeleted class="isdeleted hidden">
@@ -53,7 +53,7 @@
 		<td width="100px" class="withTax">{!! Form::text('data5', null, ['class'=>'form-control form-control-sm txtPrecio text-right', 'data-precio'=>'', 'readonly'=>'readonly']) !!}</td>
 		<td width="100px" class="withoutTax">{!! Form::text('data7', null, ['class'=>'form-control form-control-sm txtValue text-right', 'data-value'=>'']) !!}</td>
 		<td width="100px">{!! Form::text('data6', null, ['class'=>'form-control form-control-sm txtDscto text-right', 'data-dscto'=>'']) !!}</td>
-		<td width="100px">{!! Form::text('data8', null, ['class'=>'form-control form-control-sm txtDscto2 text-right', 'data-dscto2'=>'']) !!}</td>
+		<td width="100px" class="d-none">{!! Form::text('data8', null, ['class'=>'form-control form-control-sm txtDscto2 text-right', 'data-dscto2'=>'']) !!}</td>
 		<td width="100px" class="withoutTax"> <span class='form-control form-control-sm txtTotal text-right' data-total></span> </td>
 		<td width="100px" class="withTax"> <span class='form-control form-control-sm txtPriceItem text-right' data-price_item></span> </td>
 		<td width="100px" class="text-center form-inline">
@@ -64,11 +64,11 @@
 </template>
 {!! Form::hidden('items', $i, ['id'=>'items']) !!}
 <a href="#" id="btnAddProduct" class="btn btn-success btn-sm" title="Agregar Producto">{!! $icons['add'] !!} Agregar</a>
-<table class="table table-condensed">
+<table class="table table-condensed table-sm">
 	<thead>
 		<tr>
 			<th class="text-center">V.Bruto</th>
-			<th class="text-center">Dscto</th>
+			<th class="text-center">Dscto Total</th>
 			<th class="text-center">SubTotal</th>
 			<th class="text-center">Total</th>
 		</tr>

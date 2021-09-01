@@ -175,6 +175,34 @@
     </div>
     <script>
 $(document).ready(function () {
+    $('.btn-anular').click(function(e){
+        e.preventDefault();
+        var row = $(this).parents('tr');
+        var id = row.data('id');
+        var tipo = row.data('tipo');
+        var form = $('#form-delete');
+        var url = form.attr('action').replace(':_ID', id);
+        var data = form.serializeArray();
+        // row.fadeOut();
+        var texto = "El Registro "
+
+        if (!confirm(`Seguro que desea anular ${tipo} ?`)) {
+            e.preventDefault();
+            return false;
+        }
+        
+        $.post(url, data, function(result){
+            console.log(result);
+            alert(`${tipo}-${result.sn} fue anulado`)
+            //alert(result.message);
+            row.find('.status').text('<span class="badge badge-danger">ANUL</span>')
+            row.find('.btn-anular').fadeOut()
+        }).fail(function(){
+            alert(`${tipo} no fue anulado`)
+            // row.show();
+        });
+    });
+
     $('#p_value').change(function () {
         x = Math.round($('#p_value').val()*118)/100
         $('#p_price').val(x)
@@ -427,6 +455,9 @@ function calcTotal () {
     total = Math.round(100 * total) / 100
     if (with_tax) {
         subtotal = Math.round(10000 * total / 118) / 100
+        gross_value = Math.round(10000 * gross_precio / 118) / 100
+        d_items = gross_value - subtotal
+        // gross_value = Math.round(subtotal*1000000/((100-d1)*(100-d2))) / 100
     } else {
         total = Math.round(118 * subtotal) / 100
     }
