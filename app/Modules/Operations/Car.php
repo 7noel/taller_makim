@@ -13,6 +13,11 @@ class Car extends Model implements Auditable
 
 	protected $fillable = ['company_id', 'my_company', 'placa', 'brand_id', 'modelo_id', 'year', 'version', 'body', 'color', 'vin', 'motor', 'codigo', 'f_revision', 'f_llamada', 'f_recordatorio', 'f_next_pr', 'contact_name', 'contact_email', 'contact_phone', 'contact_mobile'];
 
+	public function scopeName($query, $name){
+		if (trim($name) != "") {
+			return $query->where('placa', 'LIKE', "%$name%")->orWhere('vin', 'LIKE', "%$name%");
+		}
+	}
 	public function company()
 	{
 		return $this->belongsTo('App\Modules\Finances\Company', 'company_id');

@@ -67,6 +67,7 @@ class ProofRepo extends BaseRepo{
 		}
 		// dd(explode('.', \Request::route()->getName())[0]);
 		$data = $this->prepareData($data);
+		// dd($data);
 		$model = parent::save($data, $id);
 		if (isset($data['order_id']) and isset($data['action']) and $data['action']=='generar') {
 			$ot = Order::where('id', $data['order_id'])->update(['proof_id' => $model->id, 'invoiced_at' => date('Y-m-d H:i:s'), 'status' => 'CERR']);
@@ -261,32 +262,49 @@ class ProofRepo extends BaseRepo{
 		}
 	}
 
-	public function consultarCpe($model, $anulacion = 0)
+	public function consultarCpe($model)
 	{
-		$numero = explode('-', $model->number);
-		$data = [
-			"operacion" => ($anulacion == 0) ? "consultar_comprobante" : "consultar_anulacion",
+		$data = array(
+			"operacion" => "consultar_comprobante",
 			"tipo_de_comprobante" => $model->document_type->code,
-			"serie" => $numero[0],
-			"numero" => $numero[1]
-		];
-		$respuesta = $this->send($data);
+			"serie" => $model->series,
+			"numero" => $model->number,
+		);
+		$respuesta = $this->send($data, 'documents/status');
 		return $respuesta;
-
 	}
 
-	public function generarAnulacion($model)
+	public function generarAnulacion($model, $r)
 	{
-		$numero = explode('-', $model->number);
-		$data = [
-			"operacion" => "generar_anulacion",
-			"tipo_de_comprobante" => $model->document_type->code,
-			"serie" => $numero[0],
-			"numero" => $numero[1],
-			"motivo" => "ERROR DEL SISTEMA",
-			"codigo_unico"=>""
-		];
-		$respuesta = $this->send($data);
+		$data = array(
+			"fecha_de_emision_de_documentos" => $model->issued_at,
+			"documentos" => array([
+				"external_id" => $r->data->external_id,
+				"motivo_anulacion" => "ANULACIÓN DE LA OPERACIÓN"
+			]),
+		);
+		if (substr($model->series,0,1)=='F') {
+			$url = 'voided';
+		} elseif (substr($model->series,0,1)=='B') {
+			$data['codigo_tipo_proceso'] = 3;
+			$url = 'summaries';
+		}
+		
+		$respuesta = $this->send($data, $url);
+		return $respuesta;
+	}
+	public function consultarAnulacion($model, $r_v)
+	{
+		$data = array(
+			"external_id" => $r_v->data->external_id,
+			"ticket" => $r_v->data->ticket,
+		);
+		if (substr($model->series,0,1)=='F') {
+			$url = 'voided/status';
+		} elseif (substr($model->series,0,1)=='B') {
+			$url = 'summaries/status';
+		}
+		$respuesta = $this->send($data, $url);
 		return $respuesta;
 	}
 
@@ -298,8 +316,8 @@ class ProofRepo extends BaseRepo{
 	public function generarComprobante($model)
 	{
 		$data = $this->prepareCpe($model);
-		$respuesta = $this->send($data);
-		return $respuesta; 
+		$respuesta = $this->send($data, 'documents');
+		return $respuesta;
 		//dd($respuesta);
 		//$this->readRespuesta($respuesta);
 	}
@@ -396,12 +414,12 @@ class ProofRepo extends BaseRepo{
 	 * @param  Array $data data lista para ser enviada
 	 * @return Json            Respuesta de Nubefact
 	 */
-	public function send($data)
+	public function send($data, $slug)
 	{
 		$data_json = json_encode($data);
 		// dd($data_json);
-		$ruta = "https://makim.facturandola.app/api/documents";
-		$token = "lWWhDWAG2ngODxODuZc8lCulb73x3AfCeMww8RgxddUcjAKd8P";
+		$ruta = env('FACT_RUTA').$slug;
+		$token = env('FACT_TOKEN');
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $ruta);
@@ -420,43 +438,6 @@ class ProofRepo extends BaseRepo{
 		return $respuesta;
 	}
 
-	/**
-	 * Leer Respuesta
-	 * @param  Json $respuesta respuesta de nubefact
-	 * @return html            Imprime en pantalla la respuesta
-	 */
-	public function readRespuesta($respuesta)
-	{
-		$leer_respuesta = json_decode($respuesta, true);
-		if (isset($leer_respuesta['errors'])) {
-			//Mostramos los errores si los hay
-		    echo $leer_respuesta['errors'];
-		} else {
-			//Mostramos la respuesta
-		?>
-		<h2>RESPUESTA DE SUNAT</h2>
-		    <table border="1" style="border-collapse: collapse">
-		        <tbody>
-		            <tr><th>tipo:</th><td><?php echo $leer_respuesta['tipo_de_comprobante']; ?></td></tr>
-		            <tr><th>serie:</th><td><?php echo $leer_respuesta['serie']; ?></td></tr>
-		            <tr><th>numero:</th><td><?php echo $leer_respuesta['numero']; ?></td></tr>
-		            <tr><th>enlace:</th><td><?php echo $leer_respuesta['enlace']; ?></td></tr>
-		            <tr><th>aceptada_por_sunat:</th><td><?php echo $leer_respuesta['aceptada_por_sunat']; ?></td></tr>
-		            <tr><th>sunat_description:</th><td><?php echo $leer_respuesta['sunat_description']; ?></td></tr>
-		            <tr><th>sunat_note:</th><td><?php echo $leer_respuesta['sunat_note']; ?></td></tr>
-		            <tr><th>sunat_responsecode:</th><td><?php echo $leer_respuesta['sunat_responsecode']; ?></td></tr>
-		            <tr><th>sunat_soap_error:</th><td><?php echo $leer_respuesta['sunat_soap_error']; ?></td></tr>
-		            <tr><th>pdf_zip_base64:</th><td><?php echo $leer_respuesta['pdf_zip_base64']; ?></td></tr>
-		            <tr><th>xml_zip_base64:</th><td><?php echo $leer_respuesta['xml_zip_base64']; ?></td></tr>
-		            <tr><th>cdr_zip_base64:</th><td><?php echo $leer_respuesta['cdr_zip_base64']; ?></td></tr>
-		            <tr><th>codigo_hash:</th><td><?php echo $leer_respuesta['cadena_para_codigo_qr']; ?></td></tr>
-		            <tr><th>codigo_hash:</th><td><?php echo $leer_respuesta['codigo_hash']; ?></td></tr>
-		        </tbody>
-		    </table>
-		<?php
-		}
-	}
-
 	public function autocomplete1($term, $company_id)
 	{
 		return Proof::where('sn','like',"%$term%")->where('company_id', $company_id)->where('status_id', 0)->where('payment_condition_id', 3)->whereIn('proof_type', [1, 3])->with('document_type', 'currency')->get();
@@ -470,10 +451,41 @@ class ProofRepo extends BaseRepo{
 	public function cancel($id)
 	{
 		$model = Proof::find($id);
-		$model->canceled_at = date('Y-m-d H:i:s');
-		$model->status_sunat = 'ANUL';
+		$model->status_sunat = 'PANUL';
+
+		$r = json_decode($model->response_sunat);
+		if (isset($r->success) and $r->success==true) {
+			$r_v = json_decode($model->response_voided);
+
+			if (isset($r_v->success) and $r_v->success==true) {
+				$t_v = json_decode($model->ticket_voided);
+
+				if (!isset($t_v->success) or $t_v->success==false) {
+					$model->ticket_voided = $this->consultarAnulacion($model, $r_v);
+					$t_v = json_decode($model->ticket_voided);
+					if (isset($t_v->success) and $t_v->success==true) {
+						$model->canceled_at = date('Y-m-d H:i:s');
+						$model->status_sunat = 'ANUL';
+					}					
+				}
+			} else {
+				$model->response_voided = $this->generarAnulacion($model, $r);
+				$r_v = json_decode($model->response_voided);
+				if (isset($r_v->success) and $r_v->success==true) {
+					$model->ticket_voided = $this->consultarAnulacion($model, $r_v);
+					$t_v = json_decode($model->ticket_voided);
+					if (isset($t_v->success) and $t_v->success==true) {
+						$model->status_sunat = 'ANUL';
+					}
+				}
+			}
+		} else {
+			$model->status_sunat = 'ANUL';
+		}
+		
+		// dd($r);
 		$model->save();
-		// Order::where('order_type', 'output_orders')->where('proof_id', $model->id)->update(['status'=>'APROB', 'proof_id'=>0, 'invoiced_at'=>NULL]);
+		Order::where('order_type', 'output_orders')->where('proof_id', $model->id)->update(['status'=>'APROB', 'proof_id'=>0, 'invoiced_at'=>NULL]);
 		return $model;
 	}
 

@@ -13,4 +13,12 @@ class CarRepo extends BaseRepo{
 	{
 		return $this->model->where('placa',$placa)->first();
 	}
+	public function index($filter = false, $search = false)
+	{
+		if ($filter and $search) {
+			return Car::$filter($search)->orderBy("placa", 'ASC')->paginate();
+		} else {
+			return Car::orderBy('id', 'DESC')->paginate();
+		}
+	}
 }

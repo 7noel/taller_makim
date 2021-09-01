@@ -5,6 +5,7 @@
 {!! Form::hidden('igv_code', 1, ['class'=>'form-control']) !!}
 {!! Form::hidden('issued_at', ((isset($model->issued_at)) ? $model->issued_at : date('Y-m-d')), ['class'=>'form-control']) !!}
 {!! Form::hidden('sn', ((isset($model->sn) and !isset($order))? $model->sn : ''), ['id'=>'sn']) !!}
+{!! Form::hidden('action', $action, ['id'=>'action']) !!}
 
 <div class="form-row mb-3">
 	<div class="col-sm-2">

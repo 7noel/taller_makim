@@ -1,1 +1,0 @@
-{!! Html::script('js/storage/general.js') !!}

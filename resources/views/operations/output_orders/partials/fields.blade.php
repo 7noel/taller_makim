@@ -2,10 +2,11 @@
 {!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
 {!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
 {!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
+{!! Form::hidden('action', $action, ['id'=>'action']) !!}
 <div class="form-row mb-3">
 	<div class="col-sm-2">
 		<div class="custom-control custom-switch">
-			{!! Form::checkbox('approved_at', ((isset($model) and $action=='edit')? $model->approved_at : "on"), (isset($model->approved_at) ? !is_null($model->approved_at) : false), ['class'=>'custom-control-input', 'id'=>'approved_at']) !!}
+			{!! Form::checkbox('approved_at', ((isset($model) and $action=='edit')? $model->approved_at : "on"), ((isset($model->approved_at) and $action=='edit') ? !is_null($model->approved_at) : false), ['class'=>'custom-control-input', 'id'=>'approved_at']) !!}
 			<label class="custom-control-label" for="approved_at">Aprobado/Completado</label>
 		</div>
 	</div>

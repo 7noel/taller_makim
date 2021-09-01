@@ -43,19 +43,17 @@
 			</td>
 			<td>
 				<div class="btn-group">
-				@if(isset($r->links))
-				<a href="{{ route('output_vouchers.print', $model->id) }}" class="btn btn-outline-success btn-sm" title="Imprimir" target="popup" onClick="window.open(this.href, this.target, 'toolbar=0 , location=1 , status=0 , menubar=1 , scrollbars=0 , resizable=1 , left=150pt, top=100pt, width=800px, height=700px'); return false;">{!! $icons['printer'] !!}</a>
-				@else
-				<a href="{{ route( str_replace('index', 'edit', Request::route()->getAction()['as']) , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
-				@endif
 				<div class="dropdown">
 					<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{!! $icons['config'] !!}</button>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+				@if(isset($r->links))
+				<a href="{{ route('output_vouchers.print', $model->id) }}" class="dropdown-item btn btn-outline-success btn-sm" title="Imprimir" target="popup" onClick="window.open(this.href, this.target, 'toolbar=0 , location=1 , status=0 , menubar=1 , scrollbars=0 , resizable=1 , left=150pt, top=100pt, width=800px, height=700px'); return false;">{!! $icons['printer'] !!}</a>
+				@else
+				<a href="{{ route( str_replace('index', 'edit', Request::route()->getAction()['as']) , $model) }}" class="dropdown-item btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
+				@endif
 						@if(isset($r->links))
 						<a href="{{ $r->links->pdf }}" class="dropdown-item btn btn-outline-info btn-sm" title="Pdf">{!! $icons['pdf'] !!} PDF</a>
 						<a href="{{ $r->links->xml }}" class="dropdown-item btn btn-outline-info btn-sm" title="XML">{!! $icons['xml'] !!} XML</a>
-						@else
-						<a href="#" class="dropdown-item btn-delete btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>
 						@endif
 					</div>
 				</div>
@@ -71,6 +69,9 @@
 						</form>
 					</div>
 				</div>
+				@if($model->status_sunat!='ANUL')
+						<a href="#" class="btn-anular btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>
+				@endif
 
 				</div>
 			</td>

@@ -36,7 +36,7 @@ class AdminTableSeeder extends Seeder {
     public function run()
     {
         Company::create(['company_name'=>'MULTISERVICIOS MAKIM-MAKIM E.I.R.L.', 'id_type'=>'6', 'doc'=>'20601157480', 'address'=>'AV. SEPARADORA INDUSTRIAL NRO. 3598 URB. MAYORAZGO', 'ubigeo_code'=>'150103', 'country' => 'PE', 'entity_type' => 'my_company']);
-        Company::create(['company_name'=>'JAVIER POLO', 'paternal_surname'=>'POLO', 'maternal_surname'=>'', 'name'=>'JAVIER', 'id_type'=>'1', 'doc'=>'99999999', 'address'=>'AV. SEPARADORA INDUSTRIAL NRO. 3598 URB. MAYORAZGO', 'ubigeo_code'=>'150103', 'country' => 'PE', 'entity_type' => 'employees', 'job_id'=>53]);
+        Company::create(['company_name'=>'JAVIER POLO', 'paternal_surname'=>'POLO', 'maternal_surname'=>'', 'name'=>'JAVIER', 'id_type'=>'1', 'doc'=>'99999999', 'address'=>'AV. SEPARADORA INDUSTRIAL NRO. 3598 URB. MAYORAZGO', 'ubigeo_code'=>'150103', 'country' => 'PE', 'entity_type' => 'employees', 'job_id'=>53, 'my_company'=>1]);
 
         User::create(['name' => 'Noel', 'email' => 'noel.logan@gmail.com', 'password' => '123', 'is_superuser' => true]);
         User::create(['name' => 'JAVIER POLO', 'email' => 'jpolo@makim.pe', 'password' => '123', 'is_superuser' => true]);

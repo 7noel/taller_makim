@@ -184,7 +184,6 @@ $(document).ready(function () {
         var url = form.attr('action').replace(':_ID', id);
         var data = form.serializeArray();
         // row.fadeOut();
-        var texto = "El Registro "
 
         if (!confirm(`Seguro que desea anular ${tipo} ?`)) {
             e.preventDefault();
@@ -195,7 +194,7 @@ $(document).ready(function () {
             console.log(result);
             alert(`${tipo}-${result.sn} fue anulado`)
             //alert(result.message);
-            row.find('.status').text('<span class="badge badge-danger">ANUL</span>')
+            row.find('.status').html('<span class="badge badge-danger">ANUL</span>')
             row.find('.btn-anular').fadeOut()
         }).fail(function(){
             alert(`${tipo} no fue anulado`)
@@ -625,7 +624,7 @@ function getDataPadron (doc, type) {
             if (type=='6') {
                 $('#company_name').val(data.razonSocial)
                 if (data.hasOwnProperty('ubigeo')) {
-                    $('#address').val(data.direccion)
+                    $('#address').val(data.direccion.replace(` ${data.departamento} ${data.provincia} ${data.distrito}`, ''))
                     $('#departamento').val(data.departamento)
                     $('#provincia').val(data.provincia)
                     $('#ubigeo_code').val(data.ubigeo)
@@ -737,7 +736,7 @@ function getCar() {
     url = `/getCar/${placa}`
     if (placa!='') {
         $.get(url, function(data){
-            if (data) {
+            if (data.id) {
                 console.log(data)
                 $('#car_id').val(data.id)
                 $('#company_id').val(data.company_id)

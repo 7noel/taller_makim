@@ -1,13 +1,13 @@
 <div class="form-row mb-3">
 	<div class="col-sm-2">
 		<div class="custom-control custom-switch">
-			{!! Form::checkbox('visible', '1', null,['class'=>'custom-control-input', 'id'=>'is_visible']) !!}
+			{!! Form::checkbox('visible', '1', ((isset($model))? null : '1'), ['class'=>'custom-control-input', 'id'=>'is_visible']) !!}
 			<label class="custom-control-label" for="is_visible">Visible</label>
 		</div>
 	</div>
 	<div class="col-sm-2">
 		<div class="custom-control custom-switch">
-			{!! Form::checkbox('is_downloadable', '1', null,['class'=>'custom-control-input', 'id'=>'is_downloadable']) !!}
+			{!! Form::checkbox('is_downloadable', '1', ((isset($model))? null : '1'), ['class'=>'custom-control-input', 'id'=>'is_downloadable']) !!}
 			<label class="custom-control-label" for="is_downloadable">Descargable</label>
 		</div>
 	</div>
