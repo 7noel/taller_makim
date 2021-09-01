@@ -13,13 +13,26 @@
 	</thead>
 	<tbody>
 		@foreach($models as $model)
-		<?php $r = json_decode($model->response_sunat) ?>
+		@php
+		$r = json_decode($model->response_sunat);
+		if ($model->status_sunat=='ERROR') {
+			$clase = 'badge badge-warning';
+		} elseif ($model->status_sunat=='SUNAT') {
+			$clase = 'badge badge-success';
+		} elseif ($model->status_sunat=='PANUL') {
+			$clase = 'badge badge-secondary';
+		} elseif ($model->status_sunat=='ANUL') {
+			$clase = 'badge badge-danger';
+		} else {
+			$clase = 'badge badge-info';
+		}
+		@endphp
 		<tr data-id="{{ $model->id }}" data-tipo="Comprobante">
 			<td>{{ date('d/m/Y', strtotime($model->issued_at)) }} </td>
 			<td>{{ $model->placa }}</td>
 			<td>{{ $model->document_type->description." ".$model->sn }} </td>
 			<td>{{ $model->company->company_name }} </td>
-			<td>{{ $model->status_sunat }} </td>
+			<td class="status"><span class="{{ $clase }}">{{ $model->status_sunat }}</span></td>
 			<td>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id) .' '.$model->total }}</td>
 			<td>
 				@forelse($model->orders as $order)
