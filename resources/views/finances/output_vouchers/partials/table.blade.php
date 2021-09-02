@@ -46,17 +46,18 @@
 				<div class="dropdown">
 					<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{!! $icons['config'] !!}</button>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-				@if(isset($r->links))
-				<a href="{{ route('output_vouchers.print', $model->id) }}" class="dropdown-item btn btn-outline-success btn-sm" title="Imprimir" target="popup" onClick="window.open(this.href, this.target, 'toolbar=0 , location=1 , status=0 , menubar=1 , scrollbars=0 , resizable=1 , left=150pt, top=100pt, width=800px, height=700px'); return false;">{!! $icons['printer'] !!} IMPRIMIR</a>
-				@elseif(!in_array($model->status_sunat,['PANUL', 'ANUL']))
-				<a href="{{ route( str_replace('index', 'edit', Request::route()->getAction()['as']) , $model) }}" class="dropdown-item btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!} EDITAR</a>
-				@endif
+						<a href="{{ route('output_vouchers.show', $model->id) }}" class="dropdown-item btn btn-outline-secondary btn-sm" title="Ver Doc">{!! $icons['view'] !!} VISUALIZAR</a>
+						@if(in_array($model->status_sunat,['PEND', 'ERROR']))
+						<a href="{{ route( str_replace('index', 'edit', Request::route()->getAction()['as']) , $model) }}" class="dropdown-item btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!} EDITAR</a>
+						@endif
 						@if(isset($r->links))
+						<a href="{{ route('output_vouchers.print', $model->id) }}" class="dropdown-item btn btn-outline-success btn-sm" title="Imprimir" target="popup" onClick="window.open(this.href, this.target, 'toolbar=0 , location=1 , status=0 , menubar=1 , scrollbars=0 , resizable=1 , left=150pt, top=100pt, width=800px, height=700px'); return false;">{!! $icons['printer'] !!} IMPRIMIR</a>
 						<a href="{{ $r->links->pdf }}" class="dropdown-item btn btn-outline-info btn-sm" title="Pdf">{!! $icons['pdf'] !!} DESCARGAR PDF</a>
 						<a href="{{ $r->links->xml }}" class="dropdown-item btn btn-outline-info btn-sm" title="XML">{!! $icons['xml'] !!} DESCARGAR XML</a>
 						@endif
 					</div>
 				</div>
+				@if(isset($r->links))
 				<div class="dropdown">
 					<button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{!! $icons['email'] !!}</button>
 					<div class="dropdown-menu dropdown-menu-right" style="width:210px !important;">
@@ -69,6 +70,7 @@
 						</form>
 					</div>
 				</div>
+				@endif
 				@if($model->status_sunat!='ANUL')
 						<a href="#" class="btn-anular btn btn-outline-danger btn-sm" title="ANULAR">{!! $icons['remove'] !!}</a>
 				@endif

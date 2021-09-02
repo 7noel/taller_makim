@@ -184,7 +184,7 @@ class OrderRepo extends BaseRepo{
 	public function filter($filter)
 	{
 		$order_type = explode('.', \Request::route()->getName())[0];
-		$q = Order::where('my_company', session('my_company')->id)->where('order_type', $order_type);
+		$q = Order::with('proof', 'company')->where('my_company', session('my_company')->id)->where('order_type', $order_type);
 		if ($filter->sn > 0) {
 			return $q->where('sn', $filter->sn)->orderBy('sn', 'desc')->get();
 		} elseif (trim($filter->placa) != '') {

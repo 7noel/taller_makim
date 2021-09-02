@@ -19,7 +19,7 @@ class ProofRepo extends BaseRepo{
 	{
 		$proof_type = explode('.', \Request::route()->getName())[0];
 		// dd($proof_type);
-		$q = Proof::where('my_company', session('my_company')->id)->where('proof_type', $proof_type);
+		$q = Proof::with('company', 'orders', 'document_type')->where('my_company', session('my_company')->id)->where('proof_type', $proof_type);
 		if (trim($filter->sn) != '') {
 			return $q->where('sn', $filter->sn)->orderBy('sn', 'desc')->get();
 		} elseif (trim($filter->placa) != '') {

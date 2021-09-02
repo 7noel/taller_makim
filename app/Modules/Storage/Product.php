@@ -14,7 +14,7 @@ class Product extends Model implements Auditable {
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {
-			$query->where('name', 'LIKE', "%$name%");
+			$query->where('name', 'LIKE', "%$name%")->orWhere('intern_code', 'LIKE', "%$name%");
 		}
 	}
 	public function sub_category()
