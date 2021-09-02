@@ -114,7 +114,7 @@ class ProofsController extends Controller {
 
 	public function edit($id)
 	{
-		$model = $this->repo->cancel($id);
+		// $model = $this->repo->cancel($id);
 		$action = "edit";
 		$model = $this->repo->findOrFail($id);
 		// dd($model->document_type->code);
@@ -125,7 +125,7 @@ class ProofsController extends Controller {
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.edit', compact('model', 'sellers', 'items', 'sunat_transaction', 'igv_code', 'documents', 'action'));
+		return view('partials.edit', compact('model', 'sellers', 'sunat_transaction', 'igv_code', 'documents', 'action'));
 	}
 
 	public function update($id)
