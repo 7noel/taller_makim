@@ -178,7 +178,7 @@ class ProofsController extends Controller {
 	}
 	public function print($id)
 	{
-		$model = $this->repo->cancel($id);
+		// $model = $this->repo->cancel($id);
 		// dd($model);
 		$model = $this->repo->findOrFail($id);
 		$r = json_decode($model->response_sunat);

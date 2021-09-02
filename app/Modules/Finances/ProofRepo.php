@@ -364,7 +364,17 @@ class ProofRepo extends BaseRepo{
 				"total_valor" => round($model->subtotal, 2),
 				"total_venta" => round($model->total, 2),
 			),
-			"additional_information" => "Placa: $model->placa<br>Otra linea",
+			"additional_information" => "Placa: $model->placa \nOtra linea",
+			'termino_de_pago' => array(
+				'descripcion' => (($model->expired_at>$model->issued_at) ? 'CRÉDITO' : 'CONTADOx'),
+				'tipo' => (($model->expired_at>$model->issued_at) ? '1' : '0'),
+			),
+			"extras" => array(
+				"forma_de_pago" => "Efectivo",
+				"observaciones" => "probando",
+				"vendedor" => "Juan",
+				"caja" => "Caja 1",
+			),
 		);
 		foreach ($model->details as $key => $detail) {
 			$base = round($detail->quantity*$detail->value, 2);
@@ -404,7 +414,6 @@ class ProofRepo extends BaseRepo{
 				"importe" => $model->total,
 			);
 		}
-		//dd($data);
 		return $data;
 		
 	}
@@ -467,6 +476,8 @@ class ProofRepo extends BaseRepo{
 						$model->canceled_at = date('Y-m-d H:i:s');
 						$model->status_sunat = 'ANUL';
 					}					
+				} else {
+					$model->status_sunat = 'ANUL';
 				}
 			} else {
 				$model->response_voided = $this->generarAnulacion($model, $r);
@@ -477,6 +488,8 @@ class ProofRepo extends BaseRepo{
 					if (isset($t_v->success) and $t_v->success==true) {
 						$model->status_sunat = 'ANUL';
 					}
+				} else {
+					$model->status_sunat = 'PANUL';
 				}
 			}
 		} else {
