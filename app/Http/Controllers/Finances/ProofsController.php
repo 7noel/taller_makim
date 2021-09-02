@@ -65,7 +65,7 @@ class ProofsController extends Controller {
 		$igv_code = 1;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.create', compact('proof_type', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'action'));
+		return view('partials.create', compact('sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'action'));
 	}
 
 
@@ -82,7 +82,7 @@ class ProofsController extends Controller {
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('finances.output_vouchers.create_by_order', compact('model', 'order_id', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'action'));
+		return view('finances.output_vouchers.create_by_order', compact('model', 'order_id', 'sellers','items', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'action'));
 	}
 
 	public function index2()
@@ -109,7 +109,7 @@ class ProofsController extends Controller {
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.show', compact('model', 'sellers', 'warehouses','items', 'proof_type', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'action'));
+		return view('partials.show', compact('model', 'sellers', 'items', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'action'));
 	}
 
 	public function edit($id)
@@ -125,7 +125,7 @@ class ProofsController extends Controller {
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.edit', compact('model', 'sellers', 'warehouses', 'items', 'proof_type', 'sunat_transaction', 'igv_code', 'documents', 'action'));
+		return view('partials.edit', compact('model', 'sellers', 'items', 'sunat_transaction', 'igv_code', 'documents', 'action'));
 	}
 
 	public function update($id)
