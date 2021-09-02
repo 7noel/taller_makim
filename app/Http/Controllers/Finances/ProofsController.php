@@ -82,7 +82,7 @@ class ProofsController extends Controller {
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('finances.output_vouchers.create_by_order', compact('model', 'order_id', 'sellers','items', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'action'));
+		return view('finances.output_vouchers.create_by_order', compact('model', 'order_id', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'action'));
 	}
 
 	public function index2()
