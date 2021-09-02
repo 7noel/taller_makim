@@ -48,7 +48,7 @@
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 				@if(isset($r->links))
 				<a href="{{ route('output_vouchers.print', $model->id) }}" class="dropdown-item btn btn-outline-success btn-sm" title="Imprimir" target="popup" onClick="window.open(this.href, this.target, 'toolbar=0 , location=1 , status=0 , menubar=1 , scrollbars=0 , resizable=1 , left=150pt, top=100pt, width=800px, height=700px'); return false;">{!! $icons['printer'] !!} IMPRIMIR</a>
-				@else
+				@elseif(!in_array($model->status_sunat,['PANUL', 'ANUL']))
 				<a href="{{ route( str_replace('index', 'edit', Request::route()->getAction()['as']) , $model) }}" class="dropdown-item btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!} EDITAR</a>
 				@endif
 						@if(isset($r->links))

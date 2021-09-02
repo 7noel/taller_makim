@@ -114,7 +114,6 @@ class ProofsController extends Controller {
 
 	public function edit($id)
 	{
-		// $model = $this->repo->cancel($id);
 		$action = "edit";
 		$model = $this->repo->findOrFail($id);
 		// dd($model->document_type->code);
