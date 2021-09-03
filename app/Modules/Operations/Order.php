@@ -19,6 +19,7 @@ class Order extends Model implements Auditable
 		}
 	}
 
+	//CPE Relacionado
 	public function proof()
 	{
 		return $this->belongsTo('App\Modules\Finances\Proof');

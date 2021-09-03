@@ -376,12 +376,13 @@ class ProofRepo extends BaseRepo{
 				"caja" => "Caja 1",
 			),
 		);
+		$_item = 0;
 		foreach ($model->details as $key => $detail) {
 			$base = round($detail->quantity*$detail->value, 2);
 			$subtotal = round($detail->quantity*$detail->value-$detail->discount, 2);
 			$total = round($subtotal*1.18, 2);
 			$igv = round($total - $subtotal, 2);
-			$data['items'][] = array(
+			$data['items'][$_item] = array(
 				// "unidad_de_medida"          => $detail->product->unit->code,
 				"codigo_interno"            => $detail->product->intern_code,
 				"descripcion"               => $detail->product->name,
@@ -398,14 +399,17 @@ class ProofRepo extends BaseRepo{
 				"total_impuestos"           => $igv,
 				"total_valor_item"          => $subtotal,
 				"total_item"                => $total,
-				"descuentos" => array([
+			);
+			if ($detail->discount > 0) {
+				$data['items'][$_item]['descuentos'] = array([
 					"codigo" => '00',
 					"descripcion" => 'Descuento',
 					"porcentaje" => $detail->d1,
 					"monto" => $detail->discount,
 					"base" => $base,
-				])
-			);
+				]);
+			}
+			$_item = $_item + 1;
 		}
 		if ($model->expired_at>$model->issued_at) {
 			$data['venta_al_credito'][] = array(
