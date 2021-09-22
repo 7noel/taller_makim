@@ -19,9 +19,9 @@ class BankRepo extends BaseRepo{
 	public function prepareData($data)
 	{
 		if (isset($data['show'])) {
-			$data['show'] == 1;
+			$data['show'] = 1;
 		} else {
-			$data['show'] == 0;
+			$data['show'] = 0;
 		}
 		return $data;
 	}
