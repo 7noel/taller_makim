@@ -13,6 +13,16 @@ class BankRepo extends BaseRepo{
 
 	public function findOrFail($id)
 	{
-		return Bank::with('payments')->findOrFail($id);
+		return Bank::with('payments','payments.proof.company','payments.proof.document_type')->findOrFail($id);
+	}
+
+	public function prepareData($data)
+	{
+		if (isset($data['show'])) {
+			$data['show'] == 1;
+		} else {
+			$data['show'] == 0;
+		}
+		return $data;
 	}
 }

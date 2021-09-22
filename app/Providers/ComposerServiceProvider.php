@@ -102,6 +102,7 @@ class ComposerServiceProvider extends ServiceProvider
             'check' => '<i class="fas fa-check"></i>',
             'external' => '<i class="fas fa-external-link-square-alt"></i>',
             'invoice' => '<i class="fas fa-file-invoice"></i>',
+            'close' => '<i class="fas fa-times"></i>',
         ];
     }
 

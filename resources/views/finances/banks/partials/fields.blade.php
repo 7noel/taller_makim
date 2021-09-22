@@ -24,7 +24,12 @@
 		{!! Field::select('currency_id', config('options.table_sunat.moneda'), ['label' => 'Moneda', 'class'=>'form-control-sm', 'required', 'empty'=>'Seleccionar']) !!}
 	</div>
 	<div class="col-sm-6">
+	@if(isset($model))
+		<label>Saldo Inicial</label>
+		<p class="form-control-plaintext">{{ $model->initial }}</p>
+	@else
 		{!! Field::number('initial', ['label' => 'Saldo Inicial', 'class'=>'form-control-sm', 'required', 'step'=>0]) !!}
+	@endif
 	</div>
 	<div class="col-sm-12">
 		{!! Field::text('description', ['label' => 'Descripcion', 'class'=>'form-control-sm']) !!}

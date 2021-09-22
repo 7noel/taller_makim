@@ -27,7 +27,11 @@ class BanksController extends Controller {
 
 	public function store()
 	{
-		$this->repo->save(\Request::all());
+		$data = request()->all();
+		if (isset($data['initial'])) {
+			$data['total'] = $data['initial'];
+		}
+		$this->repo->save($data);
 		return \Redirect::route('banks.index');
 	}
 
