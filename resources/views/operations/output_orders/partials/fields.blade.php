@@ -30,6 +30,9 @@
 	<div class="col-md-1 col-sm-2">
 		{!! Field::text('placa', null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
+	<div class="col-md-1 col-sm-2">
+		{!! Field::number('kilometraje', null, ['label' => 'Kilom.', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+	</div>
 	<div class="col-sm-1">
 		{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
 	</div>

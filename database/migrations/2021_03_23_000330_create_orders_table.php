@@ -23,6 +23,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('company_id')->unsigned();
             $table->bigInteger('car_id')->unsigned();
             $table->string('placa');
+            $table->decimal('kilometraje', 12,0);
             $table->string('type_service');
             $table->string('preventivo');
             $table->bigInteger('branch_id')->unsigned();

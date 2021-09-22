@@ -28,6 +28,7 @@ Route::get('listarProvincias/{departamento}', ['as' => 'ajaxprovincias', 'uses' 
 Route::get('listarDistritos/{departamento}/{provincia}', ['as' => 'ajaxdistritos','uses' => 'Admin\UbigeosController@ajaxDistritos']);
 
 Route::group(['middleware'=>['auth']], function(){
+	Route::get('get_cpe/{id}', ['as' => 'output_vouchers.get_cpe', 'uses' => 'Finances\ProofsController@get_json_cpe']);
 	Route::get('send_cpe', ['as' => 'output_vouchers.send_email_cpe', 'uses' => 'Finances\ProofsController@send_email_cpe']);
 	Route::get('getCar/{placa}', ['as' => 'getCar', 'uses' => 'Operations\CarsController@getCar']);
 	Route::get('colorsByModelo/{modelo_id}', ['as' => 'colorsByModelo', 'uses' => 'Logistics\BrandsController@colorsByModelo']);
@@ -64,6 +65,9 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'permissions'], 'namespa
 });
 
 Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Finances'], function(){
+	Route::resource('banks','BanksController');
+	Route::get('payments/by_voucher/{proof_id}', ['as' => 'payments.by_voucher', 'uses' => 'PaymentsController@by_voucher']);
+	Route::resource('payments','PaymentsController');
 	Route::resource('exchanges','ExchangesController');
 	Route::resource('companies','CompanyController');
 	Route::resource('clients','CompanyController');
@@ -85,8 +89,6 @@ Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'name
 	// Route::get('input_vouchers/create', ['as' => 'input_vouchers_create','uses' => 'ProofsController@inputVouchersCreate']);
 	
 	Route::resource('payments','PaymentsController');
-	Route::resource('amortizations','AmortizationsController');
-	Route::get('amortizations/by_proof/{proof_id}', ['as' => 'amortizations.byProof', 'uses' => 'AmortizationsController@byProof']);
 	Route::resource('output_swaps','SwapsController');
 	Route::get('output_swaps/by_proof/{proof_id}', ['as' => 'output_swaps.byProof', 'uses' => 'SwapsController@byProof']);
 	Route::resource('input_swaps','SwapsController');

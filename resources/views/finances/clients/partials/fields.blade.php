@@ -39,7 +39,7 @@
 		{!! Field::text('phone', ['label' => 'Tel Fijo', 'class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::text('mobile', ['label' => 'Celular', 'class'=>'form-control-sm']) !!}
+		{!! Field::text('mobile', ['label' => 'Celular', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
 		{!! Field::email('email', ['label' => 'Email', 'class'=>'form-control-sm']) !!}

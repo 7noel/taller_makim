@@ -11,7 +11,7 @@ class Payment extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['issued_at', 'company_id', 'number', 'is_output', 'value', 'exchange', 'bank_id', 'currency_id', 'tipo_operacion', 'cta_origen', 'cta_destino', 'titular_destino', 'currency2_id', 'monto', 'my_company'];
+	protected $fillable = ['issued_at', 'metodo', 'company_id', 'number', 'is_output', 'value', 'exchange', 'proof_id', 'bank_id', 'currency_id', 'input', 'output', 'my_company'];
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {
@@ -19,6 +19,10 @@ class Payment extends Model implements Auditable {
 		}
 	}
 
+	public function proof()
+	{
+		return $this->belongsTo('App\Modules\Finances\Proof');
+	}
 	public function bank()
 	{
 		return $this->belongsTo('App\Modules\Finances\Bank');
@@ -26,10 +30,6 @@ class Payment extends Model implements Auditable {
 	public function currency()
 	{
 		return $this->hasOne('App\Modules\Base\Currency','id','currency_id');
-	}
-	public function amortizations()
-	{
-		return $this->hasMany('App\Modules\Finances\Amortization');
 	}
 	public function mycompany()
 	{

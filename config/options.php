@@ -110,17 +110,14 @@ return array(
 		'moneda' => [
 			'1' => 'SOLES',
 			'2' => 'DÓLARES',
-			'3' => 'EUROS',
 		],
 		'moneda_symbol' => [
 			'1' => 'S/',
 			'2' => 'US$',
-			'3' => '€',
 		],
 		'moneda_sunat' => [
 			'1' => 'PEN',
 			'2' => 'USD',
-			'3' => 'EUR',
 		],
 		'percepcion_tipo'=>[
 			'1' => 'PERCEPCIÓN VENTA INTERNA - TASA 2%',
@@ -187,6 +184,22 @@ return array(
 			'number' => '631-3001268584',
 			'cci' => '003-631-003001268584-95'
 		]
+	],
+	'tipo_banco' => [
+		1=>'Banco',
+		2=>'Cuenta Corriente',
+		3=>'Cuenta de Ahorros',
+		4=>'Cuenta detracciones',
+		5=>'Efectivo',
+		6=>'Tarjeta de Crédito'
+	],
+	'metodos_pago' => [
+		1=>'Efectivo',
+		2=>'Transferencia',
+		3=>'Cheque',
+		4=>'Tarjeta de crédito',
+		5=>'Tarjeta de Débito',
+		6=>'Depósitos'
 	],
 	'types_service' => ['ACCESORIOS' => 'ACCESORIOS', 'BONIFICACIONES' => 'BONIFICACIONES', 'CAMPAÑA' => 'CAMPAÑA', 'CORRECTIVO' => 'CORRECTIVO', 'PREVENTIVO' => 'PREVENTIVO', 'SINIESTRO'=>'SINIESTRO'],
 	'preventivos' => ['5K' => '5,000', '10K' => '10,000', '15K' => '15,000', '20K' => '20,000', '25K' => '25,000', '30K' => '30,000', '35K' => '35,000', '40K' => '40,000', '45K' => '45,000', '50K' => '50,000', '55K' => '55,000', '60K' => '60,000', '65K' => '65,000', '70K' => '70,000', '75K' => '75,000', '80K' => '80,000', '85K' => '85,000', '90K' => '90,000', '95K' => '95,000', '100K' => '100,000'],

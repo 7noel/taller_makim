@@ -209,4 +209,9 @@ class ProofsController extends Controller {
 		echo $icons['pdf'];
 		return 'correo enviado';
 	}
+	public function get_json_cpe($id)
+	{
+		$model = $this->repo->findOrFail($id);
+		return response()->json($model);
+	}
 }

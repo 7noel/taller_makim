@@ -98,7 +98,7 @@
 <body>
     <div id="app">
         <nav class="{{ config('options.styles.navbar') }}">
-            <div class="container">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="/img/logo_makim_doc.jpg" alt="" height="90%">
                 </a>
@@ -175,6 +175,25 @@
     </div>
     <script>
 $(document).ready(function () {
+    $(".pagar-venta").click(function(e){
+        console.log($(this).data('id'))
+        m_id = $(this).data('id')
+
+        $.get(`/get_cpe/${m_id}`, function(data){
+            console.log(data)
+            $("#pagarModalLabel").html(data.sn)
+            if (data.currency_id==2) {
+                $("#currency_id").html('DOLARES')
+            } else {
+                $("#currency_id").html('SOLES')
+            }
+            $("#total").html(data.total)
+            $("#deuda").html((data.total-data.amortization).toFixed(2))
+            $('#metodo option').filter(function() {
+                return !this.value || $.trim(this.value).length == 0 || $.trim(this.text).length == 0
+            }).remove()
+        })
+    })
     $('.btn-anular').click(function(e){
         e.preventDefault();
         var row = $(this).parents('tr');

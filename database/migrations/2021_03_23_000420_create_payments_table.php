@@ -20,18 +20,17 @@ class CreatePaymentsTable extends Migration
             $table->string('number');
             $table->boolean('is_output');
             $table->decimal('value', 12, 2);
+            $table->decimal('input', 12, 2);
+            $table->decimal('output', 12, 2);
             $table->decimal('exchange', 7, 4);
+            $table->bigInteger('proof_id')->unsigned();
             $table->bigInteger('bank_id')->unsigned();
+            $table->integer('metodo');
             $table->bigInteger('currency_id')->unsigned();
-
-            $table->string('tipo_operacion');
-            $table->string('cta_origen');
-            $table->string('cta_destino');
-            $table->string('titular_destino');
-            $table->bigInteger('currency2_id')->unsigned();
-            $table->decimal('monto', 12, 2);
             $table->bigInteger('my_company')->unsigned();
+            $table->string('description');
 
+            $table->foreign('bank_id')->references('id')->on('banks');
             $table->foreign('my_company')->references('id')->on('companies');
             $table->timestamps();
             $table->softDeletes();

@@ -68,6 +68,7 @@ class ComposerServiceProvider extends ServiceProvider
             'update' => $this->controller. '.update',
             'delete' => $this->controller. '.destroy',
             'filter' => $this->controller. '.filter',
+            'show' => $this->controller. '.show',
         ];
     }
 
@@ -470,6 +471,26 @@ class ComposerServiceProvider extends ServiceProvider
                 'edit'=>'Editar Ticket: ',
                 'edit.update'=>'Actualizar Ticket',
                 'edit.delete'=>'Eliminar Ticket',
+            ],
+            'banks' => [
+                'index'=>'Cuentas',
+                'index.create'=>'Crear Cuenta',
+                'create'=>'Nueva Cuenta',
+                'create.create'=>'Crear Cuenta',
+                'show'=>'Vizualizando Cuenta:',
+                'edit'=>'Editar Cuenta: ',
+                'edit.update'=>'Actualizar Cuenta',
+                'edit.delete'=>'Eliminar Cuenta',
+            ],
+            'payments' => [
+                'index'=>'Pagos',
+                'index.create'=>'Crear Pago',
+                'create'=>'Nuevo Pago',
+                'create.create'=>'Crear Pago',
+                'show'=>'Vizualizando Pago:',
+                'edit'=>'Editar Pago: ',
+                'edit.update'=>'Actualizar Pago',
+                'edit.delete'=>'Eliminar Pago',
             ],
 
         ];

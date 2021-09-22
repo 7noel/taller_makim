@@ -10,4 +10,9 @@ class BankRepo extends BaseRepo{
 	public function getModel(){
 		return new Bank;
 	}
+
+	public function findOrFail($id)
+	{
+		return Bank::with('payments')->findOrFail($id);
+	}
 }

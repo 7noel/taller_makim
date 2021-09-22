@@ -1,12 +1,15 @@
 <table class="{{ config('options.styles.table') }}">
 	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
-			<th>Fecha</th>
+			<th>Emisión</th>
+			<th>Vence</th>
 			<th>Placa</th>
 			<th>Documento</th>
 			<th>Cliente</th>
 			<th>Estado</th>
 			<th>Total</th>
+			<th>Pagado</th>
+			<th>Deuda</th>
 			<th>OT</th>
 			<th>Acciones</th>
 		</tr>
@@ -29,11 +32,14 @@
 		@endphp
 		<tr data-id="{{ $model->id }}" data-tipo="Comprobante">
 			<td>{{ date('d/m/Y', strtotime($model->issued_at)) }} </td>
+			<td>{{ date('d/m/Y', strtotime($model->expired_at)) }} </td>
 			<td>{{ $model->placa }}</td>
 			<td>{{ $model->document_type->description." ".$model->sn }} </td>
 			<td>{{ $model->company->company_name }} </td>
 			<td class="status"><span class="{{ $clase }}">{{ $model->status_sunat }}</span></td>
 			<td>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id) .' '.$model->total }}</td>
+			<td>{{ $model->amortization }}</td>
+			<td class="{{ ($model->total>$model->amortization)? 'text-warning' : 'text-success' }}">{{ round($model->total - $model->amortization, 2) }}</td>
 			<td>
 				@forelse($model->orders as $order)
 				<a href="{{ '/operations/output_orders?sn='.$order->sn }}" class="btn btn-link btn-sm" title="Ver OT">{{ $order->sn }}</a>
@@ -42,10 +48,13 @@
 				@endforelse
 			</td>
 			<td>
-				<div class="btn-group">
+			<div class="btn-group">
 				<div class="dropdown">
 					<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{!! $icons['config'] !!}</button>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+						@if($model->total>$model->amortization)
+						<a href="{{ route('payments.by_voucher', $model->id) }}" class="dropdown-item btn btn-outline-primary btn-sm pagar-venta2" title="Pagar" data-id="{{ $model->id }}">{!! $icons['credit-card'] !!} PAGAR</a>
+						@endif
 						<a href="{{ route('output_vouchers.show', $model->id) }}" class="dropdown-item btn btn-outline-secondary btn-sm" title="Ver Doc">{!! $icons['view'] !!} VISUALIZAR</a>
 						@if(in_array($model->status_sunat,['PEND', 'ERROR']))
 						<a href="{{ route( str_replace('index', 'edit', Request::route()->getAction()['as']) , $model) }}" class="dropdown-item btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!} EDITAR</a>
@@ -75,9 +84,68 @@
 						<a href="#" class="btn-anular btn btn-outline-danger btn-sm" title="ANULAR">{!! $icons['remove'] !!}</a>
 				@endif
 
-				</div>
+			</div>
 			</td>
 		</tr>
 		@endforeach
 	</tbody>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="pagarModal" tabindex="-1" aria-labelledby="pagarModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pagarModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<div class="container-fluid">
+		  <div class="row">
+<form id="agregar-pago">
+<div class="form-row">
+  <div class="col-sm-6">
+  	<div class="form-group">
+  	<label for="cuenta">Cuenta</label>
+  	{!! Form::select('cuenta', ['1'=>'CUENTA PRINCIPAL'], null,['class'=>'form-control form-control-sm', 'required']) !!}
+  	</div>
+  </div>
+  <div class="col-sm-6">
+    {!! Field::select('metodo', config('options.metodos_pago'), ['label'=>'Método', 'empty'=>'Seleccionar', 'class'=>'form-control-sm', 'required']) !!}
+  </div>
+  <div class="col-sm-6">
+    {!! Field::date('issued_at', date('Y-m-d'), ['label'=>'Fecha','class'=>'form-control-sm']) !!}
+  </div>
+  <div class="col-sm-6">
+  	<label for="currency_id">Moneda</label>
+    <p class="form-control-plaintext pl-4" id="currency_id"></p>
+  </div>
+  <div class="col-sm-4">
+  	<label for="total">Total</label>
+    <p class="form-control-plaintext" id="total"></p>
+  </div>
+  <div class="col-sm-4">
+  	<label for="deuda">Deuda</label>
+    <p class="form-control-plaintext" id="deuda"></p>
+  </div>
+  <div class="col-sm-4">
+    {!! Field::number('pagar', ['label'=>'Valor a pagar','class'=>'form-control-sm', 'required', 'step'=>'0']) !!}
+  </div>
+  <div class="col-sm-12">
+    {!! Field::text('descripcion', ['label'=>'Descripción', 'class'=>'form-control-sm', 'required']) !!}
+  </div>
+  <button type="submit" class="btn btn-primary">PAGAR</button>
+</div>
+</form>
+		  </div>
+		</div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>

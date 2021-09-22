@@ -65,7 +65,7 @@ class MenuController extends Controller
             'Finanzas'=>[
                 // ['name' => 'Emite Canje de Letras', 'route' => 'output_swaps.index'],
                 // ['name' => 'Recibe Letras', 'route' => 'input_letters.index'],
-                // ['name' => 'Empresas', 'route' => 'companies.index'],
+                ['name' => 'Cuentas', 'route' => 'banks.index'],
                 ['name' => 'Tipo de Cambio', 'route' => 'exchanges.index'],
                 ['name' => 'Control de Documentos', 'route' => 'document_controls.index'],
             ],
