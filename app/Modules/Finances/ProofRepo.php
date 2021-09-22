@@ -175,17 +175,30 @@ class ProofRepo extends BaseRepo{
 				if (!isset($detail['is_deleted'])) {
 					$q = $detail['quantity'];
 					$v = $detail['value'];
+					$p = $detail['price'];
+					if ($data['with_tax']) {
+						$v = round($p*100/(100 + config('options.tax.igv')), 2);
+					} else {
+						$p = round($v*(100 + config('options.tax.igv'))/100, 2);
+					}
 					$d1 = isset($detail['d1']) ? $detail['d1'] : 0 ;
 					$d2 = isset($detail['d2']) ? $detail['d2'] : 0 ;
-					$p = $v * (100 + config('options.tax.igv')) / 100;
+					// $p = $v * (100 + config('options.tax.igv')) / 100;
+					
 					$vt = round( $v * $q * (100-$d1) * (100-$d2) / 100 )/100;
 					$t = round( $detail['price'] * $detail['quantity'] * (100-$detail['d1']) * (100-$detail['d2']) / 100 )/100;
 					// dd($t);
 					$discount = $v*$q - $vt;
+					$data['details'][$key]['value'] = round($v, 2);
 					$data['details'][$key]['price'] = round($p, 2);
 					$data['details'][$key]['discount'] = round($discount, 2);
 					$data['details'][$key]['total'] = round($vt, 2);
 					$data['details'][$key]['price_item'] = round($t, 2);
+					if ($data['with_tax']) {
+						$data['details'][$key]['total'] = round($t*100/(100 + config('options.tax.igv')), 2);
+					} else {
+						$data['details'][$key]['price_item'] = round($vt*(100 + config('options.tax.igv'))/100, 2);
+					}
 
 					$d_items += $discount;
 					$gross_value += $v * $q;
