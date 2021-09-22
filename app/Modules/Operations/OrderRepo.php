@@ -82,16 +82,31 @@ class OrderRepo extends BaseRepo{
 		if (isset($data['details'])) {
 			foreach ($data['details'] as $key => $detail) {
 				if (!isset($detail['is_deleted'])) {
-					$p = $detail['value'] * (100 + config('options.tax.igv')) / 100;
-					$vt = round( $detail['value'] * $detail['quantity'] * (100-$detail['d1']) * (100-$detail['d2']) / 100 )/100;
-					$t = round( $detail['price'] * $detail['quantity'] * (100-$detail['d1']) * (100-$detail['d2']) / 100 )/100;
+					$q = $detail['quantity'];
+					$v = $detail['value'];
+					$p = $detail['price'];
+					if ($data['with_tax']) {
+						$v = round($p*100/(100 + config('options.tax.igv')), 2);
+					} else {
+						$p = round($v*(100 + config('options.tax.igv'))/100, 2);
+					}
+					$d1 = isset($detail['d1']) ? $detail['d1'] : 0 ;
+					$d2 = isset($detail['d2']) ? $detail['d2'] : 0 ;
+					// $p = $detail['value'] * (100 + config('options.tax.igv')) / 100;
+					$vt = round( $v * $q * (100-$d1) * (100-$d2) / 100 )/100;
+					$t = round( $p * $q * (100-$d1) * (100-$d2) / 100 )/100;
 					// $t = round($vt * (100 + config('options.tax.igv')) / 100, 2);
-					$discount = $detail['value']*$detail['quantity'] - $vt;
+					$discount = $v*$q - $vt;
+					$data['details'][$key]['value'] = round($v, 2);
 					$data['details'][$key]['price'] = round($p, 2);
 					$data['details'][$key]['discount'] = round($discount, 2);
 					$data['details'][$key]['total'] = round($vt, 2);
 					$data['details'][$key]['price_item'] = round($t, 2);
-
+					if ($data['with_tax']) {
+						$data['details'][$key]['total'] = round($t*100/(100 + config('options.tax.igv')), 2);
+					} else {
+						$data['details'][$key]['price_item'] = round($vt*(100 + config('options.tax.igv'))/100, 2);
+					}
 					$d_items += $discount;
 					$gross_value += $detail['value'] * $detail['quantity'];
 					$gross_precio += $detail['price'] * $detail['quantity'];

@@ -186,7 +186,7 @@ class ProofRepo extends BaseRepo{
 					// $p = $v * (100 + config('options.tax.igv')) / 100;
 					
 					$vt = round( $v * $q * (100-$d1) * (100-$d2) / 100 )/100;
-					$t = round( $detail['price'] * $detail['quantity'] * (100-$detail['d1']) * (100-$detail['d2']) / 100 )/100;
+					$t = round( $p * $q * (100-$d1) * (100-$d2) / 100 )/100;
 					// dd($t);
 					$discount = $v*$q - $vt;
 					$data['details'][$key]['value'] = round($v, 2);
