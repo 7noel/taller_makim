@@ -10,6 +10,11 @@ class BankRepo extends BaseRepo{
 	public function getModel(){
 		return new Bank;
 	}
+	
+	public function mostrar()
+	{
+		return Bank::where('my_company', session('my_company')->id)->where('show', 1)->get();
+	}
 
 	public function findOrFail($id)
 	{
