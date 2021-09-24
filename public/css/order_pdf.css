@@ -51,3 +51,8 @@ body{
 	display: inline-block;
 	width: 30%;
 }
+footer{
+	background-color: #03a9f4;
+	position: fixed;
+	bottom: 100px;
+}

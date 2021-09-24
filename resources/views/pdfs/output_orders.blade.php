@@ -62,7 +62,7 @@
 				@foreach($model->details as $key => $detail)
 				<tr>
 					<td class="border center">{{ $key + 1 }}</td>
-					<td class="border">{{ $detail->product->intern_code.' '.$detail->product->name }}</td>
+					<td class="border">{{ $detail->product->name }}</td>
 					<td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
 					<td class="border center">{{ $detail->price }}</td>
 					<td class="border center">{{ number_format($detail->price*$detail->quantity,2) }}</td>
@@ -80,7 +80,39 @@
 				</tr>
 			</tbody>
 		</table>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
+		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
+		<div>Lorem ipsum, dolor sit amet consectetur, adipisicing elit. Amet eveniet id saepe aspernatur cumque magni soluta atque debitis officiis, sint dolor aliquam iure eum, voluptatem sed aperiam! In, officia, repellendus.</div>
 
 	</div>
+	<footer>
+		<div>Agradecemos por anticipado su preferencia, consultas y comentarios a los correos y telefonos indicados.</div>
+		<h2><strong>Cuentas: </strong></h2>
+		@foreach($cuentas as $cta)
+			<div>
+				<strong>{{ config('options.tipo_banco.'.$cta->type) }}</strong>
+				{{ $cta->name }} - N° {{ $cta->number }} - 
+				<strong>CCI N°</strong>
+				{{ $cta->cci }} - {{ config('options.table_sunat.moneda.'.$cta->currency_id) }}
+			</div>
+		@endforeach
+	</footer>
 </body>
 </html>

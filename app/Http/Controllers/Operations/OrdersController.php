@@ -9,17 +9,20 @@ use App\Modules\Operations\OrderRepo;
 use App\Modules\Finances\PaymentConditionRepo;
 use App\Modules\Finances\CompanyRepo;
 use App\Modules\Base\CurrencyRepo;
+use App\Modules\Finances\BankRepo;
 
 class OrdersController extends Controller {
 
 	protected $repo;
 	protected $paymentConditionRepo;
 	protected $companyRepo;
+	protected $bankRepo;
 
-	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo) {
+	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo) {
 		$this->repo = $repo;
 		$this->paymentConditionRepo = $paymentConditionRepo;
 		$this->companyRepo = $companyRepo;
+		$this->bankRepo = $bankRepo;
 	}
 	public function index()
 	{
@@ -122,10 +125,11 @@ class OrdersController extends Controller {
 	 */
 	public function print($id)
 	{
+		$cuentas = $this->bankRepo->mostrar();
 		$model = $this->repo->findOrFail($id);
 		//dd($model->seller->company_name);
 		\PDF::setOptions(['isPhpEnabled' => true]);
-		$pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model'));
+		$pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
 		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
 		return $pdf->stream();
 	}
