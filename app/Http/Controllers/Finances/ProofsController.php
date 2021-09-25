@@ -9,6 +9,7 @@ use App\Modules\Finances\CompanyRepo;
 use App\Modules\Storage\WarehouseRepo;
 use App\Modules\Operations\OrderRepo;
 use App\Modules\Base\TableRepo;
+use App\Modules\Finances\BankRepo;
 
 class ProofsController extends Controller {
 
@@ -20,13 +21,15 @@ class ProofsController extends Controller {
 	protected $proof_type;
 	protected $doc;
 	protected $tableRepo;
+	protected $bankRepo;
 
-	public function __construct(ProofRepo $repo, CompanyRepo $companyRepo, WarehouseRepo $warehouseRepo, OrderRepo $orderRepo, TableRepo $tableRepo) {
+	public function __construct(ProofRepo $repo, CompanyRepo $companyRepo, WarehouseRepo $warehouseRepo, OrderRepo $orderRepo, TableRepo $tableRepo, BankRepo $bankRepo) {
 		$this->repo = $repo;
 		$this->companyRepo = $companyRepo;
 		$this->warehouseRepo = $warehouseRepo;
 		$this->orderRepo = $orderRepo;
 		$this->tableRepo = $tableRepo;
+		$this->bankRepo = $bankRepo;
 
 		$this->getType();
 	}
@@ -174,6 +177,22 @@ class ProofsController extends Controller {
 			];
 		}
 		return \Response::json($result);
+	}
+
+	/**
+	 * CREA UN PDF EN EL NAVEGADOR
+	 * @param  [integer] $id [Es el id de la cotizacion]
+	 * @return [pdf]     [Retorna un pdf]
+	 */
+	public function print2($id)
+	{
+		$cuentas = $this->bankRepo->mostrar();
+		$model = $this->repo->findOrFail($id);
+		// dd(json_decode($model->response_sunat));
+		// \PDF::setOptions(['isPhpEnabled' => true]);
+		$pdf = \PDF::loadView('pdfs.output_vouchers', compact('model', 'cuentas'));
+		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
+		return $pdf->stream();
 	}
 	public function print($id)
 	{

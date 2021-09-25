@@ -81,6 +81,25 @@
     'normal' => $fontDir . '/montserrat-normal_503690d8de71ed6d6676fa96fff283cc',
   ),
   'roboto' => array(
-    'normal' => $fontDir . '/roboto-normal_fb1c39737fd1d39aafe418d6240e4770',
+    'normal' => $fontDir . '/roboto-normal_ad149bced3f7c2e0ff246c3940f6b965',
+  ),
+  'gluten' => array(
+    '100' => $fontDir . '/gluten-100_44930ea3f515950684b160dce2bf0b68',
+    '200' => $fontDir . '/gluten-200_cdd1ef33eb5cbf3297ec6c6634cd0637',
+    '300' => $fontDir . '/gluten-300_e8551cdf39a79b7118f3af399a1158c5',
+    'normal' => $fontDir . '/gluten-normal_e9fb02d95acf7c5ec2907fded215adcd',
+    '500' => $fontDir . '/gluten-500_b2afd5a6547a99d1ee16265fff05092b',
+    '600' => $fontDir . '/gluten-600_9e099f784078a9c0650af4e18d856ed1',
+    'bold' => $fontDir . '/gluten-bold_93b0da4b6d2c36a1337a2e47573780d0',
+    '800' => $fontDir . '/gluten-800_590fa634187202037fb40f52436329fc',
+    '900' => $fontDir . '/gluten-900_55eb435b9e9c7baa50a828236fcce379',
+  ),
+  'roboto condensed' => array(
+    '300_italic' => $fontDir . '/roboto-condensed-300-italic_2828e5453b3d5f138aa1725920e112f6',
+    'italic' => $fontDir . '/roboto-condensed-italic_0c72ae9fcb6b21e478a5ec2c3caf6cc3',
+    'bold_italic' => $fontDir . '/roboto-condensed-bold-italic_04b23e8aa328168dc78c448b95b7bef7',
+    '300' => $fontDir . '/roboto-condensed-300_13b971d7e3cad1816a0a8fd8c7b0ff17',
+    'normal' => $fontDir . '/roboto-condensed-normal_e618dc407a38f83070aeb09d53321fa0',
+    'bold' => $fontDir . '/roboto-condensed-bold_8c6d7b40e86f6d479722a59f9665d692',
   ),
 ) ?>

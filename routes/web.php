@@ -76,6 +76,7 @@ Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'name
 	Route::resource('payment_conditions','PaymentConditionsController');
 
 	Route::get('output_vouchers/print/{id}', ['as' => 'output_vouchers.print', 'uses' => 'ProofsController@print']);
+	Route::get('output_vouchers/print2/{id}', ['as' => 'output_vouchers.print2', 'uses' => 'ProofsController@print2']);
 	Route::get('output_vouchers/by_order/{order_id}', ['as' => 'output_vouchers.by_order', 'uses' => 'ProofsController@byOrder']);
 	Route::resource('output_vouchers','ProofsController');
 	Route::resource('input_vouchers','ProofsController');

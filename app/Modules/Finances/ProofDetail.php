@@ -29,4 +29,8 @@ class ProofDetail extends Model implements Auditable {
 	{
 		return $this->morphMany('App\Modules\Storage\Move', 'move');
 	}
+	public function unit()
+	{
+		return $this->hasOne('App\Modules\Base\Table','id','unit_id');
+	}
 }

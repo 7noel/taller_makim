@@ -21,6 +21,7 @@ class CreateProofsTable extends Migration
             $table->string('proof_type'); // typo de documento
             $table->boolean('mov'); // 1 ingresa mercaderia, 0 sale mercaderia
             $table->string('type_op'); // segun ello afecta el valor promedio
+            $table->bigInteger('car_id')->unsigned();
             $table->string('placa');
             $table->bigInteger('company_id')->unsigned();
             $table->bigInteger('my_company')->unsigned();

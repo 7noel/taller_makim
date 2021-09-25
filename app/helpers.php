@@ -1,4 +1,14 @@
 <?php 
+// require '../vendor/autoload.php';
+use Luecano\NumeroALetras\NumeroALetras;
+
+if (! function_exists('numero_letras')) {
+    function numero_letras($number, $decimals, $currency_id) {
+	    $formatter = new NumeroALetras();
+		return $formatter->toInvoice($number, $decimals, config('options.table_sunat.moneda.'.$currency_id));
+    }
+}
+
 if (! function_exists('enviar_cpe')) {
     function enviar_cpe($model)
     {

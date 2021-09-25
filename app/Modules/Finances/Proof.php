@@ -11,7 +11,7 @@ class Proof extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['issued_at', 'is_import', 'proof_type', 'mov', 'type_op', 'placa', 'document_type_id', 'sn', 'series', 'number', 'dispatch_note_date', 'dispatch_note_number', 'dam','my_company', 'company_id', 'company_store_id', 'transfer_reason_id', 'shipper_id', 'payment_condition_id', 'expired_at', 'currency_id', 'exchange', 'exchange2', 'discount', 'discount_items', 'with_tax', 'gross_value', 'subtotal', 'tax', 'interest', 'total', 'factor', 'amortization', 'seller_id', 'swap_id', 'swap_letter_id', 'reference_id','status_sunat', 'sunat_transaction', 'igv_code', 'response_sunat', 'response_voided', 'ticket_voided', 'email', 'email_1', 'email_2'];
+	protected $fillable = ['issued_at', 'is_import', 'proof_type', 'mov', 'type_op', 'placa', 'car_id', 'document_type_id', 'sn', 'series', 'number', 'dispatch_note_date', 'dispatch_note_number', 'dam','my_company', 'company_id', 'company_store_id', 'transfer_reason_id', 'shipper_id', 'payment_condition_id', 'expired_at', 'currency_id', 'exchange', 'exchange2', 'discount', 'discount_items', 'with_tax', 'gross_value', 'subtotal', 'tax', 'interest', 'total', 'factor', 'amortization', 'seller_id', 'swap_id', 'swap_letter_id', 'reference_id','status_sunat', 'sunat_transaction', 'igv_code', 'response_sunat', 'response_voided', 'ticket_voided', 'email', 'email_1', 'email_2'];
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {
@@ -40,6 +40,10 @@ class Proof extends Model implements Auditable {
 	{
 		return $this->hasOne('App\Modules\Finances\Company','id','company_id');
 	}
+	public function car()
+	{
+		return $this->belongsTo('App\Modules\Operations\Car', 'car_id');
+	}
 	public function shipper()
 	{
 		return $this->hasOne('App\Modules\Finances\Company','id','shipper_id');
@@ -54,7 +58,7 @@ class Proof extends Model implements Auditable {
 	}
 	public function seller()
 	{
-		return $this->hasOne('App\Modules\HumanResources\Employee','id','seller_id');
+		return $this->belongsTo('App\Modules\Finances\Company', 'seller_id');
 	}
 	public function reference()
 	{

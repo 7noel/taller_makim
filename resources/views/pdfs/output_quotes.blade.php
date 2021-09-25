@@ -8,6 +8,14 @@
 	<link rel="stylesheet" href="./css/order_pdf.css">
 </head>
 <body>
+	<script type="text/php">
+	if ( isset($pdf) ) {
+		$pdf->page_script('
+			$font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
+			$pdf->text(270, 810, "Página $PAGE_NUM de $PAGE_COUNT", $font, 8);
+		');
+	}
+	</script>
 	<div class="header">
 		<div class="item-left">
 			
@@ -84,5 +92,16 @@
 		</table>
 
 	</div>
+	<footer>
+		<div><strong>Cuentas: </strong></div>
+		@foreach($cuentas as $cta)
+			<div>
+				<strong>{{ config('options.tipo_banco.'.$cta->type) }}</strong>
+				{{ $cta->name }} - N° {{ $cta->number }} - 
+				<strong>CCI N°</strong>
+				{{ $cta->cci }} - {{ config('options.table_sunat.moneda.'.$cta->currency_id) }}
+			</div>
+		@endforeach
+	</footer>
 </body>
 </html>

@@ -3,19 +3,28 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Pre-Liquidación: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gluten:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="./css/order_pdf.css">
 </head>
 <body>
+	<script type="text/php">
+	if ( isset($pdf) ) {
+		$pdf->page_script('
+			$font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
+			$pdf->text(270, 810, "Página $PAGE_NUM de $PAGE_COUNT", $font, 8);
+		');
+	}
+	</script>
 	<div class="header">
 		<div class="item-left">
-			
 			<img src="./img/logo_makim_doc.jpg" alt="" width="180px">
 		</div>
 		<div>
 			<h1 class="center">
 				PRE-LIQUIDACIÓN: {{ str_pad($model->sn, 3, '0', STR_PAD_LEFT) }} - {{ $model->created_at->formatLocalized('%Y') }}
 			</h1>
-			
 		</div>
 	</div>
 	<div>
@@ -80,37 +89,19 @@
 				</tr>
 			</tbody>
 		</table>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem, ipsum dolor sit amet consectetur, adipisicing elit. Consectetur tempora ratione sit, corporis ut, nulla deserunt ab perspiciatis velit sapiente corrupti, quam est ducimus animi blanditiis neque cumque sed, id?</div>
-		<div>Lorem ipsum, dolor, sit amet consectetur adipisicing elit. Veritatis, cumque, inventore? Incidunt culpa blanditiis accusantium, enim magnam placeat itaque ipsum voluptatum excepturi consequatur voluptas cum, adipisci error, iste magni, et!</div>
-		<div>Lorem ipsum, dolor sit amet consectetur, adipisicing elit. Amet eveniet id saepe aspernatur cumque magni soluta atque debitis officiis, sint dolor aliquam iure eum, voluptatem sed aperiam! In, officia, repellendus.</div>
 
 	</div>
 	<footer>
-		<div>Agradecemos por anticipado su preferencia, consultas y comentarios a los correos y telefonos indicados.</div>
-		<h2><strong>Cuentas: </strong></h2>
+		<div><strong>Cuentas: </strong></div>
 		@foreach($cuentas as $cta)
 			<div>
 				<strong>{{ config('options.tipo_banco.'.$cta->type) }}</strong>
-				{{ $cta->name }} - N° {{ $cta->number }} - 
+				{{ $cta->name }} - N° {{ $cta->number }} -
+				@if(trim($cta->cci)!='')
 				<strong>CCI N°</strong>
-				{{ $cta->cci }} - {{ config('options.table_sunat.moneda.'.$cta->currency_id) }}
+				{{ $cta->cci }} -
+				@endif
+				{{ config('options.table_sunat.moneda.'.$cta->currency_id) }}
 			</div>
 		@endforeach
 	</footer>
