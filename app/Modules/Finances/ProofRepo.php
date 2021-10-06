@@ -5,6 +5,7 @@ use App\Modules\Base\Table;
 use App\Modules\Finances\Proof;
 use App\Modules\Operations\Order;
 use App\Modules\Finances\ProofDetailRepo;
+use App\Modules\Finances\PaymentCondition;
 use App\Modules\Base\ExpenseRepo;
 use App\Modules\Storage\MoveRepo;
 use App\Modules\Storage\Stock;
@@ -118,6 +119,8 @@ class ProofRepo extends BaseRepo{
 		if ($data['my_company'] == '') {
 			$data['my_company'] = session('my_company')->id;
 		}
+		$condition = PaymentCondition::find($data['payment_condition_id']);
+		$data['expired_at'] = date('Y-m-d', strtotime($data['issued_at']. " + $condition->days days"));
 		if ($data['document_type_id'] == 3) {
 			$data['mov'] = 0;
 		} else {

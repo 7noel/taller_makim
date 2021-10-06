@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Modules\Finances\ProofRepo;
+use App\Modules\Finances\PaymentConditionRepo;
 use App\Modules\Finances\CompanyRepo;
 use App\Modules\Storage\WarehouseRepo;
 use App\Modules\Operations\OrderRepo;
@@ -14,6 +15,7 @@ use App\Modules\Finances\BankRepo;
 class ProofsController extends Controller {
 
 	protected $repo;
+	protected $paymentConditionRepo;
 	protected $companyRepo;
 	protected $warehouseRepo;
 	protected $orderRepo;
@@ -23,8 +25,9 @@ class ProofsController extends Controller {
 	protected $tableRepo;
 	protected $bankRepo;
 
-	public function __construct(ProofRepo $repo, CompanyRepo $companyRepo, WarehouseRepo $warehouseRepo, OrderRepo $orderRepo, TableRepo $tableRepo, BankRepo $bankRepo) {
+	public function __construct(ProofRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, WarehouseRepo $warehouseRepo, OrderRepo $orderRepo, TableRepo $tableRepo, BankRepo $bankRepo) {
 		$this->repo = $repo;
+		$this->paymentConditionRepo = $paymentConditionRepo;
 		$this->companyRepo = $companyRepo;
 		$this->warehouseRepo = $warehouseRepo;
 		$this->orderRepo = $orderRepo;
@@ -63,12 +66,12 @@ class ProofsController extends Controller {
 		$action = "create";
 		// dd(\Request::route()->action['as']);
 		$my_companies = $this->companyRepo->getListMyCompany();
-		// $proof_type = $this->proof_type;
+		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sunat_transaction = 1;
 		$igv_code = 1;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.create', compact('sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'action'));
+		return view('partials.create', compact('sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'payment_conditions', 'action'));
 	}
 
 
@@ -79,13 +82,14 @@ class ProofsController extends Controller {
 		$order = $model;
 		//dd($model);
 		$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
 
 		$sunat_transaction = 1;
 		$igv_code = 1;
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('finances.output_vouchers.create_by_order', compact('model', 'order_id', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'action'));
+		return view('finances.output_vouchers.create_by_order', compact('model', 'order_id', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'payment_conditions', 'action'));
 	}
 
 	public function index2()
@@ -106,13 +110,14 @@ class ProofsController extends Controller {
 		$action = "show";
 		$model = $this->repo->findOrFail($id);
 		$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
 
 		$sunat_transaction = $model->sunat_transaction;
 		$igv_code = $model->igv_code;
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.show', compact('model', 'sellers', 'items', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'action'));
+		return view('partials.show', compact('model', 'sellers', 'items', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'payment_conditions', 'action'));
 	}
 
 	public function edit($id)
@@ -121,13 +126,14 @@ class ProofsController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		// dd($model->document_type->code);
 		//$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
 
 		$sunat_transaction = $model->sunat_transaction;
 		$igv_code = $model->igv_code;
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.edit', compact('model', 'sellers', 'sunat_transaction', 'igv_code', 'documents', 'action'));
+		return view('partials.edit', compact('model', 'sellers', 'sunat_transaction', 'igv_code', 'documents', 'payment_conditions', 'action'));
 	}
 
 	public function update($id)
@@ -188,11 +194,12 @@ class ProofsController extends Controller {
 	{
 		$cuentas = $this->bankRepo->mostrar();
 		$model = $this->repo->findOrFail($id);
-		// dd(json_decode($model->response_sunat));
+		$r = json_decode($model->response_sunat);
+		// dd(json_decode($model->res ponse_sunat));
 		// \PDF::setOptions(['isPhpEnabled' => true]);
-		$pdf = \PDF::loadView('pdfs.output_vouchers', compact('model', 'cuentas'));
+		$pdf = \PDF::loadView('pdfs.output_vouchers', compact('model', 'cuentas', 'r'));
 		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
-		return $pdf->stream();
+		return $pdf->stream($r->data->filename.".pdf");
 	}
 	public function print($id)
 	{

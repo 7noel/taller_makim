@@ -68,6 +68,7 @@ class MenuController extends Controller
                 ['name' => 'Cuentas', 'route' => 'banks.index'],
                 ['name' => 'Tipo de Cambio', 'route' => 'exchanges.index'],
                 ['name' => 'Control de Documentos', 'route' => 'document_controls.index'],
+                ['name' => 'Condiciones de Pago', 'route' => 'payment_conditions.index'],
             ],
             'Taller'=>[
                 ['name' => 'Cotizaciones', 'route' => 'output_quotes.index'],

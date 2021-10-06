@@ -3,6 +3,7 @@
 		<tr>
 			<th>#</th>
 			<th>Nombre</th>
+			<th>Días</th>
 			<th>Descripción</th>
 			<th>Acciones</th>
 		</tr>
@@ -12,6 +13,7 @@
 		<tr data-id="{{ $model->id }}">
 			<td>{{ $model->id }}</td>
 			<td>{{ $model->name }} </td>
+			<td>{{ $model->days }} </td>
 			<td>{{ $model->description }} </td>
 			<td>
 				<a href="{{ route($routes['edit'] , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>

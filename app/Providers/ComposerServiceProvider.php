@@ -493,6 +493,16 @@ class ComposerServiceProvider extends ServiceProvider
                 'edit.update'=>'Actualizar Pago',
                 'edit.delete'=>'Eliminar Pago',
             ],
+            'payment_conditions' => [
+                'index'=>'Condiciones de Pago',
+                'index.create'=>'Crear Condición de Pago',
+                'create'=>'Nueva Condición de Pago',
+                'create.create'=>'Crear Condición de Pago',
+                'show'=>'Vizualizando Condición de Pago:',
+                'edit'=>'Editar Condición de Pago: ',
+                'edit.update'=>'Actualizar Condición de Pago',
+                'edit.delete'=>'Eliminar Condición de Pago',
+            ],
 
         ];
         if (isset($arr[$pre])) {

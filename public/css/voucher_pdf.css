@@ -50,7 +50,8 @@ table{
 	text-align: left;
 }
 .table-items thead{
-	background-color: MediumSeaGreen;
+	background-color: #40b250;
+	border: solid 1px white;
 	color: white;
 	font-weight: bold;
 }

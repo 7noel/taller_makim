@@ -2,7 +2,7 @@
 {!! Form::hidden('company_id', ((isset($client->id)) ? $client->id : null), ['id'=>'company_id']) !!}
 <div class="form-row">
 	<div class="col-sm-2">
-		{!! Field::text('placa', ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'max'=>'7', 'required']) !!}
+		{!! Field::text('placa', ['label' => 'Placa', 'id'=>'txtplaca', 'class'=>'form-control-sm text-uppercase', 'max'=>'7', 'required']) !!}
 	</div>
 	<div class="col-sm-4">
 		@if(isset($client->id))

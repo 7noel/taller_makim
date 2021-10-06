@@ -73,10 +73,7 @@
 		{!! Field::number('exchange', ['label' => 'Cambio (US$)', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::select('payment_condition_id', config('options.payment_conditions'), (isset($model) ? $model->payment_condition_id : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
-	</div>
-	<div class="col-sm-2 expired_at">
-		{!! Field::date('expired_at', ['label' => 'Vencimiento', 'class'=>'form-control-sm', 'required']) !!}
+		{!! Field::select('payment_condition_id', $payment_conditions, (isset($model) ? $model->payment_condition_id : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 </div>
 

@@ -17,8 +17,7 @@ class CreatePaymentConditionsTable extends Migration {
 			$table->id();
 			$table->string('name');
 			$table->string('description');
-			$table->boolean('to_sales');
-			$table->boolean('to_purchases');
+			$table->decimal('days', 3, 0);
             $table->bigInteger('my_company')->unsigned();
 
             $table->foreign('my_company')->references('id')->on('companies');

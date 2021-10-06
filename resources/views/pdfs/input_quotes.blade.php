@@ -17,7 +17,7 @@
 			<strong class="label">Señor(a):</strong>{{ $model->company->company_name }}
 		</div>
 		<div>
-			<strong class="label">RUC:</strong>{{ $model->company->doc }}
+			<strong class="label">{{ config('options.client_doc.'.$model->company->id_type) }}:</strong>{{ $model->company->doc }}
 		</div>
 		<div>
 			<strong class="label">Dirección:</strong>{{ $model->company->address . ' ' . $model->company->ubigeo->departamento . '-' . $model->company->ubigeo->provincia . '-' . $model->company->ubigeo->distrito }}

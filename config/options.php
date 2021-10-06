@@ -18,6 +18,7 @@ return array(
 	],
 	'config2' => ['my_web', 'logo', 'size_factura', 'size_boleta', 'size_retenciones', 'size_percepciones', 'nubefact_ruta', 'nubefact_token'],
 	'tipo_calculo' => ['cantidad', 'v_unitario'],
+	'cambiar_precios' => 1,
 	'precio_en_items' => [],
 	'client_doc' =>[
 		'6' => 'RUC',

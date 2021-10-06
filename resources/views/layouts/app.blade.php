@@ -364,7 +364,7 @@ $(document).ready(function () {
     });
 
     $(document).on('focus','.txtUbigeo', function (e) {
-        //console.log($(this));
+        // console.log($(this));
         $var = {}
         $var.this = this;
         if ( !$($var.this).data("autocomplete") ) {
@@ -404,6 +404,9 @@ $(document).ready(function () {
 
     $('#placa').change(function (e) {
         getCar()
+    })
+    $('#txtplaca').change(function (e) {
+        checkCar()
     })
     $('#type_service').change(function (e) {
         if ('PREVENTIVO' == $('#type_service').val()) {
@@ -756,11 +759,27 @@ function getCar() {
     if (placa!='') {
         $.get(url, function(data){
             if (data.id) {
-                console.log(data)
                 $('#car_id').val(data.id)
                 $('#company_id').val(data.company_id)
                 $('#my_company').val(data.my_company)
                 $('#attention').val(data.contact_name)
+            } else {
+                alert("Placa no registrada en el sistema")
+                $('#placa').val('')
+                $('#placa').focus()
+            }
+        });
+    }
+}
+function checkCar() {
+    placa = $('#txtplaca').val().trim()
+    url = `/getCar/${placa}`
+    if (placa!='') {
+        $.get(url, function(data){
+            if (data.id) {
+                alert("La Placa ya está registrada en el sistema")
+                $('#txtplaca').val('')
+                $('#txtplaca').focus()
             }
         });
     }

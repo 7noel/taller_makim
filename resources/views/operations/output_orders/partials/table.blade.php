@@ -6,6 +6,7 @@
 			<th>Placa</th>
 			<th>Cliente</th>
 			<th>Estado</th>
+			<th>Mnd</th>
 			<th>Total</th>
 			<th>Doc</th>
 			<th>Acciones</th>
@@ -30,7 +31,8 @@
 			<td>{{ $model->placa }}</td>
 			<td>{{ $model->company->company_name }} </td>
 			<td class="status"><span class="{{ $clase }}">{{ $model->status }}</span></td>
-			<td>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total}} </td>
+			<td>{{ config('options.table_sunat.moneda_sunat.'.$model->currency_id) }}</td>
+			<td>{{ $model->total}} </td>
 			<td>
 				@if($model->proof_id>0)
 				<a href="{{ '/finances/output_vouchers?sn='.$model->proof->sn }}" class="btn btn-link btn-sm" title="Ver OT">{{ $model->proof->sn }}</a>

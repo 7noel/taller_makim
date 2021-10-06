@@ -6,13 +6,14 @@
 			<th>Placa</th>
 			<th>Cliente</th>
 			<th>Estado</th>
+			<th>Mnd</th>
 			<th>Total</th>
 			<th>OT</th>
 			<th>Acciones</th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($models as $model)
+	@foreach($models as $model)
 		@php
 		if ($model->status=='APROB') {
 			$clase = 'badge badge-primary';
@@ -30,7 +31,8 @@
 			<td>{{ $model->placa }}</td>
 			<td>{{ $model->company->company_name }} </td>
 			<td><span class="{{ $clase }}">{{ $model->status }}</span></td>
-			<td>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total}} </td>
+			<td>{{ config('options.table_sunat.moneda_sunat.'.$model->currency_id) }}</td>
+			<td>{{ $model->total}} </td>
 			<td>
 				@if($model->order_id>0)
 				<a href="{{ '/operations/output_orders/?sn='.$model->order_id }}" class="btn btn-link btn-sm" title="Ver OT">{{ $model->order_id }}</a>
@@ -51,6 +53,6 @@
 			@endif
 			</td>
 		</tr>
-		@endforeach
+	@endforeach
 	</tbody>
 </table>

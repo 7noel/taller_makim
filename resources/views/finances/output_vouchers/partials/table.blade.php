@@ -7,6 +7,7 @@
 			<th>Documento</th>
 			<th>Cliente</th>
 			<th>Estado</th>
+			<th>Mnd</th>
 			<th>Total</th>
 			<th>Pagado</th>
 			<th>Deuda</th>
@@ -37,7 +38,8 @@
 			<td>{{ $model->document_type->description." ".$model->sn }} </td>
 			<td>{{ $model->company->company_name }} </td>
 			<td class="status"><span class="{{ $clase }}">{{ $model->status_sunat }}</span></td>
-			<td>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id) .' '.$model->total }}</td>
+			<td>{{ config('options.table_sunat.moneda_sunat.'.$model->currency_id) }}</td>
+			<td>{{ $model->total }}</td>
 			<td>{{ $model->amortization }}</td>
 			<td class="{{ ($model->total>$model->amortization)? 'text-warning' : 'text-success' }}">{{ round($model->total - $model->amortization, 2) }}</td>
 			<td>

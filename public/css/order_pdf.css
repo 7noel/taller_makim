@@ -16,7 +16,7 @@ body{
 .header{
 	margin: 20px 0;
 	text-align: center;
-	border: solid 1px red;
+	/*border: solid 1px red;*/
 }
 .header .title{
 	font-size: 22px;

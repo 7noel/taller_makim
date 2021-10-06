@@ -112,7 +112,6 @@
 			<tr>
 				<td width="452px" class="">
 					<div>Son: <strong>{{ numero_letras($model->total, 2, $model->currency_id) }}</strong></div>
-					@php $r = json_decode($model->response_sunat); @endphp
 					<div><img src="data:image/png;base64, {{ $r->data->qr }}" alt=""></div>
 					<div>Código Hash: {{ $r->data->hash }} </div>
 				</td>

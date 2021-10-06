@@ -9,7 +9,7 @@ class PaymentCondition extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['name', 'description', 'to_sales', 'to_purchases', 'my_company'];
+	protected $fillable = ['name', 'description', 'days', 'my_company'];
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {

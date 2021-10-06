@@ -33,7 +33,7 @@
 			<strong class="label">Señor(a):</strong><span class="data-header">{{ $model->company->company_name }}</span>
 		</div>
 		<div>
-			<strong class="label">RUC:</strong><span class="data-header">{{ $model->company->doc }}</span>
+			<strong class="label">{{ config('options.client_doc.'.$model->company->id_type) }}:</strong><span class="data-header">{{ $model->company->doc }}</span>
 		</div>
 		<div>
 			<strong class="label">Dirección:</strong><span class="data-header">{{ $model->company->address . ' ' . $model->company->ubigeo->departamento . '-' . $model->company->ubigeo->provincia . '-' . $model->company->ubigeo->distrito }}</span>
@@ -44,7 +44,7 @@
 		</div>
 		<div>
 			<strong class="label">Servicio:</strong><span class="data-header-1">{{ $model->type_service }}</span>
-			<strong class="label">Asesor:</strong><span class="data-header">{{ '('.$model->seller_id.') '.$model->seller->company_name }}</span>
+			<strong class="label">Asesor:</strong><span class="data-header">{{ $model->seller->company_name }}</span>
 		</div>
 		<div>
 			<strong class="label">Placa:</strong><span class="data-header-1">{{ $model->car->placa }}</span>
@@ -62,10 +62,11 @@
 			<thead>
 				<tr>
 					<th class="th1 border center">ITEM</th>
-					<th class="th2 border center">DESCRIPCION DEL PRODUCTO</th>
+					<th class="th2 border center">DESCRIPCIÓN DEL PRODUCTO</th>
 					<th class="th3 border center">UND</th>
 					<th class="th4 border center">P. UNIT.</th>
-					<th class="th5 border center">TOTAL</th>
+					<th class="th5 border center">DSCT.</th>
+					<th class="th6 border center">TOTAL</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -75,6 +76,7 @@
 					<td class="border">{{ $detail->product->name }}</td>
 					<td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
 					<td class="border center">{{ $detail->price }}</td>
+					<td class="border center">{{ $detail->d1 }} %</td>
 					<td class="border center">{{ $detail->price_item }}</td>
 				</tr>
 				@endforeach

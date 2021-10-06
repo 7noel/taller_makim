@@ -39,7 +39,7 @@
 		@endif
 	</div>
 	<div class="col-sm-2">
-		{!! Field::select('payment_condition_id', config('options.payment_conditions'), (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
+		{!! Field::select('payment_condition_id', $payment_conditions, (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-md-2 col-sm-4">
 		{!! Field::text('attention', ['label' => 'Atención', 'class'=>'form-control-sm text-uppercase']) !!}
