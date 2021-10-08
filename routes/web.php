@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Modules\Finances\Exchange;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +16,20 @@ Route::get('houses', function () {
     return view('welcome');
 });
 Route::get('/', 'HomeController@index');
+// Route::get('cambio1/{y}/{m}', function ($y, $m) {
+// 	$last_tc = Exchange::orderBy('fecha', 'desc')->first();
+// 	if (is_null($last_tc) or $last_tc->fecha < date('Y-m-d')) {
+// 		$cambio=0;
+// 		$t_cs = getTipoCambioMes($y, $m);
+// 		foreach ($t_cs as $key => $t_c) {
+// 			if (is_null($last_tc) or $t_c->fecha > $last_tc->fecha) {
+// 				$cambio = Exchange::create(['my_company'=>1, 'fecha'=>$t_c->fecha, 'venta'=>$t_c->venta, 'compra'=>$t_c->compra]);
+// 			}
+// 		}
+// 		return $cambio;
+// 	}
+// 	return null;
+// });
 
 // Auth::routes();
 Auth::routes(['verify' => true]);

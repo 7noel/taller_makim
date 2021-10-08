@@ -3,7 +3,6 @@
 		<tr>
 			<th>#</th>
 			<th>Fecha</th>
-			<th>Moneda</th>
 			<th>Venta</th>
 			<th>Compra</th>
 			<th>Acciones</th>
@@ -13,10 +12,9 @@
 		@foreach($models as $model)
 		<tr data-id="{{ $model->id }}">
 			<td>{{ $model->id }}</td>
-			<td class='date'>{{ $model->date }}</td>
-			<td>{{ $model->currency->symbol }}</td>
-			<td>{{ $model->sales }}</td>
-			<td>{{ $model->purchase }}</td>
+			<td class='date'>{{ $model->fecha }}</td>
+			<td>{{ $model->venta }}</td>
+			<td>{{ $model->compra }}</td>
 			<td>
 				<a href="{{ route($routes['edit'] , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
 				<a href="#" class="btn-delete btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>

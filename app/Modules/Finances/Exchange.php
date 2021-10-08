@@ -9,16 +9,11 @@ class Exchange extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['date', 'currency_id', 'is_sunat', 'sales', 'purchase', 'my_company'];
+	protected $fillable = ['fecha', 'my_company', 'venta', 'compra'];
 
-	public function scopeDate($query, $name){
+	public function scopeFecha($query, $name){
 		if (trim($name) != "") {
-			$query->where('date', 'LIKE', "%$name%");
+			$query->where('fecha', 'LIKE', "%$name%");
 		}
 	}
-	public function currency()
-	{
-		return $this->belongsto('App\Modules\Base\Currency');
-	}
-
 }

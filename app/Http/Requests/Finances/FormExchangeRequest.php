@@ -22,10 +22,10 @@ class FormExchangeRequest extends Request {
 	public function rules()
 	{
 		return [
-			'date'=>'required|date_format:d/m/Y',
-			'currency_id'=>'required|numeric',
-			'sales'=>'required|numeric',
-			'purchase'=>'required|numeric',
+			'fecha'=>'required',
+			'my_company'=>'required|numeric',
+			'venta'=>'required|numeric',
+			'compra'=>'required|numeric',
 		];
 	}
 

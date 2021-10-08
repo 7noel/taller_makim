@@ -1,24 +1,13 @@
-					<div class="form-group  form-group-sm">
-						{!! Form::label('date','Fecha', ['class'=>'col-sm-2 control-label']) !!}
-						<div class="col-sm-10">
-						{!! Form::text('date', null, ['class'=>'form-control date']) !!}
-						</div>
-					</div>
-					<div class="form-group  form-group-sm">
-						{!! Form::label('currency_id','Moneda', ['class'=>'col-sm-2 control-label']) !!}
-						<div class="col-sm-10">
-						{!! Form::select('currency_id', $currencies, null,['class'=>'form-control']); !!}
-						</div>
-					</div>
-					<div class="form-group  form-group-sm">
-						{!! Form::label('sales','Venta', ['class'=>'col-sm-2 control-label']) !!}
-						<div class="col-sm-10">
-						{!! Form::text('sales', null, ['class'=>'form-control']) !!}
-						</div>
-					</div>
-					<div class="form-group  form-group-sm">
-						{!! Form::label('purchase','Compra', ['class'=>'col-sm-2 control-label']) !!}
-						<div class="col-sm-10">
-						{!! Form::text('purchase', null, ['class'=>'form-control']) !!}
-						</div>
-					</div>
+{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+
+<div class="form-row">
+	<div class="col-sm-2">
+		{!! Field::date('fecha', null, ['label'=>'Fecha', 'class'=>'form-control-sm', 'required']) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::number('venta', null, ['label'=>'Venta', 'class'=>'form-control-sm', 'step'=>0.001, 'required']) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::number('compra', null, ['label'=>'Compra','class'=>'form-control-sm', 'step'=>0.001, 'required']) !!}
+	</div>
+</div>

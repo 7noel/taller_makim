@@ -13,14 +13,14 @@ class ExchangeRepo extends BaseRepo{
 	public function index($filter = false, $search = false)
 	{
 		if ($filter and $search) {
-			return Exchange::$filter($search)->with('currency')->orderBy("$filter", 'ASC')->paginate();
+			return Exchange::$filter($search)->orderBy("$filter", 'ASC')->paginate();
 		} else {
-			return Exchange::with('currency')->orderBy('id', 'DESC')->paginate();
+			return Exchange::orderBy('id', 'DESC')->paginate();
 		}
 	}
 	public function prepareData($data)
 	{
-		$data['date'] = \Carbon::createFromFormat('d/m/Y', $data['date'], 'America/Lima')->toDateString();
+		// $data['date'] = \Carbon::createFromFormat('d/m/Y', $data['date'], 'America/Lima')->toDateString();
 		return $data;
 	}
 }
