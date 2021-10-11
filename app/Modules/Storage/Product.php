@@ -10,12 +10,16 @@ class Product extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['name', 'intern_code', 'provider_code', 'manufacturer_code', 'description', 'sub_category_id', 'unit_id', 'currency_id', 'country', 'brand', 'last_purchase', 'profit_margin', 'admin_expense', 'value', 'price', 'use_set_value', 'is_downloadable', 'my_company'];
+	protected $fillable = ['name', 'intern_code', 'provider_code', 'manufacturer_code', 'description', 'category_id', 'sub_category_id', 'unit_id', 'currency_id', 'country', 'brand', 'last_purchase', 'profit_margin', 'admin_expense', 'value', 'price', 'use_set_value', 'is_downloadable', 'is_visible', 'my_company'];
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {
 			$query->where('name', 'LIKE', "%$name%")->orWhere('intern_code', 'LIKE', "%$name%");
 		}
+	}
+	public function category()
+	{
+		return $this->belongsTo('App\Modules\Base\Table','category_id');
 	}
 	public function sub_category()
 	{

@@ -121,6 +121,7 @@ Route::group(['prefix'=>'guard', 'middleware'=>['auth', 'permissions'], 'namespa
 Route::group(['prefix'=>'storage', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Storage'], function(){
 	Route::resource('warehouses','WarehousesController');
 	Route::resource('products','ProductsController');
+	Route::resource('services','ProductsController');
 	Route::resource('input_notes','OrdersController');
 	Route::resource('output_notes','OrdersController');
 	Route::get('stocks/kardex/{id}', ['as' => 'kardex','uses' => 'ProductsController@kardex']);

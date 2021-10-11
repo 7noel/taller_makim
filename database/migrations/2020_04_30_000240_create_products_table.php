@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration {
 			$table->text('description');
 			$table->string('country');
 			$table->string('brand');
+			$table->bigInteger('category_id')->unsigned();
 			$table->bigInteger('sub_category_id')->unsigned();
 			$table->bigInteger('unit_id')->unsigned();
 			$table->bigInteger('currency_id')->unsigned()->default(1);

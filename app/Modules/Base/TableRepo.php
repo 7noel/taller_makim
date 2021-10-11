@@ -10,6 +10,13 @@ class TableRepo extends BaseRepo{
 	public function getModel(){
 		return new Table;
 	}
+
+	public function prepareData($data)
+	{
+		$data['type'] = explode('.', request()->route()->getName())[0];
+		
+		return $data;
+	}
 	public function index2($filter = false, $search = false, $type)
 	{
 		if ($filter and $search) {
@@ -24,6 +31,11 @@ class TableRepo extends BaseRepo{
 		//dd(session('my_company'));
 		// return Table::where('my_company', session('my_company')->id)->where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
 		return Table::where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
+	}
+
+	public function getListTypeByGroup($type, $group, $campo='name', $id='id')
+	{
+		return Table::where('relation_id', $group)->where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
 	}
 
 	public function getListGroupType($type, $group, $config=1, $campo='name', $id='id')

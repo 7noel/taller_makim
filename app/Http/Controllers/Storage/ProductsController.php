@@ -37,8 +37,14 @@ class ProductsController extends Controller {
 
 	public function create()
 	{
+		$tipo = explode('.', request()->route()->getName())[0];
 		$warehouses = $this->warehouseRepo->all();
-		$sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
+		// $sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
+		if ($tipo == 'services') {
+			$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '17');
+		} else {
+			$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '18');
+		}
 		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
 		$brands = $this->tableRepo->getListType('brands', 'name', 'name');
 		
@@ -48,7 +54,7 @@ class ProductsController extends Controller {
 	public function store(FormProductRequest $request)
 	{
 		$this->repo->save(\Request::all());
-		return \Redirect::route('products.index');
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
 	public function show($id)
@@ -78,14 +84,14 @@ class ProductsController extends Controller {
 		$data = $this->repo->prepareData($data);
 		$this->repo->save($data,$id);
 		//dd($data);
-		return \Redirect::route('products.index');
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
 		if (\Request::ajax()) {	return $model; }
-		return redirect()->route('products.index');
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
 	public function ajaxAutocomplete()

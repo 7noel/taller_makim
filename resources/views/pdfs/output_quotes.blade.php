@@ -62,7 +62,7 @@
 			<thead>
 				<tr>
 					<th class="th1 border center">ITEM</th>
-					<th class="th2 border center">DESCRIPCIÓN DEL PRODUCTO</th>
+					<th class="th2 border center">DESCRIPCIÓN</th>
 					<th class="th3 border center">UND</th>
 					<th class="th4 border center">P. UNIT.</th>
 					<th class="th5 border center">DSCT.</th>
@@ -70,7 +70,12 @@
 				</tr>
 			</thead>
 			<tbody>
+				@php $cat=0 @endphp
 				@foreach($model->details as $key => $detail)
+				@if($detail->category_id != $cat)
+					<tr><td class="border padding" colspan="6">{{ $detail->category->name }}</td></tr>
+					@php $cat = $detail->category_id @endphp
+				@endif
 				<tr>
 					<td class="border center">{{ $key + 1 }}</td>
 					<td class="border">{{ $detail->product->name }}</td>

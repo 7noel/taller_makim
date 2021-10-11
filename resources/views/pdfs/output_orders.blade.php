@@ -68,7 +68,12 @@
 				</tr>
 			</thead>
 			<tbody>
+				@php $cat=0 @endphp
 				@foreach($model->details as $key => $detail)
+				@if($detail->category_id != $cat)
+					<tr><td class="border padding" colspan="6">{{ $detail->category->name }}</td></tr>
+					@php $cat = $detail->category_id @endphp
+				@endif
 				<tr>
 					<td class="border center">{{ $key + 1 }}</td>
 					<td class="border">{{ $detail->product->name }}</td>

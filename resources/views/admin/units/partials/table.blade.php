@@ -18,8 +18,8 @@
 			<td>{{ config('options.unit_types.'.$model->relation_id) }}</td>
 			<td class="text-right">{{ $model->value_1 }}</td>
 			<td>
-				<a href="{{ route( $routes['edit'] , $model) }}" class="btn btn-primary btn-xs" title="Editar">{!! $icons['edit'] !!}</a>
-				<a href="#" class="btn-delete btn btn-danger btn-xs" title="Eliminar">{!! $icons['remove'] !!}</a>
+				<a href="{{ route( $routes['edit'] , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
+				<a href="#" class="btn-delete btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>
 			</td>
 		</tr>
 		@endforeach

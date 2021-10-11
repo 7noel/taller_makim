@@ -17,7 +17,7 @@
 			<td>{{ $model->job->name }}</td>
 			<td>
 				<a href="{{ route( $routes['edit'] , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
-				<a href="#" class="btn-outline-delete btn btn-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>
+				<a href="#" class="btn-delete btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>
 			</td>
 		</tr>
 		@endforeach

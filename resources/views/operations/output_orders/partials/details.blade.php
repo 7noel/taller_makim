@@ -23,6 +23,7 @@
 			{!! Form::hidden("details[$i][id]", $detail->id, ['class'=>'detailId','data-detailId'=>'']) !!}
 			{!! Form::hidden("details[$i][product_id]", $detail->product_id, ['class'=>'productId','data-productid'=>'']) !!}
 			{!! Form::hidden("details[$i][unit_id]", $detail->unit_id, ['class'=>'unitId','data-unitid'=>'']) !!}
+			{!! Form::hidden("details[$i][category_id]", $detail->category_id, ['class'=>'categoryId','data-categoryid'=>'']) !!}
 			<td><span class='form-control form-control-sm intern_code text-right' data-labelid>{{ $detail->product->intern_code }}</span></td>
 			<td>{!! Form::text("details[$i][txtProduct]", $detail->product->name, ['class'=>'form-control form-control-sm txtProduct', 'data-product'=>'', 'required'=>'required', 'disabled']); !!}</td>
 			<td>{!! Form::text("details[$i][quantity]", $detail->quantity, ['class'=>'form-control form-control-sm txtCantidad text-right', 'data-cantidad'=>'']) !!}</td>
@@ -52,6 +53,7 @@
 	<tr>
 		{!! Form::hidden('data1', null, ['class'=>'productId','data-productid'=>'']) !!}
 		{!! Form::hidden('data2', null, ['class'=>'unitId','data-unitid'=>'']) !!}
+		{!! Form::hidden('data0', null, ['class'=>'categoryId','data-categoryid'=>'']) !!}
 		<td width="100px"><span class='form-control-plaintext form-control-sm intern_code text-right' data-labelid></span></td>
 		<td width="100px">{!! Form::text('data3', null, ['class'=>'form-control form-control-sm txtProduct', 'data-product'=>'', 'required'=>'required']); !!}</td>
 		<td width="100px">{!! Form::text('data4', null, ['class'=>'form-control form-control-sm txtCantidad text-right', 'data-cantidad'=>'']) !!}</td>

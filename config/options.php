@@ -36,7 +36,7 @@ return array(
 	],
 	'bodies' => ['COMPACT / HATCHBACK' => 'COMPACT / HATCHBACK', 'CONVERTIBLE' => 'CONVERTIBLE', 'COUPE' => 'COUPE', 'OFF-ROAD' => 'OFF-ROAD', 'OTRO' => 'OTRO', 'PICK UP' => 'PICK UP', 'SEDAN' => 'SEDAN', 'STATION WAGON' => 'STATION WAGON', 'SUV' => 'SUV', 'TRANSPORTER' => 'TRANSPORTER', 'VAN' => 'VAN', ],
 	'payment_conditions' => ['1'=>'CONTADO', '2'=>'CRÉDITO', '3'=>'LETRA'],
-	'unit_types' => ['UNIDAD', 'LONGITUD', 'VOLUMEN', 'MASA'],
+	'unit_types' => ['UNIDAD', 'LONGITUD', 'VOLUMEN', 'MASA', 'SERVICIO'],
 	'entity_types' => ['my_company', 'client', 'provider', 'shipper', 'bank', 'employee'],
 	'last_number' => [
 		'1' => [// importaciones

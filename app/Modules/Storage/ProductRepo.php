@@ -17,10 +17,16 @@ class ProductRepo extends BaseRepo{
 	}
 	public function index($filter = false, $search = false)
 	{
-		if ($filter and $search) {
-			return Product::$filter($search)->with('unit', 'sub_category', 'stocks')->orderBy("$filter", 'ASC')->paginate();
+		$tipo = explode('.', request()->route()->getName())[0];
+		if($tipo == 'services') {
+			$cat = 17;
 		} else {
-			return Product::orderBy('id', 'DESC')->with('unit', 'sub_category', 'stocks')->paginate();
+			$cat = 18;
+		}
+		if ($filter and $search) {
+			return Product::$filter($search)->where('category_id', $cat)->with('unit', 'sub_category', 'stocks')->orderBy("$filter", 'ASC')->paginate();
+		} else {
+			return Product::where('category_id', $cat)->orderBy('id', 'DESC')->with('unit', 'sub_category', 'stocks')->paginate();
 		}
 	}
 	public function prepareData($data)

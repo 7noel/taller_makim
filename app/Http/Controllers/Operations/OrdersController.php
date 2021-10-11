@@ -75,7 +75,7 @@ class OrdersController extends Controller {
 	{
 		$model = $this->repo->save(request()->all());
 		//$this->sendAlert($model);
-		return \Redirect::route(explode('.', \Request::route()->getName())[0].'.index');
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
 	public function show($id)
@@ -107,7 +107,7 @@ class OrdersController extends Controller {
 	public function update($id)
 	{
 		$this->repo->save(request()->all(), $id);
-		return \Redirect::route(explode('.', \Request::route()->getName())[0].'.index');
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
 	public function destroy($id)
@@ -115,7 +115,7 @@ class OrdersController extends Controller {
 		$model = $this->repo->cancel($id);
 		//$model = $this->repo->destroy($id);
 		if (\Request::ajax()) {	return $model; }
-		return redirect()->route(explode('.', \Request::route()->getName())[0].'.index');
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
 	/**

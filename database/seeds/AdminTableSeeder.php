@@ -36,7 +36,7 @@ class AdminTableSeeder extends Seeder {
     public function run()
     {
         Company::create(['company_name'=>'MULTISERVICIOS MAKIM-MAKIM E.I.R.L.', 'id_type'=>'6', 'doc'=>'20601157480', 'address'=>'AV. SEPARADORA INDUSTRIAL NRO. 3598 URB. MAYORAZGO', 'ubigeo_code'=>'150103', 'country' => 'PE', 'entity_type' => 'my_company']);
-        Company::create(['company_name'=>'JAVIER POLO', 'paternal_surname'=>'POLO', 'maternal_surname'=>'', 'name'=>'JAVIER', 'id_type'=>'1', 'doc'=>'99999999', 'address'=>'AV. SEPARADORA INDUSTRIAL NRO. 3598 URB. MAYORAZGO', 'ubigeo_code'=>'150103', 'country' => 'PE', 'entity_type' => 'employees', 'job_id'=>53, 'my_company'=>1]);
+        Company::create(['company_name'=>'JAVIER POLO', 'paternal_surname'=>'POLO', 'maternal_surname'=>'', 'name'=>'JAVIER', 'id_type'=>'1', 'doc'=>'99999999', 'address'=>'AV. SEPARADORA INDUSTRIAL NRO. 3598 URB. MAYORAZGO', 'ubigeo_code'=>'150103', 'country' => 'PE', 'entity_type' => 'employees', 'job_id'=>35, 'my_company'=>1]);
 
         User::create(['name' => 'Noel', 'email' => 'noel.logan@gmail.com', 'password' => '123', 'is_superuser' => true]);
         User::create(['name' => 'JAVIER POLO', 'email' => 'jpolo@makim.pe', 'password' => '123', 'is_superuser' => true]);
@@ -49,18 +49,18 @@ class AdminTableSeeder extends Seeder {
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 3, 'description'=>'NOTA DE CRÉDITO', 'name'=>'BC01', 'value_1'=>0]); // 4
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 4, 'description'=>'NOTA DE DÉBITO', 'name'=>'FD01', 'value_1'=>0]); // 5
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 4, 'description'=>'NOTA DE DÉBITO', 'name'=>'BD01', 'value_1'=>0]); // 6
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 7, 'description'=>'NOTA DE VENTA', 'name'=>'NV01', 'value_1'=>0]); // 7
         
-        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'UNIDAD', 'symbol' => 'und', 'relation_id' => 0, 'value_1' => 1, 'code' => 'NIU']); // 7
-        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'PARES', 'symbol' => 'prs', 'relation_id' => 0, 'value_1' => 2, 'code' => 'NIU']); // 8
-        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'DECENA', 'symbol' => 'dec', 'relation_id' => 0, 'value_1' => 10, 'code' => 'NIU']); // 9
-        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'CIENTO', 'symbol' => 'cto', 'relation_id' => 0, 'value_1' => 100, 'code' => 'NIU']); // 10
-        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'GRUEZA', 'symbol' => 'dec', 'relation_id' => 0, 'value_1' => 1728, 'code' => 'NIU']); // 11
+        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'UNIDAD', 'symbol' => 'und', 'relation_id' => 0, 'value_1' => 1, 'code' => 'NIU']); // 8
+        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'PARES', 'symbol' => 'prs', 'relation_id' => 0, 'value_1' => 2, 'code' => 'NIU']); // 9
+        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'DECENA', 'symbol' => 'dec', 'relation_id' => 0, 'value_1' => 10, 'code' => 'NIU']); // 10
+        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'CIENTO', 'symbol' => 'cto', 'relation_id' => 0, 'value_1' => 100, 'code' => 'NIU']); // 11
         Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'MILLAR', 'symbol' => 'mill', 'relation_id' => 0, 'value_1' => 1000, 'code' => 'NIU']); // 12
         Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'SET', 'symbol' => 'set', 'relation_id' => 0, 'value_1' => 1, 'code' => 'NIU']); // 13
-        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'METRO', 'symbol' => 'mt', 'relation_id' => 3, 'value_1' => 1, 'code' => 'NIU']); // 14
-        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'KILOGRAMO', 'symbol' => 'kg', 'relation_id' => 1, 'value_1' => 1, 'code' => 'NIU']); // 15
+        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'METRO', 'symbol' => 'mt', 'relation_id' => 1, 'value_1' => 3, 'code' => 'NIU']); // 14
+        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'KILOGRAMO', 'symbol' => 'kg', 'relation_id' => 3, 'value_1' => 1, 'code' => 'NIU']); // 15
+        Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'SERVICIO', 'symbol' => 'zz', 'relation_id' => 4, 'value_1' => 1, 'code' => 'ZZ']); // 15
 
-        Table::create(['type' => 'exchanges', 'my_company' => 1, 'name' => date('Y-m-d'), 'relation_id' => 2, 'value_1' => 3, 'value_2' => 3]); // 16
 
         Table::create(['type' => 'categories', 'my_company' => 1, 'name' => 'SERVICIO', 'code' => '01']); // 17
         Table::create(['type' => 'categories', 'my_company' => 1, 'name' => 'REPUESTO', 'code' => '01']); // 18
@@ -76,16 +76,16 @@ class AdminTableSeeder extends Seeder {
         Table::create(['type' => 'sub_categories', 'my_company' => 1, 'name' => 'MOTOR', 'relation_id' => 18]); // 2176
         Table::create(['type' => 'sub_categories', 'my_company' => 1, 'name' => 'OTROS', 'relation_id' => 18]); // 2177
 
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'ADVANCED']); // 2178
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'EUROCOLUMBUS']); // 2179
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'FAMED LODZ']); // 2180
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'FAMED ZYWIEC']); // 2181
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'GMM']); // 2182
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'HERSILL']); // 2183
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'NEUMOVENT']); // 2184
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'PROHS']); // 2185
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'TSE']); // 2186
-        Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'ZOLL']); // 2187
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'ADVANCED']); // 2178
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'EUROCOLUMBUS']); // 2179
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'FAMED LODZ']); // 2180
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'FAMED ZYWIEC']); // 2181
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'GMM']); // 2182
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'HERSILL']); // 2183
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'NEUMOVENT']); // 2184
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'PROHS']); // 2185
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'TSE']); // 2186
+        // Table::create(['type' => 'brands', 'my_company' => 1, 'name' => 'ZOLL']); // 2187
 
         PermissionGroup::create(['name' => 'SISTEMAS']);
         PermissionGroup::create(['name' => 'ADMINISTRACION']);
@@ -108,13 +108,13 @@ class AdminTableSeeder extends Seeder {
 
         // 2117 es el ultimo id de table (después de cargar ubigeo y paises)
         
-        Table::create(['type' => 'id_type', 'name' => 'REGISTRO UNICO DE CONTRIBUYENTE', 'symbol' => 'RUC', 'code' => '6']); // 2118
-        Table::create(['type' => 'id_type', 'name' => 'DOCUMENTO NACIONAL DE IDENTIDAD', 'symbol' => 'DNI', 'code' => '1']); // 2119
-        Table::create(['type' => 'id_type', 'name' => 'CARNET DE EXTRANJERÍA', 'symbol' => 'CEX', 'code' => '4']); // 2120
-        Table::create(['type' => 'id_type', 'name' => 'PASAPORTE', 'symbol' => 'PAS', 'code' => '7']); // 2121
-        Table::create(['type' => 'id_type', 'name' => 'CED. DIPLOMATICA DE IDENTIDAD', 'symbol' => 'CED', 'code' => 'A']); // 2122
-        Table::create(['type' => 'id_type', 'name' => 'DOC.TRIB.NO.DOM.SIN.RUC', 'symbol' => 'NDO', 'code' => '0']); // 2123
-        Table::create(['type' => 'id_type', 'name' => 'VARIOS', 'symbol' => 'S/D', 'code' => '-']); // 2124
+        // Table::create(['type' => 'id_type', 'name' => 'REGISTRO UNICO DE CONTRIBUYENTE', 'symbol' => 'RUC', 'code' => '6']); // 2118
+        // Table::create(['type' => 'id_type', 'name' => 'DOCUMENTO NACIONAL DE IDENTIDAD', 'symbol' => 'DNI', 'code' => '1']); // 2119
+        // Table::create(['type' => 'id_type', 'name' => 'CARNET DE EXTRANJERÍA', 'symbol' => 'CEX', 'code' => '4']); // 2120
+        // Table::create(['type' => 'id_type', 'name' => 'PASAPORTE', 'symbol' => 'PAS', 'code' => '7']); // 2121
+        // Table::create(['type' => 'id_type', 'name' => 'CED. DIPLOMATICA DE IDENTIDAD', 'symbol' => 'CED', 'code' => 'A']); // 2122
+        // Table::create(['type' => 'id_type', 'name' => 'DOC.TRIB.NO.DOM.SIN.RUC', 'symbol' => 'NDO', 'code' => '0']); // 2123
+        // Table::create(['type' => 'id_type', 'name' => 'VARIOS', 'symbol' => 'S/D', 'code' => '-']); // 2124
 
 
         Table::create(['type' => 'jobs', 'my_company' => 1, 'name' => 'ANALISTA DE SISTEMAS']); // 2125
