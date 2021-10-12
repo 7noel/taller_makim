@@ -53,7 +53,8 @@ class ProductsController extends Controller {
 
 	public function store(FormProductRequest $request)
 	{
-		$this->repo->save(\Request::all());
+		$data = request()->all();
+		$this->repo->save($data);
 		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 

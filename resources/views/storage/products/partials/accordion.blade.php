@@ -40,7 +40,7 @@
                     <td align="center">{{ $stock->avarage_value }}</td>
                   @else
                     <td align="center">{{ $w->name }}</td>
-                    <td align="center">0</td>
+                    <td align="center">{!! Form::number('stocks['.$w->id.'][stock]', 0, ['class'=>"form-control form-control-sm"]) !!}</td>
                     <td>{!! Form::number('stocks['.$w->id.'][stock_min]', 0, ['class'=>"form-control form-control-sm"]) !!}</td>
                     <td>{!! Form::number('stocks['.$w->id.'][stock_max]', 0, ['class'=>"form-control form-control-sm"]) !!}</td>
                     <td align="center">0.00</td>

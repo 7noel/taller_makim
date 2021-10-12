@@ -3,7 +3,9 @@ namespace App\Modules\Operations;
 
 use App\Modules\Base\BaseRepo;
 use App\Modules\Operations\Order;
+use App\Modules\Storage\MoveRepo;
 use App\Modules\Operations\OrderDetailRepo;
+use App\Modules\Storage\Stock;
 
 class OrderRepo extends BaseRepo{
 
@@ -23,8 +25,8 @@ class OrderRepo extends BaseRepo{
 	}
 	public function save($data, $id=0)
 	{
+		$data['order_type'] = explode('.', \Request::route()->getName())[0];
 		if ($id == 0) {
-			$data['order_type'] = explode('.', \Request::route()->getName())[0];
 			$data['sn'] = $this->getNextNumber($data['order_type'], session('my_company')->id);
 		}
 		$data = $this->prepareData($data);
@@ -34,7 +36,8 @@ class OrderRepo extends BaseRepo{
 			$detailRepo= new OrderDetailRepo;
 			$toDelete = $detailRepo->syncMany($data['details'], ['key' => 'order_id', 'value' => $model->id], 'product_id');
 
-			if (isset($data['sent_at'])) {
+				//dd($data['order_type']);
+			if ($data['order_type']=='output_orders') {
 				$mov = new MoveRepo;
 				$mov->destroy($toDelete);
 				$mov->saveAll($model, 0);
@@ -66,7 +69,7 @@ class OrderRepo extends BaseRepo{
 		// 	$data['sn'] = $this->getNextNumber($data['order_type'], $data['my_company']);
 		// }
 
-		$data['document_type_id'] = 6;
+		$data['document_type_id'] = 20;
 		$data['mov'] = 0;
 		$data['type_op'] = '01'; //2135
 		if (!isset($data['warehouse_id']) or $data['warehouse_id'] == '' or $data['warehouse_id'] == '0') {
@@ -121,10 +124,11 @@ class OrderRepo extends BaseRepo{
 				} else {
 					$total = round($subtotal*(100 + config('options.tax.igv'))/100, 2);
 				}
-				
-
+				// dd($data['order_type']);
+				// dd($data['order_type']=='output_orders');
 				// Obteniendo el stock_id
-				if (!isset($detail['stock_id']) and isset($data['sent_at']) ) {
+				if (!isset($detail['stock_id']) and $data['order_type']=='output_orders' and $detail['category_id']!=17) {
+// dd('dentro de');
 					if (!isset($detail['warehouse_id'])) {
 						$detail['warehouse_id'] = $data['warehouse_id'];
 					}
@@ -193,6 +197,7 @@ class OrderRepo extends BaseRepo{
 		} else {
 			$data['canceled_at'] = null;
 		}
+
 		return $data;
 	}
 

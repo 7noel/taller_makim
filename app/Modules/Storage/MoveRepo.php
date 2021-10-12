@@ -5,7 +5,7 @@ namespace App\Modules\Storage;
 use App\Modules\Base\BaseRepo;
 use App\Modules\Storage\Move;
 use App\Modules\Storage\StockRepo;
-use App\Modules\Storage\Unit;
+use App\Modules\Base\Table;
 
 class MoveRepo extends BaseRepo{
 
@@ -15,16 +15,16 @@ class MoveRepo extends BaseRepo{
 
 	public function prepareData($data)
 	{
-		$unit_model = Unit::find($data['unit_id']);
+		$unit_model = Table::find($data['unit_id']);
 		if ($unit_model->value == 1) {
 			$data['unit_id'] = $unit_model->id;
 		} else {
-			$unit_base = Unit::where('unit_type_id', $unit_model->unit_type_id)->where('value', 1)->first();
+			$unit_base = Table::where('type', 'units')->where('relation_id', $unit_model->relation_id)->where('value_1', 1)->first();
 			$data['unit_id'] = $unit_base->id;
 		}
-		$data['input'] = $data['input'] * $unit_model->value;
-		$data['output'] = $data['output'] * $unit_model->value;
-		$data['value'] = $data['value'] / $unit_model->value;
+		$data['input'] = $data['input'] * $unit_model->value_1;
+		$data['output'] = $data['output'] * $unit_model->value_1;
+		$data['value'] = $data['value'] / $unit_model->value_1;
 		return $data;
 	}
 
@@ -39,11 +39,14 @@ class MoveRepo extends BaseRepo{
 		$data = $this->prepareData($data);
 		$stockRepo = new StockRepo;
 		$st_model = $stockRepo->find($data['stock_id']);
+		// dd($data);
+		// dd($st_model);
 		// saber si ya tiene un movimiento
 		$model_current = $this->model->where('move_type', $data['move_type'])->where('move_id', $data['move_id'])->first();
 		if ($model_current) {
 			$id = $model_current->id;
 		}
+		// dd($data);
 		/**
 		 * IF: Modificar un movimiento. FOREACH: itera con el movimiento a modificar y con los posteriores.
 		 * ELSE: Agregar un movimiento
@@ -78,7 +81,8 @@ class MoveRepo extends BaseRepo{
 				$last_stock = $move_before->stock;
 				$last_avarage = $move_before->avarage_value_after;
 			} else {
-				$last_stock = 0;
+				$last_stock = $st_model->stock_initial;
+				// $last_stock = 0;
 				$last_avarage = $data['value'];
 			}
 			
@@ -101,7 +105,7 @@ class MoveRepo extends BaseRepo{
 			return false;
 		}
 		if (count($toDelete) > 0) {
-			return false;
+			//return false;
 		}
 		foreach ($toDelete as $key2 => $id) {
 			$last_stock = 0;
@@ -109,6 +113,9 @@ class MoveRepo extends BaseRepo{
 			$model = '';
 			//encuentra los movimientos desde este id en adelante correspondiente a este stock_id
 			$move_current = $this->model->find($id);
+			var_dump($toDelete);
+			var_dump($id);
+			dd($move_current);
 			$moves_before = $this->model->where('id', '>=', $id)->where('stock_id', $move_current->stock_id)->orderBy('id', 'asc')->get();
 			foreach ($moves_before as $key => $move_before) {
 				if ($move_before->id == $id) {
@@ -158,12 +165,22 @@ class MoveRepo extends BaseRepo{
 
 	public function saveAll($model, $change_value)
 	{
+		// dd($model->details);
 		\DB::transaction(function () use ($model, $change_value){
+			$d['my_company'] = $model->my_company;
+			if ($model->document_type_id == 20) {
+				$d['document'] = 'ORDEN';
+				$d['code_document'] = '00';
+			} elseif ($model->document_type_id == 21) {
+				$d['document'] = 'TICKET';
+				$d['code_document'] = '00';
+			} else {
+				$d['document'] = $model->document_type->description;
+				$d['code_document'] = $model->document_type->code;
+			}
 			foreach ($model->details as $key => $detail) {
 				// prepara la trama para usar el metodo save de MoveRepo
 				// $d['date'] = $model->date;
-				$d['document'] = $model->document_type->name;
-				$d['code_document'] = $model->document_type->code;
 				$d['change_value'] = $change_value;
 				$d['type_op'] = $model->type_op;
 				$d['number'] = $model->id;
@@ -188,7 +205,9 @@ class MoveRepo extends BaseRepo{
 				}
 				$d['move_type'] = $detail->getMorphClass();
 				$d['move_id'] = $detail->id;
-				$this->save($d);
+				if ($detail->category_id != 17) {
+					$this->save($d);
+				}
 			}
 		});
 	}

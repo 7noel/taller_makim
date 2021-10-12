@@ -39,6 +39,9 @@ class ProductRepo extends BaseRepo{
 		}
 		if (isset($data['stocks'])) {
 			foreach ($data['stocks'] as $key => $value) {
+				if (isset($data['stocks'][$key]['stock'])) {
+					$data['stocks'][$key]['stock_initial'] = $data['stocks'][$key]['stock'];
+				}
 				//$data['stocks'][$key]['product_id'] = $data['id'];
 			}
 		}

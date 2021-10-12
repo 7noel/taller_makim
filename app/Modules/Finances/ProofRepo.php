@@ -248,7 +248,7 @@ class ProofRepo extends BaseRepo{
 		// Obteniendo el stock_id
 		if (isset($data['details'])) {
 			foreach ($data['details'] as $key => $detail) {
-				if (!isset($detail['stock_id']) and 1 == 1) {
+				if (!isset($detail['stock_id']) and $detail['category_id']!=17) {
 					if (!isset($detail['warehouse_id'])) {
 						$detail['warehouse_id'] = $data['warehouse_id'];
 					}
