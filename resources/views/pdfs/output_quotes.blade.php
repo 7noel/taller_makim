@@ -73,7 +73,7 @@
 				@php $cat=0 @endphp
 				@foreach($model->details as $key => $detail)
 				@if($detail->category_id != $cat)
-					<tr><td class="border padding" colspan="6">{{ $detail->category->name }}</td></tr>
+					<tr><td class="border padding" colspan="6"><strong>{{ $detail->category->name }}</strong></td></tr>
 					@php $cat = $detail->category_id @endphp
 				@endif
 				<tr>
