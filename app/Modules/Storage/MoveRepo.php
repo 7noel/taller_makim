@@ -99,43 +99,46 @@ class MoveRepo extends BaseRepo{
 		return $model;
 	}
 
-	public function destroy($toDelete)
+	public function destroy2($toDelete, $move_type)
 	{
 		if (is_null($toDelete)) {
 			return false;
-		}
-		if (count($toDelete) > 0) {
-			//return false;
 		}
 		foreach ($toDelete as $key2 => $id) {
 			$last_stock = 0;
 			$last_avarage = 0;
 			$model = '';
 			//encuentra los movimientos desde este id en adelante correspondiente a este stock_id
-			$move_current = $this->model->find($id);
-			var_dump($toDelete);
-			var_dump($id);
-			dd($move_current);
-			$moves_before = $this->model->where('id', '>=', $id)->where('stock_id', $move_current->stock_id)->orderBy('id', 'asc')->get();
+			$move_current = $this->model->where('move_id', $id)->where('move_type', $move_type)->first();
+			$stockRepo = new StockRepo;
+			$st_model = $stockRepo->find($move_current->stock_id);
+
+			$moves_before = $this->model->where('id', '>=', $move_current->id)->where('stock_id', $move_current->stock_id)->orderBy('id', 'asc')->get();
+			// $moves_before = $this->model->where('stock_id', $move_current->stock_id)->orderBy('id', 'asc')->get();
 			foreach ($moves_before as $key => $move_before) {
-				if ($move_before->id == $id) {
+				if ($move_before->id == $move_current->id) {
 					$last_stock = $move_before->stock + $move_before->output - $move_before->input;
 					$last_avarage = $move_before->avarage_value_before;
 					$q = 0;
 					$v = $last_avarage;
+					$data = $this->calcAvarage($last_stock, $last_avarage, $q, $v);
+					$model = $move_before->delete();
 				} else {
 					unset($data);
 					$q = $move_before->input - $move_before->output;
 					$v = ($move_before->change_value) ? $move_before->value : $last_avarage;
+					$data['id'] = $move_before->id;
+					$data = $this->calcAvarage($last_stock, $last_avarage, $q, $v);
+					$last_stock = $data['stock'];
+					$last_avarage =	$data['avarage_value_after'];
+					$model = parent::save($data, $move_before->id);
 				}
-				$data['id'] = $move_before->id;
-				$data = $this->calcAvarage($last_stock, $last_avarage, $q, $v);
-				$last_stock = $data['stock'];
-				$last_avarage =	$data['avarage_value_after'];
-				$model = $move_before->delete();
+				// dd($last_stock);
+				// dd($data);
 			}
 			$st_model->stock = $last_stock;
 			$st_model->avarage_value = $last_avarage;
+			//dd($st_model);
 			$st_model->save();
 		}
 		return true;

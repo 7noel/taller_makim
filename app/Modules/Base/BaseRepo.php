@@ -101,6 +101,46 @@ abstract class BaseRepo{
 	 * @param  [array] $k3      [tiene key y value del tipo de modelo en un polimorfismo]
 	 * @return [array]          [retorna los ids de los elementos eliminados]
 	 */
+	public function syncMany2($allData,$k1,$k2,$k3=[])
+	{
+		$toSave = [];
+		$toEdit = [];
+		$toDelete = [];
+		$new_ids = [];
+		foreach ($allData as $key => $data) {
+			if (isset($data["id"]) and $data["id"]>0) {
+				$new_ids[] = $data["id"];
+			}
+		}
+		$old_ids = $this->model->where($k1['key'],$k1['value'])->pluck('id')->toArray();
+		$toDelete = array_diff($old_ids, $new_ids);
+		# Elimina registros
+		if (isset($toDelete) and count($toDelete)>0) {
+			$this->model->whereIn('id', $toDelete)->delete();
+		}
+		# Guardar registros
+		foreach ($allData as $key => $data) {
+			$data['my_company'] = session('my_company')->id;
+			$data[$k1['key']] = $k1['value'];
+			if (empty($k3)) {
+				$model = $this->model->updateOrCreate([$k1['key'] => $k1['value'], $k2 => $data[$k2]], $data);
+			} else {
+				$model = $this->model->updateOrCreate([$k1['key'] => $k1['value'], $k2 => $data[$k2], $k3['key'] => $k3['value']], $data);
+			}
+			
+		}
+
+		return $toDelete;
+	}
+
+	/**
+	 * Graba varias items hijos de 2 tablas padres. Para eliminar se debe enviar el campo is_deleted
+	 * @param  [array] $allData [contiene los elementos a ingresar]
+	 * @param  [array] $k1      [tiene key y value del padre desde donde ingresa]
+	 * @param  [string] $k2      [nombre del key de los items]
+	 * @param  [array] $k3      [tiene key y value del tipo de modelo en un polimorfismo]
+	 * @return [array]          [retorna los ids de los elementos eliminados]
+	 */
 	public function syncMany($allData,$k1,$k2,$k3=[])
 	{
 		$toSave = [];

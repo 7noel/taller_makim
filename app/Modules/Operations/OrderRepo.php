@@ -32,14 +32,14 @@ class OrderRepo extends BaseRepo{
 		$data = $this->prepareData($data);
 		$model = parent::save($data, $id);
 
-		if (isset($data['details'])) {
-			$detailRepo= new OrderDetailRepo;
-			$toDelete = $detailRepo->syncMany($data['details'], ['key' => 'order_id', 'value' => $model->id], 'product_id');
+		if (isset($data['items'])) {
+			$detailRepo = new OrderDetailRepo;
+			$toDelete = $detailRepo->syncMany2($data['details'], ['key' => 'order_id', 'value' => $model->id], 'product_id');
 
 				//dd($data['order_type']);
 			if ($data['order_type']=='output_orders') {
 				$mov = new MoveRepo;
-				$mov->destroy($toDelete);
+				$mov->destroy2($toDelete, $detailRepo->model->getMorphClass());
 				$mov->saveAll($model, 0);
 			}
 		}
@@ -63,6 +63,9 @@ class OrderRepo extends BaseRepo{
 	{
 		if ($data['my_company'] == '') {
 			$data['my_company'] = session('my_company')->id;
+		}
+		if (isset($data['items']) and !isset($data['details'])) {
+			$data['details'] = [];
 		}
 
 		// if (($data['order_type'] == 1 or $data['order_type'] == 2) and $data['sn'] == '') {

@@ -242,6 +242,12 @@ $(document).ready(function () {
         $('.withoutTax').toggle()
     })
 
+    $(document).on('click', '.btn-delete-item', function (e) {
+        e.preventDefault()
+        $(this).parent().parent().remove()
+        calcTotal()
+    })
+
     $(document).on('change','.txtCantidad, .txtPrecio, .txtValue, .txtDscto, .txtDscto2', function (e) {
         calcTotalItem(this)
         calcTotal()
@@ -577,7 +583,7 @@ function renderTemplateRowProduct (data) {
     clone.querySelector("[data-value]").setAttribute("name", "details[" + items + "][value]")
     clone.querySelector("[data-dscto]").setAttribute("name", "details[" + items + "][d1]")
     clone.querySelector("[data-dscto2]").setAttribute("name", "details[" + items + "][d2]")
-    clone.querySelector("[data-isdeleted]").setAttribute("name", "details[" + items + "][is_deleted]")
+    // clone.querySelector("[data-isdeleted]").setAttribute("name", "details[" + items + "][is_deleted]")
     if (items>0) {$("input[name='details["+(items-1)+"][txtProduct]']").attr('disabled', true)}
     
     items = parseInt(items) + 1

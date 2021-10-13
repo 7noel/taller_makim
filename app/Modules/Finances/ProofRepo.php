@@ -77,11 +77,11 @@ class ProofRepo extends BaseRepo{
 			// DocumentControlRepo::nextNumber($data['control_id']);
 		}
 		// Registra Movimientos
-		if (isset($data['details'])) {
+		if (isset($data['items'])) {
 			$detailRepo = new ProofDetailRepo;
-			$toDelete = $detailRepo->syncMany($data['details'], ['key' => 'proof_id', 'value' => $model->id], 'product_id');
+			$toDelete = $detailRepo->syncMany2($data['details'], ['key' => 'proof_id', 'value' => $model->id], 'product_id');
 
-			if (1==0) {
+			if (isset($data['order_id']) and $data['order_id']>0) {
 				$mov = new MoveRepo;
 				$mov->destroy($toDelete);
 				$mov->saveAll($model, 1);
@@ -96,7 +96,6 @@ class ProofRepo extends BaseRepo{
 			} else {
 				$model->status_sunat = 'ERROR';
 			}
-			
 			$model->response_sunat = $respuesta;
 			$model->save();
 		}
@@ -119,6 +118,10 @@ class ProofRepo extends BaseRepo{
 		if ($data['my_company'] == '') {
 			$data['my_company'] = session('my_company')->id;
 		}
+		if (isset($data['items']) and !isset($data['details'])) {
+			$data['details'] = [];
+		}
+
 		$condition = PaymentCondition::find($data['payment_condition_id']);
 		$data['expired_at'] = date('Y-m-d', strtotime($data['issued_at']. " + $condition->days days"));
 		if ($data['document_type_id'] == 3) {

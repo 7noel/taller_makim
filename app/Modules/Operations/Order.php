@@ -52,10 +52,6 @@ class Order extends Model implements Auditable
 	{
 		return $this->belongsTo('App\Modules\Security\Company','user_id');
 	}
-	public function document_type()
-	{
-		return $this->belongsTo('App\Modules\Base\DocumentType', 'document_type_id');
-	}
 	public function currency()
 	{
 		return $this->belongsTo('App\Modules\Base\Currency', 'currency_id');

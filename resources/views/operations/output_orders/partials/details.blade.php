@@ -40,7 +40,6 @@
 			<td class="withTax"> <span class='form-control form-control-sm txtPriceItem text-right' data-price_item>{{ $detail->price_item }}</span> </td>
 			<td class="text-center form-inline">
 				<a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar">{!! $icons['remove'] !!}</a>
-				<input type="checkbox" name="details[{{$i}}][is_deleted]" data-isdeleted class="isdeleted hidden">
 			</td>
 		</tr>
 		@php $i++; @endphp
@@ -70,7 +69,6 @@
 		<td width="100px" class="withTax"> <span class='form-control form-control-sm txtPriceItem text-right' data-price_item></span> </td>
 		<td width="100px" class="text-center form-inline">
 			<a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar">{!! $icons['remove'] !!}</a>
-			<input type="checkbox" name="data8" data-isdeleted class="isdeleted hidden">
 		</td>
 	</tr>
 </template>
