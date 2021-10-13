@@ -28,7 +28,7 @@ class BrandRepo extends BaseRepo{
 		$modeloRepo= new ModeloRepo;
 		$model = parent::save($data, $id);
 		if (isset($data['modelos'])) {
-			$modeloRepo->saveMany($data['modelos'], ['key' => 'brand_id', 'value' => $model->id]);
+			$modeloRepo->saveMany2($data['modelos'], ['key' => 'brand_id', 'value' => $model->id]);
 		}
 		return $model;
 	}

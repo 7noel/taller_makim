@@ -13,8 +13,8 @@
 		@foreach($model->modelos as $modelo)
 			<tr data-id="{{ $modelo->id }}">
 				{!! Form::hidden("modelos[$i][id]", $modelo->id, ['class'=>'modeloId','data-modeloId'=>'']) !!}
-				<td>{!! Form::text("modelos[$i][name]", $modelo->name, ['class'=>'form-control form-control-sm name uppercase', 'data-name'=>'']) !!}</td>
-				<td>{!! Form::text("modelos[$i][description]", $modelo->description, ['class'=>'form-control form-control-sm description uppercase', 'data-description'=>'']) !!}</td>
+				<td>{!! Form::text("modelos[$i][name]", $modelo->name, ['class'=>'form-control form-control-sm name text-uppercase', 'data-name'=>'']) !!}</td>
+				<td>{!! Form::text("modelos[$i][description]", $modelo->description, ['class'=>'form-control form-control-sm description text-uppercase', 'data-description'=>'']) !!}</td>
 
 				<td class="text-center form-inline">
 					<a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar">{!! $icons['remove'] !!}</a>
@@ -27,12 +27,10 @@
 	</table>
 	<template id="template-row-modelo">
 		<tr>
-			<td>{!! Form::text('data1', null, ['class'=>'form-control form-control-sm name uppercase', 'data-name'=>'']) !!}</td>
-			<td>{!! Form::text('data2', null, ['class'=>'form-control form-control-sm description uppercase', 'data-description'=>'']) !!}</td>
+			<td>{!! Form::text('data1', null, ['class'=>'form-control form-control-sm name text-uppercase', 'data-name'=>'']) !!}</td>
+			<td>{!! Form::text('data2', null, ['class'=>'form-control form-control-sm description text-uppercase', 'data-description'=>'']) !!}</td>
 			<td class="text-center form-inline">
-				<div class="checkbox">
-					<label><input type="checkbox" name="data7" data-isdeleted class="isdeleted">{!! $icons['remove'] !!}</label>
-				</div>
+				<a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar">{!! $icons['remove'] !!}</a>
 			</td>
 		</tr>
 	</template>

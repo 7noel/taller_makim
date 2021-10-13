@@ -62,7 +62,7 @@ function renderTemplateRowModelo () {
 	clone.querySelector("[data-name]").setAttribute("name", "modelos[" + items + "][name]");
 	clone.querySelector("[data-description]").setAttribute("name", "modelos[" + items + "][description]");
 
-	clone.querySelector("[data-isdeleted]").setAttribute("name", "modelos[" + items + "][is_deleted]");
+	//clone.querySelector("[data-isdeleted]").setAttribute("name", "modelos[" + items + "][is_deleted]");
 	
 	items = parseInt(items) + 1;
 	$('#items_1').val(items);

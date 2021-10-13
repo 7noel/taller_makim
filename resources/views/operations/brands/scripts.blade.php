@@ -1,1 +1,1 @@
-{!! Html::script('js/operations/brands.js') !!}
+{!! Html::script('js/operations/brands2.js') !!}
