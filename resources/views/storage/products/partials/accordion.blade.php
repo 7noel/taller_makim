@@ -96,7 +96,6 @@
       </div>
     </div>
   </div>
-  @endif
   <div class="card">
     <div class="card-header" id="headingThree">
       <h6 class="mb-0">
@@ -137,6 +136,7 @@
       </div>
     </div>
   </div>
+  @endif
 </div>
 
 <template id="template-row-accessory">

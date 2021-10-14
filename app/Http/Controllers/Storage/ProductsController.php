@@ -46,7 +46,7 @@ class ProductsController extends Controller {
 			$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '18');
 		}
 		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
-		$brands = $this->tableRepo->getListType('brands', 'name', 'name');
+		$brands = $this->tableRepo->getListType('marcas', 'name', 'name');
 		
 		return view('partials.create', compact('sub_categories', 'units', 'brands', 'warehouses'));
 	}
@@ -64,7 +64,7 @@ class ProductsController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		$sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
 		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
-		$brands = $this->tableRepo->getListType('brands', 'name', 'name');
+		$brands = $this->tableRepo->getListType('marcas', 'name', 'name');
 		return view('partials.show', compact('model', 'sub_categories', 'units', 'brands', 'warehouses'));
 	}
 
@@ -74,7 +74,7 @@ class ProductsController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		$sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
 		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
-		$brands = $this->tableRepo->getListType('brands', 'name', 'name');
+		$brands = $this->tableRepo->getListType('marcas', 'name', 'name');
 		return view('partials.edit', compact('model', 'sub_categories', 'units', 'brands', 'warehouses'));
 	}
 

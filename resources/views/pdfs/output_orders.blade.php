@@ -61,7 +61,7 @@
 			<thead>
 				<tr>
 					<th class="th1 border center">ITEM</th>
-					<th class="th2 border center">DESCRIPCION DEL PRODUCTO</th>
+					<th class="th2 border center">DESCRIPCIÓN</th>
 					<th class="th3 border center">UND</th>
 					<th class="th4 border center">P. UNIT.</th>
 					<th class="th5 border center">TOTAL</th>

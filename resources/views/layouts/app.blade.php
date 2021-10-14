@@ -229,6 +229,14 @@ $(document).ready(function () {
         x = Math.round($('#p_price').val()*10000/118)/100
         $('#p_value').val(x)
     })
+    $('#p_value_cost').change(function () {
+        x = Math.round($('#p_value_cost').val()*118)/100
+        $('#p_price_cost').val(x)
+    })
+    $('#p_price_cost').change(function () {
+        x = Math.round($('#p_price_cost').val()*10000/118)/100
+        $('#p_value_cost').val(x)
+    })
     if ($('#with_tax').val() == 1) {
         $('.withTax').show()
         $('.withoutTax').hide()

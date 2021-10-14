@@ -76,6 +76,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'permissions'], 'namespa
 	Route::resource('units','TableController');
 	Route::resource('categories','TableController');
 	Route::resource('sub_categories','TableController');
+	Route::resource('marcas','TableController');
 });
 
 Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Finances'], function(){

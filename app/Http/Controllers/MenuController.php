@@ -58,6 +58,7 @@ class MenuController extends Controller
                 // ['name' => 'Categorías', 'route' => 'categories.index'],
                 ['name' => 'Sub Categorías', 'route' => 'sub_categories.index'],
                 ['name' => 'Unidades', 'route' => 'units.index'],
+                ['name' => 'Marcas', 'route' => 'marcas.index'],
             ],
             'RR HH'=>[
                 ['name' => 'Empleados', 'route' => 'employees.index'],

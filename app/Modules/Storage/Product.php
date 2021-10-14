@@ -29,6 +29,10 @@ class Product extends Model implements Auditable {
 	{
 		return $this->belongsTo('App\Modules\Base\Table','unit_id');
 	}
+	// public function marca()
+	// {
+	// 	return $this->belongsTo('App\Modules\Base\Table','brand');
+	// }
 	public function stocks()
 	{
 		return $this->hasMany('App\Modules\Storage\Stock');

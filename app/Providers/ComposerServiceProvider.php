@@ -261,7 +261,7 @@ class ComposerServiceProvider extends ServiceProvider
                 'edit.delete'=>'Eliminar Proveedor',
             ],
             'brands' => [
-                'index'=>'Marcas',
+                'index'=>'Marcas de Vehículos',
                 'index.create'=>'Crear Marca',
                 'create'=>'Nueva Marca',
                 'create.create'=>'Crear Marca',
@@ -512,6 +512,16 @@ class ComposerServiceProvider extends ServiceProvider
                 'edit'=>'Editar Condición de Pago: ',
                 'edit.update'=>'Actualizar Condición de Pago',
                 'edit.delete'=>'Eliminar Condición de Pago',
+            ],
+            'marcas' => [
+                'index'=>'Marcas de Repuestos',
+                'index.create'=>'Crear Marca',
+                'create'=>'Nueva Marca',
+                'create.create'=>'Crear Marca',
+                'show'=>'Vizualizando Marca:',
+                'edit'=>'Editar Marca: ',
+                'edit.update'=>'Actualizar Marca',
+                'edit.delete'=>'Eliminar Marca',
             ],
 
         ];
