@@ -111,7 +111,12 @@ class MoveRepo extends BaseRepo{
 			//encuentra los movimientos desde este id en adelante correspondiente a este stock_id
 			$move_current = $this->model->where('move_id', $id)->where('move_type', $move_type)->first();
 			$stockRepo = new StockRepo;
-			$st_model = $stockRepo->find($move_current->stock_id);
+			if (isset($move_current->stock_id)) {
+				$st_model = $stockRepo->find($move_current->stock_id);
+			}
+			if (!isset($st_model->id)) {
+				continue;
+			}
 
 			$moves_before = $this->model->where('id', '>=', $move_current->id)->where('stock_id', $move_current->stock_id)->orderBy('id', 'asc')->get();
 			// $moves_before = $this->model->where('stock_id', $move_current->stock_id)->orderBy('id', 'asc')->get();

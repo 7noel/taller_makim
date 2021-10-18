@@ -37,7 +37,7 @@ class OrderRepo extends BaseRepo{
 			$toDelete = $detailRepo->syncMany2($data['details'], ['key' => 'order_id', 'value' => $model->id], 'product_id');
 
 				//dd($data['order_type']);
-			if ($data['order_type']=='output_orders' and $data['category_id']==18) {
+			if ($data['order_type']=='output_orders') {
 				$mov = new MoveRepo;
 				$mov->destroy2($toDelete, $detailRepo->model->getMorphClass());
 				$mov->saveAll($model, 0);
