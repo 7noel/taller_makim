@@ -51,7 +51,7 @@ class OrderRepo extends BaseRepo{
 
 	public function getNextNumber($order_type, $my_company)
 	{
-		$last = Order::where('my_company', $my_company)->where('order_type', $order_type)->orderBy('sn', 'desc')->first();
+		$last = Order::where('my_company', $my_company)->where('order_type', $order_type)->orderBy('id', 'desc')->first();
 		if (isset($last) && $last->sn > 0) {
 			return $last->sn + 1;
 		} else {
@@ -131,7 +131,6 @@ class OrderRepo extends BaseRepo{
 				// dd($data['order_type']=='output_orders');
 				// Obteniendo el stock_id
 				if (!isset($detail['stock_id']) and $data['order_type']=='output_orders' and $detail['category_id']!=17) {
-// dd('dentro de');
 					if (!isset($detail['warehouse_id'])) {
 						$detail['warehouse_id'] = $data['warehouse_id'];
 					}
@@ -209,9 +208,9 @@ class OrderRepo extends BaseRepo{
 		$order_type = explode('.', \Request::route()->getName())[0];
 		$q = Order::with('proof', 'company')->where('my_company', session('my_company')->id)->where('order_type', $order_type);
 		if ($filter->sn > 0) {
-			return $q->where('sn', $filter->sn)->orderBy('sn', 'desc')->get();
+			return $q->where('sn', $filter->sn)->orderBy('id', 'desc')->get();
 		} elseif (trim($filter->placa) != '') {
-			return $q->where('placa', $filter->placa)->orderBy('sn', 'desc')->get();
+			return $q->where('placa', $filter->placa)->orderBy('id', 'desc')->get();
 			//return Order::where('placa', $filter->placa)->orderBy('sn', 'desc')->get();
 		} else {
 			$q->where('created_at', '>=', $filter->f1)->where('created_at', '<=', $filter->f2.' 23:59:59');
@@ -221,7 +220,7 @@ class OrderRepo extends BaseRepo{
 			if(isset($filter->status_id) && $filter->status_id != '') {
 				$q->where('status', $filter->status_id);
 			}
-			return $q->orderBy('sn', 'desc')->get();
+			return $q->orderBy('id', 'desc')->get();
 		}
 	}
 

@@ -25,7 +25,10 @@ class FormProductRequest extends Request {
 	{
 		$id = Request::route()->parameters()['product'] ?? null;
 		// $model = Product::find($data) ?? 0;
-		// dd($id);
+		if (is_null($id)) {
+			$id = Request::route()->parameters()['service'] ?? null;
+		}
+		// dd(Request::route()->parameters());
 		return [
 			'name'=>'required|unique:products,name'.((is_null($id)) ? '' : ','.$id) ,
 			'intern_code'=>['required', Rule::unique('products')->where(function ($query) {
