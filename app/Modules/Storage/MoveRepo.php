@@ -15,6 +15,11 @@ class MoveRepo extends BaseRepo{
 
 	public function prepareData($data)
 	{
+		// dd($data);
+		// if (!isset($data['unit_id'])) {
+		// 	dd($data);
+		// }
+		// var_dump($data);
 		$unit_model = Table::find($data['unit_id']);
 		if ($unit_model->value == 1) {
 			$data['unit_id'] = $unit_model->id;
@@ -36,7 +41,12 @@ class MoveRepo extends BaseRepo{
 	 */
 	public function save($data, $id=0)
 	{
+		// dd($data);
+		// if (!isset($data['unit_id'])) {
+		// 	dd($data);
+		// }
 		$data = $this->prepareData($data);
+		// dd($data);
 		$stockRepo = new StockRepo;
 		$st_model = $stockRepo->find($data['stock_id']);
 		// dd($data);
@@ -187,6 +197,9 @@ class MoveRepo extends BaseRepo{
 				$d['code_document'] = $model->document_type->code;
 			}
 			foreach ($model->details as $key => $detail) {
+				if ($detail->category_id != 17) {
+					continue;
+				}
 				// prepara la trama para usar el metodo save de MoveRepo
 				// $d['date'] = $model->date;
 				$d['change_value'] = $change_value;
@@ -214,6 +227,7 @@ class MoveRepo extends BaseRepo{
 				$d['move_type'] = $detail->getMorphClass();
 				$d['move_id'] = $detail->id;
 				if ($detail->category_id != 17) {
+				// dd($d);
 					$this->save($d);
 				}
 			}
