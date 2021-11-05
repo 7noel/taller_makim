@@ -682,7 +682,7 @@ function changeIdType() {
     if (['1','4','7','A'].indexOf(id_type)!=-1) {
         $("#company_name").removeAttr("required", "required")
         $("#paternal_surname").attr("required", "required")
-        $("#maternal_surname").attr("required", "required")
+        // $("#maternal_surname").attr("required", "required")
         $("#name").attr("required", "required")
 
         $("#company_name").parent().parent().addClass("d-none")
@@ -693,7 +693,7 @@ function changeIdType() {
     } else if (['6','-','0'].indexOf(id_type)!=-1){
         $("#company_name").attr("required", "required")
         $("#paternal_surname").removeAttr("required", "required")
-        $("#maternal_surname").removeAttr("required", "required")
+        // $("#maternal_surname").removeAttr("required", "required")
         $("#name").removeAttr("required", "required")
 
         $("#company_name").parent().parent().removeClass("d-none")
