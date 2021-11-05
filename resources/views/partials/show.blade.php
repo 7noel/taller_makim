@@ -17,6 +17,7 @@
 			 ?>
 			@if($audits->isNotEmpty())
 			<br>
+			<a class="btn btn-sm btn-info" href="#" onclick="history.go(-1)"> << Regresar</a>
 			<div>
 				<a class="btn btn-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
 					Ver Historial

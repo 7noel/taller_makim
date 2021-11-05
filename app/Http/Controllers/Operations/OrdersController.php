@@ -73,8 +73,11 @@ class OrdersController extends Controller {
 
 	public function store()
 	{
-		$model = $this->repo->save(request()->all());
-		//$this->sendAlert($model);
+		$data = request()->all();
+		$this->repo->save($data, $id);
+		if (isset($data['last_page']) && $data['last_page'] != '') {
+			return redirect()->to($data['last_page']);
+		}
 		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
@@ -106,7 +109,11 @@ class OrdersController extends Controller {
 
 	public function update($id)
 	{
-		$this->repo->save(request()->all(), $id);
+		$data = request()->all();
+		$this->repo->save($data, $id);
+		if (isset($data['last_page']) && $data['last_page'] != '') {
+			return redirect()->to($data['last_page']);
+		}
 		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 

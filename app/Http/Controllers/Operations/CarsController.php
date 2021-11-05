@@ -56,7 +56,10 @@ class CarsController extends Controller {
 
 	public function show($id)
 	{
-		//
+		$model = $this->repo->findOrFail($id);
+		$modelos = $this->modeloRepo->getListGroup('brand');
+		$bodies = config('options.bodies');
+		return view('partials.show', compact('model', 'modelos', 'bodies'));
 	}
 
 	public function edit($id)

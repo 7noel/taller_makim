@@ -40,15 +40,19 @@
 		</div>
 		<div>
 			<strong class="label">F. Emisión:</strong><span class="data-header-1">{{ $model->created_at->format('d/m/Y') }}</span>
-			<strong class="label">Condiciones:</strong><span class="data-header">{{ config('options.payment_conditions.'.$model->payment_condition_id) }}</span>
+			<strong class="label">Placa:</strong><span class="data-header">{{ $model->car->placa }}</span>
+		</div>
+		<div>
+			<strong class="label">Condiciones:</strong><span class="data-header-1">{{ config('options.payment_conditions.'.$model->payment_condition_id) }}</span>
+			<strong class="label">Marca/Modelo:</strong><span class="data-header">{{ $model->car->modelo->brand->name.' '.$model->car->modelo->name }}</span>
 		</div>
 		<div>
 			<strong class="label">Servicio:</strong><span class="data-header-1">{{ $model->type_service }}</span>
-			<strong class="label">Asesor:</strong><span class="data-header">{{ $model->seller->company_name }}</span>
+			<strong class="label">Año:</strong><span class="data-header">{{ $model->car->year }}</span>
 		</div>
 		<div>
-			<strong class="label">Placa:</strong><span class="data-header-1">{{ $model->car->placa }}</span>
-			<strong class="label">Marca/Modelo:</strong><span class="data-header">{{ $model->car->modelo->brand->name.' '.$model->car->modelo->name }}</span>
+			<strong class="label">Asesor:</strong><span class="data-header-1">{{ $model->seller->company_name }}</span>
+			<strong class="label">VIN:</strong><span class="data-header">{{ $model->car->vin }}</span>
 		</div>
 		@if(trim($model->comment)!="")
 		<div>

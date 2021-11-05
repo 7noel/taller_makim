@@ -52,7 +52,7 @@ class MenuController extends Controller
             'Almacén'=>[
                 // ['name' => 'Notas de Ingreso', 'route' => 'input_notes.index'],
                 // ['name' => 'Notas de Salida', 'route' => 'output_notes.index'],
-                ['name' => 'Productos', 'route' => 'products.index'],
+                ['name' => 'Repuestos', 'route' => 'products.index'],
                 ['name' => 'Servicios', 'route' => 'services.index'],
                 // ['name' => 'Almacenes', 'route' => 'warehouses.index'],
                 // ['name' => 'Categorías', 'route' => 'categories.index'],
