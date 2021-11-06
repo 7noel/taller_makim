@@ -98,4 +98,15 @@ class CarsController extends Controller {
 		$model = $this->repo->getCar($placa);
 		return response()->json($model);
 	}
+	public function reportNacimiento()
+	{
+		$filter = (object) request()->all();
+		if( !((array) $filter) ) {
+			$filter->f1 = date('m', strtotime("+ 1 month"));
+		}
+		$models = $this->repo->filter($filter);
+		//dd($models);
+
+		return view('operations.cars.filter',compact('models', 'filter'));
+	}
 }

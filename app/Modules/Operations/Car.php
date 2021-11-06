@@ -11,7 +11,7 @@ class Car extends Model implements Auditable
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['company_id', 'my_company', 'placa', 'brand_id', 'modelo_id', 'year', 'version', 'body', 'color', 'vin', 'motor', 'codigo', 'f_revision', 'f_llamada', 'f_recordatorio', 'f_next_pr', 'contact_name', 'contact_email', 'contact_phone', 'contact_mobile'];
+	protected $fillable = ['company_id', 'my_company', 'placa', 'brand_id', 'modelo_id', 'year', 'version', 'body', 'color', 'vin', 'motor', 'codigo', 'f_revision', 'f_llamada', 'f_recordatorio', 'f_next_pr', 'add_contact', 'contact_name', 'contact_email', 'contact_phone', 'contact_mobile'];
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {

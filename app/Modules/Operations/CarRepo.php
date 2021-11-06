@@ -21,4 +21,17 @@ class CarRepo extends BaseRepo{
 			return Car::orderBy('id', 'DESC')->paginate();
 		}
 	}
+	public function prepareData($data)
+	{
+		if (!isset($data['add_contact'])) {
+			$data['add_contact'] = false;
+		}
+		return $data;
+	}
+	public function filter($filter)
+	{
+		return Car::whereHas('company', function ($query) use($filter) {
+			    $query->whereMonth('birth', $filter->f1);
+			})->with('company', 'modelo.brand')->get();
+	}
 }

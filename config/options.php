@@ -18,6 +18,7 @@ return array(
 	],
 	'config2' => ['my_web', 'logo', 'size_factura', 'size_boleta', 'size_retenciones', 'size_percepciones', 'nubefact_ruta', 'nubefact_token'],
 	'tipo_calculo' => ['cantidad', 'v_unitario'],
+	'months' => [1=>'Enero', 2=>'Febrero', 3=>'Marzo', 4=>'Abril', 5=>'Mayo', 6=>'Junio', 7=>'Julio', 8=>'Agosto', 9=>'Setiempre', 10=>'Octubre', 11=>'Noviembre', 12=>'Diciembre'],
 	'cambiar_precios' => 1,
 	'precio_en_items' => true,
 	'client_doc' =>[

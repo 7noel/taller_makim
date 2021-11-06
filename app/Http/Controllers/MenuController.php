@@ -87,6 +87,9 @@ class MenuController extends Controller
                 ['name' => 'Compras', 'route' => 'input_vouchers.index'],
                 ['name' => 'Proveedores', 'route' => 'providers.index', 'div' => '1'],
             ],
+            'Reportes'=>[
+                ['name' => 'Nacimiento', 'route' => 'cars.nacimiento'],
+            ],
         ];
         return $links;
     }
