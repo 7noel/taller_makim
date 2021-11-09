@@ -1,5 +1,7 @@
 <?php 
 return array(
+	'seller_id' => 35,
+	'repairman_id' => 34,
 	// 'styles' => [
 	// 	'navbar'=>'navbar navbar-expand-md navbar-dark bg-dark shadow-sm',
 	// 	'card_header' => 'card-header justify-content-between bg-dark text-white',

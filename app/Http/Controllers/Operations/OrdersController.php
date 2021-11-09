@@ -49,9 +49,10 @@ class OrdersController extends Controller {
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->toArray() : [];
-		return view('operations.output_orders.create_by_quote', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
+		return view('operations.output_orders.create_by_quote', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
 	}
 
 	public function index2()
@@ -66,9 +67,10 @@ class OrdersController extends Controller {
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = ['' => 'Seleccionar'];
 		$bs_shipper = ['' => 'Seleccionar'];
-		return view('partials.create', compact('payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'action'));
+		return view('partials.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
 	}
 
 	public function store()
@@ -89,9 +91,10 @@ class OrdersController extends Controller {
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = $model->company->branches->pluck('name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
-		return view('partials.show', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
+		return view('partials.show', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
 	}
 
 	public function edit($id)
@@ -102,9 +105,10 @@ class OrdersController extends Controller {
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
-		return view('partials.edit', compact('model', 'payment_conditions', 'sellers', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
+		return view('partials.edit', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
 	}
 
 	public function update($id)
@@ -162,7 +166,8 @@ class OrdersController extends Controller {
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$currencies = $this->currencyRepo->getList('symbol');
 		$sellers = $this->employeeRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
 		$company = $this->companyRepo->findOrFail($company_id);
-		return view('partials.create', compact('payment_conditions', 'currencies', 'sellers', 'company', 'action'));
+		return view('partials.create', compact('payment_conditions', 'currencies', 'sellers', 'repairmens', 'company', 'action'));
 	}
 }
