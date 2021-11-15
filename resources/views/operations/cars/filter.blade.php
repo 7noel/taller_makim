@@ -48,7 +48,7 @@
 								<td>{{ $model->modelo->brand->name." ".$model->modelo->name }} </td>
 								<td>{{ $model->year }} </td>
 								<td>
-									<a href="{{ route('clients.show', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Ver">{!! $icons['view'] !!}</a>
+									<a href="{{ route('clients.show', $model->company->id) }}" class="btn btn-outline-secondary btn-sm" title="Ver">{!! $icons['view'] !!}</a>
 								</td>
 							</tr>
 							@endforeach
