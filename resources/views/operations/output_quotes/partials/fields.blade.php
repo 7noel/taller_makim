@@ -38,9 +38,6 @@
 		{!! Field::select('seller_id', $sellers, ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
 		@endif
 	</div>
-	<div class="col-md-2 col-sm-4">
-		{!! Field::select('repairman_id', $repairmens, ['empty'=>'Seleccionar', 'label'=>'Técnico', 'class'=>'form-control-sm', 'required']) !!}
-	</div>
 	<div class="col-sm-2">
 		{!! Field::select('payment_condition_id', $payment_conditions, (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
