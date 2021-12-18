@@ -42,6 +42,7 @@
 			</td>
 			<td>
 				<a href="{{ route( 'print_order' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="Imprimir">{!! $icons['printer'] !!}</a>
+				<a href="{{ route('polls.create') }}" target="_blank" class="btn btn-outline-info btn-sm" title="Encuesta">{!! $icons['poll'] !!}</a>
 			@if($model->status=='APROB')
 				<a href="{{ route('output_vouchers.by_order', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Generar Venta">{!! $icons['invoice'] !!}</a>
 			@endif

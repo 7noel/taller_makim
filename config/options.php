@@ -215,7 +215,7 @@ return array(
 		'p1' => '¿Qué tan satisfecho está con el desempeño de su asesor de servicio?',
 		'p2' => '¿Qué tan satisfecho está con la puntualidad en la entrega de su unidad?',
 		'p3' => '¿Qué tan satisfecho quedo con la explicación por el valor del servicio realizado?',
-		'p4' => 'Clasifique su satisfacción con el desempeño general del departamento de servicio',
+		'p4' => 'Clasifique su satisfacción con el desempeño general',
 		'p5' => '¿Continuaría trayendo su vehículo aquí para que le realicen el servicio?',
 	],
 );

@@ -70,7 +70,7 @@ class Proof extends Model implements Auditable {
 	// }
 	public function details()
 	{
-		return $this->hasMany('App\Modules\Finances\ProofDetail');
+		return $this->hasMany('App\Modules\Finances\ProofDetail')->orderBy('category_id', 'desc')->orderBy('sub_category_id', 'desc');
 	}
 	public function expenses()
 	{

@@ -272,6 +272,7 @@ $(document).ready(function () {
                 select: function(event, ui){
                     $p = ui.item.id
                     $($this).parent().parent().find('.categoryId').val($p.category_id)
+                    $($this).parent().parent().find('.subCategoryId').val($p.sub_category_id)
                     $($this).parent().parent().find('.productId').val($p.id)
                     $($this).parent().parent().find('.txtProduct').val($p.name)
                     $($this).parent().parent().find('.unitId').val($p.unit_id)
@@ -585,6 +586,7 @@ function renderTemplateRowProduct (data) {
     clone.querySelector("[data-productid]").setAttribute("name", "details[" + items + "][product_id]")
     clone.querySelector("[data-unitid]").setAttribute("name", "details[" + items + "][unit_id]")
     clone.querySelector("[data-categoryid]").setAttribute("name", "details[" + items + "][category_id]")
+    clone.querySelector("[data-subcategoryid]").setAttribute("name", "details[" + items + "][sub_category_id]")
     clone.querySelector("[data-product]").setAttribute("name", "details[" + items + "][txtProduct]")
     clone.querySelector("[data-cantidad]").setAttribute("name", "details[" + items + "][quantity]")
     clone.querySelector("[data-precio]").setAttribute("name", "details[" + items + "][price]")

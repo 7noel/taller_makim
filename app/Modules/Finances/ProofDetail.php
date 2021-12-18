@@ -11,7 +11,7 @@ class ProofDetail extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['proof_id', 'product_id', 'stock_id', 'unit_id', 'category_id', 'quantity', 'discount', 'price', 'total', 'price_item', 'cost', 'value', 'd1', 'd2', 'igv_code', 'my_company'];
+	protected $fillable = ['proof_id', 'product_id', 'stock_id', 'unit_id', 'category_id', 'sub_category_id', 'quantity', 'discount', 'price', 'total', 'price_item', 'cost', 'value', 'd1', 'd2', 'igv_code', 'my_company'];
 
 	public function parent()
 	{
@@ -20,6 +20,10 @@ class ProofDetail extends Model implements Auditable {
 	public function category()
 	{
 		return $this->belongsTo('App\Modules\Base\Table','category_id');
+	}
+	public function sub_category()
+	{
+		return $this->belongsTo('App\Modules\Base\Table','sub_category_id');
 	}
 	public function stock()
 	{

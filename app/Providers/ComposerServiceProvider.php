@@ -75,6 +75,7 @@ class ComposerServiceProvider extends ServiceProvider
     public function icons()
     {
         return [
+            'poll' => '<i class="fas fa-poll"></i>',
             'store' => '<i class="fas fa-store"></i>',
             'view' => '<i class="fas fa-eye"></i>',
             'add' => '<i class="fas fa-plus"></i>',
@@ -110,6 +111,16 @@ class ComposerServiceProvider extends ServiceProvider
     {
         // $pre = $this->controller;
         $arr = [
+            'polls' => [
+                'index'=>'Encuestas',
+                'index.create'=>'Crear Encuesta',
+                'create'=>'Nueva Encuesta:',
+                'create.create'=>'Crear Encuesta',
+                'show'=>'Vizualizando Encuesta',
+                'edit'=>'Editar Encuesta: ',
+                'edit.update'=>'Actualizar Encuesta',
+                'edit.delete'=>'Eliminar Encuesta',
+            ],
             'document_controls' => [
                 'index'=>'Controles de Documento',
                 'index.create'=>'Crear Control de Documento',

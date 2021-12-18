@@ -66,7 +66,7 @@ class Order extends Model implements Auditable
 	}
 	public function details()
 	{
-		return $this->hasMany('App\Modules\Operations\OrderDetail')->orderBy('category_id', 'desc');
+		return $this->hasMany('App\Modules\Operations\OrderDetail')->orderBy('category_id', 'desc')->orderBy('sub_category_id', 'desc');
 	}
 	public function attributes()
 	{

@@ -11,11 +11,19 @@ class TicketDetail extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     use SoftDeletes;
 
-    protected $fillable = ['ticket_id', 'quantity', 'stock_id', 'unit_id'];
+    protected $fillable = ['ticket_id', 'category_id', 'sub_category_id', 'quantity', 'stock_id', 'unit_id'];
 
 	public function parent()
 	{
 		return $this->hasOne('App\Modules\Storage\Ticket','id','ticket_id');
+	}
+	public function category()
+	{
+		return $this->belongsTo('App\Modules\Base\Table','category_id');
+	}
+	public function sub_category()
+	{
+		return $this->belongsTo('App\Modules\Base\Table','sub_category_id');
 	}
 	public function stock()
 	{

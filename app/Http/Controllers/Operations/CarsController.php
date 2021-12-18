@@ -8,6 +8,7 @@ use App\Modules\Operations\BrandRepo;
 use App\Modules\Operations\ModeloRepo;
 use App\Modules\Operations\CarRepo;
 use App\Modules\Finances\CompanyRepo;
+use App\Modules\Base\UbigeoRepo;
 
 class CarsController extends Controller {
 
@@ -15,12 +16,14 @@ class CarsController extends Controller {
 	protected $brandRepo;
 	protected $modeloRepo;
 	protected $companyRepo;
+	protected $ubigeoRepo;
 
-	public function __construct(CompanyRepo $companyRepo, CarRepo $repo, BrandRepo $brandRepo, ModeloRepo $modeloRepo) {
+	public function __construct(CompanyRepo $companyRepo, CarRepo $repo, BrandRepo $brandRepo, ModeloRepo $modeloRepo, UbigeoRepo $ubigeoRepo) {
 		$this->repo = $repo;
 		$this->brandRepo = $brandRepo;
 		$this->modeloRepo = $modeloRepo;
 		$this->companyRepo = $companyRepo;
+		$this->ubigeoRepo = $ubigeoRepo;
 	}
 
 	public function index()
@@ -33,7 +36,8 @@ class CarsController extends Controller {
 	{
 		$bodies = config('options.bodies');
 		$modelos = $this->modeloRepo->getListGroup('brand');
-		return view('partials.create', compact('modelos', 'bodies'));
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
+		return view('partials.create', compact('modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function createByClient($client_id)
@@ -41,8 +45,9 @@ class CarsController extends Controller {
 		$client = $this->companyRepo->find($client_id);
 		$bodies = config('options.bodies');
 		$modelos = $this->modeloRepo->getListGroup('brand');
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
 		// return redirect()->route('cars.add', $client);
-		return view('partials.create', compact('client', 'modelos', 'bodies'));
+		return view('partials.create', compact('client', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function store()
@@ -59,7 +64,8 @@ class CarsController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		$modelos = $this->modeloRepo->getListGroup('brand');
 		$bodies = config('options.bodies');
-		return view('partials.show', compact('model', 'modelos', 'bodies'));
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
+		return view('partials.show', compact('model', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function edit($id)
@@ -67,7 +73,8 @@ class CarsController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		$modelos = $this->modeloRepo->getListGroup('brand');
 		$bodies = config('options.bodies');
-		return view('partials.edit', compact('model', 'modelos', 'bodies'));
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
+		return view('partials.edit', compact('model', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function update($id)

@@ -75,19 +75,27 @@
 			</thead>
 			<tbody>
 				@php $cat=0 @endphp
+				@php $subcat=0 @endphp
 				@foreach($model->details as $key => $detail)
-				@if($detail->category_id != $cat)
-					<tr><td class="border padding" colspan="6"><strong>{{ $detail->category->name }}</strong></td></tr>
-					@php $cat = $detail->category_id @endphp
-				@endif
-				<tr>
-					<td class="border center">{{ $key + 1 }}</td>
-					<td class="border">{{ $detail->product->name }}</td>
-					<td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
-					<td class="border center">{{ $detail->price }}</td>
-					<td class="border center">{{ $detail->d1 }} %</td>
-					<td class="border center">{{ $detail->price_item }}</td>
-				</tr>
+					@if($detail->category_id == 18 and $detail->category_id != $cat)
+						<tr><td class="border padding" colspan="6"><strong>{{ $detail->category->name }}</strong></td></tr>
+						@php $cat = $detail->category_id @endphp
+						@php $subcat = $detail->sub_category_id @endphp
+					@else
+						@if($detail->category_id != 18 and $detail->sub_category_id != $subcat)
+							<tr><td class="border padding" colspan="6"><strong>{{ $detail->sub_category->name }}</strong></td></tr>
+							@php $cat = $detail->category_id @endphp
+							@php $subcat = $detail->sub_category_id @endphp
+						@endif
+					@endif
+					<tr>
+						<td class="border center">{{ $key + 1 }}</td>
+						<td class="border">{{ $detail->product->name }}</td>
+						<td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
+						<td class="border center">{{ $detail->price }}</td>
+						<td class="border center">{{ $detail->d1 }} %</td>
+						<td class="border center">{{ $detail->price_item }}</td>
+					</tr>
 				@endforeach
 			</tbody> 
 		</table>
