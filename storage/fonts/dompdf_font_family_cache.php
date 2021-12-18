@@ -77,18 +77,12 @@
     'italic' => $rootDir . '/lib/fonts/DejaVuSerif-Italic',
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
-  'gluten' => array(
-    '100' => $fontDir . '/gluten-100_3302f39d052f878e61220140bce30b80',
-    '200' => $fontDir . '/gluten-200_9ca9d6fcbc67a8bea96ef64e90cf4c57',
-    '300' => $fontDir . '/gluten-300_a0b2b578fdf9b8477c246f8ad4866209',
-    'normal' => $fontDir . '/gluten-normal_1c8b9ebb57d1da0fa2fa2f657f3c5671',
-    '500' => $fontDir . '/gluten-500_555cb7a36642e6a0e72bb13b2fb7666a',
-    '600' => $fontDir . '/gluten-600_0b60ad136ea6b2d64875e5f5d15d739f',
-    'bold' => $fontDir . '/gluten-bold_ff93c0547a32ddec951edecf1681bcdc',
-    '800' => $fontDir . '/gluten-800_196d3196407ac2d6c96a49324d677839',
-    '900' => $fontDir . '/gluten-900_cadb3cd0ae37f5b5bf1f9fa25bc2e2cc',
-  ),
-  'oooh baby' => array(
-    'normal' => $fontDir . '/oooh-baby-normal_f71cb48f27ea7edc0bb083545c200081',
+  'roboto condensed' => array(
+    '300_italic' => $fontDir . '/roboto-condensed-300-italic_2828e5453b3d5f138aa1725920e112f6',
+    'italic' => $fontDir . '/roboto-condensed-italic_0c72ae9fcb6b21e478a5ec2c3caf6cc3',
+    'bold_italic' => $fontDir . '/roboto-condensed-bold-italic_04b23e8aa328168dc78c448b95b7bef7',
+    '300' => $fontDir . '/roboto-condensed-300_13b971d7e3cad1816a0a8fd8c7b0ff17',
+    'normal' => $fontDir . '/roboto-condensed-normal_e618dc407a38f83070aeb09d53321fa0',
+    'bold' => $fontDir . '/roboto-condensed-bold_8c6d7b40e86f6d479722a59f9665d692',
   ),
 ) ?>

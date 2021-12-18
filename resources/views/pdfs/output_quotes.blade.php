@@ -5,6 +5,9 @@
 	<link rel="icon" type="image/jpeg" href="./img/logo_makim_01.jpg" />
 
 	<title>Cotización: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="./css/order_pdf.css">
 </head>
 <body>
