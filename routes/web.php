@@ -147,6 +147,7 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	// Route::post('orders/filter', ['as' => 'orders.filter','uses' => 'OrdersController@filter']);
 	Route::resource('output_quotes','OrdersController');
 	Route::resource('output_orders','OrdersController');
+	Route::resource('appointments','AppointmentController');
 	Route::resource('input_quotes','OrdersController');
 	Route::resource('input_orders','OrdersController');
 	Route::get('orders/print/{id}', ['as' => 'print_order','uses' => 'OrdersController@print']);

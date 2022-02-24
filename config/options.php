@@ -64,6 +64,7 @@ return array(
 	'proof_status' => ['PEND' => 'PEND', 'ERROR' => 'ERROR', 'SUNAT' => 'SUNAT', 'PANUL' => 'PANUL', 'ANUL' => 'ANUL'],
 	'quote_status' => ['PEND' => 'PEND', 'APROB' => 'APROB', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
 	'order_status' => ['ENPRG' => 'ENPRG', 'COMP' => 'COMP', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
+	'appointment_status' => ['PEND' => 'PEND', 'APROB' => 'APROB', 'ANUL' => 'ANUL'],
 	'quote_status_next' => [
 		'PEND' => ['PEND', 'APROB', 'ANUL'],
 		'APROB' => ['APROB', 'PEND'],

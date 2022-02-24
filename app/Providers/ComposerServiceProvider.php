@@ -534,6 +534,16 @@ class ComposerServiceProvider extends ServiceProvider
                 'edit.update'=>'Actualizar Marca',
                 'edit.delete'=>'Eliminar Marca',
             ],
+            'appointments' => [
+                'index'=>'Cita',
+                'index.create'=>'Crear Cita',
+                'create'=>'Nueva Cita',
+                'create.create'=>'Crear Cita',
+                'show'=>'Vizualizando Cita:',
+                'edit'=>'Editar Cita: ',
+                'edit.update'=>'Actualizar Cita',
+                'edit.delete'=>'Eliminar Cita',
+            ],
 
         ];
         if (isset($arr[$pre])) {

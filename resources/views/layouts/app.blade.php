@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     
     <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed&family=Roboto&family=Roboto+Condensed&display=swap" rel="stylesheet">
-     <style>
+    <style>
         body{
             font-family: 'Encode Sans Condensed', sans-serif;
             /*font-family: 'Roboto', sans-serif;*/
@@ -364,7 +364,6 @@ $(document).ready(function () {
     });
     //carga provincias
     $('#provincia').change(function(){
-        //alert('pp');
         cargaDistritos()
     })
 
@@ -782,9 +781,12 @@ function getCar() {
                 $('#my_company').val(data.my_company)
                 $('#attention').val(data.contact_name)
             } else {
-                alert("Placa no registrada en el sistema")
-                $('#placa').val('')
-                $('#placa').focus()
+                // Si no existe el input company_name (diferente a una cita), se blanquea los campos para agregar una placa que si existe en la BD.
+                if ($('#company_name').length == 0) {
+                    alert("Placa no registrada en el sistema")
+                    $('#placa').val('')
+                    $('#placa').focus()
+                }
             }
         });
     }
