@@ -83,7 +83,7 @@ class ProofRepo extends BaseRepo{
 
 			if (isset($data['order_id']) and $data['order_id']>0) {
 				$mov = new MoveRepo;
-				$mov->destroy($toDelete);
+				$mov->destroy2($toDelete, $detailRepo->model->getMorphClass());
 				$mov->saveAll($model, 1);
 			}
 		}
@@ -486,41 +486,46 @@ class ProofRepo extends BaseRepo{
 	public function cancel($id)
 	{
 		$model = Proof::find($id);
-		$model->status_sunat = 'PANUL';
 
-		$r = json_decode($model->response_sunat);
-		if (isset($r->success) and $r->success==true) {
-			$r_v = json_decode($model->response_voided);
-
-			if (isset($r_v->success) and $r_v->success==true) {
-				$t_v = json_decode($model->ticket_voided);
-
-				if (!isset($t_v->success) or $t_v->success==false) {
-					$model->ticket_voided = $this->consultarAnulacion($model, $r_v);
-					$t_v = json_decode($model->ticket_voided);
-					if (isset($t_v->success) and $t_v->success==true) {
-						$model->canceled_at = date('Y-m-d H:i:s');
-						$model->status_sunat = 'ANUL';
-					}					
-				} else {
-					$model->status_sunat = 'ANUL';
-				}
-			} else {
-				$model->response_voided = $this->generarAnulacion($model, $r);
+		if ($model->document_type_id == 7) {
+			$model->status_sunat = 'ANUL';
+		} else {
+			$model->status_sunat = 'PANUL';
+			$r = json_decode($model->response_sunat);
+			if (isset($r->success) and $r->success==true) {
 				$r_v = json_decode($model->response_voided);
+
 				if (isset($r_v->success) and $r_v->success==true) {
-					$model->ticket_voided = $this->consultarAnulacion($model, $r_v);
 					$t_v = json_decode($model->ticket_voided);
-					if (isset($t_v->success) and $t_v->success==true) {
+
+					if (!isset($t_v->success) or $t_v->success==false) {
+						$model->ticket_voided = $this->consultarAnulacion($model, $r_v);
+						$t_v = json_decode($model->ticket_voided);
+						if (isset($t_v->success) and $t_v->success==true) {
+							$model->canceled_at = date('Y-m-d H:i:s');
+							$model->status_sunat = 'ANUL';
+						}					
+					} else {
 						$model->status_sunat = 'ANUL';
 					}
 				} else {
-					$model->status_sunat = 'PANUL';
+					$model->response_voided = $this->generarAnulacion($model, $r);
+					$r_v = json_decode($model->response_voided);
+					if (isset($r_v->success) and $r_v->success==true) {
+						$model->ticket_voided = $this->consultarAnulacion($model, $r_v);
+						$t_v = json_decode($model->ticket_voided);
+						if (isset($t_v->success) and $t_v->success==true) {
+							$model->status_sunat = 'ANUL';
+						}
+					} else {
+						$model->status_sunat = 'PANUL';
+					}
 				}
+			} else {
+				$model->status_sunat = 'ANUL';
 			}
-		} else {
-			$model->status_sunat = 'ANUL';
 		}
+		
 		
 		// dd($r);
 		$model->save();

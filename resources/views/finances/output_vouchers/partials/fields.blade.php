@@ -7,6 +7,7 @@
 {!! Form::hidden('sn', ((isset($model->sn) and !isset($order))? $model->sn : ''), ['id'=>'sn']) !!}
 {!! Form::hidden('action', $action, ['id'=>'action']) !!}
 
+@if(1==0)
 <div class="form-row mb-3">
 	<div class="col-sm-2">
 		<div class="custom-control custom-switch">
@@ -15,6 +16,7 @@
 		</div>
 	</div>
 </div>
+@endif
 <div class="form-row">
 	@if(isset($order))
 	<div class="col-md-1 col-sm-2">
