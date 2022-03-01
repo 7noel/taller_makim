@@ -16,11 +16,11 @@ class AppointmentRepo extends BaseRepo{
 			return $q->where('placa', $filter->placa)->orderBy('id', 'desc')->get();
 			//return Order::where('placa', $filter->placa)->orderBy('sn', 'desc')->get();
 		} else {
-			$q->where('start_at', '>=', $filter->f1.' 00:00:00')->where('start_at', '<=', $filter->f1.' 23:59:59');
+			$q->where('start_at', '>=', $filter->f1)->where('start_at', '<=', $filter->f2.' 23:59:59');
 			if(isset($filter->status_id) && $filter->status_id != '') {
 				$q->where('status', $filter->status_id);
 			}
-			return $q->orderBy('id', 'desc')->get();
+			return $q->orderBy('start_at', 'asc')->get();
 		}
 	}
 

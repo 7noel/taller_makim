@@ -20,6 +20,7 @@ class AppointmentController extends Controller {
 		if( !((array) $filter) ) {
 			$filter->placa = '';
 			$filter->f1 = date('Y-m-d');
+			$filter->f2 = date("Y-m-d", strtotime(date('Y-m-d')."+ 2 weeks"));
 		}
 		$models = $this->repo->filter($filter);
 		return view('partials.filter',compact('models', 'filter'));
@@ -44,6 +45,7 @@ class AppointmentController extends Controller {
 	public function edit($id)
 	{
 		$model = $this->repo->findOrFail($id);
+		// dd($model->start_at);
 		return view('partials.edit', compact('model'));
 	}
 

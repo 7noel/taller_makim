@@ -64,19 +64,7 @@ return array(
 	'proof_status' => ['PEND' => 'PEND', 'ERROR' => 'ERROR', 'SUNAT' => 'SUNAT', 'PANUL' => 'PANUL', 'ANUL' => 'ANUL'],
 	'quote_status' => ['PEND' => 'PEND', 'APROB' => 'APROB', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
 	'order_status' => ['ENPRG' => 'ENPRG', 'COMP' => 'COMP', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
-	'appointment_status' => ['PEND' => 'PEND', 'APROB' => 'APROB', 'ANUL' => 'ANUL'],
-	'quote_status_next' => [
-		'PEND' => ['PEND', 'APROB', 'ANUL'],
-		'APROB' => ['APROB', 'PEND'],
-		'ANUL' => ['ANUL'],
-		'CERR' => ['CERR'],
-	],
-	'order_status_next' => [
-		'ENPRG' => ['ENPRG', 'COMP', 'CANC'],
-		'COMP' => ['COMP', 'ENPRG'],
-		'CANC' => ['CANC'],
-		'CERR' => ['CERR']
-	],
+	'appointment_status' => ['PEND' => 'PEND', 'EFECT' => 'EFECT', 'ANUL' => 'ANUL'],
 	'tax' => ['igv' => 18],
 	'table_sunat' => [
 		'tipo_comprobante' => [

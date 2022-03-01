@@ -6,13 +6,16 @@
 	<div class="col-sm-2">
 		<div class="custom-control custom-switch">
 			{!! Form::checkbox('approved_at', ((isset($model))? $model->approved_at : "on"), ((isset($model->approved_at)) ? !is_null($model->approved_at) : false), ['class'=>'custom-control-input', 'id'=>'approved_at']) !!}
-			<label class="custom-control-label" for="approved_at">Vehículo en Taller</label>
+			<label class="custom-control-label" for="approved_at">Efectiva</label>
 		</div>
 	</div>
 </div>
 <div class="form-row">
 	<div class="col-md-4 col-sm-4">
-		{!! Field::datetimeLocal('start_at', null, ['label' => 'Fecha y Hora', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+		<div id="field_start_at" class="form-group">
+			<label for="start_at">Fecha y Hora<span class="badge badge-info">!</span></label>
+			{!! Form::datetimeLocal('start_at', ((isset($model)) ? $model->start_at->format('Y-m-d\TH:i') : null), ['class'=>'form-control form-control-sm text-uppercase', 'required']) !!}
+		</div>
 	</div>
 	<div class="col-md-2 col-sm-4">
 		{!! Field::text('placa', null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}

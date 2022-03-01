@@ -13,13 +13,19 @@ class Appointment extends Model implements Auditable
 
     protected $fillable = ['my_company', 'start_at', 'canceled_at', 'placa', 'modelo', 'company_name', 'type_service', 'preventivo', 'email', 'mobile', 'status', 'comment'];
     protected $dates = ['start_at', 'canceled_at'];
-protected $casts = [
-        'start_at'  => 'datetime:Y-m-d\TH:i'
-   ];
 
     public function scopeName($query, $name){
         if (trim($name) != "") {
             $query->where('name', 'LIKE', "%$name%");
         }
     }
+
+    // public function getStartAtAttribute($value) {
+    //     return \Carbon\Carbon::parse($value)->format('Y-m-d\TH:i');
+    // }
+
+    // public function setStartAtAttribute($value='')
+    // {
+    //     $this->attributes['start_at'] = \Carbon::parse($value)->format('Y-m-d\TH:i');
+    // }
 }

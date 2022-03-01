@@ -7,14 +7,6 @@
 {!! Form::hidden('sn', ((isset($model->sn) and !isset($order))? $model->sn : ''), ['id'=>'sn']) !!}
 {!! Form::hidden('action', $action, ['id'=>'action']) !!}
 
-<div class="form-row mb-3">
-	<div class="col-sm-2">
-		<div class="custom-control custom-switch">
-			{!! Form::checkbox('send_sunat', '1', null,['class'=>'custom-control-input', 'id'=>'send_sunat']) !!}
-			<label class="custom-control-label" for="send_sunat">Enviar a SUNAT</label>
-		</div>
-	</div>
-</div>
 <div class="form-row">
 	@if(isset($order))
 	<div class="col-md-1 col-sm-2">
@@ -27,9 +19,26 @@
 		{!! Form::label('document_type_id','Documento', ['class'=>'control-label']) !!}
 		{!! Form::select('document_type_id', $documents, null, ['class'=>'form-control form-control-sm']) !!}
 	</div>
-	<div class="col-md-1 col-sm-2">
-		{!! Field::text('placa', ((isset($model->placa)) ? $model->placa : null), ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+	<div class="col-sm-1">
+		{!! Field::text('series', ['label' => 'Serie', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
+	<div class="col-sm-2">
+		{!! Field::text('number', ['label' => 'Número', 'class'=>'form-control-sm text-uppercase']) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::date('issued_at', ((isset($model)) ? $model->issued_at : date('Y-m-d')), ['label' => 'Fecha', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+	</div>
+	<div class="col-sm-1">
+		{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? $model->currency_id : 1), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::number('exchange', ['label' => 'Cambio (US$)', 'class'=>'form-control-sm text-uppercase']) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::select('payment_condition_id', $payment_conditions, (isset($model) ? $model->payment_condition_id : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
+	</div>
+</div>
+<div class="form-row">
 	<div class="col-sm-4">
 	{!! Form::label('txtcompany','Compañía:', ['class'=>'control-label']) !!}
 		@if(isset($company))
@@ -45,28 +54,6 @@
 			{!! Form::hidden('is_import', null, ['id'=>'is_import']) !!}
 			{!! Form::text('company', ((isset($model->company_id)) ? $model->company->company_name : null), ['class'=>'form-control form-control-sm', 'id'=>'txtCompany', 'required']) !!}
 		@endif
-	</div>
-	<div class="col-sm-1">
-		{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? $model->currency_id : 1), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
-	</div>
-</div>
-<div class="form-row">
-	{!! Form::hidden('reference_id', null) !!}
-	<div class="col-sm-2 d-none">
-		{!! Form::label('reference_number','Referencia', ['class'=>'control-label']) !!}
-		{!! Form::text('reference_number', ((isset($model->reference_id) and $model->reference_id>0) ? $model->reference->number : ''), ['class'=>'form-control']) !!}
-	</div>
-	<div class="col-sm-2 d-none">
-	{!! Form::label('note_type_id','Motivo de Nota', ['class'=>'control-label']) !!}
-		{!! Form::select('note_type_id', config('options.table_sunat.tipo_de_nota_de_credito') , ((isset($model->note_type_id)) ? $model->note_type_id : ''), ['class'=>'form-control']) !!}
-	</div>
-</div>
-<div class="form-row">
-	<div class="col-sm-2">
-		{!! Field::number('exchange', ['label' => 'Cambio (US$)', 'class'=>'form-control-sm text-uppercase']) !!}
-	</div>
-	<div class="col-sm-2">
-		{!! Field::select('payment_condition_id', $payment_conditions, (isset($model) ? $model->payment_condition_id : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 </div>
 

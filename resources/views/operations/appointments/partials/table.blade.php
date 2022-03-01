@@ -24,7 +24,7 @@
 		}
 		@endphp
 		<tr data-id="{{ $model->id }}">
-			<td>{{ $model->start_at->isoFormat('DD/MM/Y h:mm a') }}</td>
+			<td>{{ $model->start_at->format('d/m/Y h:i a') }}</td>
 			<td>{{ $model->company_name }} </td>
 			<td>{{ $model->placa }}</td>
 			<td>{{ $model->modelo }}</td>
