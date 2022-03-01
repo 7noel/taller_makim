@@ -312,6 +312,13 @@ $(document).ready(function () {
             $('#branch_id').focus()
         }
     })
+    $('#txtProvider').autocomplete({
+        source: "/api/companies/autocompleteAjax/providers/"+my_company+"/",
+        minLength: 4,
+        select: function(event, ui){
+            $('#company_id').val(ui.item.id)
+        }
+    })
 
     $('#txtShipper').autocomplete({
         source: "/api/companies/autocompleteAjax/shippers/"+my_company+"/",

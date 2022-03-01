@@ -207,4 +207,5 @@ return array(
 		'p4' => 'Clasifique su satisfacción con el desempeño general',
 		'p5' => '¿Continuaría trayendo su vehículo aquí para que le realicen el servicio?',
 	],
+	'docs_compras' => [ '1'=>'FACTURA', '2'=>'BOLETA', '3'=>'GUIA', '4'=>'NOTA DE ENTRADA', '5'=>'RECIBO POR HONORARIOS', '6'=>'SERVICIOS PÚBLICOS'],
 );
