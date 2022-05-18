@@ -59,6 +59,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('proof_id')->unsigned(); // id del comprobante (solo para pedido)
             $table->bigInteger('user_id')->unsigned();
             $table->text('comment');
+            $table->json('inventory');
             $table->bigInteger('my_company')->unsigned();
 
             $table->foreign('my_company')->references('id')->on('companies');

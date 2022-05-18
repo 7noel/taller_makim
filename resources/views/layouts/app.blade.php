@@ -8,7 +8,17 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <style>
+.paint-canvas {
+  border: 1px black solid;
+  display: block;
+  margin: 1rem;
+}
 
+.color-picker {
+  margin: 1rem 1rem 0 1rem;
+}
+    </style>
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -175,6 +185,9 @@
     </div>
     <script>
 $(document).ready(function () {
+    $("#btn-image-load").click(function (e) {
+        $("#image_base64").val(document.querySelector("#canvas").toDataURL('image/jpeg').replace(/^data:image\/jpeg;base64,/, ""))
+    })
     $(".pagar-venta").click(function(e){
         console.log($(this).data('id'))
         m_id = $(this).data('id')
@@ -261,7 +274,7 @@ $(document).ready(function () {
         calcTotal()
     });
 
-//autocomplete para elementos agregados por javascript
+    //autocomplete para elementos agregados por javascript
     $(document).on('focus','.txtProduct', function (e) {
         $this = this
         if ( !$($this).data("autocomplete") ) {

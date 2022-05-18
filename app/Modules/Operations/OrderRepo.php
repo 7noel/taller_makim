@@ -32,7 +32,7 @@ class OrderRepo extends BaseRepo{
 		$data = $this->prepareData($data);
 		$model = parent::save($data, $id);
 
-		if (isset($data['items'])) {
+		if (isset($data['items']) and $data['items']>0) {
 			$detailRepo = new OrderDetailRepo;
 			$toDelete = $detailRepo->syncMany2($data['details'], ['key' => 'order_id', 'value' => $model->id], 'product_id');
 
@@ -45,6 +45,9 @@ class OrderRepo extends BaseRepo{
 		}
 		if (isset($data['order_id']) and isset($data['quote_sn'])) {
 			Order::where('id', $data['order_id'])->update(['order_id' => $model->id, 'invoiced_at' => date('Y-m-d H:i:s'), 'status' => 'CERR']);
+		}
+		if (isset($data['image_base64']) and $data['image_base64'] != '') {
+			$this->saveImageBase64($data['image_base64'], 'ot_'.$model->id);
 		}
 		return $model;
 	}
@@ -63,6 +66,9 @@ class OrderRepo extends BaseRepo{
 	{
 		if ($data['my_company'] == '') {
 			$data['my_company'] = session('my_company')->id;
+		}
+		if (isset($data['inventory'])) {
+			//$data['inventory'] = json_encode($data['inventory']);
 		}
 		if (isset($data['items']) and !isset($data['details'])) {
 			$data['details'] = [];

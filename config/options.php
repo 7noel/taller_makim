@@ -208,4 +208,42 @@ return array(
 		'p5' => '¿Continuaría trayendo su vehículo aquí para que le realicen el servicio?',
 	],
 	'docs_compras' => [ '1'=>'FACTURA', '2'=>'BOLETA', '3'=>'GUIA', '4'=>'NOTA DE ENTRADA', '5'=>'RECIBO POR HONORARIOS', '6'=>'SERVICIOS PÚBLICOS'],
+	'inventory' => [
+		'col_1' => [
+			'Llave de contacto',
+			'Llavero',
+			'Tarjeta de Propiedad',
+			'SOAT',
+			'Libro de Servicio',
+			'Manual de usuario',
+			'Revisión técnica',
+			'Máscara de Radio',
+			'Radio',
+			'Tapa sol',
+			'Plumillas',
+		],
+		'col_2' => [
+			'Seguro de Ruedas',
+			'Seguro de Vasos',
+			'Encendedor',
+			'Cenicero',
+			'Vasos de Rueda',
+			'Gata',
+			'Herramientas',
+			'Pisos',
+			'Tapices',
+			'Escarpines',
+			'Emblemas',
+
+		],
+		'col_3' => [
+			'Llanta de repuesto',
+			'Control de garaje',
+			'Cable remolque',
+			'Triángulo de seguridad',
+			'Cable de batería',
+			'Compresora de aire',
+			'Antena',
+		],
+	]
 );

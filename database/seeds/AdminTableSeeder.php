@@ -120,7 +120,7 @@ class AdminTableSeeder extends Seeder {
         Table::create(['type' => 'jobs', 'my_company' => 1, 'name' => 'ANALISTA DE SISTEMAS']); // 2125
         Table::create(['type' => 'jobs', 'my_company' => 1, 'name' => 'GERENTE GENERAL']); // 2126
         Table::create(['type' => 'jobs', 'my_company' => 1, 'name' => 'ADMINISTRADOR']); // 2127
-        Table::create(['type' => 'jobs', 'my_company' => 1, 'name' => 'ASISTENTE ADMINISTRATIVO']); // 2128
+        // Table::create(['type' => 'jobs', 'my_company' => 1, 'name' => 'ASISTENTE ADMINISTRATIVO']); // 2128
         Table::create(['type' => 'jobs', 'my_company' => 1, 'name' => 'CREDITO Y FINANZAS']); // 2129
         Table::create(['type' => 'jobs', 'my_company' => 1, 'name' => 'FACTURADOR']); // 2130
         Table::create(['type' => 'jobs', 'my_company' => 1, 'name' => 'TÉCNICO']); //2131

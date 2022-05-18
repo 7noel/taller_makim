@@ -230,6 +230,12 @@ abstract class BaseRepo{
 		}
 		\Storage::disk('local')->put('storage/'.$name,  \File::get($file));
 	}
+
+	public function saveImageBase64($base64, $name)
+	{
+		$data = base64_decode($base64);
+		\Storage::disk('public')->put($name.".jpg", $data);
+	}
 	public function prepareDataImage($data, $images)
 	{
 		foreach ($images as $key => $image) {

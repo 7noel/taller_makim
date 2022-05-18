@@ -76,6 +76,7 @@ class OrdersController extends Controller {
 	public function store()
 	{
 		$data = request()->all();
+		//dd($data);
 		$this->repo->save($data);
 		if (isset($data['last_page']) && $data['last_page'] != '') {
 			return redirect()->to($data['last_page']);
@@ -101,6 +102,7 @@ class OrdersController extends Controller {
 	{
 		$action = "edit";
 		$model = $this->repo->findOrFail($id);
+		// dd($model->inventory['solicitud']);
 		$quote = $model->quote;
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
@@ -114,6 +116,7 @@ class OrdersController extends Controller {
 	public function update($id)
 	{
 		$data = request()->all();
+		// dd($data);
 		$this->repo->save($data, $id);
 		if (isset($data['last_page']) && $data['last_page'] != '') {
 			return redirect()->to($data['last_page']);
@@ -128,6 +131,27 @@ class OrdersController extends Controller {
 		if (\Request::ajax()) {	return $model; }
 		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
+
+	/**
+	 * CREA UN PDF Inventario EN EL NAVEGADOR
+	 * @param  [integer] $id [Es el id de la cotizacion]
+	 * @return [pdf]     [Retorna un pdf]
+	 */
+	public function printInventory($id)
+	{
+		$cuentas = $this->bankRepo->mostrar();
+		$model = $this->repo->findOrFail($id);
+		//dd($model->seller->company_name);
+		// \PDF::setOptions(['isPhpEnabled' => true]);
+		$pdf = \PDF::loadView('pdfs.inventory', compact('model', 'cuentas'));
+		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
+		return $pdf->stream();
+	}
+	/**
+	 * Envía Correo al generar cotización
+	 * @param  Obj $model Modelo de la cotización
+	 * @return boolean        Retorna true indicando que se envió con exito
+	 */
 
 	/**
 	 * CREA UN PDF EN EL NAVEGADOR
