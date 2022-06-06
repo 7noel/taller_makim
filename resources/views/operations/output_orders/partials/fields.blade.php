@@ -20,10 +20,10 @@
 		<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Inventario</a>
 	</li>
 	<li class="nav-item" role="presentation">
-		<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Otros</a>
+		<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Imagen</a>
 	</li>
 </ul>
-<div class="tab-content" id="myTabContent">
+<div class="tab-content mt-2" id="myTabContent">
 	<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 		<div class="form-row">
 			<div class="col-md-1 col-sm-2">
@@ -123,11 +123,11 @@
 			@endforeach
 			</div>
 		</div>
-		<div class="form-row">
+		<div class="form-row mt-2">
 			<div class="col-sm-12">
 				<div id="field_inventory_combustible" class="form-group">
 					<label for="inventory_solicitud">Solicitud Cliente</label>
-					<textarea class="form-control form-control-sm text-uppercase" id="inventory_solicitud" rows="3" name="inventory[solicitud]">{{(isset($model->inventory['solicitud']))? trim($model->inventory['solicitud']):''}}</textarea>
+					<textarea class="form-control form-control-sm text-uppercase" id="inventory_solicitud" rows="5" name="inventory[solicitud]">{{(isset($model->inventory['solicitud']))? trim($model->inventory['solicitud']):''}}</textarea>
 				</div>
 			</div>
 		</div>
