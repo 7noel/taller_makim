@@ -150,7 +150,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
-                            @if (Route::has('companies.register'))
+                            @if (Route::has('companies.register') and 1==0)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('companies.register') }}">{{ __('Register') }}</a>
                                 </li>
