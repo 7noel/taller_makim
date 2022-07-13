@@ -105,7 +105,7 @@ class ProofRepo extends BaseRepo{
 	public function getNextNumber($document_type_id, $my_company = 1)
 	{
 		$doc = Table::where('id', $document_type_id)->where('my_company', $my_company)->first();
-		$last = Proof::where('my_company', $my_company)->where('document_type_id', $document_type_id)->where('series', $doc->name)->orderBy('number', 'desc')->first();
+		$last = Proof::where('my_company', $my_company)->where('document_type_id', $document_type_id)->where('series', $doc->name)->orderByRaw('CONVERT(number, SIGNED) desc')->first();
 		if ($last) {
 			return ['id' => $doc->id, 'series' => $doc->name, 'number'=> ($last->number + 1)];
 		} else {

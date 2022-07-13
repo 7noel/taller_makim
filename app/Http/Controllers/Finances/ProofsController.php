@@ -117,7 +117,7 @@ class ProofsController extends Controller {
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('partials.show', compact('model', 'sellers', 'items', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'payment_conditions', 'action'));
+		return view('partials.show', compact('model', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'payment_conditions', 'action'));
 	}
 
 	public function edit($id)

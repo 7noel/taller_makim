@@ -20,6 +20,7 @@ class CreateProofDetailsTable extends Migration
             $table->bigInteger('stock_id')->unsigned();
             $table->bigInteger('unit_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
+            $table->bigInteger('sub_category_id')->unsigned();
             $table->decimal('value', 15, 2);
             $table->decimal('price', 15, 2);
             $table->decimal('quantity', 15, 2);

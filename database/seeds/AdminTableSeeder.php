@@ -49,7 +49,7 @@ class AdminTableSeeder extends Seeder {
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 3, 'description'=>'NOTA DE CRÉDITO', 'name'=>'BC01', 'value_1'=>0]); // 4
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 4, 'description'=>'NOTA DE DÉBITO', 'name'=>'FD01', 'value_1'=>0]); // 5
         Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 4, 'description'=>'NOTA DE DÉBITO', 'name'=>'BD01', 'value_1'=>0]); // 6
-        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 7, 'description'=>'NOTA DE VENTA', 'name'=>'NV01', 'value_1'=>0]); // 7
+        Table::create(['type' => 'document_controls', 'my_company' => 1, 'relation_id' => 7, 'description'=>'NOTA DE VENTA', 'name'=>'NV01', 'value_1'=>0, 'value_3'=>1, 'code'=>'00']); // 7
         
         Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'UNIDAD', 'symbol' => 'und', 'relation_id' => 0, 'value_1' => 1, 'code' => 'NIU']); // 8
         Table::create(['type' => 'units', 'my_company' => 1, 'name' => 'PARES', 'symbol' => 'prs', 'relation_id' => 0, 'value_1' => 2, 'code' => 'NIU']); // 9
