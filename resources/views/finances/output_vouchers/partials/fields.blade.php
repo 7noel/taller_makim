@@ -6,8 +6,8 @@
 {!! Form::hidden('issued_at', ((isset($model->issued_at)) ? $model->issued_at : date('Y-m-d')), ['class'=>'form-control']) !!}
 {!! Form::hidden('sn', ((isset($model->sn) and !isset($order))? $model->sn : ''), ['id'=>'sn']) !!}
 {!! Form::hidden('action', $action, ['id'=>'action']) !!}
+{!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
 
-@if(1==1)
 <div class="form-row mb-3">
 	<div class="col-sm-2">
 		<div class="custom-control custom-switch">
@@ -16,7 +16,6 @@
 		</div>
 	</div>
 </div>
-@endif
 <div class="form-row">
 	@if(isset($order))
 	<div class="col-md-1 col-sm-2">
