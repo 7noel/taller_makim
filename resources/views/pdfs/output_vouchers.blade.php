@@ -32,7 +32,7 @@
 			</td>
 			<td class="col_2 center">
 					RUC: {{ $model->mycompany->doc }}<br>
-					{{ $model->document_type->description }} ELECTRÓNICA <br>
+					{{ $model->document_type->description }} {{ ($model->document_type_id == 7) ? '' : 'ELECTRÓNICA'}}<br>
 					{{ $model->series.' - '.str_pad($model->number, 6, '0', STR_PAD_LEFT) }}
 			</td>
 		</tr>
