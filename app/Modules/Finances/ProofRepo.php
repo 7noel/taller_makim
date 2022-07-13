@@ -89,14 +89,18 @@ class ProofRepo extends BaseRepo{
 		}
 		// $this->saveExpenses($data, $model);
 		if (isset($data['send_sunat']) and $data['send_sunat'] == 1 and $model->proof_type == 'output_vouchers') {
-			$respuesta = $this->generarComprobante($model);
-			$r = json_decode($respuesta);
-			if (isset($r->success) and $r->success) {
+			if ($data['document_type_id'] == 7) {
 				$model->status_sunat = 'SUNAT';
 			} else {
-				$model->status_sunat = 'ERROR';
+				$respuesta = $this->generarComprobante($model);
+				$r = json_decode($respuesta);
+				if (isset($r->success) and $r->success) {
+					$model->status_sunat = 'SUNAT';
+				} else {
+					$model->status_sunat = 'ERROR';
+				}
+				$model->response_sunat = $respuesta;
 			}
-			$model->response_sunat = $respuesta;
 			$model->save();
 		}
 		return $model;

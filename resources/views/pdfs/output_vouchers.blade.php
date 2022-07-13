@@ -117,8 +117,10 @@
 			<tr>
 				<td width="452px" class="">
 					<div>Son: <strong>{{ numero_letras($model->total, 2, $model->currency_id) }}</strong></div>
+					@if($model->document_type_id != 7)
 					<div><img src="data:image/png;base64, {{ $r->data->qr }}" alt=""></div>
 					<div>Código Hash: {{ $r->data->hash }} </div>
+					@endif
 				</td>
 				<td width="247px" class="">
 					<table class="totales">

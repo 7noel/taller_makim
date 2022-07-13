@@ -195,11 +195,17 @@ class ProofsController extends Controller {
 		$cuentas = $this->bankRepo->mostrar();
 		$model = $this->repo->findOrFail($id);
 		$r = json_decode($model->response_sunat);
+		if (isset($r->data->filename)) {
+			$nombre = $r->data->filename;
+		} else {
+			$nombre = $model->sn;
+		}
+		
 		// dd(json_decode($model->res ponse_sunat));
 		// \PDF::setOptions(['isPhpEnabled' => true]);
 		$pdf = \PDF::loadView('pdfs.output_vouchers', compact('model', 'cuentas', 'r'));
 		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
-		return $pdf->stream($r->data->filename.".pdf");
+		return $pdf->stream($nombre.".pdf");
 	}
 	public function print($id)
 	{

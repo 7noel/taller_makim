@@ -7,7 +7,7 @@
 {!! Form::hidden('sn', ((isset($model->sn) and !isset($order))? $model->sn : ''), ['id'=>'sn']) !!}
 {!! Form::hidden('action', $action, ['id'=>'action']) !!}
 
-@if(1==0)
+@if(1==1)
 <div class="form-row mb-3">
 	<div class="col-sm-2">
 		<div class="custom-control custom-switch">
