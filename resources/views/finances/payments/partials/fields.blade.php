@@ -42,10 +42,10 @@
 	</div>
 	<div class="col-sm-2">
 		<label for="deuda">Deuda</label>
-		<p class="form-control-plaintext" id="deuda">{{ config('options.table_sunat.moneda_symbol.'.$proof->currency_id) .' '.($proof->total -$proof->amortization) }}</p>
+		<p class="form-control-plaintext" id="deuda">{{ config('options.table_sunat.moneda_symbol.'.$proof->currency_id) .' '.round($proof->total - $proof->amortization, 2) }}</p>
 	</div>
 	<div class="col-sm-2">
-		{!! Field::number('value', ['label' => 'Valor a pagar', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+		{!! Field::number('value', ['label' => 'Valor a pagar', 'class'=>'form-control-sm text-uppercase', 'required', 'step'=>'0.01']) !!}
 	</div>
 	<div class="col-sm-12">
 		{!! Field::text('description', ['label' => 'Descripción', 'class'=>'form-control-sm text-uppercase']) !!}
