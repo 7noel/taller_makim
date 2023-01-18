@@ -24,7 +24,7 @@
 		{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? $model->currency_id : 1), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::number('exchange', ['label' => 'Cambio (US$)', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::number('exchange', ['label' => 'Cambio (US$)', 'class'=>'form-control-sm text-uppercase', 'step'=>'0.001']) !!}
 	</div>
 	<div class="col-sm-2">
 		{!! Field::select('payment_condition_id', $payment_conditions, (isset($model) ? $model->payment_condition_id : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
@@ -32,7 +32,7 @@
 </div>
 <div class="form-row">
 	<div class="col-sm-4">
-	{!! Form::label('txtProvider','Compañía:', ['class'=>'control-label']) !!}
+	{!! Form::label('txtProvider','Proveedor:', ['class'=>'control-label']) !!}
 		@if(isset($company))
 			{!! Form::hidden('company_id', $company->id, ['id'=>'company_id']) !!}
 			@if($is_issuance == 0 and $is_proof == 1)
