@@ -93,7 +93,7 @@
 				{!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory['comprobante']) ? $model->inventory['comprobante'] : ''), ['empty'=>'SIN COMPROBANTE', 'label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
 			</div>
 			<div class="col-sm-2">
-				{!! Field::date('inventory[entrega]', (isset($model->inventory['entrega']) ? $model->inventory['entrega'] : date('Y-m-d')), ['label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
+				{!! Field::date('inventory[entrega]', (isset($model->inventory['entrega']) ? $model->inventory['entrega'] : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
 			</div>
 		</div>
 		

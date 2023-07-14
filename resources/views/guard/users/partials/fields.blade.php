@@ -18,7 +18,10 @@
   			<label class="custom-control-label" for="is_superuser">SUPER USUARIO</label>
 		</div>
 		@endif
-		
-		{!! Form::checkboxes('roles', $roles->pluck('name', 'id'), $model->roles->pluck('id')->toArray()) !!}
+		@if(isset($model))
+			{!! Form::checkboxes('roles', $roles->pluck('name', 'id'), $model->roles->pluck('id')->toArray()) !!}
+		@else
+			{!! Form::checkboxes('roles', $roles->pluck('name', 'id'), []) !!}
+		@endif
 	</div>
 </div>

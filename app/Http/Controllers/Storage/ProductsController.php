@@ -70,9 +70,14 @@ class ProductsController extends Controller {
 
 	public function edit($id)
 	{
+		$tipo = explode('.', request()->route()->getName())[0];
 		$warehouses = $this->warehouseRepo->all();
 		$model = $this->repo->findOrFail($id);
-		$sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
+		if ($tipo == 'services') {
+			$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '17');
+		} else {
+			$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '18');
+		}
 		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
 		$brands = $this->tableRepo->getListType('marcas', 'name', 'name');
 		return view('partials.edit', compact('model', 'sub_categories', 'units', 'brands', 'warehouses'));
