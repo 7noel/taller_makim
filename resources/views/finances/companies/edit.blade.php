@@ -8,7 +8,7 @@
 				<h5 class="{{ config('options.styles.card_header') }}"> {{ $labels['edit'] }}
 				</h5>
 				<div class="card-body">
-					{!! Form::model($model, ['route'=> [$routes['update'], $model] , 'method'=>'PUT', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
+					{!! Form::model($model, ['route'=> ['companies.save_my_company', $model] , 'method'=>'PUT', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
 						@if(Request::url() != URL::previous())
 						<input type="hidden" name="last_page" value="{{ URL::previous() }}">
 						@endif
@@ -21,7 +21,7 @@
 					{!! Form::close() !!}
 				</div>
 			</div>
-			@include('partials.delete')
+			
 			<?php 
 			$audits = $model->audits()->with('user')->get();
 			 ?>
@@ -59,7 +59,3 @@
 </div>
 
 @endsection
-
-<?php 
-//dd($views['scripts']);
- ?>

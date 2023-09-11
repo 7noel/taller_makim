@@ -1,5 +1,25 @@
 <?php 
 return array(
+	'documents_type' => [
+		'01' => 'FACTURA ELECTRÓNICA',
+		'03' => 'BOLETA ELECTRÓNICA',
+		'07' => 'NOTA DE CRÉDITO',
+		'08' => 'NOTA DE DÉBITO',
+		'09' => 'GUÍA DE REMISIÓN REMITENTE',
+		'80' => 'NOTA DE VENTA',
+		'PD' => 'PEDIDO',
+		'OT' => 'ORDEN DE TRABAJO',
+		'CT' => 'COTIZAIÓN',
+		'OC' => 'ORDEN DE COMPRA',
+		'RQ' => 'REQUERIMIENTO',
+		'TK' => 'TICKET',
+		'20' => 'COMPROBANTE DE RETENCIÓN ELECTRÓNICA',
+		'40' => 'COMPROBANTE DE PERCEPCIÓN ELECTRÓNICA',
+		'04' => 'LIQUIDACIÓN DE COMPRA',
+		'U2' => 'Guía de Ingreso Almacén',
+		'U3' => 'Guía de Salida Almacén',
+		'U4' => 'Guía de Transferencia Almacén'
+	],
 	'seller_id' => 35,
 	'repairman_id' => 34,
 	// 'styles' => [
@@ -67,12 +87,6 @@ return array(
 	'appointment_status' => ['PEND' => 'PEND', 'EFECT' => 'EFECT', 'ANUL' => 'ANUL'],
 	'tax' => ['igv' => 18],
 	'table_sunat' => [
-		'tipo_comprobante' => [
-			'1' => 'FACTURA',
-			'3' => 'BOLETA',
-			'7' => 'NOTA DE CRÉDITO',
-			'8' => 'NOTA DE DÉBITO',
-		],
 		'sunat_transaction' => [
 			'1' => 'VENTA INTERNA',
 			'2' => 'EXPORTACIÓN',

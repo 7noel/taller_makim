@@ -31,9 +31,32 @@ class CompanyController extends Controller {
 		return view('partials.create', compact('ubigeo'));
 	}
 
+	public function my_company()
+	{
+		$id = 1;
+		$model = $this->repo->findOrFail($id);
+		// dd($model);
+		$jobs = $this->tableRepo->getListType('jobs');
+		$ubigeo = $this->ubigeoRepo->listUbigeo($model->ubigeo_code);
+		return view('finances.companies.edit', compact('model', 'ubigeo', 'jobs'));
+	}
+	public function save_my_company($id)
+	{
+		$id = 1;
+		$data = request()->all();
+		//dd($data);
+		
+		$this->repo->save($data, $id);
+		return redirect()->to('/');
+		// if (isset($data['last_page']) && $data['last_page'] != '') {
+		// 	return redirect()->to($data['last_page']);
+		// }
+		// return redirect()->route($this->getType().'.index');
+	}
+
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -49,9 +72,9 @@ class CompanyController extends Controller {
 		$data = request()->all();
 		$this->repo->save($data);
 		if (isset($data['last_page']) && $data['last_page'] != '') {
-			return \Redirect::to($data['last_page']);
+			return redirect()->to($data['last_page']);
 		}
-		return \Redirect::route($this->getType().'.index');
+		return redirect()->route($this->getType().'.index');
 	}
 
 	public function show($id)
@@ -77,15 +100,15 @@ class CompanyController extends Controller {
 		
 		$this->repo->save($data, $id);
 		if (isset($data['last_page']) && $data['last_page'] != '') {
-			return \Redirect::to($data['last_page']);
+			return redirect()->to($data['last_page']);
 		}
-		return \Redirect::route($this->getType().'.index');
+		return redirect()->route($this->getType().'.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route($this->getType().'.index');
 	}
 	public function ajaxAutocomplete($type = '', $my_company = '')
@@ -108,10 +131,10 @@ class CompanyController extends Controller {
 				})
 			];
 		});
-		return \Response::json($result);
+		return response()->json($result);
 	}
 	public function getType()
 	{
-		return explode('.', \Request::route()->getName())[0];
+		return explode('.', request()->route()->getName())[0];
 	}
 }

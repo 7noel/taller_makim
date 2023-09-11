@@ -65,7 +65,7 @@ class PaymentsController extends Controller {
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('payments.index');
 	}
 

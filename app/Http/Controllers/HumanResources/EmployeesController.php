@@ -27,7 +27,7 @@ class EmployeesController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -41,8 +41,8 @@ class EmployeesController extends Controller {
 
 	public function store(FormEmployeeRequest $request)
 	{
-		$this->repo->save(\Request::all());
-		return \Redirect::route('employees.index');
+		$this->repo->save(request()->all());
+		return redirect()->route('employees.index');
 	}
 
 	public function show($id)
@@ -61,14 +61,14 @@ class EmployeesController extends Controller {
 
 	public function update($id, FormEmployeeRequest $request)
 	{
-		$this->repo->save(\Request::all(), $id);
-		return \Redirect::route('employees.index');
+		$this->repo->save(request()->all(), $id);
+		return redirect()->route('employees.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('employees.index');
 	}
 
@@ -84,7 +84,7 @@ class EmployeesController extends Controller {
 				'label' => $model->full_name
 			];
 		}
-		return \Response::json($result);
+		return response()->json($result);
 	}
 
 }

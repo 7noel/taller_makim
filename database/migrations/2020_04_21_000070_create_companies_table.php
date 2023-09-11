@@ -33,6 +33,7 @@ class CreateCompaniesTable extends Migration {
 			$table->string('email_2');
 			$table->string('contact');
 			$table->string('comment');
+            $table->json('config')->nullable();
 			$table->date('birth')->nullable();
 			$table->string('bank_bcp');
 			$table->string('bank_other');

@@ -9,7 +9,10 @@ class Company extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['company_name', 'brand_name', 'name', 'paternal_surname', 'maternal_surname', 'id_type', 'doc', 'address', 'ubigeo_code', 'phone', 'mobile', 'email', 'contact', 'comment', 'birth', 'country', 'entity_type', 'gender', 'company_id', 'my_company', 'job_id'];
+	protected $fillable = ['company_name', 'brand_name', 'name', 'paternal_surname', 'maternal_surname', 'id_type', 'doc', 'address', 'ubigeo_code', 'phone', 'mobile', 'email', 'contact', 'comment', 'config', 'birth', 'country', 'entity_type', 'gender', 'company_id', 'my_company', 'job_id'];
+	protected $casts = [
+		'config' => 'array',
+	];
 
 	public function ubigeo()
 	{

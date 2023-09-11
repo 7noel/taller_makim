@@ -1,11 +1,15 @@
 <div class="form-row">
 	{!! Form::hidden('id_type', '6', ['id'=>'id_type', 'required']) !!}
 	{!! Form::hidden('country', 'PE', ['id'=>'country', 'required']) !!}
+	@if(isset($model->config['logo']))
+		{!! Form::hidden('temporal[logo]', $model->config['logo']) !!}
+	@endif
+	{!! Form::hidden('country', 'PE', ['id'=>'country', 'required']) !!}
 
 	@if(isset($model))
 	{!! Form::hidden('doc', 'PE', ['id'=>'doc', 'required']) !!}
 	<div class="col-sm-2">
-		{!! Field::text('doc1', ['label' => 'Número RUC', 'class'=>'form-control-sm text-uppercase', 'required', 'readonly']) !!}
+		{!! Field::text('doc', ['label' => 'Número RUC', 'class'=>'form-control-sm text-uppercase', 'required', 'readonly']) !!}
 	</div>
 	@else
 	<div class="col-sm-2">
@@ -56,25 +60,18 @@
 	<div class="col-sm-2">
 		{!! Field::email('email', ['label' => 'Email', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
+	@if(!isset($model))
 	<div class="col-sm-2">
 		{!! Field::password('password', ['label' => 'Contraseña', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
 		{!! Field::password('confirmed_password', ['label' => 'Confirmar', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
-	@if(isset($model))
+	@endif
 	<div class="col-sm-2">
 		{!! Field::text('web', ['label'=>'Página web', 'class'=>'form-control-sm']) !!}
 	</div>
-	<div class="col-sm-2">
-		{!! Field::text('nubefact_ruta', ['label'=>'Ruta de Nubefact', 'class'=>'form-control-sm']) !!}
-	</div>
-	<div class="col-sm-2">
-		{!! Field::text('nubefact_token', ['label'=>'Token de Nubefact', 'class'=>'form-control-sm']) !!}
-	</div>
-	<div class="col-sm-2">
-		{!! Field::file('logo', ['label'=>'Logo', 'class'=>'form-control-sm']) !!}
-	</div>
+	@if(1==0)
 	<div class="col-sm-2">
 		{!! Field::select('size_factura', config('options.config.size'), ['label'=>'Format de Facturas', 'class'=>'form-control-sm']) !!}
 	</div>
@@ -89,7 +86,22 @@
 	</div>
 	@endif
 </div>
+
 @if(isset($model))
+<div class="form-row">
+	<div class="col-sm-4">
+		{!! Field::text('config[facturador_ruta]', ['label'=>'Ruta de Facturador', 'class'=>'form-control-sm']) !!}
+	</div>
+	<div class="col-sm-4">
+		{!! Field::text('config[facturador_token]', ['label'=>'Token de Facturador', 'class'=>'form-control-sm']) !!}
+	</div>
+	<div class="col-sm-4">
+		{!! Field::file('config[logo]', ['label'=>'Logo', 'class'=>'form-control-sm']) !!}
+	</div>
+</div>
+@endif
+
+@if(isset($model) and 1==0)
 @php $i=0; @endphp
 <table class="table table-sm table-responsive-xl">
 	<thead>

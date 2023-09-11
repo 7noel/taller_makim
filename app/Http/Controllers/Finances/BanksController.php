@@ -16,7 +16,7 @@ class BanksController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -32,7 +32,7 @@ class BanksController extends Controller {
 			$data['total'] = $data['initial'];
 		}
 		$this->repo->save($data);
-		return \Redirect::route('banks.index');
+		return redirect()->route('banks.index');
 	}
 
 	public function show($id)
@@ -49,14 +49,14 @@ class BanksController extends Controller {
 
 	public function update($id)
 	{
-		$this->repo->save(\Request::all(), $id);
-		return \Redirect::route('banks.index');
+		$this->repo->save(request()->all(), $id);
+		return redirect()->route('banks.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('banks.index');
 	}
 

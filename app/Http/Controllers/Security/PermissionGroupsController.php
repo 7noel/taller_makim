@@ -15,7 +15,7 @@ class PermissionGroupsController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -26,9 +26,9 @@ class PermissionGroupsController extends Controller {
 
 	public function store()
 	{
-		$this->repo->save(\Request::all());
-		//dd(\Request::route()->getAction()['as']);
-		return \Redirect::route('permission_groups.index');
+		$this->repo->save(request()->all());
+		//dd(request()->route()->getAction()['as']);
+		return redirect()->route('permission_groups.index');
 	}
 
 	public function show($id)
@@ -44,14 +44,14 @@ class PermissionGroupsController extends Controller {
 
 	public function update($id)
 	{
-		$this->repo->save(\Request::all(), $id);
-		return \Redirect::route('permission_groups.index');
+		$this->repo->save(request()->all(), $id);
+		return redirect()->route('permission_groups.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('permission_groups.index');
 	}
 

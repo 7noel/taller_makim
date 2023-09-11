@@ -15,17 +15,17 @@ class UbigeosController extends Controller{
 	public function ajaxProvincias($departamento)
 	{
 		$provincias = $this->ubigeoRepo->ajaxProvincias($departamento);
-		return \Response::json($provincias);
+		return response()->json($provincias);
 	}
 	public function ajaxDistritos($departamento,$provincia)
 	{
 		$distritos = $this->ubigeoRepo->ajaxDistritos($provincia);
-		return \Response::json($distritos);
+		return response()->json($distritos);
 	}
 	public function ajaxDistritos2($departamento,$provincia)
 	{
 		$distritos = $this->ubigeoRepo->ajaxDistritos2($provincia);
-		return \Response::json($distritos);
+		return response()->json($distritos);
 	}
 	public function ajaxGetDataUbigeo($code)
 	{
@@ -43,6 +43,6 @@ class UbigeosController extends Controller{
 				'label' => $model->departamento.' - '.$model->provincia.' - '.$model->distrito,
 			];
 		}
-		return \Response::json($result);
+		return response()->json($result);
 	}
 }

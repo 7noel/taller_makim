@@ -16,7 +16,7 @@ class TableController extends Controller {
 
 	public function __construct(TableRepo $repo) {
 		$this->repo = $repo;
-		$uri = \Request::server('REQUEST_URI');
+		$uri = request()->server('REQUEST_URI');
         $uri = explode('?', $uri);
         $url = explode('/', $uri[0]);
         array_shift($url);
@@ -31,7 +31,7 @@ class TableController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index2('name', \Request::get('name'), $this->controller);
+		$models = $this->repo->index2('name', request()->get('name'), $this->controller);
 		return view('partials.index',compact('models'));
 	}
 
@@ -43,8 +43,8 @@ class TableController extends Controller {
 
 	public function store()
 	{
-		$this->repo->save(\Request::all());
-		return redirect()->route(explode('.', \Request::route()->getName())[0].'.index');
+		$this->repo->save(request()->all());
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
 	public function show($id)
@@ -62,15 +62,15 @@ class TableController extends Controller {
 
 	public function update($id)
 	{
-		$this->repo->save(\Request::all(), $id);
-		return redirect()->route(explode('.', \Request::route()->getName())[0].'.index');
+		$this->repo->save(request()->all(), $id);
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
-		return redirect()->route(explode('.', \Request::route()->getName())[0].'.index');
+		if (request()->ajax()) {	return $model; }
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
 

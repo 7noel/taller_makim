@@ -26,7 +26,7 @@
 								<tr data-id="{{ $model->id }}">
 									<td>{{ $model->id }}</td>
 									<td>{{ $model->created_at->formatLocalized('%d-%m-%Y') }} </td>
-									<td>{{ $model->move->parent->document_type->name }}</td>
+									<td>{{ $model->move->parent->document_type_id }}</td>
 									<td>{{ $model->move->parent->number }} </td>
 									<td>{{ $model->type_op }} </td>
 									<td>{{ $model->input }} </td>

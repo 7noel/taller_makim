@@ -21,7 +21,7 @@ class ExchangesController extends Controller {
 	
 	public function index()
 	{
-		$models = $this->repo->index('fecha', \Request::get('name'));
+		$models = $this->repo->index('fecha', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -33,7 +33,7 @@ class ExchangesController extends Controller {
 	public function store(FormExchangeRequest $request)
 	 
 	{
-		$this->repo->save(\Request::all());
+		$this->repo->save(request()->all());
 		return redirect()->route('exchanges.index');
 	}
 
@@ -50,14 +50,14 @@ class ExchangesController extends Controller {
 
 	public function update($id, FormExchangeRequest $request)
 	{
-		$this->repo->save(\Request::all(), $id);
+		$this->repo->save(request()->all(), $id);
 		return redirect()->route('exchanges.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('exchanges.index');
 	}
 

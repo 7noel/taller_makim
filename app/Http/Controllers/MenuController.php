@@ -48,6 +48,7 @@ class MenuController extends Controller
                 ['name' => 'Roles', 'route' => 'roles.index', 'div' => '1'],
                 ['name' => 'Grupos', 'route' => 'permission_groups.index'],
                 ['name' => 'Permisos', 'route' => 'permissions.index'],
+                ['name' => 'Empresa', 'route' => 'companies.my_company', 'div' => '1'],
             ],
             'Almacén'=>[
                 // ['name' => 'Notas de Ingreso', 'route' => 'input_notes.index'],

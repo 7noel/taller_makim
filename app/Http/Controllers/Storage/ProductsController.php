@@ -31,7 +31,7 @@ class ProductsController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -96,7 +96,7 @@ class ProductsController extends Controller {
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
@@ -113,7 +113,7 @@ class ProductsController extends Controller {
 				'label' => $model->intern_code.'  '.$model->name
 			];
 		}
-		return \Response::json($result);
+		return response()->json($result);
 	}
 
 	public function ajaxAutocomplete2($warehouse_id = 1)
@@ -130,18 +130,18 @@ class ProductsController extends Controller {
 				'label' => $model->product->intern_code.' | '.$model->product->name
 			];
 		}
-		return \Response::json($result);
+		return response()->json($result);
 	}
 	public function ajaxGetData($warehouse_id, $product_id)
 	{
 		$term = request()->get('term');
 		$result = $this->repo->ajaxGetData($warehouse_id,$product_id);
-		return \Response::json($result);
+		return response()->json($result);
 	}
 	public function ajaxGetById($id)
 	{
 		$result = $this->repo->getById($id);
-		return \Response::json($result);
+		return response()->json($result);
 	}
 	public function kardex($id)
 	{

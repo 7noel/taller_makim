@@ -16,6 +16,8 @@ Route::get('houses', function () {
     return view('welcome');
 });
 Route::get('/', 'HomeController@index');
+Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+
 // Route::get('cambio1/{y}/{m}', function ($y, $m) {
 // 	$last_tc = Exchange::orderBy('fecha', 'desc')->first();
 // 	if (is_null($last_tc) or $last_tc->fecha < date('Y-m-d')) {
@@ -80,6 +82,10 @@ Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'permissions'], 'namespa
 });
 
 Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Finances'], function(){
+	Route::get('/companies/my_company', 'CompanyController@my_company')->name('companies.my_company');
+	Route::put('/companies/save_my_company/{id}', 'CompanyController@save_my_company')->name('companies.save_my_company');
+	//Route::get('my_company', ['as' => 'my_company', 'uses' => 'CompanyController@mycompany']);
+
 	Route::resource('banks','BanksController');
 	Route::get('payments/by_voucher/{proof_id}', ['as' => 'payments.by_voucher', 'uses' => 'PaymentsController@by_voucher']);
 	Route::resource('payments','PaymentsController');
@@ -93,6 +99,8 @@ Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'name
 	Route::get('output_vouchers/print/{id}', ['as' => 'output_vouchers.print', 'uses' => 'ProofsController@print2']);
 	Route::get('output_vouchers/print2/{id}', ['as' => 'output_vouchers.print2', 'uses' => 'ProofsController@print']);
 	Route::get('output_vouchers/by_order/{order_id}', ['as' => 'output_vouchers.by_order', 'uses' => 'ProofsController@byOrder']);
+	Route::get('input_vouchers/print/{id}', ['as' => 'input_vouchers.print', 'uses' => 'ProofsController@input_vouchers_print']);
+	Route::get('input_vouchers/by_order/{order_id}', ['as' => 'input_vouchers.by_order', 'uses' => 'ProofsController@byOrder']);
 	Route::resource('output_vouchers','ProofsController');
 	Route::resource('input_vouchers','ProofsController');
 	Route::resource('output_letters','ProofsController');

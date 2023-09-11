@@ -185,6 +185,9 @@
     </div>
     <script>
 $(document).ready(function () {
+    // if ($('#is_downloadable').length) {
+    //     $('.is_downloadable').val($('#is_downloadable').val())
+    // }
     $("#btn-image-load").click(function (e) {
         $("#image_base64").val(document.querySelector("#canvas").toDataURL('image/jpeg').replace(/^data:image\/jpeg;base64,/, ""))
     })
@@ -286,6 +289,9 @@ $(document).ready(function () {
                     $p = ui.item.id
                     $($this).parent().parent().find('.categoryId').val($p.category_id)
                     $($this).parent().parent().find('.subCategoryId').val($p.sub_category_id)
+                    if ($('#is_downloadable')) {
+                        $($this).parent().parent().find('.is_downloadable').val($p.is_downloadable)
+                    }
                     $($this).parent().parent().find('.productId').val($p.id)
                     $($this).parent().parent().find('.txtProduct').val($p.name)
                     $($this).parent().parent().find('.unitId').val($p.unit_id)
@@ -606,6 +612,7 @@ function renderTemplateRowProduct (data) {
     clone.querySelector("[data-unitid]").setAttribute("name", "details[" + items + "][unit_id]")
     clone.querySelector("[data-categoryid]").setAttribute("name", "details[" + items + "][category_id]")
     clone.querySelector("[data-subcategoryid]").setAttribute("name", "details[" + items + "][sub_category_id]")
+    clone.querySelector("[data-is_downloadable]").setAttribute("name", "details[" + items + "][is_downloadable]")
     clone.querySelector("[data-product]").setAttribute("name", "details[" + items + "][txtProduct]")
     clone.querySelector("[data-cantidad]").setAttribute("name", "details[" + items + "][quantity]")
     clone.querySelector("[data-precio]").setAttribute("name", "details[" + items + "][price]")

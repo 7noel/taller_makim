@@ -28,7 +28,7 @@ class PaymentConditionsController extends Controller {
 	public function store()
 	{
 		$this->repo->save(\Request::all());
-		return \Redirect::route('payment_conditions.index');
+		return redirect()->route('payment_conditions.index');
 	}
 
 	public function show($id)
@@ -45,13 +45,13 @@ class PaymentConditionsController extends Controller {
 	public function update($id)
 	{
 		$this->repo->save(\Request::all(), $id);
-		return \Redirect::route('payment_conditions.index');
+		return redirect()->route('payment_conditions.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('payment_conditions.index');
 	}
 }

@@ -57,14 +57,13 @@ class ProofsController extends Controller {
 
 	public function issuanceVouchers()
 	{
-		$models = $this->repo->issuanceVouchers('number', \Request::get('name'));
+		$models = $this->repo->issuanceVouchers('number', request()->get('name'));
 		return view('finances.proofs.issuance_vouchers',compact('models'));
 	}
 
 	public function create()
 	{
 		$action = "create";
-		// dd(\Request::route()->action['as']);
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sunat_transaction = 1;
@@ -74,13 +73,13 @@ class ProofsController extends Controller {
 		return view('partials.create', compact('sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'documents', 'payment_conditions', 'action'));
 	}
 
-
 	public function byOrder($order_id)
 	{
+		$type = explode('.', request()->route()->action['as'])[0];
 		$action = "generar";
 		$model = $this->orderRepo->findOrFail($order_id);
 		$order = $model;
-		//dd($model);
+		// dd($model);
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 
@@ -89,19 +88,27 @@ class ProofsController extends Controller {
 		// $proof_type = $this->proof_type;
 		$sellers = $this->companyRepo->getListSellers();
 		$documents = $this->tableRepo->getListDoc('document_controls', 'description', 'id');
-		return view('finances.output_vouchers.create_by_order', compact('model', 'order_id', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'payment_conditions', 'action'));
+		if ($type == 'input_vouchers') {
+			return view('finances.input_vouchers.create_by_order', compact('model', 'order_id', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'payment_conditions', 'action'));
+		} elseif ($type == 'output_vouchers') {
+			return view('finances.output_vouchers.create_by_order', compact('model', 'order_id', 'sellers', 'my_companies', 'sunat_transaction', 'igv_code', 'order', 'documents', 'payment_conditions', 'action'));
+		} else {
+			return dd(request()->route()->action['as']);
+		}
+		
+		//dd(\Request::route()->action['as']);
 	}
 
 	public function index2()
 	{
-		$models = $this->repo->index('sn', \Request::get('name'), $this->proof_type);
+		$models = $this->repo->index('sn', request()->get('name'), $this->proof_type);
 		return view('partials.index',compact('models'));
 	}
 
 	public function store()
 	{
 		//dd(\Request::all());
-		$this->repo->save(\Request::all());
+		$this->repo->save(request()->all());
 		return redirect()->route($this->doc.'.index');
 	}
 
@@ -138,7 +145,7 @@ class ProofsController extends Controller {
 
 	public function update($id)
 	{
-		$this->repo->save(\Request::all(), $id);
+		$this->repo->save(request()->all(), $id);
 		return redirect()->route($this->doc.'.index');
 	}
 
@@ -146,8 +153,8 @@ class ProofsController extends Controller {
 	{
 		$model = $this->repo->cancel($id);
 		// $model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
-		return redirect()->route(explode('.', \Request::route()->getName())[0].'.index');
+		if (request()->ajax()) {	return $model; }
+		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 	public function createByCompany($company_id)
 	{
@@ -160,7 +167,7 @@ class ProofsController extends Controller {
 	}
 	public function getType()
 	{
-		$this->doc = explode('.', \Request::route()->getName())[0];
+		$this->doc = explode('.', request()->route()->getName())[0];
 		$array = [
 			'issuance_vouchers' => 1,
 			'reception_vouchers' => 2,
@@ -182,7 +189,7 @@ class ProofsController extends Controller {
 				'label' => $model->document_type->name.' '.$model->sn
 			];
 		}
-		return \Response::json($result);
+		return response()->json($result);
 	}
 
 	/**
@@ -195,16 +202,8 @@ class ProofsController extends Controller {
 		$cuentas = $this->bankRepo->mostrar();
 		$model = $this->repo->findOrFail($id);
 		$r = json_decode($model->response_sunat);
-		if (isset($r->data->filename)) {
-			$nombre = $r->data->filename;
-		} else {
-			$nombre = $model->sn;
-		}
-		
-		// dd(json_decode($model->res ponse_sunat));
-		// \PDF::setOptions(['isPhpEnabled' => true]);
+		$nombre = (isset($r->data->filename)) ? $r->data->filename : $nombre = $model->sn;
 		$pdf = \PDF::loadView('pdfs.output_vouchers', compact('model', 'cuentas', 'r'));
-		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
 		return $pdf->stream($nombre.".pdf");
 	}
 	public function print($id)
@@ -220,9 +219,17 @@ class ProofsController extends Controller {
 			'Content-Disposition' => 'inline; filename="'.$r->data->filename.".pdf".'"'
 		]);
 	}
+	public function input_vouchers_print($id)
+	{
+		$cuentas = $this->bankRepo->mostrar();
+		$model = $this->repo->findOrFail($id);
+		$nombre = $model->sn;
+		$pdf = \PDF::loadView('pdfs.input_vouchers', compact('model', 'cuentas'));
+		return $pdf->stream($nombre.".pdf");
+	}
 	public function send_email_cpe()
 	{
-		$data = \Request::all();
+		$data = request()->all();
 		$id = $data['cpe'];
 		$email = $data['email'];
 		$model = $this->repo->findOrFail($id);

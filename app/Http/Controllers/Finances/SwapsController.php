@@ -23,7 +23,7 @@ class SwapsController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -36,8 +36,8 @@ class SwapsController extends Controller {
 	public function store()
 	{
 		//return back();
-		$this->repo->save(\Request::all());
-		return \Redirect::route('finances.swaps.index');
+		$this->repo->save(request()->all());
+		return redirect()->route('finances.swaps.index');
 	}
 
 	public function show($id)
@@ -55,8 +55,8 @@ class SwapsController extends Controller {
 
 	public function update($id)
 	{
-		$this->repo->save(\Request::all(), $id);
-		return \Redirect::route('finances.swaps.index');
+		$this->repo->save(request()->all(), $id);
+		return redirect()->route('finances.swaps.index');
 	}
 
 	public function byProof($proof_id)
@@ -74,7 +74,7 @@ class SwapsController extends Controller {
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('finances.swaps.index');
 	}
 }

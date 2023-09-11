@@ -33,8 +33,8 @@ class AppointmentController extends Controller {
 
 	public function store()
 	{
-		$this->repo->save(\Request::all());
-		return \Redirect::route('appointments.index');
+		$this->repo->save(request()->all());
+		return redirect()->route('appointments.index');
 	}
 
 	public function show($id)
@@ -51,14 +51,14 @@ class AppointmentController extends Controller {
 
 	public function update($id)
 	{
-		$this->repo->save(\Request::all(), $id);
-		return \Redirect::route('appointments.index');
+		$this->repo->save(request()->all(), $id);
+		return redirect()->route('appointments.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('operations.appointments.index');
 	}
 

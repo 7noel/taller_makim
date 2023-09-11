@@ -54,9 +54,9 @@
 	<tr>
 		{!! Form::hidden('data1', null, ['class'=>'productId','data-productid'=>'']) !!}
 		{!! Form::hidden('data2', null, ['class'=>'unitId','data-unitid'=>'']) !!}
-		{!! Form::hidden('data0', null, ['class'=>'categoryId','data-categoryid'=>'']) !!}
-		{!! Form::hidden('data0', null, ['class'=>'subCategoryId','data-subcategoryid'=>'']) !!}
-		{!! Form::hidden('data5', null, ['class'=>'is_downloadable','data-is_downloadable'=>'']) !!}
+		{!! Form::hidden('data3', null, ['class'=>'categoryId','data-categoryid'=>'']) !!}
+		{!! Form::hidden('data4', null, ['class'=>'subCategoryId','data-subcategoryid'=>'']) !!}
+		{!! Form::hidden('data5', 0, ['class'=>'is_downloadable','data-is_downloadable'=>'']) !!}
 		<td width="100px"><span class='form-control-plaintext form-control-sm intern_code text-right' data-labelid></span></td>
 		<td width="100px">{!! Form::text('data3', null, ['class'=>'form-control form-control-sm txtProduct', 'data-product'=>'', 'required'=>'required']); !!}</td>
 		<td width="100px">{!! Form::text('data4', null, ['class'=>'form-control form-control-sm txtCantidad text-right', 'data-cantidad'=>'']) !!}</td>

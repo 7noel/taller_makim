@@ -24,7 +24,8 @@ class PaymentRepo extends BaseRepo{
 				$data['output'] = $data['value'];
 				$data['input'] = 0;
 			}
-			$proof->amortization = $proof->amortization + $data['input'] - $data['output'];
+			$proof->amortization = $proof->amortization + $data['value'];
+			// $proof->amortization = $proof->amortization + $data['input'] - $data['output'];
 			$proof->save();
 		}
 		$bank = Bank::find($data['bank_id']);

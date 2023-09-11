@@ -33,14 +33,16 @@ class OrderRepo extends BaseRepo{
 		$model = parent::save($data, $id);
 
 		if (isset($data['items']) and $data['items']>0) {
+			// Guarda los detalles
 			$detailRepo = new OrderDetailRepo;
 			$toDelete = $detailRepo->syncMany2($data['details'], ['key' => 'order_id', 'value' => $model->id], 'product_id');
 
-				//dd($data['order_type']);
-			if ($data['order_type']=='output_orders') {
+			// Regulariza el stock y registra los movimientos
+			if ($data['order_type']=='output_orders' and $data['is_downloadable']==1) {
 				$mov = new MoveRepo;
 				$mov->destroy2($toDelete, $detailRepo->model->getMorphClass());
-				$mov->saveAll($model, 0);
+				$change_value = 0 ;
+				$mov->saveAll($model, $change_value);
 			}
 		}
 		if (isset($data['order_id']) and isset($data['quote_sn'])) {

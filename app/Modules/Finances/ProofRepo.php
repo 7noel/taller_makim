@@ -52,23 +52,22 @@ class ProofRepo extends BaseRepo{
 
 	public function save($data, $id=0)
 	{
+		$data['proof_type'] = explode('.', \Request::route()->getName())[0];
 		if ($id == 0) {
-			$data['proof_type'] = explode('.', \Request::route()->getName())[0];
 			if ($data['proof_type'] == 'output_vouchers' and (!isset($data['sn']) or $data['sn'] == '')) {
 				$data['status_sunat'] = 'PEND';
-				// $nextNumber = DocumentControlRepo::getNextNumber($data['document_type_id'], $data['my_company'], $data['reference_id']);
-				//dd($nextNumber);
 				$sn = $this->getNextNumber($data['document_type_id'], $data['my_company']);
 				$data['series'] = $sn['series'];
 				$data['number'] = $sn['number'];
 				$data['sn'] = $sn['series'] . '-' . $sn['number'];
 				$data['control_id'] = $sn['id'];
 			}
-
 		}
-		// dd(explode('.', \Request::route()->getName())[0]);
+		if ($data['proof_type'] == 'input_vouchers') {
+			$data['sn'] = $data['series'] . '-' . $data['number'];
+			$data['status_sunat'] = 'PEND';
+		}
 		$data = $this->prepareData($data);
-		// dd($data);
 		$model = parent::save($data, $id);
 		if (isset($data['order_id']) and isset($data['action']) and $data['action']=='generar') {
 			$ot = Order::where('id', $data['order_id'])->update(['proof_id' => $model->id, 'invoiced_at' => date('Y-m-d H:i:s'), 'status' => 'CERR']);
@@ -81,10 +80,11 @@ class ProofRepo extends BaseRepo{
 			$detailRepo = new ProofDetailRepo;
 			$toDelete = $detailRepo->syncMany2($data['details'], ['key' => 'proof_id', 'value' => $model->id], 'product_id');
 
-			if (isset($data['order_id']) and $data['order_id']>0) {
+			if ($data['is_downloadable']==1 and ($data['proof_type'] == 'input_vouchers' or ($data['proof_type'] == 'output_vouchers' and isset($data['order_id']) )) ) {
 				$mov = new MoveRepo;
 				$mov->destroy2($toDelete, $detailRepo->model->getMorphClass());
-				$mov->saveAll($model, 1);
+				$change_value = ( $data['proof_type']=='input_vouchers') ? 1 : 0 ;
+				$mov->saveAll($model, $change_value);
 			}
 		}
 		// $this->saveExpenses($data, $model);

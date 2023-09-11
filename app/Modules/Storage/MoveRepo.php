@@ -183,7 +183,6 @@ class MoveRepo extends BaseRepo{
 
 	public function saveAll($model, $change_value)
 	{
-		// dd($model->details);
 		\DB::transaction(function () use ($model, $change_value){
 			$d['my_company'] = $model->my_company;
 			if ($model->document_type_id == 20) {
@@ -197,7 +196,8 @@ class MoveRepo extends BaseRepo{
 				$d['code_document'] = $model->document_type->code;
 			}
 			foreach ($model->details as $key => $detail) {
-				if ($detail->category_id != 17) {
+			// dd($detail);
+				if (!$detail->is_downloadable) {
 					continue;
 				}
 				// prepara la trama para usar el metodo save de MoveRepo
@@ -226,7 +226,8 @@ class MoveRepo extends BaseRepo{
 				}
 				$d['move_type'] = $detail->getMorphClass();
 				$d['move_id'] = $detail->id;
-				if ($detail->category_id != 17) {
+				// dd($d);
+				if ($detail->is_downloadable) {
 				// dd($d);
 					$this->save($d);
 				}
@@ -236,6 +237,6 @@ class MoveRepo extends BaseRepo{
 
 	public function kardex($stock_id)
 	{
-		return $this->model->where('stock_id', $stock_id)->with('move.parent.document_type')->get();
+		return $this->model->where('stock_id', $stock_id)->with('move.parent')->get();
 	}
 }

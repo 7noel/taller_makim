@@ -21,7 +21,7 @@ class WarehousesController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -33,8 +33,8 @@ class WarehousesController extends Controller {
 
 	public function store(FormWarehouseRequest $request)
 	{
-		$this->repo->save(\Request::all());
-		return \Redirect::route('warehouses.index');
+		$this->repo->save(request()->all());
+		return redirect()->route('warehouses.index');
 	}
 
 	public function show($id)
@@ -53,19 +53,19 @@ class WarehousesController extends Controller {
 
 	public function update($id, FormWarehouseRequest $request)
 	{
-		$this->repo->save(\Request::all(), $id);
-		return \Redirect::route('warehouses.index');
+		$this->repo->save(request()->all(), $id);
+		return redirect()->route('warehouses.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('warehouses.index');
 	}
 	public function ajaxList()
 	{
 		$ajax = $this->repo->ajaxList();
-		return \Response::json($ajax);
+		return response()->json($ajax);
 	}
 }

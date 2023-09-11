@@ -22,7 +22,7 @@ class DocumentControlsController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -35,7 +35,7 @@ class DocumentControlsController extends Controller {
 
 	public function store()
 	{
-		$this->repo->save(\Request::all());
+		$this->repo->save(request()->all());
 		return \Redirect::route('document_controls.index');
 	}
 
@@ -54,14 +54,14 @@ class DocumentControlsController extends Controller {
 
 	public function update($id)
 	{
-		$this->repo->save(\Request::all(), $id);
+		$this->repo->save(request()->all(), $id);
 		return \Redirect::route('document_controls.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('document_controls.index');
 	}
 

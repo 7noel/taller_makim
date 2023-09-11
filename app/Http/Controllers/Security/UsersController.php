@@ -21,7 +21,7 @@ class UsersController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -33,8 +33,8 @@ class UsersController extends Controller {
 
 	public function store(FormUserRequest $request)
 	{
-		$this->repo->save(\Request::all());
-		return \Redirect::route('users.index');
+		$this->repo->save(request()->all());
+		return redirect()->route('users.index');
 	}
 
 	public function show($id)
@@ -51,14 +51,14 @@ class UsersController extends Controller {
 
 	public function update($id, FormUserRequest $request)
 	{
-		$this->repo->save(\Request::all(), $id);
+		$this->repo->save(request()->all(), $id);
 		return \Redirect::route('users.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('users.index');
 	}
 
@@ -85,6 +85,6 @@ class UsersController extends Controller {
 				'label' => $model->email.' '.$model->name
 			];
 		}
-		return \Response::json($result);
+		return response()->json($result);
 	}
 }

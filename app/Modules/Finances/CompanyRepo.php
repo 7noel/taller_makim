@@ -67,6 +67,12 @@ class CompanyRepo extends BaseRepo{
 	{
 		$data['entity_type'] = explode('.', \Request::route()->getName())[0];
 		$data = $this->prepareData($data);
+		if (isset($data['config']['logo'])) {
+			$data['config']['logo'] = $this->saveFile('storage', $data['config']['logo']);
+		} elseif (isset($data['temporal']['logo'])) {
+			$data['config']['logo'] = $data['temporal']['logo'];
+		}
+		
 		$model = parent::save($data, $id);
 		// dd($data['brand_name']);
 

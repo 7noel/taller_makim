@@ -57,7 +57,7 @@ class OrdersController extends Controller {
 
 	public function index2()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -128,7 +128,7 @@ class OrdersController extends Controller {
 	{
 		$model = $this->repo->cancel($id);
 		//$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 
@@ -162,7 +162,7 @@ class OrdersController extends Controller {
 	{
 		$cuentas = $this->bankRepo->mostrar();
 		$model = $this->repo->findOrFail($id);
-		//dd($model->seller->company_name);
+		//dd($model->mycompany->company_name);
 		// \PDF::setOptions(['isPhpEnabled' => true]);
 		$pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
 		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));

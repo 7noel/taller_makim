@@ -19,7 +19,7 @@ class BrandsController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', \Request::get('name'));
+		$models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
@@ -30,8 +30,8 @@ class BrandsController extends Controller {
 
 	public function store()
 	{
-		$this->repo->save(\Request::all());
-		return \Redirect::route('brands.index');
+		$this->repo->save(request()->all());
+		return redirect()->route('brands.index');
 	}
 
 	public function show($id)
@@ -47,20 +47,20 @@ class BrandsController extends Controller {
 
 	public function update($id)
 	{
-		$this->repo->save(\Request::all(), $id);
-		return \Redirect::route('brands.index');
+		$this->repo->save(request()->all(), $id);
+		return redirect()->route('brands.index');
 	}
 
 	public function destroy($id)
 	{
 		$model = $this->repo->destroy($id);
-		if (\Request::ajax()) {	return $model; }
+		if (request()->ajax()) {	return $model; }
 		return redirect()->route('operations.brands.index');
 	}
 
 	public function modelosByWarehouse($warehouse_id)
 	{
 		$modelos = $this->modeloRepo->modelosByWarehouse($warehouse_id);
-		return \Response::json($modelos);
+		return response()->json($modelos);
 	}
 }

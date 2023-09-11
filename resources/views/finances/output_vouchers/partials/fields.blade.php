@@ -1,4 +1,9 @@
 {!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+@if(isset($order))
+	{!! Form::hidden('is_downloadable', 0, ['id'=>'is_downloadable']) !!}
+@else
+	{!! Form::hidden('is_downloadable', 1, ['id'=>'is_downloadable']) !!}
+@endif
 {!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
 
 {!! Form::hidden('sunat_transaction', $sunat_transaction, ['class'=>'form-control']) !!}

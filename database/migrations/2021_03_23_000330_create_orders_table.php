@@ -16,6 +16,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->boolean('mov');
+            $table->boolean('is_downloadable');
             $table->string('sn'); // numero correlativo para cotizaciones y pedidos para las 3 empresas
             $table->string('order_type'); // typo de documento {1=>'order', 2=>'quote'}
             $table->string('type_op'); // segun ello afecta el valor promedio

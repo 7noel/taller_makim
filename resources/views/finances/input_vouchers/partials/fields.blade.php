@@ -1,4 +1,5 @@
 {!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('is_downloadable', 1, ['id'=>'is_downloadable']) !!}
 {!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
 
 {!! Form::hidden('sunat_transaction', $sunat_transaction, ['class'=>'form-control']) !!}
@@ -7,15 +8,22 @@
 {!! Form::hidden('action', $action, ['id'=>'action']) !!}
 
 <div class="form-row">
+	@if(isset($order))
+	<div class="col-md-1 col-sm-2">
+		{!! Form::hidden('order_id', $order->id, ['id'=>'order_id']) !!}
+		{!! Form::label('order_sn', 'Orden') !!}
+		{!! Form::text('order_sn', $order->sn, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+	</div>
+	@endif
 	<div class="col-sm-2">
 		{!! Form::label('document_type_id','Documento', ['class'=>'control-label']) !!}
 		{!! Form::select('document_type_id', config('options.docs_compras'), null, ['class'=>'form-control form-control-sm']) !!}
 	</div>
 	<div class="col-sm-1">
-		{!! Field::text('series', ['label' => 'Serie', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::text('series', ['label' => 'Serie', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::text('number', ['label' => 'Número', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::text('number', ['label' => 'Número', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
 		{!! Field::date('issued_at', ((isset($model)) ? $model->issued_at : date('Y-m-d')), ['label' => 'Fecha', 'class'=>'form-control-sm text-uppercase', 'required']) !!}

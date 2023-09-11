@@ -31,6 +31,7 @@ class CreateProofsTable extends Migration
             $table->string('sn');
             $table->string('series');
             $table->string('number');
+            $table->boolean('is_downloadable');
             // Guia para las compras
             $table->date('dispatch_note_date');
             $table->string('dispatch_note_number');
