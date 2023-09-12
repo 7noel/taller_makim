@@ -197,7 +197,7 @@ class MoveRepo extends BaseRepo{
 			}
 			foreach ($model->details as $key => $detail) {
 			// dd($detail);
-				if (!$detail->is_downloadable) {
+				if (!$detail->is_downloadable or !$detail->stock_id) {
 					continue;
 				}
 				// prepara la trama para usar el metodo save de MoveRepo
