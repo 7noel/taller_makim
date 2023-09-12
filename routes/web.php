@@ -42,6 +42,8 @@ Route::get('/finances/companies/register', 'Finances\CompanyController@register'
 // Route::get('/home', 'HomeController@index');
 Route::get('listarProvincias/{departamento}', ['as' => 'ajaxprovincias', 'uses' => 'Admin\UbigeosController@ajaxProvincias']);
 Route::get('listarDistritos/{departamento}/{provincia}', ['as' => 'ajaxdistritos','uses' => 'Admin\UbigeosController@ajaxDistritos']);
+Route::get('excel_productos', ['as' => 'excel','uses' => 'Storage\ProductsController@excel']);
+Route::get('excel_servicios', ['as' => 'excel2','uses' => 'Storage\ProductsController@excel2']);
 
 Route::group(['middleware'=>['auth']], function(){
 	Route::get('get_cpe/{id}', ['as' => 'output_vouchers.get_cpe', 'uses' => 'Finances\ProofsController@get_json_cpe']);

@@ -13,6 +13,8 @@ use App\Modules\Storage\WarehouseRepo;
 
 use App\Http\Requests\Logistics\FormProductRequest;
 
+use App\Exports\ProductsExport;
+use App\Exports\ServicesExport;
 class ProductsController extends Controller {
 
 	protected $repo;
@@ -148,5 +150,13 @@ class ProductsController extends Controller {
 		$models = $this->moveRepo->kardex($id);
 		// dd($models);
 		return view('storage.products.kardex', compact('models'));
+	}
+	public function excel()
+	{
+		return \Excel::download(new ProductsExport, 'products.xlsx');
+	}
+	public function excel2()
+	{
+		return \Excel::download(new ServicesExport, 'servicios.xlsx');
 	}
 }
