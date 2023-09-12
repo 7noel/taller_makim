@@ -94,7 +94,12 @@ class MoveRepo extends BaseRepo{
 				$last_stock = $move_before->stock;
 				$last_avarage = $move_before->avarage_value_after;
 			} else {
+				try {
 				$last_stock = $st_model->stock_initial;
+					
+				} catch (Exception $e) {
+					echo $data;
+				}
 				// $last_stock = 0;
 				$last_avarage = $data['value'];
 			}
