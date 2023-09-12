@@ -49,9 +49,6 @@ class MoveRepo extends BaseRepo{
 		// dd($data);
 		$stockRepo = new StockRepo;
 		$st_model = $stockRepo->find($data['stock_id']);
-		if (is_null($st_model)) {
-			// break;
-		}
 		// dd($data);
 		// dd($st_model);
 		// saber si ya tiene un movimiento
@@ -94,12 +91,7 @@ class MoveRepo extends BaseRepo{
 				$last_stock = $move_before->stock;
 				$last_avarage = $move_before->avarage_value_after;
 			} else {
-				try {
 				$last_stock = $st_model->stock_initial;
-					
-				} catch (Exception $e) {
-					echo $data;
-				}
 				// $last_stock = 0;
 				$last_avarage = $data['value'];
 			}
