@@ -49,6 +49,9 @@ class MoveRepo extends BaseRepo{
 		// dd($data);
 		$stockRepo = new StockRepo;
 		$st_model = $stockRepo->find($data['stock_id']);
+		if (is_null($st_model)) {
+			continue;
+		}
 		// dd($data);
 		// dd($st_model);
 		// saber si ya tiene un movimiento
@@ -197,7 +200,7 @@ class MoveRepo extends BaseRepo{
 			}
 			foreach ($model->details as $key => $detail) {
 			// dd($detail);
-				if (!$detail->is_downloadable or !$detail->stock_id) {
+				if ($detail->is_downloadable==0 or $detail->stock_id==0) {
 					continue;
 				}
 				// prepara la trama para usar el metodo save de MoveRepo
