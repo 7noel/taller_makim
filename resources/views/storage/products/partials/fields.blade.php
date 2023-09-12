@@ -1,4 +1,5 @@
 {!! Form::hidden('category_id', '18') !!}
+{!! Form::hidden('is_downloadable', '1') !!}
 <div class="form-row mb-3">
 	<div class="col-sm-2">
 		<div class="custom-control custom-switch">

@@ -1,6 +1,7 @@
 {!! Form::hidden('country', 'PE') !!}
 {!! Form::hidden('unit_id', '16') !!}
 {!! Form::hidden('category_id', '17') !!}
+{!! Form::hidden('is_downloadable', '0') !!}
 <div class="form-row mb-3">
 	<div class="col-sm-2">
 		<div class="custom-control custom-switch">
