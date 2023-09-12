@@ -50,7 +50,7 @@ class MoveRepo extends BaseRepo{
 		$stockRepo = new StockRepo;
 		$st_model = $stockRepo->find($data['stock_id']);
 		if (is_null($st_model)) {
-			continue;
+			// break;
 		}
 		// dd($data);
 		// dd($st_model);
