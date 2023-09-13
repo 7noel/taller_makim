@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @if(get_defined_vars(session('my_company')->config['favicon']) and \Storage::disk('public')->exists(session('my_company')->config['favicon']) )
-    <link rel="icon" type="image/jpeg" href="/img/favicon.png" />
+    <link rel="icon" type="image/jpeg" href="{{ \Storage::url( session('my_company')->config['favicon']) }}" />
     @else
     <link rel="icon" type="image/jpeg" href="/img/favicon.png" />
     @endif    
