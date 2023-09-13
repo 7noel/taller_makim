@@ -3,7 +3,7 @@
     if (null == session('my_company')) {
         session(['my_company' => App\Modules\Finances\Company::find(1)]);
     }
-    //dd(\Storage::url( session('my_company')->config['logo']));
+    dd(\Storage::url( session('my_company')->config['favicon']));
 @endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
