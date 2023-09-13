@@ -1,23 +1,33 @@
 <!doctype html>
+@php
+    if (null == session('my_company')) {
+        session(['my_company' => App\Modules\Finances\Company::find(1)]);
+    }
+    //dd(\Storage::url( session('my_company')->config['logo']));
+@endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/jpeg" href="/img/logo_makim_01.jpg" />
+    @if(get_defined_vars(session('my_company')->config['logo']) and \Storage::disk('public')->exists(session('my_company')->config['favicon']) )
+    <link rel="icon" type="image/jpeg" href="/img/favicon.png" />
+    @else
+    <link rel="icon" type="image/jpeg" href="/img/favicon.png" />
+    @endif    
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <style>
-.paint-canvas {
-  border: 1px black solid;
-  display: block;
-  margin: 1rem;
-}
+        .paint-canvas {
+          border: 1px black solid;
+          display: block;
+          margin: 1rem;
+        }
 
-.color-picker {
-  margin: 1rem 1rem 0 1rem;
-}
+        .color-picker {
+          margin: 1rem 1rem 0 1rem;
+        }
     </style>
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -110,7 +120,12 @@
         <nav class="{{ config('options.styles.navbar') }}">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="/img/logo_makim_doc.jpg" alt="" height="50px">
+                    @if(get_defined_vars(session('my_company')->config['logo']) and \Storage::disk('public')->exists(session('my_company')->config['logo']) )
+                    <img src="{{ \Storage::url( session('my_company')->config['logo']) }}" alt="" height="50px">
+                    @else
+                    <!-- <img src="/img/logo_makim_doc.jpg" alt="" height="50px"> -->
+                    {{ config('app.name', 'Laravel') }}
+                    @endif
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

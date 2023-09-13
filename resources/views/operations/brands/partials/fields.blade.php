@@ -8,3 +8,7 @@
 </div>
 
 @include('operations.brands.partials.details')
+
+@section('scripts')
+	@include('operations.brands.scripts')
+@endsection

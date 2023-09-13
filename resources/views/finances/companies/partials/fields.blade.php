@@ -4,6 +4,9 @@
 	@if(isset($model->config['logo']))
 		{!! Form::hidden('temporal[logo]', $model->config['logo']) !!}
 	@endif
+	@if(isset($model->config['favicon']))
+		{!! Form::hidden('temporal[favicon]', $model->config['favicon']) !!}
+	@endif
 	{!! Form::hidden('country', 'PE', ['id'=>'country', 'required']) !!}
 
 	@if(isset($model))
@@ -71,32 +74,21 @@
 	<div class="col-sm-2">
 		{!! Field::text('web', ['label'=>'Página web', 'class'=>'form-control-sm']) !!}
 	</div>
-	@if(1==0)
-	<div class="col-sm-2">
-		{!! Field::select('size_factura', config('options.config.size'), ['label'=>'Format de Facturas', 'class'=>'form-control-sm']) !!}
-	</div>
-	<div class="col-sm-2">
-		{!! Field::select('size_boleta', config('options.config.size'), ['label'=>'Format de PDF Boletas', 'class'=>'form-control-sm']) !!}
-	</div>
-	<div class="col-sm-2">
-		{!! Field::select('size_retencion', config('options.config.size_2'), ['label'=>'Format de Retenciones', 'class'=>'form-control-sm']) !!}
-	</div>
-	<div class="col-sm-2">
-		{!! Field::select('size_percepcion', config('options.config.size_2'), ['label'=>'Format de Percepciones', 'class'=>'form-control-sm']) !!}
-	</div>
-	@endif
 </div>
 
 @if(isset($model))
 <div class="form-row">
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		{!! Field::text('config[facturador_ruta]', ['label'=>'Ruta de Facturador', 'class'=>'form-control-sm']) !!}
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		{!! Field::text('config[facturador_token]', ['label'=>'Token de Facturador', 'class'=>'form-control-sm']) !!}
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		{!! Field::file('config[logo]', ['label'=>'Logo', 'class'=>'form-control-sm']) !!}
+	</div>
+	<div class="col-sm-3">
+		{!! Field::file('config[favicon]', ['label'=>'Favicon', 'class'=>'form-control-sm']) !!}
 	</div>
 </div>
 @endif

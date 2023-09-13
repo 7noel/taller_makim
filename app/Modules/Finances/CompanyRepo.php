@@ -72,6 +72,11 @@ class CompanyRepo extends BaseRepo{
 		} elseif (isset($data['temporal']['logo'])) {
 			$data['config']['logo'] = $data['temporal']['logo'];
 		}
+		if (isset($data['config']['favicon'])) {
+			$data['config']['favicon'] = $this->saveFile('storage', $data['config']['favicon']);
+		} elseif (isset($data['temporal']['favicon'])) {
+			$data['config']['favicon'] = $data['temporal']['favicon'];
+		}
 		
 		$model = parent::save($data, $id);
 		// dd($data['brand_name']);
