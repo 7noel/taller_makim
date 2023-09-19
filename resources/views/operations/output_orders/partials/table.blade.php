@@ -28,19 +28,19 @@
 		<tr data-id="{{ $model->id }}" data-tipo="OT">
 			<td>{{ $model->sn }}</td>
 			<td>{{ $model->created_at->formatLocalized('%d/%m/%Y') }}</td>
-			<td>{{ $model->placa }}</td>
+			<td style="white-space: nowrap;">{{ $model->placa }}</td>
 			<td>{{ $model->company->company_name }} </td>
 			<td class="status"><span class="{{ $clase }}">{{ $model->status }}</span></td>
 			<td>{{ config('options.table_sunat.moneda_sunat.'.$model->currency_id) }}</td>
 			<td>{{ $model->total}} </td>
-			<td>
+			<td style="white-space: nowrap;">
 				@if($model->proof_id>0)
 				<a href="{{ '/finances/output_vouchers?sn='.$model->proof->sn }}" class="btn btn-link btn-sm" title="Ver OT">{{ $model->proof->sn }}</a>
 				@else
 				SIN DOC
 				@endif
 			</td>
-			<td>
+			<td style="white-space: nowrap;">
 				<a href="{{ route( 'print_inventory' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="Inventario">{!! $icons['car'] !!}</a>
 				<a href="{{ route( 'print_order' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="Imprimir">{!! $icons['printer'] !!}</a>
 				<a href="{{ route('polls.create') }}" target="_blank" class="btn btn-outline-info btn-sm" title="Encuesta">{!! $icons['poll'] !!}</a>

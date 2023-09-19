@@ -34,4 +34,8 @@ class CarRepo extends BaseRepo{
 			    $query->whereMonth('birth', $filter->f1);
 			})->with('company', 'modelo.brand')->get();
 	}
+	public function withoutSlug()
+	{
+		return Car::where('slug', '')->withTrashed()->get();
+	}
 }

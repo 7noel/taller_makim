@@ -38,6 +38,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 Route::get('/finances/companies/register', 'Finances\CompanyController@register')->name('companies.register');
+Route::get('generate_slug', ['as' => 'generate_slug','uses' => 'Operations\CarsController@generateSlug']);
 
 // Route::get('/home', 'HomeController@index');
 Route::get('listarProvincias/{departamento}', ['as' => 'ajaxprovincias', 'uses' => 'Admin\UbigeosController@ajaxProvincias']);
@@ -76,7 +77,7 @@ Route::group(['middleware'=>['auth']], function(){
 });
 
 Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Admin'], function(){
-	Route::resource('document_controls','TableController');
+	Route::resource('document_controls','DocumentControlsController');
 	Route::resource('units','TableController');
 	Route::resource('categories','TableController');
 	Route::resource('sub_categories','TableController');

@@ -116,4 +116,15 @@ class CarsController extends Controller {
 
 		return view('operations.cars.filter',compact('models', 'filter'));
 	}
+	public function generateSlug()
+	{
+		$cars = $this->repo->withoutSlug();
+		//dd($cars);
+		foreach ($cars as $key => $car) {
+			// $car->slug = bin2hex(random_bytes($value));
+			$car->slug = 24;
+			$car->save();
+		}
+		return 'Fin';
+	}
 }

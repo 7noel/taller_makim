@@ -15,7 +15,7 @@ class CreateDocumentControlsTable extends Migration {
 		Schema::create('document_controls', function(Blueprint $table)
 		{
 			$table->id();
-			$table->bigInteger('document_type_id')->unsigned();
+			$table->string('code', 10);
 			$table->bigInteger('company_id')->unsigned();
 			$table->string('series', 10);
 			$table->bigInteger('number')->unsigned();

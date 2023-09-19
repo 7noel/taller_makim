@@ -9,7 +9,7 @@ class DocumentControl extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['document_type_id', 'company_id', 'series', 'number', 'my_company'];
+	protected $fillable = ['code', 'company_id', 'series', 'number', 'my_company'];
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {

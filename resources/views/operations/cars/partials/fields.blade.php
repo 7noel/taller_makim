@@ -2,6 +2,9 @@
 
 {!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
 {!! Form::hidden('company_id', ((isset($client->id)) ? $client->id : null), ['id'=>'company_id']) !!}
+@if(!isset($model))
+	{!! Form::hidden('slug', 24) !!}
+@endif
 <div class="form-row">
 	<div class="col-sm-2">
 		{!! Field::text('placa', ['label' => 'Placa', 'id'=>'txtplaca', 'class'=>'form-control-sm text-uppercase', 'max'=>'7', 'required']) !!}

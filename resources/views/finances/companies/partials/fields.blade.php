@@ -7,10 +7,8 @@
 	@if(isset($model->config['favicon']))
 		{!! Form::hidden('temporal[favicon]', $model->config['favicon']) !!}
 	@endif
-	{!! Form::hidden('country', 'PE', ['id'=>'country', 'required']) !!}
 
 	@if(isset($model))
-	{!! Form::hidden('doc', 'PE', ['id'=>'doc', 'required']) !!}
 	<div class="col-sm-2">
 		{!! Field::text('doc', ['label' => 'Número RUC', 'class'=>'form-control-sm text-uppercase', 'required', 'readonly']) !!}
 	</div>
@@ -26,7 +24,7 @@
 
 	@if(isset($model))
 	<div class="col-sm-4">
-		{!! Field::text('brand_name', ['label' => 'Marca', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::text('brand_name', ['label' => 'Nombre Establecimiento', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
 	@endif
 
@@ -39,7 +37,9 @@
 	<div class="col-sm-2">
 		{!! Field::text('name', ['label' => 'Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
-	{!! Form::hidden('country', 'PE', ['id'=>'country', 'required']) !!}
+	<div class="col-sm-2">
+		{!! Field::text('code', ['label' => 'Código', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+	</div>
 	<div class="col-sm-2">
 		{!! Field::select('departamento', $ubigeo['departamento'], $ubigeo['value']['departamento'], ['empty'=>'Seleccionar', 'label'=>'Departamento', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
@@ -58,8 +58,6 @@
 	<div class="col-sm-2">
 		{!! Field::text('mobile', ['label' => 'Celular', 'class'=>'form-control-sm']) !!}
 	</div>
-</div>
-<div class="form-row">
 	<div class="col-sm-2">
 		{!! Field::email('email', ['label' => 'Email', 'class'=>'form-control-sm', 'required']) !!}
 	</div>

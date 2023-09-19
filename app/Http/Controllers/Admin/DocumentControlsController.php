@@ -5,7 +5,6 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Modules\Base\DocumentControlRepo;
-use App\Modules\Base\DocumentTypeRepo;
 use App\Modules\Finances\CompanyRepo;
 
 class DocumentControlsController extends Controller {
@@ -14,9 +13,8 @@ class DocumentControlsController extends Controller {
 	protected $documentTypeRepo;
 	protected $companyRepo;
 
-	public function __construct(DocumentControlRepo $repo, DocumentTypeRepo $documentTypeRepo, CompanyRepo $companyRepo) {
+	public function __construct(DocumentControlRepo $repo, CompanyRepo $companyRepo) {
 		$this->repo = $repo;
-		$this->documentTypeRepo = $documentTypeRepo;
 		$this->companyRepo = $companyRepo;
 	}
 
@@ -29,8 +27,7 @@ class DocumentControlsController extends Controller {
 	public function create()
 	{
 		$myCompanies = $this->companyRepo->getListMyCompany();
-		$documents = $this->documentTypeRepo->getList();
-		return view('partials.create', compact('myCompanies', 'documents'));
+		return view('partials.create', compact('myCompanies'));
 	}
 
 	public function store()
@@ -48,8 +45,7 @@ class DocumentControlsController extends Controller {
 	{
 		$model = $this->repo->findOrFail($id);
 		$myCompanies = $this->companyRepo->getListMyCompany();
-		$documents = $this->documentTypeRepo->getList();
-		return view('partials.edit', compact('model', 'myCompanies', 'documents'));
+		return view('partials.edit', compact('model', 'myCompanies'));
 	}
 
 	public function update($id)

@@ -1,6 +1,6 @@
 <?php 
 return array(
-	'documents_type' => [
+	'document_types' => [
 		'01' => 'FACTURA ELECTRÓNICA',
 		'03' => 'BOLETA ELECTRÓNICA',
 		'07' => 'NOTA DE CRÉDITO',
