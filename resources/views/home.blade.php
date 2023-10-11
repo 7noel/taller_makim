@@ -6,30 +6,58 @@
         <div class="col-md-12">
             <div class="card-group">
                 <div class="card">
-                    <div class="card-body">
-                        <a href="{{ route('clients.index') }}" class="card-title text-dark">Clientes
+                    <div class="card-body text-center">
+                        <a href="{{ route('clients.index') }}" class="card-title text-dark">CLIENTES
                         <img src="/img/clientes.png" class="card-img-top"></a>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-body">
-                        <a href="{{ route('cars.index') }}" class="card-title text-dark">Vehículos
+                    <div class="card-body text-center">
+                        <a href="{{ route('cars.index') }}" class="card-title text-dark">VEHÍCULOS
                         <img src="/img/accord.png" class="card-img-top"></a>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-body">
-                        <a href="{{ route('output_quotes.index') }}" class="card-title text-dark">Cotizaciones
+                    <div class="card-body text-center">
+                        <a href="{{ route('output_quotes.index') }}" class="card-title text-dark">COTIZACIONES
                         <img src="/img/cotizar.png" class="card-img-top"></a>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-body">
-                        <a href="{{ route('output_orders.index') }}" class="card-title text-dark">Ordenes
+                    <div class="card-body text-center">
+                        <a href="{{ route('output_orders.index') }}" class="card-title text-dark">ÓRDENES
                         <img src="/img/ordenes.png" class="card-img-top"></a>
                     </div>
                 </div>
             </div>
+
+{{--
+            <div class="card-group">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a href="#" class="card-title text-dark">TABLERO
+                        <img src="/img/procesos.png" class="card-img-top"></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a href="#" class="card-title text-dark">REPORTES
+                        <img src="/img/informe.png" class="card-img-top"></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a href="#" class="card-title text-dark">VENTAS
+                        <img src="/img/ventas.png" class="card-img-top"></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a href="#" class="card-title text-dark">COMPRAS
+                        <img src="/img/compras_1.png" class="card-img-top"></a>
+                    </div>
+                </div>
+            </div>--}}
         </div>
     </div>
 </div>
