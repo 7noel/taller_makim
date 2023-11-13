@@ -31,11 +31,10 @@
                 </div>
             </div>
 
-{{--
             <div class="card-group">
                 <div class="card">
                     <div class="card-body text-center">
-                        <a href="#" class="card-title text-dark">TABLERO
+                        <a href="{{ route('panel') }}" class="card-title text-dark">TABLERO
                         <img src="/img/procesos.png" class="card-img-top"></a>
                     </div>
                 </div>
@@ -57,7 +56,7 @@
                         <img src="/img/compras_1.png" class="card-img-top"></a>
                     </div>
                 </div>
-            </div>--}}
+            </div>
         </div>
     </div>
 </div>

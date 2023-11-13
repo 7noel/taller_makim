@@ -38,7 +38,7 @@ class OrderRepo extends BaseRepo{
 			$toDelete = $detailRepo->syncMany2($data['details'], ['key' => 'order_id', 'value' => $model->id], 'product_id');
 
 			// Regulariza el stock y registra los movimientos
-			if ($data['order_type']=='output_orders' and $data['is_downloadable']==1) {
+			if (1==0 and $data['order_type']=='output_orders' and $data['is_downloadable']==1) {
 				$mov = new MoveRepo;
 				$mov->destroy2($toDelete, $detailRepo->model->getMorphClass());
 				$change_value = 0 ;
@@ -242,6 +242,11 @@ class OrderRepo extends BaseRepo{
 			Order::where('order_type', 'output_quotes')->where('order_id', $model->id)->update(['status'=>'APROB', 'order_id'=>0, 'invoiced_at'=>NULL]);
 		}
 		return $model;
+	}
+	
+	public function ordersRecepcion()
+	{
+		return $this->model->where('order_type', 'output_orders')->with('car.modelo.brand')->orderBy('created_at', 'desc')->get();
 	}
 
 }

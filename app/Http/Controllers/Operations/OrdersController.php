@@ -184,6 +184,7 @@ class OrdersController extends Controller {
             $message->from(env('CONTACT_MAIL'), env('CONTACT_NAME'));
         });
 	}
+
 	public function createByCompany($company_id)
 	{
 		$action = "edit";
@@ -194,4 +195,135 @@ class OrdersController extends Controller {
 		$company = $this->companyRepo->findOrFail($company_id);
 		return view('partials.create', compact('payment_conditions', 'currencies', 'sellers', 'repairmens', 'company', 'action'));
 	}
+
+	public function panel()
+	{
+		$models = $this->repo->ordersRecepcion();
+		return view('operations.output_orders.panel', compact('models'));
+	}
+
+	public function createByCar($car_id)
+	{
+		$action = "create";
+		$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
+		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
+		$bs = ['' => 'Seleccionar'];
+		$bs_shipper = ['' => 'Seleccionar'];
+		$car = $this->carRepo->findOrFail($car_id);
+		return view('partials.create', compact('car', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
+	}
+
+	public function recepcion_crear()
+	{
+		$action = "create";
+		$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
+		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
+		$bs = ['' => 'Seleccionar'];
+		$bs_shipper = ['' => 'Seleccionar'];
+		return view('operations.taller.recepcion_crear', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
+	}
+
+	public function recepcion_edit($id)
+	{
+		$action = "edit";
+		$model = $this->repo->findOrFail($id);
+		// dd(collect($model->custom_details)->sortBy('quantity'));
+		$quote = $model->quote;
+		$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
+		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
+		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
+		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
+		return view('operations.taller.recepcion_edit', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
+	}
+	public function recepcionByCar($car_id)
+	{
+		$action = "create";
+		$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
+		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
+		$bs = ['' => 'Seleccionar'];
+		$bs_shipper = ['' => 'Seleccionar'];
+		$car = $this->carRepo->findOrFail($car_id);
+		return view('operations.taller.recepcion_crear', compact('car', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
+	}
+	public function changeStatusOrder($id)
+	{
+		$model = $this->repo->findOrFail($id);
+		return view('operations.taller.change_status_order', compact('model'));
+	}
+	public function updateStatus($id)
+	{
+		$data = request()->all();
+		// dd($data['status']);
+		if ($data['action']=='cliente') {
+			$mensaje['DIAG'][0] = 'Lamentamos que no estés de acuerdo con tu orden de trabajo, ahora tu asesor encargado se comunicará contigo, recuerda que estamos para servirte';
+			$mensaje['DIAG'][1] = 'Ahora tu orden de trabajo avanzará a la fase de diagnóstico, recibirás una nueva notificación cuando el diagnóstico se haya completado';
+			$mensaje['REPAR'][0] = 'Lamentamos que nuestro diagnóstico no haya sido oportuno, ahora tu asesor encargado se comunicará contigo, recuerda que estamos para servirte';
+			$mensaje['REPAR'][1] = 'Diagnóstico aprobado con éxito, ahora nuestro equipo continuará con el proceso';
+
+			$msj = $mensaje[$data['status']][$data['aprobacion']];
+
+			if ($data['aprobacion']==1) {
+				$icon = '<i class="fa-solid fa-thumbs-up"></i>';
+				$title = '¡Bien!';
+				$data['status_msj'] = 'Aprobado por Cliente';
+				$data['status_aprobacion'] = 1;
+			} else {
+				$icon = '<i class="fa-solid fa-face-frown"></i>';
+				$title = '¡Oh no!';
+				$data['status_msj'] = 'Rechazado por Cliente';
+				$data['status_aprobacion'] = 0;
+			}
+		}
+		$model = $this->repo->changeStatus($data, $id);
+		if ($data['action']=='cliente') {
+			return view('operations.taller.cliente_respuesta', compact('icon', 'msj', 'title'));
+		}
+		return redirect()->route('home2');
+	}
+	public function orderClient($slug)
+	{
+		$action = 'cliente';
+		$model = $this->repo->findBySlug($slug);
+		return view('operations.taller.cliente', compact('model', 'action'));
+	}
+	public function diagnostico_edit($id)
+	{
+		$action = "edit";
+		$model = $this->repo->findOrFail($id);
+		// dd(collect($model->custom_details)->sortBy('quantity'));
+		$quote = $model->quote;
+		$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
+		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
+		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
+		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
+		return view('operations.taller.diagnostico', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
+	}
+	public function repuestos_edit($id)
+	{
+		dd('repuestos_edit');
+	}
+	public function aprobacion_edit($id)
+	{
+		dd('aprobacion_edit');
+	}
+	public function controlcalidad_edit($id)
+	{
+		dd('controlcalidad_edit');
+	}
+	public function entrega_edit($id)
+	{
+		dd('entrega_edit');
+	}
+
+
 }

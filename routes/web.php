@@ -37,6 +37,7 @@ Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'i
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+Route::get('/panel', 'Operations\OrdersController@panel')->name('panel');
 Route::get('/finances/companies/register', 'Finances\CompanyController@register')->name('companies.register');
 Route::get('generate_slug', ['as' => 'generate_slug','uses' => 'Operations\CarsController@generateSlug']);
 
@@ -164,6 +165,19 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::get('orders/print/{id}', ['as' => 'print_order','uses' => 'OrdersController@print']);
 	Route::get('orders/inventory/{id}', ['as' => 'print_inventory','uses' => 'OrdersController@printInventory']);
 	Route::get('orders/createByCompany/{company_id}', ['as' => 'create_order_by_company','uses' => 'OrdersController@createByCompany']);
+
+	Route::get('orden_cliente/{slug}', ['as' => 'order_client', 'uses' => 'Operations\OrdersController@orderClient']);
+	
+	Route::get('recepcion_crear', ['as' => 'recepcion.create', 'uses' => 'OrdersController@recepcion_crear']);
+	Route::get('recepcion_edit/{id}', ['as' => 'recepcion.edit', 'uses' => 'OrdersController@recepcion_edit']);
+	Route::get('recepcion_by_car/{car_id}', ['as' => 'recepcion_by_car', 'uses' => 'OrdersController@recepcionByCar']);
+	Route::get('diagnostico/{id}', ['as' => 'diagnostico.edit', 'uses' => 'OrdersController@diagnostico_edit']);
+	Route::get('repuestos/{id}', ['as' => 'repuestos.edit', 'uses' => 'OrdersController@repuestos_edit']);
+	Route::get('aprobacion/{id}', ['as' => 'aprobacion.edit', 'uses' => 'OrdersController@aprobacion_edit']);
+	Route::get('controlcalidad/{id}', ['as' => 'controlcalidad.edit', 'uses' => 'OrdersController@controlcalidad_edit']);
+	Route::get('entrega/{id}', ['as' => 'entrega.edit', 'uses' => 'OrdersController@entrega_edit']);
+	Route::get('change_status_order/{id}', ['as' => 'change_status_order', 'uses' => 'OrdersController@changeStatusOrder']);
+	Route::put('update_status/{id}', ['as' => 'update_status_order', 'uses' => 'OrdersController@updateStatus']);
 });
 
 Route::group(['prefix'=>'logistics', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Logistics'], function(){
