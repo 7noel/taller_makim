@@ -246,7 +246,11 @@ class OrderRepo extends BaseRepo{
 	
 	public function ordersRecepcion()
 	{
-		return $this->model->where('order_type', 'output_orders')->with('car.modelo.brand')->orderBy('created_at', 'desc')->get();
+		return $this->model->where('order_type', 'inventory')->with('car.modelo.brand')->orderBy('created_at', 'desc')->get();
+	}
+	public function withoutSlug()
+	{
+		return Order::where('slug', '')->withTrashed()->get();
 	}
 
 }

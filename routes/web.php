@@ -39,7 +39,7 @@ Auth::routes(['verify' => true]);
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
 Route::get('/panel', 'Operations\OrdersController@panel')->name('panel');
 Route::get('/finances/companies/register', 'Finances\CompanyController@register')->name('companies.register');
-Route::get('generate_slug', ['as' => 'generate_slug','uses' => 'Operations\CarsController@generateSlug']);
+Route::get('generate_slug', ['as' => 'generate_slug','uses' => 'Operations\OrdersController@generateSlug']);
 
 // Route::get('/home', 'HomeController@index');
 Route::get('listarProvincias/{departamento}', ['as' => 'ajaxprovincias', 'uses' => 'Admin\UbigeosController@ajaxProvincias']);

@@ -78,6 +78,7 @@ class ComposerServiceProvider extends ServiceProvider
             'poll' => '<i class="fas fa-poll"></i>',
             'store' => '<i class="fas fa-store"></i>',
             'view' => '<i class="fas fa-eye"></i>',
+            'view-close' => '<i class="fa-solid fa-eye-slash"></i>',
             'add' => '<i class="fas fa-plus"></i>',
             'edit' => '<i class="fas fa-pencil-alt"></i>',
             'remove' => '<i class="far fa-trash-alt"></i>',
@@ -105,6 +106,7 @@ class ComposerServiceProvider extends ServiceProvider
             'invoice' => '<i class="fas fa-file-invoice"></i>',
             'close' => '<i class="fas fa-times"></i>',
             'car' => '<i class="fas fa-car"></i>',
+            'whatsapp' => '<i class="fa-brands fa-whatsapp"></i>',
         ];
     }
 

@@ -61,6 +61,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->text('comment');
             $table->json('inventory')->nullable();
+            $table->string('slug');
             $table->bigInteger('my_company')->unsigned();
 
             $table->foreign('my_company')->references('id')->on('companies');

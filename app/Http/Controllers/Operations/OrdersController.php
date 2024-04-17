@@ -224,7 +224,7 @@ class OrdersController extends Controller {
 		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = ['' => 'Seleccionar'];
 		$bs_shipper = ['' => 'Seleccionar'];
-		return view('operations.taller.recepcion_crear', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
+		return view('operations.inventory.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
 	}
 
 	public function recepcion_edit($id)
@@ -288,6 +288,20 @@ class OrdersController extends Controller {
 		}
 		return redirect()->route('home2');
 	}
+
+	public function generateSlug()
+	{
+		$orders = $this->repo->withoutSlug();
+		//dd($orders);
+		$bits = 24;
+		foreach ($orders as $key => $order) {
+			$order->slug = bin2hex(random_bytes($bits));
+			// $order->slug = 24;
+			$order->save();
+		}
+		return 'Fin';
+	}
+
 	public function orderClient($slug)
 	{
 		$action = 'cliente';
