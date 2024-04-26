@@ -13,6 +13,16 @@
 	</div>
 </div>
 
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+	<li class="nav-item" role="presentation">
+		<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Inventario</a>
+	</li>
+	<li class="nav-item" role="presentation">
+		<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Imagen</a>
+	</li>
+</ul>
+<div class="tab-content mt-2" id="myTabContent">
+	<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 		<div class="form-row">
 			<div class="col-md-1 col-sm-2">
 				{!! Form::label('sn', 'OT') !!}
@@ -116,7 +126,8 @@
 				</div>
 			</div>
 		</div>
-
+	</div>
+	<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 		<input type="hidden" id="mi_ot" value="{{ (isset($model) and \Storage::disk('public')->exists('ot_'.$model->id.'.jpg'))? $model->id : '' }}">
 		<input type="color"  class="js-color-picker color-picker" value="#fa0000">
 		<input type="range" class="js-line-range" min="4" max="30" value="4">
@@ -126,8 +137,10 @@
 		<button type="button" class="btn btn-sm btn-light" id="btn-reset">Limpiar imagen</button>
 
 		<div id="my-image-editor" width="600" height="300">
-			<canvas class="js-paint paint-canvas" id="canvas"></canvas>
+			<canvas class="js-paint paint-canvas" id="canvas" style="max-widt=100%"></canvas>
 		</div>
+	</div>
+</div>
 
 <script>
 const loadImage = (canvas, image_url) => {
@@ -139,6 +152,7 @@ const loadImage = (canvas, image_url) => {
 		imgHeight = this.height
 		canvas.width = imgWidth
 		canvas.height = imgHeight
+		canvas.style.width = '90%'
 		context.drawImage(this, 0, 0, imgWidth, imgHeight)
 		context.lineCap = 'round'
 		context.strokeStyle = '#fa0000'
@@ -179,23 +193,24 @@ lineWidthRange.addEventListener( 'input', event => {
     context.lineWidth = width
 })
 
-let x = 0, y = 0
-let isMouseDown = false
+let x = 0, y = 0;
+let isMouseDown = false;
 
 const stopDrawing = () => { isMouseDown = false; }
 const startDrawing = event => {
-    isMouseDown = true;
-	[x, y] = [event.offsetX, event.offsetY]
+    isMouseDown = true;   
+   [x, y] = [event.offsetX, event.offsetY];  
 }
+
 var newX = 0
 var newY = 0
 
 const drawLine = event => {
     if ( isMouseDown ) {
-		let posicion = canvas.getBoundingClientRect()
+    	let posicion = canvas.getBoundingClientRect()
 		let correccionX = posicion.x;
 		let correccionY = posicion.y;
-        if (event.changedTouches == undefined) {
+		if (event.changedTouches == undefined) {
             // Versión ratón
             newX = event.offsetX;
             newY = event.offsetY;
@@ -204,21 +219,20 @@ const drawLine = event => {
             newX = event.changedTouches[0].pageX - correccionX;
             newY = event.changedTouches[0].pageY - correccionY;
         }
-        context.beginPath()
-        context.moveTo( x, y )
-        context.lineTo( newX, newY )
+        context.beginPath();
+        context.moveTo( x, y );
+        context.lineTo( newX, newY );
         context.stroke();
-        [x, y] = [newX, newY];
-        // x = newX
-        // y = newY
+        //[x, y] = [newX, newY];
+        x = newX;
+        y = newY;
     }
 }
 
-canvas.addEventListener('mousedown', startDrawing)
-canvas.addEventListener('mousemove', drawLine)
-canvas.addEventListener('mouseup', stopDrawing)
-canvas.addEventListener('mouseout', stopDrawing)
-
+canvas.addEventListener( 'mousedown', startDrawing );
+canvas.addEventListener( 'mousemove', drawLine );
+canvas.addEventListener( 'mouseup', stopDrawing );
+canvas.addEventListener( 'mouseout', stopDrawing );
 // Eventos pantallas táctiles
 canvas.addEventListener('touchstart', startDrawing)
 canvas.addEventListener('touchmove', drawLine)
