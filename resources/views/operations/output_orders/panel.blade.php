@@ -40,12 +40,34 @@ $models_7 = $models->where('status', 'ENTR');
 				</li>
 			</ul>
 			<div class="tab-content" id="myTabContent">
+				<!-- Modal -->
+				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLabel">Enviar Mensaje</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				      	<label for="mobile">Celular</label>
+				        <input type="number" id="mobile">
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+				        <a href="#" target="_blank" class="btn btn-outline-success" id="btn-whatsapp">{!! $icons['whatsapp'] !!} Whatsapp</a>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+
 				<div class="tab-pane fade show active" id="recepcion" role="tabpanel" aria-labelledby="recepcion-tab">
-					<h3>RECEPCIÓN <a href="{{ route('recepcion.create') }}" type="button" class="btn btn-primary btn-sm btn-circle">{!! $icons['add'] !!}</a></h3>
+					<h3>RECEPCIÓN <a href="{{ route('inventory.create') }}" type="button" class="btn btn-primary btn-sm btn-circle">{!! $icons['add'] !!}</a></h3>
 					<div class="row">
 						@foreach ($models_1 as $model)
 						@php
-						$texto = "Hola, Bienvenido a ".env('APP_NAME').". Gracias por preferirnos. Estamos a punto de ingresar tu vehículo {$model->car->modelo->brand->name} {$model->car->modelo->name} placa: {$model->car->placa}, es necesario aprobar el ingreso al taller en el siguiente link ".route( 'order_client' , $model->slug);
+						$texto = "Hola, Bienvenido a ".env('APP_NAME').". Gracias por preferirnos. Estamos a punto de ingresar tu vehículo {$model->car->modelo->brand->name} {$model->car->modelo->name} placa: {$model->car->placa}, es necesario aprobar el ingreso al taller en el siguiente link: ".route( 'order_client' , $model->slug);
 						$status_logs = collect($model->status_log);
 						if( $status_logs->isNotEmpty() ) {
 							$last_log = $status_logs->last();
@@ -59,8 +81,13 @@ $models_7 = $models->where('status', 'ENTR');
 							<div class="card">
 								<div class="card-body">
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
-										<a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
-										<a href="{{ route( 'recepcion.edit' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<input class="input_mobile" type="hidden" value="{{ $model->company->mobile }}">
+										<!-- Button trigger modal -->
+										<button type="button" class="btn btn-outline-info btn-sm btn-circle btn-modal-mobile" data-toggle="modal" data-target="#exampleModal">
+										  {!! $icons['whatsapp'] !!}
+										</button>
+										{{-- <a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a> --}}
+										<a href="{{ route( 'inventory.edit' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
@@ -201,7 +228,22 @@ $models_7 = $models->where('status', 'ENTR');
 	</div>
 </div>
 
-
+<script>
+$(document).ready(function () {
+	var texto = "{{ $texto }}"
+    $(".btn-modal-mobile").click(function (e) {
+    	console.log($(this).parent().find('.input_mobile').val())
+		$('#mobile').val($(this).parent().find('.input_mobile').val())
+    	mobile = $('#mobile').val()
+    	$("#btn-whatsapp").attr('href', `https://wa.me/+51${mobile}?text=${texto}`)
+        
+    })
+    $("#mobile").change(function (e) {
+    	mobile = $('#mobile').val()
+    	$("#btn-whatsapp").attr('href', `https://wa.me/+51${mobile}?text=${texto}`)
+    })
+})
+</script>
 
 @endsection
 

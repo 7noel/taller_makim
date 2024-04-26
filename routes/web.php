@@ -168,13 +168,15 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 
 	Route::get('orden_cliente/{slug}', ['as' => 'order_client', 'uses' => 'Operations\OrdersController@orderClient']);
 	
-	Route::get('recepcion_crear', ['as' => 'recepcion.create', 'uses' => 'OrdersController@recepcion_crear']);
-	Route::get('recepcion_edit/{id}', ['as' => 'recepcion.edit', 'uses' => 'OrdersController@recepcion_edit']);
-	Route::get('recepcion_by_car/{car_id}', ['as' => 'recepcion_by_car', 'uses' => 'OrdersController@recepcionByCar']);
-	Route::get('diagnostico/{id}', ['as' => 'diagnostico.edit', 'uses' => 'OrdersController@diagnostico_edit']);
-	Route::get('repuestos/{id}', ['as' => 'repuestos.edit', 'uses' => 'OrdersController@repuestos_edit']);
-	Route::get('aprobacion/{id}', ['as' => 'aprobacion.edit', 'uses' => 'OrdersController@aprobacion_edit']);
-	Route::get('controlcalidad/{id}', ['as' => 'controlcalidad.edit', 'uses' => 'OrdersController@controlcalidad_edit']);
+	Route::resource('inventory','OrdersController');
+	//Route::get('recepcion_crear', ['as' => 'reception.create', 'uses' => 'OrdersController@recepcion_crear']);
+	Route::post('recepcion_store', ['as' => 'reception.store', 'uses' => 'OrdersController@store']);
+	Route::get('recepcion_edit/{id}', ['as' => 'reception.edit', 'uses' => 'OrdersController@recepcion_edit']);
+	Route::get('recepcion_by_car/{car_id}', ['as' => 'reception_by_car', 'uses' => 'OrdersController@recepcionByCar']);
+	Route::get('diagnostico/{id}', ['as' => 'diagnostic.edit', 'uses' => 'OrdersController@diagnostico_edit']);
+	Route::get('repuestos/{id}', ['as' => 'products.edit', 'uses' => 'OrdersController@repuestos_edit']);
+	Route::get('aprobacion/{id}', ['as' => 'approbation.edit', 'uses' => 'OrdersController@aprobacion_edit']);
+	Route::get('controlcalidad/{id}', ['as' => 'qc.edit', 'uses' => 'OrdersController@controlcalidad_edit']);
 	Route::get('entrega/{id}', ['as' => 'entrega.edit', 'uses' => 'OrdersController@entrega_edit']);
 	Route::get('change_status_order/{id}', ['as' => 'change_status_order', 'uses' => 'OrdersController@changeStatusOrder']);
 	Route::put('update_status/{id}', ['as' => 'update_status_order', 'uses' => 'OrdersController@updateStatus']);

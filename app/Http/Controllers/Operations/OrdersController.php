@@ -217,6 +217,7 @@ class OrdersController extends Controller {
 
 	public function recepcion_crear()
 	{
+		//dd(\Request::route()->getName());
 		$action = "create";
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();

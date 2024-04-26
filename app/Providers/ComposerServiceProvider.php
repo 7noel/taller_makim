@@ -365,6 +365,16 @@ class ComposerServiceProvider extends ServiceProvider
                 'edit.update'=>'Actualizar Orden de Trabajo',
                 'edit.delete'=>'Eliminar Orden de Trabajo',
             ],
+            'inventory' => [
+                'index'=>'Inventarios',
+                'index.create'=>'Crear Inventario',
+                'create'=>'Nueva Inventario',
+                'create.create'=>'Crear Inventario',
+                'show'=>'Vizualizando Inventario:',
+                'edit'=>'Editar Inventario: ',
+                'edit.update'=>'Actualizar Inventario',
+                'edit.delete'=>'Eliminar Inventario',
+            ],
 
             'input_quotes' => [
                 'index'=>'Requerimientos',
