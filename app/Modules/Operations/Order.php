@@ -21,8 +21,10 @@ class Order extends Model implements Auditable
 		'aprobacion' => 'object',
 		'reparacion' => 'object',
 		'control_calidad' => 'object',
+		
 		'status_log' => 'object',
 		'custom_details' => 'object',
+
 		'diag_at' => 'datetime',
 		'repu_at' => 'datetime',
 		'approved_at' => 'datetime',
@@ -30,6 +32,13 @@ class Order extends Model implements Auditable
 		'checked_at' => 'datetime',
 		'send_at' => 'datetime',
 	];
+	protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->slug = generateSlug(); // Generates a random string of 10 characters
+        });
+    }
+
 	public function scopeName($query, $name){
 		if (trim($name) != "") {
 			$query->where('number', 'LIKE', "%$name%")->orWhere('created_at', 'LIKE', "%name%");

@@ -84,6 +84,15 @@ return array(
 	'proof_status' => ['PEND' => 'PEND', 'ERROR' => 'ERROR', 'SUNAT' => 'SUNAT', 'PANUL' => 'PANUL', 'ANUL' => 'ANUL'],
 	'quote_status' => ['PEND' => 'PEND', 'APROB' => 'APROB', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
 	'order_status' => ['ENPRG' => 'ENPRG', 'COMP' => 'COMP', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
+
+	'inventory_status' => ['PEND' => 'RECEPCION', 'DIAG' => 'DIAGNÓSTICO', 'REPU' => 'REPUESTOS', 'APROB' => 'APROBACION', 'REPAR' => 'REPARACIÓN', 'CONTR' => 'CONTROL DE CALIDAD', 'ENTR' => 'ENTREGA', 'ANUL' => 'ANULADO', 'CERR' => 'CERR'],
+	'inventory_status_PEND' => ['DIAG' => 'DIAGNÓSTICO'],
+	'inventory_status_DIAG' => ['REPU' => 'REPUESTOS'],
+	'inventory_status_REPU' => ['APROB' => 'APROBACION'],
+	'inventory_status_APROB' => ['DIAG' => 'DIAGNÓSTICO', 'REPU' => 'REPUESTOS', 'REPAR' => 'REPARACIÓN'],
+	'inventory_status_REPAR' => ['CONTR' => 'CONTROL DE CALIDAD'],
+	'inventory_status_CONTR' => ['REPAR' => 'REPARACIÓN', 'ENTR' => 'ENTREGA'],
+
 	'appointment_status' => ['PEND' => 'PEND', 'EFECT' => 'EFECT', 'ANUL' => 'ANUL'],
 	'tax' => ['igv' => 18],
 	'table_sunat' => [

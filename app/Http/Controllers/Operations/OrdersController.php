@@ -257,7 +257,7 @@ class OrdersController extends Controller {
 	public function changeStatusOrder($id)
 	{
 		$model = $this->repo->findOrFail($id);
-		return view('operations.taller.change_status_order', compact('model'));
+		return view('operations.inventory.change_status', compact('model'));
 	}
 	public function updateStatus($id)
 	{

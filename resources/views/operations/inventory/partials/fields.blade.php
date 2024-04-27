@@ -131,7 +131,7 @@ const loadImage = (canvas, image_url) => {
 		imgHeight = this.height
 		canvas.width = imgWidth
 		canvas.height = imgHeight
-		canvas.style.width = '90%'
+		//canvas.style.width = '90%'
 		context.drawImage(this, 0, 0, imgWidth, imgHeight)
 		context.lineCap = 'round'
 		context.strokeStyle = '#fa0000'

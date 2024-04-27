@@ -40,19 +40,26 @@ if (! function_exists('getTipoCambioMes')) {
 	function getTipoCambioMes($y, $m)
 	{
 		$token = 'apis-token-1023.w5G1lEE2hQQ-mO6JwuSY3K812hvT0Ttl';
-	   $ch = curl_init();
-	   curl_setopt($ch, CURLOPT_URL, "https://api.apis.net.pe/v1/tipo-cambio-sunat?month=$m&year=$y");
-	   curl_setopt(
-	      $ch, CURLOPT_HTTPHEADER, array(
-	       'Referer: https://apis.net.pe/tipo-de-cambio-sunat-api',
-	       'Authorization: Bearer ' . $token
-	      )
-	   );
-	   curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-	   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	   $respuesta  = curl_exec($ch);
-	   curl_close($ch);
-	   return json_decode($respuesta);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, "https://api.apis.net.pe/v1/tipo-cambio-sunat?month=$m&year=$y");
+		curl_setopt(
+			$ch, CURLOPT_HTTPHEADER, array(
+			'Referer: https://apis.net.pe/tipo-de-cambio-sunat-api',
+			'Authorization: Bearer ' . $token
+			)
+		);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$respuesta  = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($respuesta);
+	}
+}
+
+if (! function_exists('generateSlug')) {
+	function generateSlug($bits = 24)
+	{
+		return bin2hex(random_bytes($bits));
 	}
 }

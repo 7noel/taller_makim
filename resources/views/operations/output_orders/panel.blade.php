@@ -80,8 +80,7 @@ $models_7 = $models->where('status', 'ENTR');
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
-										<input class="input_mobile" type="hidden" value="{{ $model->company->mobile }}">
+									<h5>
 										<!-- Button trigger modal -->
 										<button type="button" class="btn btn-outline-info btn-sm btn-circle btn-modal-mobile" data-toggle="modal" data-target="#exampleModal">
 										  {!! $icons['whatsapp'] !!}
@@ -90,8 +89,11 @@ $models_7 = $models->where('status', 'ENTR');
 										<a href="{{ route( 'inventory.edit' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
+									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}</h5>
 									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
 									<p class="card-text {{ $class }}">{{ $last_log->message }} {{ $last_log->created_at->diffForHumans() }}</p>
+									<input class="input_mobile" type="hidden" value="{{ $model->company->mobile }}">
+									<input class="input_texto" type="hidden" value="{{ $texto }}">
 								</div>
 							</div>
 						</div>
@@ -230,17 +232,17 @@ $models_7 = $models->where('status', 'ENTR');
 
 <script>
 $(document).ready(function () {
-	var texto = "{{ $texto }}"
     $(".btn-modal-mobile").click(function (e) {
-    	console.log($(this).parent().find('.input_mobile').val())
+		console.log($(this).parent().find('.input_mobile').val())
 		$('#mobile').val($(this).parent().find('.input_mobile').val())
     	mobile = $('#mobile').val()
-    	$("#btn-whatsapp").attr('href', `https://wa.me/+51${mobile}?text=${texto}`)
-        
+		window.texto = $(this).parent().find('.input_texto').val()
+		console.log(texto)
+    	$("#btn-whatsapp").attr('href', `https://wa.me/+51${mobile}?text=${window.texto}`)
     })
     $("#mobile").change(function (e) {
-    	mobile = $('#mobile').val()
-    	$("#btn-whatsapp").attr('href', `https://wa.me/+51${mobile}?text=${texto}`)
+		mobile = $('#mobile').val()
+    	$("#btn-whatsapp").attr('href', `https://wa.me/+51${mobile}?text=${window.texto}`)
     })
 })
 </script>
