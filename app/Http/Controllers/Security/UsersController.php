@@ -66,13 +66,23 @@ class UsersController extends Controller {
 	{
 		return view('auth.change_password');
 	}
-	public function updatePassword(ChangePasswordRequest $request)
-	{
-		$model = $this->repo->findOrFail(\Auth::user()->id);
-		$model->fill($request->all());
-		$model->save();
-		return redirect()->to('/');
-	}
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required',
+        ]);
+        $model = $this->repo->findOrFail(\Auth::user()->id);
+        if (!\Hash::check($request->current_password, $model->password)) {
+            return back()->withErrors('¡La contraseña actual no coincide!');
+        }
+        $model->password = $request->password;
+        $model->save();
+        return redirect()->to('/');
+    }
+
 	public function ajaxAutocomplete()
 	{
 		$term = \Input::get('term');

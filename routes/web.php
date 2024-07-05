@@ -37,9 +37,9 @@ Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'i
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
-Route::get('/panel', 'Operations\OrdersController@panel')->name('panel');
 Route::get('/finances/companies/register', 'Finances\CompanyController@register')->name('companies.register');
 Route::get('generate_slug', ['as' => 'generate_slug','uses' => 'Operations\OrdersController@generateSlug']);
+Route::get('orden_cliente/{slug}', ['as' => 'order_client', 'uses' => 'Operations\OrdersController@orderClient']);
 
 // Route::get('/home', 'HomeController@index');
 Route::get('listarProvincias/{departamento}', ['as' => 'ajaxprovincias', 'uses' => 'Admin\UbigeosController@ajaxProvincias']);
@@ -48,6 +48,9 @@ Route::get('excel_productos', ['as' => 'excel','uses' => 'Storage\ProductsContro
 Route::get('excel_servicios', ['as' => 'excel2','uses' => 'Storage\ProductsController@excel2']);
 
 Route::group(['middleware'=>['auth']], function(){
+	Route::get('change_password', ['as' => 'change_password', 'uses' => 'Security\UsersController@changePassword']);
+	Route::post('update_password', ['as' => 'update_password', 'uses'=>'Security\UsersController@updatePassword']);
+
 	Route::get('get_cpe/{id}', ['as' => 'output_vouchers.get_cpe', 'uses' => 'Finances\ProofsController@get_json_cpe']);
 	Route::get('send_cpe', ['as' => 'output_vouchers.send_email_cpe', 'uses' => 'Finances\ProofsController@send_email_cpe']);
 	Route::get('getCar/{placa}', ['as' => 'getCar', 'uses' => 'Operations\CarsController@getCar']);
@@ -123,8 +126,6 @@ Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'name
 });
 
 Route::group(['prefix'=>'guard', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Security'], function(){
-	Route::get('change_password', ['as' => 'change_password', 'uses' => 'UsersController@changePassword']);
-	Route::post('update_password', ['as'=>'update_password', 'uses'=>'UsersController@updatePassword']);
 	Route::resource('users','UsersController');
 	Route::resource('roles','RolesController');
 	Route::resource('permissions','PermissionsController');
@@ -166,7 +167,6 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::get('orders/inventory/{id}', ['as' => 'print_inventory','uses' => 'OrdersController@printInventory']);
 	Route::get('orders/createByCompany/{company_id}', ['as' => 'create_order_by_company','uses' => 'OrdersController@createByCompany']);
 
-	Route::get('orden_cliente/{slug}', ['as' => 'order_client', 'uses' => 'Operations\OrdersController@orderClient']);
 	
 	Route::resource('inventory','OrdersController');
 	//Route::get('recepcion_crear', ['as' => 'reception.create', 'uses' => 'OrdersController@recepcion_crear']);
@@ -180,6 +180,7 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::get('entrega/{id}', ['as' => 'entrega.edit', 'uses' => 'OrdersController@entrega_edit']);
 	Route::get('change_status_order/{id}', ['as' => 'change_status_order', 'uses' => 'OrdersController@changeStatusOrder']);
 	Route::put('update_status/{id}', ['as' => 'update_status_order', 'uses' => 'OrdersController@updateStatus']);
+	Route::get('panel', 'OrdersController@panel')->name('panel');
 });
 
 Route::group(['prefix'=>'logistics', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Logistics'], function(){

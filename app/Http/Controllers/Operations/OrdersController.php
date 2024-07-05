@@ -145,7 +145,7 @@ class OrdersController extends Controller {
 		// \PDF::setOptions(['isPhpEnabled' => true]);
 		$pdf = \PDF::loadView('pdfs.inventory', compact('model', 'cuentas'));
 		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
-		return $pdf->stream();
+		return $pdf->stream('Inventorio_'.$model->id.'.pdf');
 	}
 	/**
 	 * Envía Correo al generar cotización
@@ -199,7 +199,7 @@ class OrdersController extends Controller {
 	public function panel()
 	{
 		$models = $this->repo->ordersRecepcion();
-		return view('operations.output_orders.panel', compact('models'));
+		return view('operations.inventory.panel', compact('models'));
 	}
 
 	public function createByCar($car_id)
@@ -263,7 +263,7 @@ class OrdersController extends Controller {
 	{
 		$data = request()->all();
 		// dd($data['status']);
-		if ($data['action']=='cliente') {
+		if ($data['action'] == 'cliente') {
 			$mensaje['DIAG'][0] = 'Lamentamos que no estés de acuerdo con tu orden de trabajo, ahora tu asesor encargado se comunicará contigo, recuerda que estamos para servirte';
 			$mensaje['DIAG'][1] = 'Ahora tu orden de trabajo avanzará a la fase de diagnóstico, recibirás una nueva notificación cuando el diagnóstico se haya completado';
 			$mensaje['REPAR'][0] = 'Lamentamos que nuestro diagnóstico no haya sido oportuno, ahora tu asesor encargado se comunicará contigo, recuerda que estamos para servirte';
@@ -284,7 +284,7 @@ class OrdersController extends Controller {
 			}
 		}
 		$model = $this->repo->changeStatus($data, $id);
-		if ($data['action']=='cliente') {
+		if ($data['action'] == 'cliente') {
 			return view('operations.taller.cliente_respuesta', compact('icon', 'msj', 'title'));
 		}
 		return redirect()->route('home2');
@@ -307,7 +307,7 @@ class OrdersController extends Controller {
 	{
 		$action = 'cliente';
 		$model = $this->repo->findBySlug($slug);
-		return view('operations.taller.cliente', compact('model', 'action'));
+		return view('operations.inventory.client_inventory', compact('model', 'action'));
 	}
 	public function diagnostico_edit($id)
 	{

@@ -16,7 +16,7 @@ class Order extends Model implements Auditable
 	// 	'inventory' => 'array',
 	// ];
 	protected $casts = [
-		'inventory' => 'array',
+		'inventory' => 'object',
 		'diagnostico' => 'object',
 		'aprobacion' => 'object',
 		'reparacion' => 'object',

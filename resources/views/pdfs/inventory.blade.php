@@ -51,9 +51,9 @@
 			<strong class="label">Kilometraje::</strong><span class="data-header">{{ number_format($model->kilometraje) }} km</span>
 		</div>
 		<div>
-			<strong class="label">Responsable:</strong><span class="data-header-1">{{ $model->repairman->company_name }}</span>
-			@if(isset($model->inventory['entrega']) and trim($model->inventory['entrega'])!="")
-			<strong class="label">F. Entrega::</strong><span class="data-header">{{ date('d/m/Y', strtotime($model->inventory['entrega'])) }}</span>
+			<strong class="label">Responsable:</strong><span class="data-header-1">{{ isset($model->repairman->company_name) ? $model->repairman->company_name : '' }}</span>
+			@if(isset($model->inventory->entrega) and trim($model->inventory->entrega)!="")
+			<strong class="label">F. Entrega::</strong><span class="data-header">{{ date('d/m/Y', strtotime($model->inventory->entrega)) }}</span>
 			@endif
 		</div>
 		@if(trim($model->comment)!="")
@@ -67,7 +67,7 @@
 			<strong>Solicitudes del cliente:</strong>
 		</p>
 		<div>
-			<span>{!! nl2br($model->inventory['solicitud']) !!}</span>
+			<span>{!! nl2br($model->inventory->solicitud) !!}</span>
 		</div>
 	</div>
 		
@@ -85,7 +85,7 @@
 			@foreach (config('options.inventory.col_1') as $label)
 				<tr>
 					<td class='col-check border'>
-						{!! ((isset($model->inventory[$label]) and $model->inventory[$label]==true)) ? $check : " " !!}
+						{!! ((isset($model->inventory->$label) and $model->inventory->$label==true)) ? $check : " " !!}
 					</td>
 					<td class='col-description'>{{ $label }}</td>
 				</tr>
@@ -97,7 +97,7 @@
 			@foreach (config('options.inventory.col_2') as $label)
 				<tr>
 					<td class='col-check border'>
-						{!! ((isset($model->inventory[$label]) and $model->inventory[$label]==true)) ? $check : " " !!}
+						{!! ((isset($model->inventory->$label) and $model->inventory->$label==true)) ? $check : " " !!}
 					</td>
 					<td class='col-description'>{{ $label }}</td>
 				</tr>
@@ -109,14 +109,14 @@
 			@foreach (config('options.inventory.col_3') as $label)
 				<tr>
 					<td class='col-check border'>
-						{!! ((isset($model->inventory[$label]) and $model->inventory[$label]==true)) ? $check : " " !!}
+						{!! ((isset($model->inventory->$label) and $model->inventory->$label==true)) ? $check : " " !!}
 					</td>
 					<td class='col-description'>{{ $label }}</td>
 				</tr>
 			@endforeach
 			<?php 
-			if (isset($model->inventory['combustible'])) {
-				$comb = ($model->inventory['combustible']==0)?'E':(($model->inventory['combustible']==25)?'&frac14;':(($model->inventory['combustible']==50)?'&frac12;':(($model->inventory['combustible']==75)?'	&frac34;':'F')));
+			if (isset($model->inventory->combustible)) {
+				$comb = ($model->inventory->combustible==0)?'E':(($model->inventory->combustible==25)?'&frac14;':(($model->inventory->combustible==50)?'&frac12;':(($model->inventory->combustible==75)?'	&frac34;':'F')));
 			} else {
 				$comb = '';
 			}
@@ -138,9 +138,9 @@
 				<br>
 				Declaro no dejar ningún objeto de valor de ningún tipo y estar conforme con el inventario.
 			</div>
-			@if(isset($model->inventory['comprobante']) and trim($model->inventory['comprobante'])!="")
+			@if(isset($model->inventory->comprobante) and trim($model->inventory->comprobante)!="")
 			<div>
-				<p><strong>Cliente solicita:</strong><span> {{ $model->inventory['comprobante'] }}</span></p>
+				<p><strong>Cliente solicita:</strong><span> {{ $model->inventory->comprobante }}</span></p>
 			</div>
 			@endif
 			<div class="firmas">
