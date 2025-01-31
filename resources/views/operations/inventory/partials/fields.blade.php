@@ -125,7 +125,7 @@
         <input type="file" accept="image/*" id="photoInput" style="display:none;" capture="camera">
         <button type="button" class="btn btn-outline-primary" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
         <input type="file" accept="video/*" id="videoInput" style="display:none;" capture="camera">
-        <button type="button" class="btn btn-outline-primary" id="addVideo"><i class="fas fa-video"></i> Grabar Video</button>
+        <button type="button" style="display:none;" class="btn btn-outline-primary" id="addVideo"><i class="fas fa-video"></i> Grabar Video</button>
         
         <div class="media-container">
             <div id="imageView" class="image-view" style="display:none;">
