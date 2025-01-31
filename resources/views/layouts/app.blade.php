@@ -49,6 +49,50 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed&family=Roboto&family=Roboto+Condensed&display=swap" rel="stylesheet">
     <style>
+
+        .thumbnail {
+    position: relative;
+    cursor: pointer;
+    margin: 5px;
+    width: 100px; /* Ancho de la miniatura */
+    height: 56.25px; /* Proporción 16:9 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Evitar que se salgan las imágenes */
+    background-color: black; /* Fondo negro */
+    border-radius: 4px; /* Opcional: esquinas redondeadas */
+}
+
+.thumbnail img, .thumbnail video {
+    max-width: 100%; /* No exceder el ancho de la miniatura */
+    max-height: 100%; /* No exceder la altura de la miniatura */
+    object-fit: cover; /* Mantener la proporción */
+}
+.thumbnails {
+    display: flex;
+    flex-wrap: wrap; /* Permitir que se envuelvan las miniaturas */
+    justify-content: center; /* Centrar miniaturas */
+    margin-top: 10px; /* Espaciado superior */
+}
+
+        .remove-btn { position: absolute; top: 5px; right: 5px; }
+        .full-screen-btn { position: absolute; bottom: 5px; right: 5px; }
+        .media-container { background-color: gray; margin-top: 10px; }
+        .video-player, .image-view {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            overflow: hidden;
+        }
+        #videoPlayer video, #selectedImage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
         body{
             font-family: 'Encode Sans Condensed', sans-serif;
             /*font-family: 'Roboto', sans-serif;*/

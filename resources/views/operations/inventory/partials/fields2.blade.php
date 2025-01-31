@@ -108,7 +108,6 @@
 		</div>
 	</div>
 	<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-		{{--
 		<input type="hidden" id="mi_ot" value="{{ (isset($model) and \Storage::disk('public')->exists('ot_'.$model->id.'.jpg'))? $model->id : '' }}">
 		<input type="color"  class="js-color-picker color-picker" value="#fa0000">
 		<input type="range" class="js-line-range" min="4" max="30" value="4">
@@ -120,117 +119,10 @@
 		<div id="my-image-editor" width="600" height="300">
 			<canvas class="js-paint paint-canvas" id="canvas" style="max-widt=100%"></canvas>
 		</div>
-		--}}
-
-        <input type="file" accept="image/*" id="photoInput" style="display:none;" capture="camera">
-        <button type="button" class="btn btn-outline-primary" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
-        <input type="file" accept="video/*" id="videoInput" style="display:none;" capture="camera">
-        <button type="button" class="btn btn-outline-primary" id="addVideo"><i class="fas fa-video"></i> Grabar Video</button>
-        
-        <div class="media-container">
-            <div id="imageView" class="image-view" style="display:none;">
-                <img id="selectedImage" src="" alt="Imagen seleccionada">
-                <button class="btn btn-secondary full-screen-btn" id="fullScreenBtn"><i class="fas fa-expand"></i></button>
-            </div>
-            <div id="videoPlayer" class="video-player" style="display:none;">
-                <video class="embed-responsive-item" controls></video>
-            </div>
-        </div>
-        <div class="thumbnails d-flex flex-wrap mt-2"></div>
-
 	</div>
 </div>
+
 <script>
-    $(document).ready(function() {
-        $('#addPhoto').on('click', function() {
-            $('#photoInput').click();
-        });
-
-        $('#photoInput').on('change', function(event) {
-            const files = event.target.files;
-            const thumbnails = $('.thumbnails');
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    thumbnails.append(`
-                        <div class="thumbnail" onclick="showImage('${e.target.result}')">
-                            <img src="${e.target.result}" alt="Foto ${i + 1}">
-                            <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail(this)">X</button>
-                        </div>
-                    `);
-                    showImage(e.target.result);
-                };
-
-                reader.readAsDataURL(file);
-            }
-        });
-
-        $('#addVideo').on('click', function() {
-            $('#videoInput').click();
-        });
-
-        $('#videoInput').on('change', function(event) {
-            const files = event.target.files;
-            const thumbnails = $('.thumbnails');
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    thumbnails.append(`
-                        <div class="thumbnail" onclick="playVideo('${e.target.result}')">
-                            <video src="${e.target.result}" muted></video>
-                            <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail(this)">X</button>
-                        </div>
-                    `);
-                    playVideo(e.target.result);
-                };
-
-                reader.readAsDataURL(file);
-            }
-        });
-    });
-
-    function showImage(src) {
-        $('#videoPlayer').hide();
-        $('#selectedImage').attr('src', src);
-        $('#imageView').show();
-    }
-
-    function playVideo(src) {
-        $('#imageView').hide();
-        $('#videoPlayer video').attr('src', src).show();
-        $('#videoPlayer').show();
-    }
-
-    $('#fullScreenBtn').on('click', function() {
-        const img = document.getElementById('selectedImage');
-        if (img) {
-            if (img.requestFullscreen) {
-                img.requestFullscreen();
-            } else if (img.mozRequestFullScreen) {
-                img.mozRequestFullScreen();
-            } else if (img.webkitRequestFullscreen) {
-                img.webkitRequestFullscreen();
-            } else if (img.msRequestFullscreen) {
-                img.msRequestFullscreen();
-            }
-        }
-    });
-
-    function removeThumbnail(button) {
-        if (confirm("¿Estás seguro de que quieres eliminar esta foto?")) {
-            $(button).closest('.thumbnail').remove();
-        }
-    }
-
-</script>
-
-<script>/*
 const loadImage = (canvas, image_url) => {
 	context = canvas.getContext("2d")
 	var img = new Image()
@@ -328,5 +220,5 @@ canvas.addEventListener('touchmove', drawLine)
 document.getElementById("btn-reset").onclick = function() {  
 	loadImage(canvas, '/img/inventory.jpeg')
 }
-*/
+
 </script>

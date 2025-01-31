@@ -15,6 +15,10 @@ use App\Modules\Finances\Exchange;
 Route::get('houses', function () {
     return view('welcome');
 });
+
+Route::get('demo2', function () {
+	return view('demo2');
+});
 Route::get('/', 'HomeController@index');
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 

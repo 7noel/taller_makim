@@ -70,6 +70,7 @@ class OrdersController extends Controller {
 		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = ['' => 'Seleccionar'];
 		$bs_shipper = ['' => 'Seleccionar'];
+		// return view('operations.inventory.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
 		return view('partials.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
 	}
 
