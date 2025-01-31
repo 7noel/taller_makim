@@ -107,7 +107,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+	<div class="tab-pane fade mb-5 text-center" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 		{{--
 		<input type="hidden" id="mi_ot" value="{{ (isset($model) and \Storage::disk('public')->exists('ot_'.$model->id.'.jpg'))? $model->id : '' }}">
 		<input type="color"  class="js-color-picker color-picker" value="#fa0000">
