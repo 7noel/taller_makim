@@ -17,7 +17,7 @@ class TableRepo extends BaseRepo{
 		
 		return $data;
 	}
-	public function index2($filter = false, $search = false, $type)
+	public function indexTable($filter = false, $search = false, $type)
 	{
 		if ($filter and $search) {
 			return $this->model->$filter($search)->where('type', $type)->orderBy("$filter", 'ASC')->paginate();
