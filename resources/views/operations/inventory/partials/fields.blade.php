@@ -73,31 +73,73 @@
 		</div>
 		
 		<div class="form-row">
-			<div class="col-sm-3">
-			@foreach (config('options.inventory.col_1') as $label)
-				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="{{$label}}" name="inventory[{{$label}}]" {{((isset($model->inventory->$label) and $model->inventory->$label==true))?'checked':''}}>
-					<label class="custom-control-label" for="{{$label}}">{{ $label }}</label>
-				</div>
+
+  <style>
+    .radio-green input[type="radio"] + label { color: green; }
+    .radio-amber input[type="radio"] + label { color: orange; }
+    .radio-red input[type="radio"] + label { color: red; }
+    .radio-black input[type="radio"] + label { color: black; }
+
+    /* Alinear en una sola línea para PC */
+    @media (min-width: 768px) {
+      .checklist-item {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        align-items: start;
+        gap: 10px;
+        padding: 5px 0;
+        transition: background-color 0.2s;
+      }
+      .checklist-item:hover {
+        background-color: rgba(0, 0, 0, 0.075); /* Similar al efecto de .table-hover */
+      }
+      .checklist-item .item-name {
+        word-wrap: break-word;
+        max-width: 100%;
+      }
+      .checklist-item .options {
+        display: flex;
+        justify-content: space-evenly;
+      }
+    }
+
+    /* Separación entre ítems en móviles */
+    @media (max-width: 767px) {
+      .checklist-item {
+        margin-bottom: 20px;
+      }
+    }
+
+    .comment {
+      max-width: 100%;
+    }
+  </style>
+			@foreach($checklist_details as $index => $checklist)
+                <div class="checklist-item">
+                  <span class="item-name">{{ $checklist->name }}</span>
+                  <div class="options">
+                    <div class="form-check radio-green">
+                      <input class="form-check-input" type="radio" name="item-{{ $index }}" id="correcto-{{ $index }}" value="correcto">
+                      <label class="form-check-label" for="correcto-{{ $index }}">Correcto</label>
+                    </div>
+                    <div class="form-check radio-amber">
+                      <input class="form-check-input" type="radio" name="item-{{ $index }}" id="recomendable-{{ $index }}" value="recomendable">
+                      <label class="form-check-label" for="recomendable-{{ $index }}">Recomendable</label>
+                    </div>
+                    <div class="form-check radio-red">
+                      <input class="form-check-input" type="radio" name="item-{{ $index }}" id="urgente-{{ $index }}" value="urgente">
+                      <label class="form-check-label" for="urgente-{{ $index }}">Urgente</label>
+                    </div>
+                    <div class="form-check radio-black">
+                      <input class="form-check-input" type="radio" name="item-{{ $index }}" id="no-aplica-{{ $index }}" value="no_aplica">
+                      <label class="form-check-label" for="no-aplica-{{ $index }}">No Aplica</label>
+                    </div>
+                  </div>
+                  <input class="form-control form-control-sm comment" type="text" name="comentario-{{ $index }}" placeholder="Escribe un comentario">
+                </div>
 			@endforeach
-			</div>
-			<div class="col-sm-3">
-			@foreach (config('options.inventory.col_2') as $label)
-				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="{{$label}}" name="inventory[{{$label}}]" {{((isset($model->inventory->$label) and $model->inventory->$label==true))?'checked':''}}>
-					<label class="custom-control-label" for="{{$label}}">{{ $label }}</label>
-				</div>
-			@endforeach
-			</div>
-			<div class="col-sm-3">
-			@foreach (config('options.inventory.col_3') as $label)
-				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="{{$label}}" name="inventory[{{$label}}]" {{((isset($model->inventory->$label) and $model->inventory->$label==true))?'checked':''}}>
-					<label class="custom-control-label" for="{{$label}}">{{ $label }}</label>
-				</div>
-			@endforeach
-			</div>
 		</div>
+
 		<div class="form-row mt-2">
 			<div class="col-sm-12">
 				<div id="field_inventory_combustible" class="form-group">
@@ -141,73 +183,69 @@
 	</div>
 </div>
 <script>
-    $(document).ready(function() {
-        $('#addPhoto').on('click', function() {
-            $('#photoInput').click();
-        });
+$(document).ready(function () {
+    let imageCount = 0;
+    let videoCount = 0;
 
-        $('#photoInput').on('change', function(event) {
-            const files = event.target.files;
-            const thumbnails = $('.thumbnails');
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    thumbnails.append(`
-                        <div class="thumbnail" onclick="showImage('${e.target.result}')">
-                            <img src="${e.target.result}" alt="Foto ${i + 1}">
-                            <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail(this)">X</button>
-                        </div>
-                    `);
-                    showImage(e.target.result);
-                };
-
-                reader.readAsDataURL(file);
-            }
-        });
-
-        $('#addVideo').on('click', function() {
-            $('#videoInput').click();
-        });
-
-        $('#videoInput').on('change', function(event) {
-            const files = event.target.files;
-            const thumbnails = $('.thumbnails');
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    thumbnails.append(`
-                        <div class="thumbnail" onclick="playVideo('${e.target.result}')">
-                            <video src="${e.target.result}" muted></video>
-                            <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail(this)">X</button>
-                        </div>
-                    `);
-                    playVideo(e.target.result);
-                };
-
-                reader.readAsDataURL(file);
-            }
-        });
+    $('#addPhoto').on('click', function () {
+        $('#photoInput').click();
     });
 
-    function showImage(src) {
-        $('#videoPlayer').hide();
-        $('#selectedImage').attr('src', src);
-        $('#imageView').show();
-    }
+    $('#photoInput').on('change', function (event) {
+        const files = event.target.files;
+        const thumbnails = $('.thumbnails');
 
-    function playVideo(src) {
-        $('#imageView').hide();
-        $('#videoPlayer video').attr('src', src).show();
-        $('#videoPlayer').show();
-    }
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
 
-    $('#fullScreenBtn').on('click', function() {
+            reader.onload = function (e) {
+                const imageId = `image-${imageCount}`;
+                thumbnails.append(`
+                    <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('${e.target.result}')">
+                        <img src="${e.target.result}" alt="Foto ${imageCount + 1}">
+                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
+                    </div>
+                `);
+                $('#vehicleForm').append(`<input type="hidden" id="input-${imageId}" name="image[${imageCount}]" value="${e.target.result}">`);
+                imageCount++;
+                showImage(e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    $('#addVideo').on('click', function () {
+        $('#videoInput').click();
+    });
+
+    $('#videoInput').on('change', function (event) {
+        const files = event.target.files;
+        const thumbnails = $('.thumbnails');
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const videoId = `video-${videoCount}`;
+                thumbnails.append(`
+                    <div class="thumbnail" id="thumbnail-${videoId}" onclick="playVideo('${e.target.result}')">
+                        <video src="${e.target.result}" muted></video>
+                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${videoId}')">X</button>
+                    </div>
+                `);
+                $('#vehicleForm').append(`<input type="hidden" id="input-${videoId}" name="video[${videoCount}]" value="${e.target.result}">`);
+                videoCount++;
+                playVideo(e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    $('#fullScreenBtn').on('click', function () {
         const img = document.getElementById('selectedImage');
         if (img) {
             if (img.requestFullscreen) {
@@ -221,13 +259,26 @@
             }
         }
     });
+});
 
-    function removeThumbnail(button) {
-        if (confirm("¿Estás seguro de que quieres eliminar esta foto?")) {
-            $(button).closest('.thumbnail').remove();
-        }
+function showImage(src) {
+    $('#videoPlayer').hide();
+    $('#selectedImage').attr('src', src);
+    $('#imageView').show();
+}
+
+function playVideo(src) {
+    $('#imageView').hide();
+    $('#videoPlayer video').attr('src', src).show();
+    $('#videoPlayer').show();
+}
+
+function removeThumbnail(id) {
+    if (confirm("¿Estás seguro de que quieres eliminar esta foto o video?")) {
+        $(`#thumbnail-${id}`).remove();
+        $(`#input-${id}`).remove();
     }
-
+}
 </script>
 
 <script>/*

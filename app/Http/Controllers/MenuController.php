@@ -81,6 +81,7 @@ class MenuController extends Controller
                 ['name' => 'Marcas', 'route' => 'brands.index', 'div' => '1'],
                 ['name' => 'Vehículos', 'route' => 'cars.index'],
                 ['name' => 'Clientes', 'route' => 'clients.index'],
+                ['name' => 'Checklist', 'route' => 'checklist.index'],
                 // ['name' => 'Transportistas', 'route' => 'shippers.index'],
             ],
             'Logística'=>[

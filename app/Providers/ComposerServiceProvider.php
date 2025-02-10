@@ -114,6 +114,16 @@ class ComposerServiceProvider extends ServiceProvider
     {
         // $pre = $this->controller;
         $arr = [
+            'checklist' => [
+                'index'=>'Checklists',
+                'index.create'=>'Crear Checklist',
+                'create'=>'Nueva Checklist:',
+                'create.create'=>'Crear Checklist',
+                'show'=>'Vizualizando Checklist',
+                'edit'=>'Editar Checklist: ',
+                'edit.update'=>'Actualizar Checklist',
+                'edit.delete'=>'Eliminar Checklist',
+            ],
             'polls' => [
                 'index'=>'Encuestas',
                 'index.create'=>'Crear Encuesta',

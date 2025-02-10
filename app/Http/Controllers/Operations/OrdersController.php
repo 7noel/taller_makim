@@ -5,6 +5,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use App\Modules\Operations\ChecklistDetailRepo;
 use App\Modules\Operations\OrderRepo;
 use App\Modules\Finances\PaymentConditionRepo;
 use App\Modules\Finances\CompanyRepo;
@@ -18,11 +19,12 @@ class OrdersController extends Controller {
 	protected $companyRepo;
 	protected $bankRepo;
 
-	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo) {
+	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo) {
 		$this->repo = $repo;
 		$this->paymentConditionRepo = $paymentConditionRepo;
 		$this->companyRepo = $companyRepo;
 		$this->bankRepo = $bankRepo;
+		$this->checklistDetailRepo = $checklistDetailRepo;
 	}
 	public function index()
 	{
@@ -70,8 +72,9 @@ class OrdersController extends Controller {
 		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = ['' => 'Seleccionar'];
 		$bs_shipper = ['' => 'Seleccionar'];
+		$checklist_details = $this->checklistDetailRepo->all2();
 		// return view('operations.inventory.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
-		return view('partials.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
+		return view('partials.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details'));
 	}
 
 	public function store()
@@ -146,7 +149,7 @@ class OrdersController extends Controller {
 		// \PDF::setOptions(['isPhpEnabled' => true]);
 		$pdf = \PDF::loadView('pdfs.inventory', compact('model', 'cuentas'));
 		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
-		return $pdf->stream('Inventorio_'.$model->id.'.pdf');
+		return $pdf->stream('Inventario_'.$model->id.'.pdf');
 	}
 	/**
 	 * Envía Correo al generar cotización

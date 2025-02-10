@@ -153,6 +153,7 @@ Route::group(['prefix'=>'humanresources', 'middleware'=>['auth', 'permissions']]
 Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Operations'], function(){
 	Route::resource('polls','PollController');
 	Route::get('reportenacimiento', ['as'=>'cars.nacimiento', 'uses' => 'CarsController@reportNacimiento']);
+	Route::resource('checklist','ChecklistController');
 	Route::resource('brands','BrandsController');
 	Route::resource('cars','CarsController');
 	Route::get('cars/create_by_client/{client_id}', ['as' => 'cars.create_by_client', 'uses' => 'CarsController@createByClient']);

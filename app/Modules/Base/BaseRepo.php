@@ -15,6 +15,9 @@ abstract class BaseRepo{
 	public function find($id){
 		return $this->model->where('my_company', session('my_company')->id)->where('id', $id)->first();
 	}
+	public function find2($id){
+		return $this->model->where('id', $id)->first();
+	}
 	public function findOrFail($id){
 		return $this->model->where('id', $id)->firstOrFail();
 		//return $this->model->where('my_company', session('my_company')->id)->where('id', $id)->firstOrFail();
@@ -26,6 +29,10 @@ abstract class BaseRepo{
 	{
 		return $this->model->where('my_company', session('my_company')->id)->get();
 	}
+	public function all2()
+	{
+		return $this->model->get();
+	}
 	public function index($filter = false, $search = false)
 	{
 		if ($filter and $search) {
@@ -34,15 +41,39 @@ abstract class BaseRepo{
 			return $this->model->where('my_company', session('my_company')->id)->orderBy('id', 'DESC')->paginate();
 		}
 	}
+	public function index2($filter = false, $search = false)
+	{
+		if ($filter and $search) {
+			return $this->model->$filter($search)->orderBy("$filter", 'ASC')->paginate();
+		} else {
+			return $this->model->orderBy('id', 'DESC')->paginate();
+		}
+	}
 
 	public function getList($name='name', $id='id')
 	{
 		return $list = [""=>'Seleccionar'] + $this->model->where('my_company', session('my_company')->id)->orderBy($name, 'ASC')->pluck($name, $id)->toArray();
 	}
+	public function getList2($name='name', $id='id')
+	{
+		return $list = [""=>'Seleccionar'] + $this->model->orderBy($name, 'ASC')->pluck($name, $id)->toArray();
+	}
 	
 	public function getListGroup($group, $name='name', $id='id')
 	{
 		foreach ($this->model->where('my_company', session('my_company')->id)->with($group)->oederBy($name, 'ASC')->get() as $key => $u) {
+			$r[$u->$group->name][$u->$id] = $u->$name;
+		}
+		if (isset($r)) {
+			return [''=>'Seleccionar'] + $r;
+		} else {
+			return [''=>'Seleccionar'];
+		}
+		
+	}
+	public function getListGroup2($group, $name='name', $id='id')
+	{
+		foreach ($this->model->with($group)->oederBy($name, 'ASC')->get() as $key => $u) {
 			$r[$u->$group->name][$u->$id] = $u->$name;
 		}
 		if (isset($r)) {
@@ -59,6 +90,14 @@ abstract class BaseRepo{
 	public function all_only_deleted()
 	{
 		return $this->model->where('my_company', session('my_company')->id)->onlyTrashed()->get();
+	}
+	public function all_with_deleted2()
+	{
+		return $this->model->withTrashed()->get();
+	}
+	public function all_only_deleted2()
+	{
+		return $this->model->onlyTrashed()->get();
 	}
 	public function jsonArray($array,$value,$label)
 	{

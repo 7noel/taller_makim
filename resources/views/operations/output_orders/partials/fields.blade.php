@@ -87,14 +87,14 @@
 					<label for="inventory_combustible">
 						Combustible
 					</label>
-					<input class="" id="inventory_combustible" name="inventory[combustible]" type="range" step='25' value="{{(isset($model->inventory['combustible']))? $model->inventory['combustible']:''}}">
+					<input class="" id="inventory_combustible" name="inventory[combustible]" type="range" step='25' value="{{(isset($model->inventory->combustible))? $model->inventory->combustible:''}}">
 				</div>
 			</div>
 			<div class="col-sm-2">
-				{!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory['comprobante']) ? $model->inventory['comprobante'] : ''), ['empty'=>'SIN COMPROBANTE', 'label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
+				{!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory->comprobante) ? $model->inventory->comprobante : ''), ['empty'=>'SIN COMPROBANTE', 'label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
 			</div>
 			<div class="col-sm-2">
-				{!! Field::date('inventory[entrega]', (isset($model->inventory['entrega']) ? $model->inventory['entrega'] : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
+				{!! Field::date('inventory[entrega]', (isset($model->inventory->entrega) ? $model->inventory->entrega : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
 			</div>
 		</div>
 		
@@ -102,7 +102,7 @@
 			<div class="col-sm-3">
 			@foreach (config('options.inventory.col_1') as $label)
 				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="{{$label}}" name="inventory[{{$label}}]" {{((isset($model->inventory[$label]) and $model->inventory[$label]==true))?'checked':''}}>
+					<input type="checkbox" class="custom-control-input" id="{{$label}}" name="inventory[{{$label}}]" {{((isset($model->inventory->$label) and $model->inventory->$label==true))?'checked':''}}>
 					<label class="custom-control-label" for="{{$label}}">{{ $label }}</label>
 				</div>
 			@endforeach
@@ -110,7 +110,7 @@
 			<div class="col-sm-3">
 			@foreach (config('options.inventory.col_2') as $label)
 				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="{{$label}}" name="inventory[{{$label}}]" {{((isset($model->inventory[$label]) and $model->inventory[$label]==true))?'checked':''}}>
+					<input type="checkbox" class="custom-control-input" id="{{$label}}" name="inventory[{{$label}}]" {{((isset($model->inventory->$label) and $model->inventory->$label==true))?'checked':''}}>
 					<label class="custom-control-label" for="{{$label}}">{{ $label }}</label>
 				</div>
 			@endforeach
@@ -118,7 +118,7 @@
 			<div class="col-sm-3">
 			@foreach (config('options.inventory.col_3') as $label)
 				<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="{{$label}}" name="inventory[{{$label}}]" {{((isset($model->inventory[$label]) and $model->inventory[$label]==true))?'checked':''}}>
+					<input type="checkbox" class="custom-control-input" id="{{$label}}" name="inventory[{{$label}}]" {{((isset($model->inventory->$label) and $model->inventory->$label==true))?'checked':''}}>
 					<label class="custom-control-label" for="{{$label}}">{{ $label }}</label>
 				</div>
 			@endforeach
@@ -128,7 +128,7 @@
 			<div class="col-sm-12">
 				<div id="field_inventory_combustible" class="form-group">
 					<label for="inventory_solicitud">Solicitud Cliente</label>
-					<textarea class="form-control form-control-sm text-uppercase" id="inventory_solicitud" rows="5" name="inventory[solicitud]">{{(isset($model->inventory['solicitud']))? trim($model->inventory['solicitud']):''}}</textarea>
+					<textarea class="form-control form-control-sm text-uppercase" id="inventory_solicitud" rows="5" name="inventory->solicitud">{{(isset($model->inventory->solicitud))? trim($model->inventory->solicitud):''}}</textarea>
 				</div>
 			</div>
 		</div>

@@ -23,7 +23,12 @@
 			</div>
 			@include('partials.delete')
 			<?php 
-			$audits = $model->audits()->with('user')->get();
+			if (method_exists($model, 'audits')) {
+				$audits = $model->audits()->with('user')->get();
+			} else {
+				$audits = collect([]);
+			}
+			
 			 ?>
 			@if($audits->isNotEmpty())
 			<br>
