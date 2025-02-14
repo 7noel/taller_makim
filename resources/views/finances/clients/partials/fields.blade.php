@@ -48,6 +48,16 @@
 		{!! Field::date('birth', ['label' => 'Nacimiento', 'class'=>'form-control-sm']) !!}
 	</div>
 </div>
+@if(!isset($model))
+<div class="form-row">
+	<div class="col-sm-2 mb-3">
+		<div class="custom-control custom-switch">
+			{!! Form::checkbox('crear_vehiculo', 'on', true, ['class'=>'custom-control-input', 'id'=>'crear_vehiculo']) !!}
+			<label class="custom-control-label" for="crear_vehiculo">Crear Vehículo</label>
+		</div>
+	</div>
+</div>
+@endif
 
 @isset($model)
 <table class="table table-sm table-responsive-xl">

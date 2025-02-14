@@ -247,6 +247,40 @@
     </div>
     <script>
 $(document).ready(function () {
+    $('#link-crear-marca').click(function (e) {
+        clearModalMarcaYModelo();
+        setTimeout(function() {
+            $('#marca').focus();
+        }, 500)
+    })
+    $('#link-crear-modelo').click(function (e) {
+        clearModalMarcaYModelo()
+        $('#marca_id').val($('#brand_id').val())
+        $('#marca').val($('#brand_id option:selected').text())
+        $('#marca').prop('readonly', true);
+        setTimeout(function() {
+            $('#modelo_name').focus();
+        }, 500)
+    })
+    $("#btn-crear-marca").click(function(e){
+        crearMarcaYModelo()
+    })
+    $("#btn-crear-modelo").click(function(e){
+        crearModelo()
+    })
+
+    //carga modelos
+    $('#brand_id').change(function(){
+        if ($('#brand_id').val()=='') {
+            $('#link-crear-marca').removeClass('d-none')
+            $('#link-crear-modelo').addClass('d-none')
+        } else {
+            $('#link-crear-marca').addClass('d-none')
+            $('#link-crear-modelo').removeClass('d-none')
+        }
+        cargaModelos()
+    })
+
     // if ($('#is_downloadable').length) {
     //     $('.is_downloadable').val($('#is_downloadable').val())
     // }
@@ -536,6 +570,94 @@ $(document).ready(function () {
 
     })
 })
+
+function clearModalMarcaYModelo() {
+    $('#marca_id').val('')
+    $('#marca').removeClass('is-invalid')
+    $('#marca').val('')
+    $('#marca').prop('readonly', false)
+    $('#modelo_name').removeClass('is-invalid')
+    $('#modelo_name').val('')
+}
+function crearMarcaYModelo() {
+    var $marca_id = $('#marca_id').val().trim()
+    var $marca = $('#marca').val().trim()
+    var $modelo = $('#modelo_name').val().trim()
+    if ($marca=='') {
+        $('#marca').addClass('is-invalid')
+        $('#marcaFeedback').text('La Marca es obligatoria')
+        return false
+    } else {
+        $('#marca').removeClass('is-invalid')
+    }
+    if ($modelo=='') {
+        $('#modelo_name').addClass('is-invalid')
+        $('#modeloNameFeedback').text('El Modelo es obligatorio')
+        return false
+    } else {
+        $('#modelo_name').removeClass('is-invalid')
+    }
+    page = '/crear-marca'
+    $.get(page, {brand_id: $marca_id, marca: $marca, modelo: $modelo}, function(data){
+        if (data.error!=undefined) {
+            if(data.error.marca!=undefined) {
+                $('#marca').addClass('is-invalid')
+                $('#marcaFeedback').text(data.error.marca)
+                $('#modelo_name').removeClass('is-invalid')
+            }
+            if(data.error.modelo!=undefined) {
+                $('#modelo_name').removeClass('is-invalid')
+                $('#marcaFeedback').text(data.error.modelo)
+                $('#modelo_name').addClass('is-invalid')
+            }
+        } else {
+            $('#marca').removeClass('is-invalid')
+            $('#modelo_name').removeClass('is-invalid')
+            cargaMarcas(data.marca.id, data.modelo.id)
+            //$('#brand_id').val(data.marca.id)
+            //cargaModelos(data.modelo.id)
+            //$('#modelo_id').val(data.modelo.id)
+            $('#marcaModal').modal('hide')
+        }
+    })
+}
+
+/*cargar marcas*/
+function cargaMarcas(id='', modelo_id=''){
+    var $marcas = $('#brand_id')
+    var $modelos=$('#modelo_id')
+    var page = "/listarMarcas"
+    $.get(page, function(data){
+        $marcas.empty()
+        $modelos.empty()
+        $marcas.append("<option value=''>Seleccionar</option>");
+        $.each(data, function (index, ModeloObj) {
+            $marcas.append("<option value='"+ModeloObj.id+"'>"+ModeloObj.name+"</option>")
+        })
+        $('#brand_id').val(id)
+        cargaModelos(modelo_id)
+    })
+}
+
+/*cargar modelos*/
+function cargaModelos(id=''){
+    var $marca = $('#brand_id')
+    var $modelos=$('#modelo_id')
+    var page = "/listarModelos/" + $marca.val()
+    if ($marca.val() == '') {
+        $modelos.empty("")
+    } else {
+        $.get(page, function(data){
+            $modelos.empty()
+            $modelos.append("<option value=''>Seleccionar</option>");
+            $.each(data, function (index, ModeloObj) {
+                $modelos.append("<option value='"+ModeloObj.id+"'>"+ModeloObj.name+"</option>")
+            })
+            $('#modelo_id').val(id)
+        })
+
+    }
+}
 
 function calcTotal () {
     var with_tax = false

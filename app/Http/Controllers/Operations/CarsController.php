@@ -35,9 +35,11 @@ class CarsController extends Controller {
 	public function create()
 	{
 		$bodies = config('options.bodies');
-		$modelos = $this->modeloRepo->getListGroup('brand');
+		$brands = $this->brandRepo->getList();
+		// $modelos = $this->modeloRepo->getListGroup('brand');
+		$modelos = [];
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
-		return view('partials.create', compact('modelos', 'bodies', 'ubigeo'));
+		return view('partials.create', compact('brands', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function createByClient($client_id)
@@ -52,7 +54,12 @@ class CarsController extends Controller {
 
 	public function store()
 	{
-		$this->repo->save(request()->all());
+		$data = request()->all();
+		$model = $this->repo->save($data);
+		if(isset($data['crear_ingreso'])) {
+			return redirect()->route('recepcion_by_car', ['car_id' => $model->id]);
+			// return redirect()->route('output_orders.by_car', ['car_id' => $model->id]);
+		}
 		if (isset($data['last_page'])) {
 			return redirect($data['last_page']);
 		}
@@ -62,19 +69,21 @@ class CarsController extends Controller {
 	public function show($id)
 	{
 		$model = $this->repo->findOrFail($id);
-		$modelos = $this->modeloRepo->getListGroup('brand');
+		$brands = $this->brandRepo->getList();
+		$modelos = $model->brand->modelos->sortBy('name')->pluck('name', 'id')->toArray();
 		$bodies = config('options.bodies');
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
-		return view('partials.show', compact('model', 'modelos', 'bodies', 'ubigeo'));
+		return view('partials.show', compact('model', 'brands', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function edit($id)
 	{
 		$model = $this->repo->findOrFail($id);
-		$modelos = $this->modeloRepo->getListGroup('brand');
+		$brands = $this->brandRepo->getList();
+		$modelos = $model->brand->modelos->sortBy('name')->pluck('name', 'id')->toArray();
 		$bodies = config('options.bodies');
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
-		return view('partials.edit', compact('model', 'modelos', 'bodies', 'ubigeo'));
+		return view('partials.edit', compact('model', 'brands', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function update($id)

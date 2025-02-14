@@ -71,6 +71,9 @@ class CompanyController extends Controller {
 	{
 		$data = request()->all();
 		$this->repo->save($data);
+		if (isset($data['crear_vehiculo'])) {
+			return redirect()->route('cars.create_by_client', ['client_id' => $model->id]);
+		}
 		if (isset($data['last_page']) && $data['last_page'] != '') {
 			return redirect()->to($data['last_page']);
 		}

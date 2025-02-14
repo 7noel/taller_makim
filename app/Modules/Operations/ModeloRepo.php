@@ -48,4 +48,15 @@ class ModeloRepo extends BaseRepo{
 		}
 		
 	}
+
+	public function modelosByBrand($brand_id)
+	{
+		$distritos = Modelo::where('brand_id','=',$brand_id)->orderBy('name')->get();
+		return $distritos;
+	}
+
+	public function findByName($brand_id, $modelo)
+	{
+		return Modelo::where('brand_id', $brand_id)->where('name', $modelo)->first();
+	}
 }

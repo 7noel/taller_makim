@@ -50,6 +50,9 @@ Route::get('listarProvincias/{departamento}', ['as' => 'ajaxprovincias', 'uses' 
 Route::get('listarDistritos/{departamento}/{provincia}', ['as' => 'ajaxdistritos','uses' => 'Admin\UbigeosController@ajaxDistritos']);
 Route::get('excel_productos', ['as' => 'excel','uses' => 'Storage\ProductsController@excel']);
 Route::get('excel_servicios', ['as' => 'excel2','uses' => 'Storage\ProductsController@excel2']);
+Route::get('listarMarcas', ['as' => 'ajaxmarcas', 'uses' => 'Operations\BrandsController@ajaxMarcas']);
+Route::get('listarModelos/{brand_id}', ['as' => 'ajaxmodelos', 'uses' => 'Operations\BrandsController@ajaxModelos']);
+Route::get('crear-marca', ['as' => 'ajax_crear_marca', 'uses' => 'Operations\BrandsController@ajaxCrearMarca']);
 
 Route::group(['middleware'=>['auth']], function(){
 	Route::get('change_password', ['as' => 'change_password', 'uses' => 'Security\UsersController@changePassword']);

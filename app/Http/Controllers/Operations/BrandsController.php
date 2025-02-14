@@ -63,4 +63,53 @@ class BrandsController extends Controller {
 		$modelos = $this->modeloRepo->modelosByWarehouse($warehouse_id);
 		return response()->json($modelos);
 	}
+
+	public function ajaxMarcas()
+	{
+		$marcas = $this->repo->allOrderName();
+		return \Response::json($marcas);
+	}
+
+	public function ajaxModelos($brand_id)
+	{
+		$modelos = $this->modeloRepo->modelosByBrand($brand_id);
+		return \Response::json($modelos);
+	}
+
+	public function ajaxCrearMarca()
+	{
+		$data = request()->all();
+		if (trim($data['brand_id']) == '') {
+			if( $this->repo->findByName($data['marca']) ) {
+				return ['error' => ['marca' => 'La Marca ya existe']];
+			}
+			$marca = $this->repo->save([
+				'name' => $data['marca'],
+			]);
+			$brand_id = $marca->id;
+
+		} else {
+			// dd($this->modeloRepo->findByName($data['brand_id'], $data['modelo']));
+			if( $this->modeloRepo->findByName($data['brand_id'], $data['modelo']) ) {
+				return ['error' => ['modelo' => 'El Modelo ya existe para esta marca']];
+			}
+			$brand_id = $data['brand_id'];
+		}
+		
+		$modelo = $this->modeloRepo->save([
+			'brand_id' => $brand_id,
+			'name' => $data['modelo'],
+		]);
+
+		return [
+			'marca' => [
+				'id' => $brand_id,
+				'name' => $data['marca']
+			],
+			'modelo' => [
+				'id' => $modelo->id,
+				'name' => $modelo->name
+			]
+		];
+	}
 }

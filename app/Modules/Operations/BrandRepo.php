@@ -23,6 +23,10 @@ class BrandRepo extends BaseRepo{
 	{
 		return Brand::where('is_car',true)->pluck($name, $id)->toArray();
 	}
+	public function allOrderName($name='name', $id='id')
+	{
+		return Brand::orderBy('name')->get();
+	}
 	public function save($data, $id=0){
 		$data = $this->prepareData($data);
 		$modeloRepo= new ModeloRepo;
@@ -31,6 +35,11 @@ class BrandRepo extends BaseRepo{
 			$modeloRepo->saveMany2($data['modelos'], ['key' => 'brand_id', 'value' => $model->id]);
 		}
 		return $model;
+	}
+
+	public function findByName($marca)
+	{
+		return Brand::where('name', $marca)->first();
 	}
 
 }
