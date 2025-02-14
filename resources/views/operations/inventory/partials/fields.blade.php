@@ -113,6 +113,17 @@
     .comment {
       max-width: 100%;
     }
+    nvas-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+    }
+    canvas {
+        border: 1px solid #ccc;
+        width: 100%;
+        height: auto;
+    }
   </style>
 			@foreach($checklist_details as $index => $checklist)
                 <div class="checklist-item">
@@ -164,8 +175,38 @@
 		</div>
 		--}}
 
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <label for="imageSelector">Selecciona un tipo de vehículo:</label>
+                <select id="imageSelector" class="custom-select w-auto d-inline-block" onchange="changeImage()">
+                    <option value="/img/inv-sedan.png">Sedán</option>
+                    <option value="/img/inv-suv.png">SUV</option>
+                    <option value="/img/inv-pickup.png">Pickup</option>
+                </select>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-12 text-center canvas-container">
+                <canvas id="damageCanvas"></canvas>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-outline-danger" onclick="clearCanvas()"><i class="fas fa-trash"></i> Borrar marcas</button>
+                <button class="btn btn-outline-secondary" onclick="undoLastMark()"><i class="fas fa-undo"></i> Deshacer</button>
+                <select id="damageType" class="custom-select w-auto d-inline-block">
+                    <option value="red">Rayón</option>
+                    <option value="blue">Abolladura</option>
+                    <option value="green">Quiñe</option>
+                </select>
+                
+                <input type="hidden" id="image_base64" name="image_base64">
+            </div>
+        </div>
+
+
         <input type="file" accept="image/*" id="photoInput" style="display:none;" capture="camera">
-        <button type="button" class="btn btn-outline-primary" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
+        <button type="button" class="btn btn-outline-primary mt-4" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
         <input type="file" accept="video/*" id="videoInput" style="display:none;" capture="camera">
         <button type="button" style="display:none;" class="btn btn-outline-primary" id="addVideo"><i class="fas fa-video"></i> Grabar Video</button>
         
@@ -183,6 +224,78 @@
 	</div>
 </div>
 <script>
+
+        let canvas = document.getElementById("damageCanvas");
+        let ctx = canvas.getContext("2d");
+        let img = new Image();
+        let marks = [];
+        
+        function loadImage(src) {
+            img.src = src;
+            img.onload = function() {
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                redrawCanvas();
+                updateImageData();
+            };
+        }
+        
+        function changeImage() {
+            let selectedImage = document.getElementById("imageSelector").value;
+            marks = [];
+            loadImage(selectedImage);
+        }
+        
+        loadImage("/img/inv-sedan.png");
+        
+        canvas.addEventListener("click", function(event) {
+            let rect = canvas.getBoundingClientRect();
+            let scaleX = canvas.width / rect.width;
+            let scaleY = canvas.height / rect.height;
+            let x = (event.clientX - rect.left) * scaleX;
+            let y = (event.clientY - rect.top) * scaleY;
+            let color = document.getElementById("damageType").value;
+            marks.push({ x, y, color });
+            redrawCanvas();
+            updateImageData();
+        });
+        
+        function drawMark(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        
+        function undoLastMark() {
+            if (marks.length > 0) {
+                marks.pop();
+                redrawCanvas();
+                updateImageData();
+            }
+        }
+        
+        function clearCanvas() {
+            marks = [];
+            redrawCanvas();
+            updateImageData();
+        }
+        
+        function redrawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            marks.forEach(mark => drawMark(mark.x, mark.y, mark.color));
+        }
+        
+        function updateImageData() {
+            canvas.toBlob(function(blob) {
+                let reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = function() {
+                    document.getElementById("image_base64").value = reader.result;
+                };
+            }, "image/png");
+        }
 $(document).ready(function () {
     let imageCount = 0;
     let videoCount = 0;
