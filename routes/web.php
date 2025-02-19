@@ -181,7 +181,7 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	//Route::get('recepcion_crear', ['as' => 'reception.create', 'uses' => 'OrdersController@recepcion_crear']);
 	Route::post('recepcion_store', ['as' => 'reception.store', 'uses' => 'OrdersController@store']);
 	Route::get('recepcion_edit/{id}', ['as' => 'reception.edit', 'uses' => 'OrdersController@recepcion_edit']);
-	Route::get('recepcion_by_car/{car_id}', ['as' => 'reception_by_car', 'uses' => 'OrdersController@recepcionByCar']);
+	Route::get('recepcion_by_car/{car_id}', ['as' => 'inventory.recepcion_by_car', 'uses' => 'OrdersController@recepcionByCar']);
 	Route::get('diagnostico/{id}', ['as' => 'diagnostic.edit', 'uses' => 'OrdersController@diagnostico_edit']);
 	Route::get('repuestos/{id}', ['as' => 'products.edit', 'uses' => 'OrdersController@repuestos_edit']);
 	Route::get('aprobacion/{id}', ['as' => 'approbation.edit', 'uses' => 'OrdersController@aprobacion_edit']);

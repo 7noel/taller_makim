@@ -12,6 +12,7 @@ use App\Modules\Finances\PaymentConditionRepo;
 use App\Modules\Finances\CompanyRepo;
 use App\Modules\Base\CurrencyRepo;
 use App\Modules\Finances\BankRepo;
+use App\Modules\Operations\CarRepo;
 
 class OrdersController extends Controller {
 
@@ -19,14 +20,16 @@ class OrdersController extends Controller {
 	protected $paymentConditionRepo;
 	protected $companyRepo;
 	protected $bankRepo;
+	protected $carRepo;
 
-	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo) {
+	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo) {
 		$this->repo = $repo;
 		$this->paymentConditionRepo = $paymentConditionRepo;
 		$this->companyRepo = $companyRepo;
 		$this->bankRepo = $bankRepo;
 		$this->checklistDetailRepo = $checklistDetailRepo;
 		$this->orderChecklistDetailRepo = $orderChecklistDetailRepo;
+		$this->carRepo = $carRepo;
 	}
 	public function index()
 	{
@@ -84,6 +87,9 @@ class OrdersController extends Controller {
 		$data = request()->all();
 		//dd($data);
 		$this->repo->save($data);
+		if (explode('.', \Request::route()->getName())[0] == 'inventory') {
+			return redirect()->route('panel');
+		}
 		if (isset($data['last_page']) && $data['last_page'] != '') {
 			return redirect()->to($data['last_page']);
 		}
@@ -269,7 +275,9 @@ class OrdersController extends Controller {
 	}
 	public function recepcionByCar($car_id)
 	{
+		// dd(explode('.', \Request::route()->getName())[0]);
 		$action = "create";
+		$checklist_details = $this->checklistDetailRepo->all2();
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
@@ -277,7 +285,7 @@ class OrdersController extends Controller {
 		$bs = ['' => 'Seleccionar'];
 		$bs_shipper = ['' => 'Seleccionar'];
 		$car = $this->carRepo->findOrFail($car_id);
-		return view('operations.taller.recepcion_crear', compact('car', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
+		return view('operations.inventory.create', compact('car', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details'));
 	}
 	public function changeStatusOrder($id)
 	{

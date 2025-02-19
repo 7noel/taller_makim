@@ -70,7 +70,7 @@ class CompanyController extends Controller {
 	public function store(FormCompanyRequest $request)
 	{
 		$data = request()->all();
-		$this->repo->save($data);
+		$model = $this->repo->save($data);
 		if (isset($data['crear_vehiculo'])) {
 			return redirect()->route('cars.create_by_client', ['client_id' => $model->id]);
 		}

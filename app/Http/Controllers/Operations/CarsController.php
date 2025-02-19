@@ -45,11 +45,13 @@ class CarsController extends Controller {
 	public function createByClient($client_id)
 	{
 		$client = $this->companyRepo->find($client_id);
+		$brands = $this->brandRepo->getList();
+		$modelos = [];
 		$bodies = config('options.bodies');
 		$modelos = $this->modeloRepo->getListGroup('brand');
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
 		// return redirect()->route('cars.add', $client);
-		return view('partials.create', compact('client', 'modelos', 'bodies', 'ubigeo'));
+		return view('partials.create', compact('brands', 'modelos', 'client', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function store()
@@ -57,7 +59,7 @@ class CarsController extends Controller {
 		$data = request()->all();
 		$model = $this->repo->save($data);
 		if(isset($data['crear_ingreso'])) {
-			return redirect()->route('recepcion_by_car', ['car_id' => $model->id]);
+			return redirect()->route('inventory.recepcion_by_car', ['car_id' => $model->id]);
 			// return redirect()->route('output_orders.by_car', ['car_id' => $model->id]);
 		}
 		if (isset($data['last_page'])) {

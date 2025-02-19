@@ -107,7 +107,7 @@
 	</div>
 	<div class="col-sm-2">
 		{!! Field::text('year', ['label' => 'Año', 'class'=>'form-control-sm text-uppercase']) !!}
-	</div>
+	</div>{{--
 	<div class="col-sm-2">
 		{!! Field::date('f_revision', ['label' => 'Pro_Rev_T', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
@@ -116,7 +116,7 @@
 			{!! Form::checkbox('add_contact', '1', null,['class'=>'custom-control-input', 'id'=>'add_contact']) !!}
 	  		<label class="custom-control-label" for="add_contact">Agregar un Contacto</label>
   		</div>
-	</div>
+	</div>--}}
 </div>
 <div class="form-row contact d-none">
 	<div class="col-sm-4">

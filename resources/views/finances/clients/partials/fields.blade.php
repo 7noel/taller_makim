@@ -44,9 +44,6 @@
 	<div class="col-sm-2">
 		{!! Field::email('email', ['label' => 'Email', 'class'=>'form-control-sm']) !!}
 	</div>
-	<div class="col-sm-2">
-		{!! Field::date('birth', ['label' => 'Nacimiento', 'class'=>'form-control-sm']) !!}
-	</div>
 </div>
 @if(!isset($model))
 <div class="form-row">

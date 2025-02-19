@@ -8,11 +8,11 @@
 				<h5 class="{{ config('options.styles.card_header') }}"> Nuevo Inventario
 				</h5>
 				<div class="card-body">
-					{!! Form::open(['route'=> 'orders.store' , 'method'=>'POST', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
+					{!! Form::open(['route'=> 'inventory.store' , 'method'=>'POST', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
 						@if(Request::url() != URL::previous())
 						<input type="hidden" name="last_page" value="{{ URL::previous() }}">
 						@endif
-						@include('operations.inventory.reception')
+						@include('operations.inventory.partials.fields')
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-10">
 								<button type="submit" class="btn btn-outline-success" id="submit">{!! $icons['save'] !!} Crear Inventario</button>
