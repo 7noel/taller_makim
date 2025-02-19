@@ -5,6 +5,7 @@ use App\Modules\Base\BaseRepo;
 use App\Modules\Operations\Order;
 use App\Modules\Storage\MoveRepo;
 use App\Modules\Operations\OrderDetailRepo;
+use App\Modules\Operations\OrderChecklistDetailRepo;
 use App\Modules\Storage\Stock;
 
 class OrderRepo extends BaseRepo{
@@ -25,11 +26,35 @@ class OrderRepo extends BaseRepo{
 	}
 	public function save($data, $id=0)
 	{
+		// dd($data);
 		$data['order_type'] = explode('.', \Request::route()->getName())[0];
 		if ($id == 0) {
 			$data['sn'] = $this->getNextNumber($data['order_type'], session('my_company')->id);
 		}
 		$data = $this->prepareData($data);
+
+		if ($id==0) {
+			$my_id = Order::orderBy('id', 'desc')->first()->id + 1;
+		} else {
+			$my_id = $id;
+		}
+		
+
+		if (isset($data['inventory']['photos'][0])) {
+			$i = 0;
+			foreach ($data['inventory']['photos'] as $key => $photo) {
+				if (strlen($photo) < 30) {
+					$name_files[$key] = $photo;
+				} else {
+					$name = 'ot_'.$my_id.'_'.str_pad($key, 3, "0", STR_PAD_LEFT);
+					// $name = 'ot_'.$my_id.'_'.str_pad($i, 3, "0", STR_PAD_LEFT);
+					$this->saveImageBase64($photo, $name);
+					$name_files[$key] = $name.".jpg";
+				}
+				$i = $i + 1;
+			}
+			$data['inventory']['photos'] = $name_files;
+		}
 		$model = parent::save($data, $id);
 
 		if (isset($data['items']) and $data['items']>0) {
@@ -51,6 +76,14 @@ class OrderRepo extends BaseRepo{
 		if (isset($data['image_base64']) and $data['image_base64'] != '') {
 			$this->saveImageBase64($data['image_base64'], 'ot_'.$model->id);
 		}
+			// dd($data['order_checklist_details']);
+		if (isset($data['order_checklist_details']) and count($data['order_checklist_details'])>0) {
+			// dd($data);
+			// Guarda los order_checklist_details
+			$orderChecklistDetailRepo = new OrderChecklistDetailRepo;
+			$toDelete = $orderChecklistDetailRepo->syncMany2($data['order_checklist_details'], ['key' => 'order_id', 'value' => $model->id], 'checklist_detail_id');
+		}
+
 		return $model;
 	}
 

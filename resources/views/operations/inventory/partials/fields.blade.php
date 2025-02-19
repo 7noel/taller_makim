@@ -30,9 +30,6 @@
 			<div class="col-md-1 col-sm-2">
 				{!! Field::number('kilometraje', null, ['label' => 'Kilom.', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 			</div>
-			<div class="col-sm-1">
-				{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
-			</div>
 			<div class="col-sm-2">
 				{!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
 			</div>
@@ -48,9 +45,6 @@
 			</div>
 			<div class="col-md-2 col-sm-4">
 				{!! Field::text('attention', ['label' => 'Atención', 'class'=>'form-control-sm text-uppercase']) !!}
-			</div>
-			<div class="col-md-4 col-sm-6">
-				{!! Field::text('comment', ['label' => 'Comentarios', 'class'=>'form-control-sm text-uppercase']) !!}
 			</div>
 		</div>
 
@@ -71,6 +65,17 @@
 				{!! Field::date('inventory[entrega]', (isset($model->inventory->entrega) ? $model->inventory->entrega : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
 			</div>
 		</div>
+        <div class="form-row">
+            <div class="col-sm-12">
+                <div id="field_inventory_combustible" class="form-group">
+                    <label for="inventory_solicitud">Solicitud Cliente</label>
+                    <textarea class="form-control form-control-sm text-uppercase" id="inventory_solicitud" rows="2" name="inventory[solicitud]">{{(isset($model->inventory->solicitud))? trim($model->inventory->solicitud):''}}</textarea>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                {!! Field::text('comment', ['label' => 'Comentarios', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+        </div>
 		
 		<div class="form-row">
 
@@ -126,39 +131,42 @@
     }
   </style>
 			@foreach($checklist_details as $index => $checklist)
+                @php
+                $checkeds = ['correcto' => '', 'recomendable' => '', 'urgente' => '', 'no_aplica' => '', '' => '']; 
+                $checkeds[$checklist->status] = 'checked';
+                @endphp
                 <div class="checklist-item">
-                  <span class="item-name">{{ $checklist->name }}</span>
-                  <div class="options">
-                    <div class="form-check radio-green">
-                      <input class="form-check-input" type="radio" name="item-{{ $index }}" id="correcto-{{ $index }}" value="correcto">
-                      <label class="form-check-label" for="correcto-{{ $index }}">Correcto</label>
+                    <input type="hidden" name="order_checklist_details[{{ $index }}][id]" value="">
+                    <input type="hidden" name="order_checklist_details[{{ $index }}][order_id]" value="{{ (isset($model)) ? $model->id : '' }}">
+                    <input type="hidden" name="order_checklist_details[{{ $index }}][checklist_id]" value="{{ $checklist->checklist_id }}">
+                    <input type="hidden" name="order_checklist_details[{{ $index }}][checklist_detail_id]" value="{{ $checklist->id }}">
+                    <input type="hidden" name="order_checklist_details[{{ $index }}][name]" value="{{ $checklist->name }}">
+                    <input type="hidden" name="order_checklist_details[{{ $index }}][type]" value="{{ $checklist->type }}">
+                    <input type="hidden" name="order_checklist_details[{{ $index }}][category]" value="{{ $checklist->category }}">
+                    <span class="item-name">{{ $checklist->name }}</span>
+                    <div class="options">
+                        <div class="form-check radio-green">
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="correcto-{{ $index }}" value="correcto" {{ $checkeds['correcto'] }}>
+                            <label class="form-check-label" for="correcto-{{ $index }}">Correcto</label>
+                        </div>
+                        <div class="form-check radio-amber">
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="recomendable-{{ $index }}" value="recomendable" {{ $checkeds['recomendable'] }}>
+                            <label class="form-check-label" for="recomendable-{{ $index }}">Recomendable</label>
+                        </div>
+                        <div class="form-check radio-red">
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="urgente-{{ $index }}" value="urgente" {{ $checkeds['urgente'] }}>
+                            <label class="form-check-label" for="urgente-{{ $index }}">Urgente</label>
+                        </div>
+                        <div class="form-check radio-black">
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="no-aplica-{{ $index }}" value="no_aplica" {{ $checkeds['no_aplica'] }}>
+                            <label class="form-check-label" for="no-aplica-{{ $index }}">No Aplica</label>
+                        </div>
                     </div>
-                    <div class="form-check radio-amber">
-                      <input class="form-check-input" type="radio" name="item-{{ $index }}" id="recomendable-{{ $index }}" value="recomendable">
-                      <label class="form-check-label" for="recomendable-{{ $index }}">Recomendable</label>
-                    </div>
-                    <div class="form-check radio-red">
-                      <input class="form-check-input" type="radio" name="item-{{ $index }}" id="urgente-{{ $index }}" value="urgente">
-                      <label class="form-check-label" for="urgente-{{ $index }}">Urgente</label>
-                    </div>
-                    <div class="form-check radio-black">
-                      <input class="form-check-input" type="radio" name="item-{{ $index }}" id="no-aplica-{{ $index }}" value="no_aplica">
-                      <label class="form-check-label" for="no-aplica-{{ $index }}">No Aplica</label>
-                    </div>
-                  </div>
-                  <input class="form-control form-control-sm comment" type="text" name="comentario-{{ $index }}" placeholder="Escribe un comentario">
+                    <input class="form-control form-control-sm comment" type="text" name="order_checklist_details[{{ $index }}][comment]" value="{{ $checklist->comment }}" placeholder="Escribe un comentario">
                 </div>
 			@endforeach
 		</div>
 
-		<div class="form-row mt-2">
-			<div class="col-sm-12">
-				<div id="field_inventory_combustible" class="form-group">
-					<label for="inventory_solicitud">Solicitud Cliente</label>
-					<textarea class="form-control form-control-sm text-uppercase" id="inventory_solicitud" rows="5" name="inventory[solicitud]">{{(isset($model->inventory->solicitud))? trim($model->inventory->solicitud):''}}</textarea>
-				</div>
-			</div>
-		</div>
 	</div>
 	<div class="tab-pane fade mb-5 text-center" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 		{{--
@@ -179,9 +187,9 @@
             <div class="col-md-12 text-center">
                 <label for="imageSelector">Selecciona un tipo de vehículo:</label>
                 <select id="imageSelector" class="custom-select w-auto d-inline-block" onchange="changeImage()">
-                    <option value="/img/inv-sedan.png">Sedán</option>
-                    <option value="/img/inv-suv.png">SUV</option>
-                    <option value="/img/inv-pickup.png">Pickup</option>
+                    <option value="/img/inv-sedan.jpg">Sedán</option>
+                    <option value="/img/inv-suv.jpg">SUV</option>
+                    <option value="/img/inv-pickup.jpg">Pickup</option>
                 </select>
             </div>
         </div>
@@ -195,9 +203,9 @@
                 <button class="btn btn-outline-danger" onclick="clearCanvas()"><i class="fas fa-trash"></i> Borrar marcas</button>
                 <button class="btn btn-outline-secondary" onclick="undoLastMark()"><i class="fas fa-undo"></i> Deshacer</button>
                 <select id="damageType" class="custom-select w-auto d-inline-block">
-                    <option value="red">Rayón</option>
-                    <option value="blue">Abolladura</option>
-                    <option value="green">Quiñe</option>
+                    <option value="green">Rayón</option>
+                    <option value="red">Abolladura</option>
+                    <option value="blue">Quiñe</option>
                 </select>
                 
                 <input type="hidden" id="image_base64" name="image_base64">
@@ -219,12 +227,27 @@
                 <video class="embed-responsive-item" controls></video>
             </div>
         </div>
-        <div class="thumbnails d-flex flex-wrap mt-2"></div>
+        <div class="thumbnails d-flex flex-wrap mt-2" id="multimedia">
+        @php $imageCount=0; @endphp
+        @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
+            @foreach($model->inventory->photos as $imageCount => $photo)
+                @php $imageId = "image-".$imageCount; @endphp
+            <div class="thumbnail" id="thumbnail-{{ $imageId }}" onclick="showImage('/storage/{{ $photo }}')">
+                <img src="/storage/{{ $photo }}" alt="Foto {{ $imageCount + 1 }}">
+                <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('{{ $imageId }}')">X</button>
+            </div>
+            <input type="hidden" id="input-{{ $imageId }}" name="inventory[photos][{{ $imageCount}}]" value="{{ $photo }}">
+            @endforeach
+            @php $imageCount = $imageCount + 1; @endphp
+        @endif
+        </div>
 
 	</div>
 </div>
 <script>
-
+    @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
+        showImage("/storage/{{ current($model->inventory->photos) }}")
+    @endif
         let canvas = document.getElementById("damageCanvas");
         let ctx = canvas.getContext("2d");
         let img = new Image();
@@ -245,8 +268,11 @@
             marks = [];
             loadImage(selectedImage);
         }
-        
-        loadImage("/img/inv-sedan.png");
+        @if(isset($model))
+        loadImage("/storage/ot_{{$model->id}}.jpg");
+        @else
+        loadImage("/img/inv-sedan.jpg");
+        @endif
         
         canvas.addEventListener("click", function(event) {
             let rect = canvas.getBoundingClientRect();
@@ -288,16 +314,17 @@
         }
         
         function updateImageData() {
-            canvas.toBlob(function(blob) {
+            $("#image_base64").val(document.querySelector("#damageCanvas").toDataURL('image/jpeg').replace(/^data:image\/jpeg;base64,/, ""))
+            /*canvas.toBlob(function(blob) {
                 let reader = new FileReader();
                 reader.readAsDataURL(blob);
                 reader.onloadend = function() {
                     document.getElementById("image_base64").value = reader.result;
                 };
-            }, "image/png");
+            }, "image/png");*/
         }
 $(document).ready(function () {
-    let imageCount = 0;
+    let imageCount = {{ $imageCount }};
     let videoCount = 0;
 
     $('#addPhoto').on('click', function () {
@@ -305,6 +332,7 @@ $(document).ready(function () {
     });
 
     $('#photoInput').on('change', function (event) {
+        console.log(imageCount)
         const files = event.target.files;
         const thumbnails = $('.thumbnails');
 
@@ -320,7 +348,7 @@ $(document).ready(function () {
                         <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
                     </div>
                 `);
-                $('#vehicleForm').append(`<input type="hidden" id="input-${imageId}" name="image[${imageCount}]" value="${e.target.result}">`);
+                $('#multimedia').append(`<input type="hidden" id="input-${imageId}" name="inventory[photos][${imageCount}]" value="${e.target.result.replace(/^data:image\/jpeg;base64,/, "")}">`);
                 imageCount++;
                 showImage(e.target.result);
             };
@@ -349,7 +377,7 @@ $(document).ready(function () {
                         <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${videoId}')">X</button>
                     </div>
                 `);
-                $('#vehicleForm').append(`<input type="hidden" id="input-${videoId}" name="video[${videoCount}]" value="${e.target.result}">`);
+                $('#multimedia').append(`<input type="hidden" id="input-${videoId}" name="inventory[videos][${videoCount}]" value="${e.target.result}">`);
                 videoCount++;
                 playVideo(e.target.result);
             };

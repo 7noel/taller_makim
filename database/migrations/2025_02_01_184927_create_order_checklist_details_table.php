@@ -17,6 +17,7 @@ class CreateOrderChecklistDetailsTable extends Migration
             $table->id();
             $table->bigInteger('order_id')->unsigned();
             $table->bigInteger('checklist_id')->unsigned();
+            $table->bigInteger('checklist_detail_id')->unsigned();
             $table->string('name');
             $table->string('type');
             $table->string('category');

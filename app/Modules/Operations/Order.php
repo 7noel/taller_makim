@@ -102,4 +102,8 @@ class Order extends Model implements Auditable
 	{
 		return $this->morphMany('App\Modules\Base\Attribute', 'attribute');
 	}
+	public function order_checklist_details()
+	{
+		return $this->hasMany('App\Modules\Operations\ChecklistDetail');
+	}
 }

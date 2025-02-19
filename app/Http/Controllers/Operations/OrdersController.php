@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Modules\Operations\ChecklistDetailRepo;
+use App\Modules\Operations\OrderChecklistDetailRepo;
 use App\Modules\Operations\OrderRepo;
 use App\Modules\Finances\PaymentConditionRepo;
 use App\Modules\Finances\CompanyRepo;
@@ -19,12 +20,13 @@ class OrdersController extends Controller {
 	protected $companyRepo;
 	protected $bankRepo;
 
-	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo) {
+	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo) {
 		$this->repo = $repo;
 		$this->paymentConditionRepo = $paymentConditionRepo;
 		$this->companyRepo = $companyRepo;
 		$this->bankRepo = $bankRepo;
 		$this->checklistDetailRepo = $checklistDetailRepo;
+		$this->orderChecklistDetailRepo = $orderChecklistDetailRepo;
 	}
 	public function index()
 	{
@@ -99,14 +101,15 @@ class OrdersController extends Controller {
 		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = $model->company->branches->pluck('name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
-		return view('partials.show', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
+		$checklist_details = $this->checklistDetailRepo->all2();
+		return view('partials.show', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details'));
 	}
 
 	public function edit($id)
 	{
 		$action = "edit";
 		$model = $this->repo->findOrFail($id);
-		// dd($model->inventory['solicitud']);
+		// dd($model->inventory);
 		$quote = $model->quote;
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
@@ -114,7 +117,9 @@ class OrdersController extends Controller {
 		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
-		return view('partials.edit', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
+		$checklist_details = $this->orderChecklistDetailRepo->byOrder($model->id, '1');
+		// dd($checklist_details);
+		return view('partials.edit', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details'));
 	}
 
 	public function update($id)
@@ -134,6 +139,22 @@ class OrdersController extends Controller {
 		//$model = $this->repo->destroy($id);
 		if (request()->ajax()) {	return $model; }
 		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
+	}
+
+	/**
+	 * CREA UN PDF Inventario EN EL NAVEGADOR
+	 * @param  [integer] $id [Es el id de la cotizacion]
+	 * @return [pdf]     [Retorna un pdf]
+	 */
+	public function print_inventory($id)
+	{
+		$cuentas = $this->bankRepo->mostrar();
+		$model = $this->repo->findOrFail($id);
+		//dd($model->seller->company_name);
+		// \PDF::setOptions(['isPhpEnabled' => true]);
+		$pdf = \PDF::loadView('pdfs.inventory', compact('model', 'cuentas'));
+		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
+		return $pdf->stream('Inventario_'.$model->id.'.pdf');
 	}
 
 	/**
