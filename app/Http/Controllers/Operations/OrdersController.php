@@ -152,7 +152,7 @@ class OrdersController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		//dd($model->seller->company_name);
 		// \PDF::setOptions(['isPhpEnabled' => true]);
-		$pdf = \PDF::loadView('pdfs.inventory', compact('model', 'cuentas'));
+		$pdf = \PDF::loadView('operations.inventory.pdf', compact('model', 'cuentas'));
 		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
 		return $pdf->stream('Inventario_'.$model->id.'.pdf');
 	}

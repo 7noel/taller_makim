@@ -16,7 +16,7 @@
 	</script>
 	<div class="header">
 		<div class="item-left2 d-block col_1">
-			<img src="./img/logo_makim_doc.jpg" alt="" width="180px">
+			<img src="./img/speed.png" alt="" width="100px">
 			<div class="company_name">{{ $model->mycompany->company_name }}</div>
 			<div>{{ $model->mycompany->address}}</div>
 			<div>{{ $model->mycompany->ubigeo->departamento.' - '.$model->mycompany->ubigeo->provincia.' - '.$model->mycompany->ubigeo->distrito }}</div>
@@ -56,19 +56,14 @@
 			<strong class="label">F. Entrega::</strong><span class="data-header">{{ date('d/m/Y', strtotime($model->inventory->entrega)) }}</span>
 			@endif
 		</div>
+		<div>
+			<strong class="label">Solicitud del cliente:</strong><span class="data-header">{{ $model->inventory->solicitud }}</span>
+		</div>
 		@if(trim($model->comment)!="")
 		<div>
 			<strong class="label">Comentario:</strong><span class="data-header">{{ $model->comment }}</span>
 		</div>
 		@endif
-	</div>
-	<div class="solicitud">
-		<p class="uppercase">
-			<strong>Solicitudes del cliente:</strong>
-		</p>
-		<div>
-			<span>{!! nl2br($model->inventory->solicitud) !!}</span>
-		</div>
 	</div>
 		
 	<div class="">
@@ -77,64 +72,15 @@
 		$aspa = '<div style="font-family: DejaVu Sans, sans-serif;">✗</div>';
 		$columnas = 4;
 		 ?>
-		<p class="uppercase">
-			<strong>Inventario de recepción:</strong>
-		</p>
-		<div class="col_inv">
-			<table class="table-inventory">
-			@foreach (config('options.inventory.col_1') as $label)
-				<tr>
-					<td class='col-check border'>
-						{!! ((isset($model->inventory->$label) and $model->inventory->$label==true)) ? $check : " " !!}
-					</td>
-					<td class='col-description'>{{ $label }}</td>
-				</tr>
-			@endforeach
-			</table>
-		</div>
-		<div class="col_inv">
-			<table class="table-inventory">
-			@foreach (config('options.inventory.col_2') as $label)
-				<tr>
-					<td class='col-check border'>
-						{!! ((isset($model->inventory->$label) and $model->inventory->$label==true)) ? $check : " " !!}
-					</td>
-					<td class='col-description'>{{ $label }}</td>
-				</tr>
-			@endforeach
-			</table>
-		</div>
-		<div class="col_inv">
-			<table class="table-inventory">
-			@foreach (config('options.inventory.col_3') as $label)
-				<tr>
-					<td class='col-check border'>
-						{!! ((isset($model->inventory->$label) and $model->inventory->$label==true)) ? $check : " " !!}
-					</td>
-					<td class='col-description'>{{ $label }}</td>
-				</tr>
-			@endforeach
-			<?php 
-			if (isset($model->inventory->combustible)) {
-				$comb = ($model->inventory->combustible==0)?'E':(($model->inventory->combustible==25)?'&frac14;':(($model->inventory->combustible==50)?'&frac12;':(($model->inventory->combustible==75)?'	&frac34;':'F')));
-			} else {
-				$comb = '';
-			}
-			 ?>
-			</table>
-		</div>
 		<div class='col_img'>
 			<img src="{{ (\Storage::disk('public')->exists('ot_'.$model->id.'.jpg'))?asset('/storage/ot_'.$model->id.'.jpg'):asset('/img/inventory.jpeg') }}" alt="" class="inventory-image">
 		</div>
-	</div>
-	<div class="combustible">
-		<img width="170px" src="{{ asset('/img/combustible.jpeg') }}" alt="">
 	</div>
 	<div>
 		<p class="uppercase"><strong>Condiciones:</strong></p>
 		<div>
 			<div align="center">
-				Autorizo a MAKIM AUTOMOTRIZ a realizar las operaciones descritas en "SOLICITUDES DEL CLIENTE".
+				Autorizo realizar las operaciones descritas en "SOLICITUDES DEL CLIENTE".
 				<br>
 				Declaro no dejar ningún objeto de valor de ningún tipo y estar conforme con el inventario.
 			</div>

@@ -89,7 +89,7 @@ $models_7 = $models->where('status', 'ENTR');
 										</button>
 										{{-- <a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a> --}}
 										<a href="{{ route( 'inventory.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
-										<a href="{{ route( 'print_inventory' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="Inventario">{!! $icons['pdf'] !!}</a>
+										<a href="{{ route( 'order.print_inventory' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="Inventario">{!! $icons['pdf'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}</h5>
