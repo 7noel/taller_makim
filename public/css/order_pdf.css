@@ -122,12 +122,10 @@ footer{
 }
 .col_img{
 	display: inline-block;
+	vertical-align: top;
 }
 .inventory-image{
 	width: 270px;
-	vertical-align: top;
-}
-.col_img{
 	vertical-align: top;
 }
 .solicitud{

@@ -156,9 +156,10 @@ class OrdersController extends Controller {
 	{
 		$cuentas = $this->bankRepo->mostrar();
 		$model = $this->repo->findOrFail($id);
+		$checklist_details = $this->orderChecklistDetailRepo->byOrder($model->id, '1');
 		//dd($model->seller->company_name);
 		// \PDF::setOptions(['isPhpEnabled' => true]);
-		$pdf = \PDF::loadView('operations.inventory.pdf', compact('model', 'cuentas'));
+		$pdf = \PDF::loadView('operations.inventory.pdf', compact('model', 'cuentas', 'checklist_details'));
 		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
 		return $pdf->stream('Inventario_'.$model->id.'.pdf');
 	}
