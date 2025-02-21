@@ -27,9 +27,6 @@
 			<div class="col-md-1 col-sm-2">
 				{!! Field::text('placa', null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 			</div>
-			<div class="col-md-1 col-sm-2">
-				{!! Field::number('kilometraje', null, ['label' => 'Kilom.', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
-			</div>
 			<div class="col-sm-2">
 				{!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
 			</div>
@@ -49,18 +46,42 @@
 		</div>
 
 		<div class="form-row">
-			<div class="col-sm-2">
+			{{--<div class="col-sm-2">
 				<div id="field_inventory_combustible" class="form-group">
 					<label for="inventory_combustible">
 						Combustible
 					</label>
 					<input class="" id="inventory_combustible" name="inventory[combustible]" type="range" step='25' value="{{(isset($model->inventory->combustible))? $model->inventory->combustible :''}}">
 				</div>
-			</div>
-			<div class="col-sm-2">
-				{!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory->comprobante
-				) ? $model->inventory->comprobante : ''), ['empty'=>'SIN COMPROBANTE', 'label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
-			</div>
+			</div> --}}
+            <div class="col-sm-2">
+                {!! Field::select('inventory[combustible]', config('options.combustible'), (isset($model->inventory->combustible
+                ) ? $model->inventory->combustible : ''), ['empty'=>'SELECCIONAR', 'label'=>'Combustible', 'class'=>'form-control-sm']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::number('kilometraje', null, ['label' => 'Kilom.', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::select('inventory[tarjeta_propiedad]', config('options.tarjeta_propiedad'), (isset($model->inventory->tarjeta_propiedad
+                ) ? $model->inventory->tarjeta_propiedad : ''), ['empty'=>'SELECCIONAR', 'label'=>'TJ Propiedad', 'class'=>'form-control-sm']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::date('inventory[soat]', (isset($model->inventory->soat) ? $model->inventory->soat : ''), ['label'=>'Fecha de soat', 'class'=>'form-control-sm']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::date('inventory[revision_tecnica]', (isset($model->inventory->revision_tecnica) ? $model->inventory->revision_tecnica : ''), ['label'=>'Revisión Técnica', 'class'=>'form-control-sm']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::number('inventory[llaves]', (isset($model->inventory->llaves) ? $model->inventory->llaves : '0'), ['label'=>'Llaves', 'class'=>'form-control-sm']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::select('inventory[control_remoto]', ['SI'=>'SI', 'NO'=>'NO'], (isset($model->inventory->control_remoto
+                ) ? $model->inventory->control_remoto : ''), ['empty'=>'SIN control_remoto', 'label'=>'Control Rremoto', 'class'=>'form-control-sm']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory->comprobante
+                ) ? $model->inventory->comprobante : ''), ['empty'=>'SIN COMPROBANTE', 'label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
+            </div>
 			<div class="col-sm-2">
 				{!! Field::date('inventory[entrega]', (isset($model->inventory->entrega) ? $model->inventory->entrega : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
 			</div>
@@ -139,26 +160,26 @@
                     <input type="hidden" name="order_checklist_details[{{ $index }}][id]" value="">
                     <input type="hidden" name="order_checklist_details[{{ $index }}][order_id]" value="{{ (isset($model)) ? $model->id : '' }}">
                     <input type="hidden" name="order_checklist_details[{{ $index }}][checklist_id]" value="{{ $checklist->checklist_id }}">
-                    <input type="hidden" name="order_checklist_details[{{ $index }}][checklist_detail_id]" value="{{ $checklist->id }}">
+                    <input type="hidden" name="order_checklist_details[{{ $index }}][checklist_detail_id]" value="{{ (isset($checklist->checklist_detail_id)) ? $checklist->checklist_detail_id : $checklist->id }}">
                     <input type="hidden" name="order_checklist_details[{{ $index }}][name]" value="{{ $checklist->name }}">
                     <input type="hidden" name="order_checklist_details[{{ $index }}][type]" value="{{ $checklist->type }}">
                     <input type="hidden" name="order_checklist_details[{{ $index }}][category]" value="{{ $checklist->category }}">
                     <span class="item-name">{{ $checklist->name }}</span>
                     <div class="options">
                         <div class="form-check radio-green">
-                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="correcto-{{ $index }}" value="correcto" {{ $checkeds['correcto'] }}>
-                            <label class="form-check-label" for="correcto-{{ $index }}">Correcto</label>
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="correcto-{{ $index }}" value="correcto" {{ $checkeds['correcto'] }} required>
+                            <label class="form-check-label" for="correcto-{{ $index }}">Bueno</label>
                         </div>
                         <div class="form-check radio-amber">
-                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="recomendable-{{ $index }}" value="recomendable" {{ $checkeds['recomendable'] }}>
-                            <label class="form-check-label" for="recomendable-{{ $index }}">Recomendable</label>
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="recomendable-{{ $index }}" value="recomendable" {{ $checkeds['recomendable'] }} required>
+                            <label class="form-check-label" for="recomendable-{{ $index }}">Regular</label>
                         </div>
                         <div class="form-check radio-red">
-                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="urgente-{{ $index }}" value="urgente" {{ $checkeds['urgente'] }}>
-                            <label class="form-check-label" for="urgente-{{ $index }}">Urgente</label>
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="urgente-{{ $index }}" value="urgente" {{ $checkeds['urgente'] }} required>
+                            <label class="form-check-label" for="urgente-{{ $index }}">Malo</label>
                         </div>
                         <div class="form-check radio-black">
-                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="no-aplica-{{ $index }}" value="no_aplica" {{ $checkeds['no_aplica'] }}>
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="no-aplica-{{ $index }}" value="no_aplica" {{ $checkeds['no_aplica'] }} required>
                             <label class="form-check-label" for="no-aplica-{{ $index }}">No Aplica</label>
                         </div>
                     </div>
@@ -217,7 +238,7 @@
         <button type="button" class="btn btn-outline-primary mt-4" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
         <input type="file" accept="video/*" id="videoInput" style="display:none;" capture="camera">
         <button type="button" style="display:none;" class="btn btn-outline-primary" id="addVideo"><i class="fas fa-video"></i> Grabar Video</button>
-        
+
         <div class="media-container">
             <div id="imageView" class="image-view" style="display:none;">
                 <img id="selectedImage" src="" alt="Imagen seleccionada">
@@ -228,26 +249,23 @@
             </div>
         </div>
         <div class="thumbnails d-flex flex-wrap mt-2" id="multimedia">
-        @php $imageCount=0; @endphp
-        @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
-            @foreach($model->inventory->photos as $imageCount => $photo)
-                @php $imageId = "image-".$imageCount; @endphp
-            <div class="thumbnail" id="thumbnail-{{ $imageId }}" onclick="showImage('/storage/{{ $photo }}')">
-                <img src="/storage/{{ $photo }}" alt="Foto {{ $imageCount + 1 }}">
-                <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('{{ $imageId }}')">X</button>
-            </div>
-            <input type="hidden" id="input-{{ $imageId }}" name="inventory[photos][{{ $imageCount}}]" value="{{ $photo }}">
-            @endforeach
-            @php $imageCount = $imageCount + 1; @endphp
-        @endif
+            @php $imageCount=0; @endphp
+            @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
+                @foreach($model->inventory->photos as $imageCount => $photo)
+                    @php $imageId = "image-".$imageCount; @endphp
+                <div class="thumbnail" id="thumbnail-{{ $imageId }}" onclick="showImage('/storage/{{ $photo }}')">
+                    <img src="/storage/{{ $photo }}" alt="Foto {{ $imageCount + 1 }}">
+                    <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('{{ $imageId }}')">X</button>
+                </div>
+                <input type="hidden" id="input-{{ $imageId }}" name="inventory[photos][{{ $imageCount }}]" value="{{ $photo }}">
+                @endforeach
+                @php $imageCount = $imageCount + 1; @endphp
+            @endif
         </div>
 
 	</div>
 </div>
 <script>
-    @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
-        showImage("/storage/{{ current($model->inventory->photos) }}")
-    @endif
         let canvas = document.getElementById("damageCanvas");
         let ctx = canvas.getContext("2d");
         let img = new Image();
@@ -323,7 +341,11 @@
                 };
             }, "image/png");*/
         }
+
 $(document).ready(function () {
+    @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
+        showImage("/storage/{{ current($model->inventory->photos) }}")
+    @endif
     let imageCount = {{ $imageCount }};
     let videoCount = 0;
 
@@ -332,7 +354,6 @@ $(document).ready(function () {
     });
 
     $('#photoInput').on('change', function (event) {
-        console.log(imageCount)
         const files = event.target.files;
         const thumbnails = $('.thumbnails');
 
@@ -341,16 +362,47 @@ $(document).ready(function () {
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                const imageId = `image-${imageCount}`;
-                thumbnails.append(`
-                    <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('${e.target.result}')">
-                        <img src="${e.target.result}" alt="Foto ${imageCount + 1}">
-                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
-                    </div>
-                `);
-                $('#multimedia').append(`<input type="hidden" id="input-${imageId}" name="inventory[photos][${imageCount}]" value="${e.target.result.replace(/^data:image\/jpeg;base64,/, "")}">`);
-                imageCount++;
-                showImage(e.target.result);
+                const originalDataUrl = e.target.result;
+                const originalImage = new Image();
+
+                originalImage.onload = function() {
+                    let w = originalImage.width, h = originalImage.height;
+                    let newW = w, newH = h;
+
+                    // Si el ancho es mayor a 1600, se reduce
+                    if (w > 1600) {
+                        const factor = 1600 / w;
+                        newW = 1600;
+                        newH = h * factor;
+                    }
+                    // Si la altura es menor a 1200, se amplía
+                    else if (h < 1200) {
+                        const factor = 1200 / h;
+                        newW = w * factor;
+                        newH = 1200;
+                    }
+
+                    // Crear canvas para redimensionar la imagen
+                    const canvas = document.createElement('canvas');
+                    canvas.width = newW;
+                    canvas.height = newH;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(originalImage, 0, 0, newW, newH);
+                    const resizedDataUrl = canvas.toDataURL('image/jpeg');
+
+                    const imageId = `image-${imageCount}`;
+                    thumbnails.append(`
+                        <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('${resizedDataUrl}')">
+                            <img src="${resizedDataUrl}" alt="Foto ${imageCount + 1}">
+                            <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
+                        </div>
+                    `);
+                    $('#multimedia').append(`<input type="hidden" id="input-${imageId}" name="inventory[photos][${imageCount}]" value="${resizedDataUrl.replace(/^data:image\/jpeg;base64,/, "")}">`);
+                    imageCount++;
+                    showImage(resizedDataUrl);
+                };
+
+                originalImage.src = originalDataUrl;
             };
 
             reader.readAsDataURL(file);
@@ -402,6 +454,25 @@ $(document).ready(function () {
     });
 });
 
+// Actualización de removeThumbnail para mostrar la primera miniatura disponible o ocultar el visualizador si no hay ninguna.
+function removeThumbnail(id) {
+    if (confirm("¿Estás seguro de que quieres eliminar esta foto o video?")) {
+        $(`#thumbnail-${id}`).remove();
+        $(`#input-${id}`).remove();
+
+        // Buscar la primera miniatura restante
+        let firstThumbnail = $('.thumbnail').first();
+        if (firstThumbnail.length > 0) {
+            // Simula el clic para mostrar la miniatura en el visualizador
+            firstThumbnail.click();
+        } else {
+            // Si no quedan miniaturas, ocultar ambos visualizadores
+            $('#imageView').hide();
+            $('#videoPlayer').hide();
+        }
+    }
+}
+
 function showImage(src) {
     $('#videoPlayer').hide();
     $('#selectedImage').attr('src', src);
@@ -413,112 +484,4 @@ function playVideo(src) {
     $('#videoPlayer video').attr('src', src).show();
     $('#videoPlayer').show();
 }
-
-function removeThumbnail(id) {
-    if (confirm("¿Estás seguro de que quieres eliminar esta foto o video?")) {
-        $(`#thumbnail-${id}`).remove();
-        $(`#input-${id}`).remove();
-    }
-}
-</script>
-
-<script>/*
-const loadImage = (canvas, image_url) => {
-	context = canvas.getContext("2d")
-	var img = new Image()
-	img.src = image_url
-	img.onload = function(){
-		imgWidth = this.width
-		imgHeight = this.height
-		canvas.width = imgWidth
-		canvas.height = imgHeight
-		//canvas.style.width = '90%'
-		context.drawImage(this, 0, 0, imgWidth, imgHeight)
-		context.lineCap = 'round'
-		context.strokeStyle = '#fa0000'
-		context.lineWidth = '4'
-	}
-}
-var ot = document.getElementById('mi_ot').value
-if (ot!='') {
-	image_url = `/storage/ot_${ot}.jpg`
-} else {
-	image_url = "/img/inventory.jpeg"
-}
-var canvas = document.getElementById("canvas"),
-	context = canvas.getContext("2d"),
-	painting = false,
-	lastX = 0,
-	lastY = 0,
-	lineThickness = 1;
-if (canvas.getContext) {
-	loadImage(canvas, image_url)
-}
-// const canvas = document.querySelector( '.js-paint' );
-// const context = canvas.getContext( '2d' );
-
-
-const colorPicker = document.querySelector('.js-color-picker')
-
-colorPicker.addEventListener('change', event => {
-    context.strokeStyle = event.target.value
-})
-
-const lineWidthRange = document.querySelector( '.js-line-range' )
-const lineWidthLabel = document.querySelector( '.js-range-value' )
-
-lineWidthRange.addEventListener( 'input', event => {
-    const width = event.target.value
-    lineWidthLabel.innerHTML = width
-    context.lineWidth = width
-})
-
-let x = 0, y = 0;
-let isMouseDown = false;
-
-const stopDrawing = () => { isMouseDown = false; }
-const startDrawing = event => {
-    isMouseDown = true;   
-   [x, y] = [event.offsetX, event.offsetY];  
-}
-
-var newX = 0
-var newY = 0
-
-const drawLine = event => {
-    if ( isMouseDown ) {
-    	let posicion = canvas.getBoundingClientRect()
-		let correccionX = posicion.x;
-		let correccionY = posicion.y;
-		if (event.changedTouches == undefined) {
-            // Versión ratón
-            newX = event.offsetX;
-            newY = event.offsetY;
-        } else {
-            // Versión touch, pantalla tactil
-            newX = event.changedTouches[0].pageX - correccionX;
-            newY = event.changedTouches[0].pageY - correccionY;
-        }
-        context.beginPath();
-        context.moveTo( x, y );
-        context.lineTo( newX, newY );
-        context.stroke();
-        //[x, y] = [newX, newY];
-        x = newX;
-        y = newY;
-    }
-}
-
-canvas.addEventListener( 'mousedown', startDrawing );
-canvas.addEventListener( 'mousemove', drawLine );
-canvas.addEventListener( 'mouseup', stopDrawing );
-canvas.addEventListener( 'mouseout', stopDrawing );
-// Eventos pantallas táctiles
-canvas.addEventListener('touchstart', startDrawing)
-canvas.addEventListener('touchmove', drawLine)
-
-document.getElementById("btn-reset").onclick = function() {  
-	loadImage(canvas, '/img/inventory.jpeg')
-}
-*/
 </script>

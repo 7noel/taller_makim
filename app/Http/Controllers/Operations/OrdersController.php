@@ -124,6 +124,7 @@ class OrdersController extends Controller {
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
 		$checklist_details = $this->orderChecklistDetailRepo->byOrder($model->id, '1');
+		// $checklist_details = $this->checklistDetailRepo->all2();
 		// dd($checklist_details);
 		return view('partials.edit', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details'));
 	}

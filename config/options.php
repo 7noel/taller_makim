@@ -1,5 +1,17 @@
 <?php 
 return array(
+	'combustible' => [
+		'0' => 'VACIO',
+		'25' => '1/4',
+		'50' => 'MEDIO',
+		'75' => '3/4',
+		'100' => 'FULL'
+	],
+	'tarjeta_propiedad' => [
+		'FISICA' => 'FISICA',
+		'VIRTUAL' => 'VIRTUAL',
+		'NO' => 'NO'
+	],
 	'document_types' => [
 		'01' => 'FACTURA ELECTRÓNICA',
 		'03' => 'BOLETA ELECTRÓNICA',

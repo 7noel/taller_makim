@@ -16,7 +16,7 @@
             white-space: nowrap;
         }
         td {
-/*            padding: 4px;*/
+            /*padding: 4px;*/
             vertical-align: middle;
             border: 1px solid #000;
             word-wrap: break-word;
@@ -46,14 +46,13 @@
         .blue { background-color: #0000FF; }
         .desc-col { width: 45%; text-align: left; border-right: none; }
         .circle-col { width: 5%; text-align: center; border-left: none; border-right: none; }
-        .comment-col { width: 20%; text-align: left; border-left: none; }
+        .comment-col { width: 20%; text-align: left; border-left: none; font-style: italic; font-size:8px }
         .desc-col, .circle-col, .comment-col{
-        	padding: 2px 1px;
+        	padding: 1px 1px;
         }
         .legend-table {
             border: 1px solid #000;
             border-collapse: separate;
-            margin-bottom: 10px;
             text-align: left;
         }
         .legend-table td {
@@ -65,33 +64,53 @@
         	width: 270px;
         }
         .table-datos{
-        	border: none;
         	text-transform: uppercase;
         }
         .table-datos td{
-        	border: none;
-        	padding: 0px;
-        	font-size: 10px;
+        	border: solid 1px black;
+        	font-size: 9px;
+        	padding: 1px 2px;
         }
         .table-datos .label2 {
         	font-weight: bold;
         	width: 25%;
         	vertical-align: top;
         }
+        .table-datos th {
+        	border: solid 1px black;
+        	background-color: lightgray;
+        	text-align: center;
+        	font-weight: bold;
+        	text-transform: uppercase;
+        }
         .table-datos .label3{
         	font-weight: bold;
         	width: 15%;
         	vertical-align: top;
-        }
-        .table-datos td{
-        	padding: 1px 0;
-        	border: none;
         }
 		.div_img{
 			margin-top: 0;
 		}
 		.inventory-image{
 			width: 270px;
+		}
+		.table-ingreso{
+			border: none;
+			font-size: 9px;
+		}
+		.table-ingreso td{
+			border: none;
+		}
+		.table-ingreso .label{
+        	font-weight: bold;
+        	width: 15%;
+        	vertical-align: top;
+		}
+		.table-ingreso .col1{
+			width: 45%;
+		}
+		.mt-5{
+			margin-top: 5px;
 		}
     </style>
 </head>
@@ -127,17 +146,30 @@
 			</tr>
 		</table>
 	</div>
-	<br>
+
+<table class="table-ingreso">
+	<tr>
+		<td class="label">Tipo de Servicio:</td>
+		<td class="col1">{{ $model->type_service }}</td>
+		<td class="label">F. Emisión:</td>
+		<td>{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
+	</tr>
+	<tr>
+		<td class="label">Asesor:</td>
+		<td class="col1">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
+		<td class="label">F. Entrega:</td>
+		<td>{{ ($model->inventory->entrega == '') ? '' : date('d/m/Y', strtotime($model->inventory->entrega)) }}</td>
+	</tr>
+</table>
 <table>
 	<tr>
 		<td style="width:59%; border: none;">
 			<table class="table-datos">
 				<tr>
-					<td class="label2">F. Emisión:</td>
-					<td>{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
+					<th colspan="2">datos del CLIENTE</th>
 				</tr>
 				<tr>
-					<td class="label2">Señor(a):</td>
+					<td class="label2">Propietario(a):</td>
 					<td>{{ $model->company->company_name }}</td>
 				</tr>
 				<tr>
@@ -149,60 +181,69 @@
 					<td>{{ $model->company->address . ' ' . $model->company->ubigeo->departamento . '-' . $model->company->ubigeo->provincia . '-' . $model->company->ubigeo->distrito }}</td>
 				</tr>
 				<tr>
-					<td class="label2">Tipo de Servicio:</td>
-					<td>{{ $model->type_service }}</td>
-				</tr>
-				<tr>
-					<td class="label2">Responsable:</td>
-					<td>{{ isset($model->repairman->company_name) ? $model->repairman->company_name : '' }}</td>
-				</tr>
-				<tr>
-					<td class="label2">Placa:</td>
-					<td><strong>{{ $model->car->placa }}</strong></td>
-				</tr>
-				<tr>
-					<td class="label2">Marca/Modelo:</td>
-					<td>{{ $model->car->modelo->brand->name.' '.$model->car->modelo->name }}</td>
-				</tr>
-				<tr>
-					<td class="label2">Año:</td>
-					<td>{{ $model->car->year }}</td>
-				</tr>
-				<tr>
-					<td class="label2">VIN:</td>
-					<td>{{ $model->car->vin }}</td>
-				</tr>
-				<tr>
-					<td class="label2">Kilometraje:</td>
-					<td>{{ number_format($model->kilometraje) }} km</td>
-				</tr>
-				<tr>
-					<td class="label2">F. Entrega:</td>
-					<td>{{ date('d/m/Y', strtotime($model->inventory->entrega)) }}</td>
-				</tr>
-				<tr>
 					<td class="label2">Cia. de seguro:</td>
 					<td>PACIFICO</td>
 				</tr>
 				<tr>
+					<td class="label2">Usuario:</td>
+					<td>percy rojas</td>
+				</tr>
+				<tr>
+					<td class="label2">Contacto:</td>
+					<td>juan perez</td>
+				</tr>
+			</table>
+			<table class="table-datos">
+				<tr>
+					<th colspan="4">DATOS DEL VEHICULO</th>
+				</tr>
+				<tr>
+					<td class="label2">Placa:</td>
+					<td colspan="3">{{ $model->car->placa }}</td>
+				</tr>
+				<tr>
+					<td class="label2">Marca:</td>
+					<td colspan="3">{{ $model->car->modelo->brand->name }}</td>
+				</tr>
+				<tr>
+					<td class="label2">Modelo:</td>
+					<td colspan="3">{{ $model->car->modelo->name }}</td>
+				</tr>
+				<tr>
+					<td class="label2">VIN:</td>
+					<td colspan="3">{{ $model->car->vin }}</td>
+				</tr>
+				<tr>
+					<td class="label2">Año:</td>
+					<td colspan="3">{{ $model->car->year }}</td>
+				</tr>
+				<tr>
+					<td class="label2">Motor:</td>
+					<td colspan="3">{{ $model->car->motor }}</td>
+				</tr>
+				<tr>
+					<td class="label2">Color:</td>
+					<td colspan="">{{ $model->car->color }}</td>
+					<td class="label2">Combustible:</td>
+					<td>{{ config('options.combustible.'.$model->inventory->combustible) }}</td>
+				</tr>
+				<tr>
+					<td class="label2">Kilometraje:</td>
+					<td>{{ number_format($model->kilometraje) }} km</td>
 					<td class="label2">Tj propiedad:</td>
-					<td>SI</td>
+					<td>{{ $model->inventory->tarjeta_propiedad }}</td>
 				</tr>
 				<tr>
 					<td class="label2">soat:</td>
-					<td>SI</td>
-				</tr>
-				<tr>
-					<td class="label2">revision:</td>
-					<td>04/09/2025</td>
+					<td>{{ ($model->inventory->soat == '') ? '' : date('d/m/Y', strtotime($model->inventory->soat)) }}</td>
+					<td class="label2">revision Tec:</td>
+					<td>{{ ($model->inventory->revision_tecnica == '') ? '' : date('d/m/Y', strtotime($model->inventory->revision_tecnica)) }}</td>
 				</tr>
 				<tr>
 					<td class="label2">llaves:</td>
-					<td>2</td>
-				</tr>
-				<tr>
+					<td>{{ $model->inventory->llaves }}</td>
 					<td class="label2">c. remoto:</td>
-					<td>SI</td>
+					<td>{{ $model->inventory->control_remoto }}</td>
 				</tr>
 			</table>
 			
@@ -222,56 +263,53 @@
 		</td>
 	</tr>
 </table>
-<br>
-<table class="table-datos">
+<table class="table-datos mt-5">
 	<tr>
 		<td class="label3">SOLICITUD DEL CLIENTE:</td>
 		<td>{{ $model->inventory->solicitud }} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat ipsum voluptate aliquid nostrum amet voluptatibus, maiores quisquam, saepe laborum nisi laudantium odio, quibusdam possimus. At unde quidem quia consequuntur, totam.</td>
 	</tr>
-	<tr>
-		<td class="label3">comentarios de asesor:</td>
-		<td>{{ $model->comment }} Lorem, ipsum dolor sit amet, consectetur adipisicing elit. Minima quod quisquam a, odit magnam, repellat hic animi voluptate atque cumque sunt, ipsum et corrupti rerum magni. Qui eveniet, explicabo libero.</td>
-	</tr>
 </table>
-	<br>
-    <table class="legend-table">
+    <table class="legend-table mt-5">
         <tr>
-            <th>Leyenda checklist:</th>
-            <td><span class="circle green"></span> Correcto</td>
-            <td><span class="circle amber"></span> Recomendable</td>
-            <td><span class="circle red"></span> Urgente</td>
+            <th>Leyenda Checklist:</th>
+            <td><span class="circle green"></span> Bueno</td>
+            <td><span class="circle amber"></span> Regular</td>
+            <td><span class="circle red"></span> Malo</td>
             <td><span class="circle black"></span> No aplica</td>
         </tr>
     </table>
-    <table style="font-size: 9px;">
-        <tbody>
+    <table class="mt-5" style="font-size: 9px;">
             @php
                 $numRows = ceil(count($checklist_details) / 3);
-                $columns = [[], [], []];
-                foreach ($checklist_details as $index => $item) {
-                    $columns[$index % 3][] = $item;
-                }
+                $numCols = 3;
+                $itemsPerCol = ceil(count($checklist_details) / $numCols);
+                $columns = array_chunk($checklist_details->toArray(), $itemsPerCol);
             @endphp
-            @for ($i = 0; $i < $numRows; $i++)
+            @for ($i = 0; $i < $itemsPerCol; $i++)
                 <tr>
-                    @for ($j = 0; $j < 3; $j++)
+                    @for ($j = 0; $j < $numCols; $j++)
                         @php
                             $item = $columns[$j][$i] ?? null;
-                            $statusClass = $item ? ($item->status == 'correcto' ? 'green' : ($item->status == 'recomendable' ? 'amber' : ($item->status == 'urgente' ? 'red' : 'black'))) : '';
+                            $statusClass = $item ? ($item['status'] == 'correcto' ? 'green' : ($item['status'] == 'recomendable' ? 'amber' : ($item['status'] == 'urgente' ? 'red' : 'black'))) : '';
                         @endphp
-                        <td class="desc-col">{{ $item->name ?? '' }}</td>
+                        <td class="desc-col">{{ $item['name'] ?? '' }}</td>
                         <td class="circle-col">@if($item)<span class="circle {{ $statusClass }}"></span>@endif</td>
-                        <td class="comment-col">{{ $item->comment ?? '' }}</td>
+                        <td class="comment-col">{{ $item['comment'] ?? '' }}</td>
                     @endfor
                 </tr>
             @endfor
-        </tbody>
     </table>
-		
-	<br><br>
-	<table>
+
+<table class="table-datos mt-5">
+	<tr>
+		<td class="label3">OBSERVACIONES:</td>
+		<td>{{ $model->comment }} Lorem, ipsum dolor sit amet, consectetur adipisicing elit. Minima quod quisquam a, odit magnam, repellat hic animi voluptate atque cumque sunt, ipsum et corrupti rerum magni. Qui eveniet, explicabo libero.</td>
+	</tr>
+</table>
+
+	<table class="mt-5" style="font-size: 9px;">
 		<tr>
-			<td style="width: 60%; text-align: center;">AUTORIZACIÓN CLIENTES</td>
+			<td style="width: 60%; text-align: center; font-weight: bold;">AUTORIZACIÓN CLIENTES</td>
 			<td rowspan="2" style="vertical-align: bottom;">
 				<div style="border-top: solid 1px; text-align: center;">AUTORIZADO / DNI</div>
 			</td>
@@ -283,7 +321,7 @@
 			<td>Por el presente autorizo las reparaciones autorizadas conjuntamente con el material que sea necesario usar en ellas. También autorizo a ustedes y sus empleados para que operen este vehículo por la calle, carreteras y otros sitios a fin de asegurar las pruebas e inspecciones pertinentes y para asegurar el pago por concepto de reparaciones y materiales este vehículo queda sujeto a las leyes que amparan los derechos de la empresa.</td>
 		</tr>
 		<tr>
-			<td style="width: 60%; text-align: center;">IMPORTANTE</td>
+			<td style="width: 60%; text-align: center; font-weight: bold;">IMPORTANTE</td>
 			<td rowspan="2" style="vertical-align: bottom;">
 				<div style="border-top: solid 1px; text-align: center;">RECIBI CONFORME / DNI</div>
 			</td>
@@ -292,7 +330,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td>En caso que el cliente no abonase los trabajos realizados a la empresa y estando el automóvil a su disposición, la empresa esta facultado a: <br>a) Cobrar la suma de S/. 50 x días/mes...diarios por derechos a guardería. <br>b) Cobrar el .....% de intereses por derecho a guardería. <br>c) A cualquier otra acción permitida por la ley</td>
+			<td>En caso que el cliente no abonase los trabajos realizados a la empresa y estando el automóvil a su disposición, la empresa esta facultado a: <br>a) Cobrar la suma de S/ 50.00 diarios por derechos a guardería. <br>b) Cobrar el .....% de intereses por derecho a guardería. <br>c) A cualquier otra acción permitida por la ley.</td>
 		</tr>
 	</table>
 
