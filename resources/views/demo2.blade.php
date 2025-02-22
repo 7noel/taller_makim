@@ -3,218 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Vehículo</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Marcador de Daños</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .thumbnail {
-    position: relative;
-    cursor: pointer;
-    margin: 5px;
-    width: 100px; /* Ancho de la miniatura */
-    height: 56.25px; /* Proporción 16:9 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Evitar que se salgan las imágenes */
-    background-color: black; /* Fondo negro */
-    border-radius: 4px; /* Opcional: esquinas redondeadas */
-}
-
-.thumbnail img, .thumbnail video {
-    max-width: 100%; /* No exceder el ancho de la miniatura */
-    max-height: 100%; /* No exceder la altura de la miniatura */
-    object-fit: cover; /* Mantener la proporción */
-}
-.thumbnails {
-    display: flex;
-    flex-wrap: wrap; /* Permitir que se envuelvan las miniaturas */
-    justify-content: center; /* Centrar miniaturas */
-    margin-top: 10px; /* Espaciado superior */
-}
-
-        .remove-btn { position: absolute; top: 5px; right: 5px; }
-        .full-screen-btn { position: absolute; bottom: 5px; right: 5px; }
-        .media-container { background-color: gray; margin-top: 10px; }
-        .video-player, .image-view {
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .canvas-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            overflow: hidden;
+            max-width: 800px;
+            margin: auto;
         }
-        #videoPlayer video, #selectedImage {
-            position: absolute;
-            top: 0;
-            left: 0;
+        canvas {
+            border: 1px solid #ccc;
             width: 100%;
-            height: 100%;
-            object-fit: contain;
+            height: auto;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Formulario de Vehículo</h1>
-
-        <form>
-
-      <label for="validationServer03">City</label>
-      <input type="text" class="form-control is-invalid" id="validationServer03" aria-describedby="" required>
-      <div id="validationServer03Feedback" class="invalid-feedback">
-        Please provide a valid city.
-      </div>
-
-        </form>
-
-        <form id="vehicleForm">
-            <div class="form-group">
-                <label for="placa">Placa</label>
-                <input type="text" class="form-control" id="placa" required>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 class="mb-3">Marca los daños en la imagen</h2>
             </div>
-            <div class="form-group">
-                <label for="kilometraje">Kilometraje</label>
-                <input type="number" class="form-control" id="kilometraje" required>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <label for="imageSelector">Selecciona un tipo de vehículo:</label>
+                <select id="imageSelector" class="custom-select w-auto d-inline-block" onchange="changeImage()">
+                    <option value="/img/inv-sedan.jpg">Sedán</option>
+                    <option value="/img/inv-suv.jpg">SUV</option>
+                    <option value="/img/inv-pickup.jpg">Pickup</option>
+                </select>
             </div>
-            <div class="form-group">
-                <label for="contacto">Contacto</label>
-                <input type="text" class="form-control" id="contacto" required>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-12 text-center canvas-container">
+                <canvas id="damageCanvas"></canvas>
             </div>
-            <div class="form-group">
-                <label for="celular">Celular</label>
-                <input type="tel" class="form-control" id="celular" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" required>
-            </div>
-            <input type="file" accept="image/*" id="photoInput" style="display:none;" capture="camera">
-            <button type="button" class="btn btn-outline-primary" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
-            <input type="file" accept="video/*" id="videoInput" style="display:none;" capture="camera">
-            <button type="button" class="btn btn-outline-primary" id="addVideo"><i class="fas fa-video"></i> Grabar Video</button>
-            
-            <div class="media-container">
-                <div id="imageView" class="image-view" style="display:none;">
-                    <img id="selectedImage" src="" alt="Imagen seleccionada">
-                    <button class="btn btn-secondary full-screen-btn" id="fullScreenBtn"><i class="fas fa-expand"></i></button>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-outline-danger" onclick="clearCanvas()"><i class="fas fa-trash"></i> Borrar marcas</button>
+                <button class="btn btn-outline-warning" onclick="undoLastMark()"><i class="fas fa-undo"></i> Deshacer</button>
+                <div class="d-inline-block">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="damageType" id="rayon" value="red" checked>
+                        <label class="form-check-label" for="rayon">Rayón</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="damageType" id="abolladura" value="blue">
+                        <label class="form-check-label" for="abolladura">Abolladura</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="damageType" id="quine" value="green">
+                        <label class="form-check-label" for="quine">Quiñe</label>
+                    </div>
                 </div>
-                <div id="videoPlayer" class="video-player" style="display:none;">
-                    <video class="embed-responsive-item" controls></video>
-                </div>
+                
+                <input type="hidden" id="image_base64" name="image_base64">
             </div>
-            <div class="thumbnails d-flex flex-wrap mt-2"></div>
-            <h3>Estado de Componentes</h3>
-            <div class="form-group">
-                <label>Aceite de Motor</label>
-                <input type="text" class="form-control mb-2" placeholder="Comentario">
-                <div>
-                    <label><input type="radio" name="oil" value="ok"> <span style="color:green;">Ok</span></label>
-                    <label><input type="radio" name="oil" value="suggested"> <span style="color:gold;">Sugerido</span></label>
-                    <label><input type="radio" name="oil" value="urgent"> <span style="color:red;">Urgente</span></label>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-success">Enviar</button>
-        </form>
+        </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script>
-$(document).ready(function () {
-    let imageCount = 0;
-    let videoCount = 0;
-
-    $('#addPhoto').on('click', function () {
-        $('#photoInput').click();
-    });
-
-    $('#photoInput').on('change', function (event) {
-        const files = event.target.files;
-        const thumbnails = $('.thumbnails');
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const imageId = `image-${imageCount}`;
-                thumbnails.append(`
-                    <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('${e.target.result}')">
-                        <img src="${e.target.result}" alt="Foto ${imageCount + 1}">
-                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
-                    </div>
-                `);
-                $('#vehicleForm').append(`<input type="hidden" id="input-${imageId}" name="image[${imageCount}]" value="${e.target.result}">`);
-                imageCount++;
-                showImage(e.target.result);
+    
+    <script>
+        let canvas = document.getElementById("damageCanvas");
+        let ctx = canvas.getContext("2d");
+        let img = new Image();
+        let marks = [];
+        
+        function loadImage(src) {
+            img.src = src;
+            img.onload = function() {
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                redrawCanvas();
+                updateImageData();
             };
-
-            reader.readAsDataURL(file);
         }
-    });
-
-    $('#addVideo').on('click', function () {
-        $('#videoInput').click();
-    });
-
-    $('#videoInput').on('change', function (event) {
-        const files = event.target.files;
-        const thumbnails = $('.thumbnails');
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const videoId = `video-${videoCount}`;
-                thumbnails.append(`
-                    <div class="thumbnail" id="thumbnail-${videoId}" onclick="playVideo('${e.target.result}')">
-                        <video src="${e.target.result}" muted></video>
-                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${videoId}')">X</button>
-                    </div>
-                `);
-                $('#vehicleForm').append(`<input type="hidden" id="input-${videoId}" name="video[${videoCount}]" value="${e.target.result}">`);
-                videoCount++;
-                playVideo(e.target.result);
-            };
-
-            reader.readAsDataURL(file);
+        
+        function changeImage() {
+            let selectedImage = document.getElementById("imageSelector").value;
+            marks = [];
+            loadImage(selectedImage);
         }
-    });
-
-    $('#fullScreenBtn').on('click', function () {
-        const img = document.getElementById('selectedImage');
-        if (img) {
-            if (img.requestFullscreen) {
-                img.requestFullscreen();
-            } else if (img.mozRequestFullScreen) {
-                img.mozRequestFullScreen();
-            } else if (img.webkitRequestFullscreen) {
-                img.webkitRequestFullscreen();
-            } else if (img.msRequestFullscreen) {
-                img.msRequestFullscreen();
+        
+        loadImage("/img/inv-sedan.jpg");
+        
+        canvas.addEventListener("click", function(event) {
+            let rect = canvas.getBoundingClientRect();
+            let scaleX = canvas.width / rect.width;
+            let scaleY = canvas.height / rect.height;
+            let x = (event.clientX - rect.left) * scaleX;
+            let y = (event.clientY - rect.top) * scaleY;
+            let color = document.querySelector('input[name="damageType"]:checked').value;
+            marks.push({ x, y, color });
+            redrawCanvas();
+            updateImageData();
+        });
+        
+        function drawMark(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        
+        function undoLastMark() {
+            if (marks.length > 0) {
+                marks.pop();
+                redrawCanvas();
+                updateImageData();
             }
         }
-    });
-});
-
-function showImage(src) {
-    $('#videoPlayer').hide();
-    $('#selectedImage').attr('src', src);
-    $('#imageView').show();
-}
-
-function playVideo(src) {
-    $('#imageView').hide();
-    $('#videoPlayer video').attr('src', src).show();
-    $('#videoPlayer').show();
-}
-
-function removeThumbnail(id) {
-    if (confirm("¿Estás seguro de que quieres eliminar esta foto o video?")) {
-        $(`#thumbnail-${id}`).remove();
-        $(`#input-${id}`).remove();
-    }
-}
-</script>
-
+        
+        function clearCanvas() {
+            marks = [];
+            redrawCanvas();
+            updateImageData();
+        }
+        
+        function redrawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            marks.forEach(mark => drawMark(mark.x, mark.y, mark.color));
+        }
+        
+        function updateImageData() {
+            canvas.toBlob(function(blob) {
+                let reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = function() {
+                    document.getElementById("image_base64").value = reader.result;
+                };
+            }, "image/jpeg");
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

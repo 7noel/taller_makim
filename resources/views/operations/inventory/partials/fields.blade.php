@@ -105,6 +105,7 @@
     .radio-amber input[type="radio"] + label { color: orange; }
     .radio-red input[type="radio"] + label { color: red; }
     .radio-black input[type="radio"] + label { color: black; }
+    .radio-blue input[type="radio"] + label { color: blue; }
 
     /* Alinear en una sola línea para PC */
     @media (min-width: 768px) {
@@ -183,7 +184,7 @@
                             <label class="form-check-label" for="no-aplica-{{ $index }}">No Aplica</label>
                         </div>
                     </div>
-                    <input class="form-control form-control-sm comment" type="text" name="order_checklist_details[{{ $index }}][comment]" value="{{ $checklist->comment }}" placeholder="Escribe un comentario">
+                    <input class="form-control form-control-sm comment" type="text" name="order_checklist_details[{{ $index }}][comment]" value="{{ $checklist->comment }}" placeholder="">
                 </div>
 			@endforeach
 		</div>
@@ -215,21 +216,30 @@
             </div>
         </div>
         <div class="row justify-content-center mt-3">
-            <div class="col-md-12 text-center canvas-container">
-                <canvas id="damageCanvas"></canvas>
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-outline-danger" onclick="clearCanvas()"><i class="fas fa-trash"></i> Borrar marcas</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="undoLastMark()"><i class="fas fa-undo"></i> Deshacer</button>
+                <div class="d-inline-block ml-3">
+                    <div class="form-check form-check-inline radio-green">
+                        <input class="form-check-input" type="radio" name="damageType" id="rayon" value="green" checked>
+                        <label class="form-check-label" for="rayon">Rayón</label>
+                    </div>
+                    <div class="form-check form-check-inline radio-red">
+                        <input class="form-check-input" type="radio" name="damageType" id="abolladura" value="red">
+                        <label class="form-check-label" for="abolladura">Abolladura</label>
+                    </div>
+                    <div class="form-check form-check-inline radio-blue">
+                        <input class="form-check-input" type="radio" name="damageType" id="quine" value="blue">
+                        <label class="form-check-label" for="quine">Quiñe</label>
+                    </div>
+                </div>
+                
+                <input type="hidden" id="image_base64" name="image_base64">
             </div>
         </div>
         <div class="row justify-content-center mt-3">
-            <div class="col-md-12 text-center">
-                <button class="btn btn-outline-danger" onclick="clearCanvas()"><i class="fas fa-trash"></i> Borrar marcas</button>
-                <button class="btn btn-outline-secondary" onclick="undoLastMark()"><i class="fas fa-undo"></i> Deshacer</button>
-                <select id="damageType" class="custom-select w-auto d-inline-block">
-                    <option value="green">Rayón</option>
-                    <option value="red">Abolladura</option>
-                    <option value="blue">Quiñe</option>
-                </select>
-                
-                <input type="hidden" id="image_base64" name="image_base64">
+            <div class="col-md-12 text-center canvas-container">
+                <canvas id="damageCanvas"></canvas>
             </div>
         </div>
 
@@ -298,7 +308,8 @@
             let scaleY = canvas.height / rect.height;
             let x = (event.clientX - rect.left) * scaleX;
             let y = (event.clientY - rect.top) * scaleY;
-            let color = document.getElementById("damageType").value;
+            let color = document.querySelector('input[name="damageType"]:checked').value;
+            // let color = document.getElementById("damageType").value;
             marks.push({ x, y, color });
             redrawCanvas();
             updateImageData();
@@ -387,7 +398,14 @@ $(document).ready(function () {
                     canvas.width = newW;
                     canvas.height = newH;
                     const ctx = canvas.getContext('2d');
+                    // Rellenar con fondo blanco
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, newW, newH);
+
+                    // Dibujar la imagen sobre el fondo blanco
                     ctx.drawImage(originalImage, 0, 0, newW, newH);
+
+                    // Convertir a JPEG
                     const resizedDataUrl = canvas.toDataURL('image/jpeg');
 
                     const imageId = `image-${imageCount}`;
@@ -460,16 +478,18 @@ function removeThumbnail(id) {
         $(`#thumbnail-${id}`).remove();
         $(`#input-${id}`).remove();
 
-        // Buscar la primera miniatura restante
-        let firstThumbnail = $('.thumbnail').first();
-        if (firstThumbnail.length > 0) {
-            // Simula el clic para mostrar la miniatura en el visualizador
-            firstThumbnail.click();
-        } else {
-            // Si no quedan miniaturas, ocultar ambos visualizadores
-            $('#imageView').hide();
-            $('#videoPlayer').hide();
-        }
+        setTimeout(function() {
+            // Buscar la primera miniatura restante
+            let firstThumbnail = $('.thumbnail').first();
+            if (firstThumbnail.length > 0) {
+                // Simula el clic para mostrar la miniatura en el visualizador
+                firstThumbnail.click();
+            } else {
+                // Si no quedan miniaturas, ocultar ambos visualizadores
+                $('#imageView').hide();
+                $('#videoPlayer').hide();
+            }
+        }, 500)
     }
 }
 
