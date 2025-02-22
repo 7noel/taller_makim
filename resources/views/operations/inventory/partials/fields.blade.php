@@ -456,37 +456,37 @@ $(document).ready(function () {
         }
     });
 
-    document.getElementById('fullScreenBtn').addEventListener('click', function (event) {
-        event.preventDefault(); // Previene la navegación accidental
+    // document.getElementById('fullScreenBtn').addEventListener('click', function (event) {
+    //     event.preventDefault(); // Previene la navegación accidental
 
-        const img = document.getElementById('selectedImage');
-        if (img) {
-            if (img.requestFullscreen) {
-                img.requestFullscreen();
-            } else if (img.mozRequestFullScreen) { // Firefox
-                img.mozRequestFullScreen();
-            } else if (img.webkitRequestFullscreen) { // Chrome, Safari y Opera
-                img.webkitRequestFullscreen();
-            } else if (img.msRequestFullscreen) { // IE/Edge
-                img.msRequestFullscreen();
-            }
-        }
-    });
-
-    // $('#fullScreenBtn').on('click', function () {
     //     const img = document.getElementById('selectedImage');
     //     if (img) {
     //         if (img.requestFullscreen) {
     //             img.requestFullscreen();
-    //         } else if (img.mozRequestFullScreen) {
+    //         } else if (img.mozRequestFullScreen) { // Firefox
     //             img.mozRequestFullScreen();
-    //         } else if (img.webkitRequestFullscreen) {
+    //         } else if (img.webkitRequestFullscreen) { // Chrome, Safari y Opera
     //             img.webkitRequestFullscreen();
-    //         } else if (img.msRequestFullscreen) {
+    //         } else if (img.msRequestFullscreen) { // IE/Edge
     //             img.msRequestFullscreen();
     //         }
     //     }
     // });
+
+    $('#fullScreenBtn').on('click', function () {
+        const img = document.getElementById('selectedImage');
+        if (img) {
+            if (img.requestFullscreen) {
+                img.requestFullscreen();
+            } else if (img.mozRequestFullScreen) {
+                img.mozRequestFullScreen();
+            } else if (img.webkitRequestFullscreen) {
+                img.webkitRequestFullscreen();
+            } else if (img.msRequestFullscreen) {
+                img.msRequestFullscreen();
+            }
+        }
+    });
 });
 
 // Actualización de removeThumbnail para mostrar la primera miniatura disponible o ocultar el visualizador si no hay ninguna.
