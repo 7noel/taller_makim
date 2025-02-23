@@ -5,58 +5,55 @@
 {!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
 {!! Form::hidden('action', $action, ['id'=>'action']) !!}
 
-<div class="accordion" id="accordionExample">
-  <div class="card">
-    <div class="card-header" id="headingOne">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Vehículo
-        </button>
-      </h2>
-    </div>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+	<li class="nav-item" role="presentation">
+		<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Inventario</a>
+	</li>
+	<li class="nav-item" role="presentation">
+		<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Imagen</a>
+	</li>
+</ul>
+<div class="tab-content mt-2" id="myTabContent">
+	<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+		<div class="form-row">
+			<div class="col-md-1 col-sm-2">
+				{!! Form::label('sn', 'Inventario') !!}
+				@if(isset($model) and $model->order_type == 'inventory')
+				{!! Form::text('sn', null, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+				@else
+				{!! Form::text('sn', '',['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+				@endif
+			</div>
+			<div class="col-md-1 col-sm-2">
+				{!! Field::text('placa', null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+			</div>
+			<div class="col-sm-2">
+				{!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
+			</div>
+			<div class="col-sm-1 d-none">
+				{!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}
+			</div>
+			<div class="col-md-2 col-sm-4">
+				@if(isset(\Auth::user()->employee->job_id) and (\Auth::user()->employee->job_id == 8 or \Auth::user()->id==3))
+				{!! Field::select('seller_id', [\Auth::user()->employee->id => \Auth::user()->employee->full_name], ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
+				@else
+				{!! Field::select('seller_id', $sellers, ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
+				@endif
+			</div>
+			<div class="col-md-2 col-sm-4">
+				{!! Field::text('attention', ['label' => 'Atención', 'class'=>'form-control-sm text-uppercase']) !!}
+			</div>
+		</div>
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
-
-        <div class="form-row">
-            <div class="col-md-1 col-sm-2">
-                {!! Form::label('sn', 'Inventario') !!}
-                @if(isset($model) and $model->order_type == 'inventory')
-                {!! Form::text('sn', null, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
-                @else
-                {!! Form::text('sn', '',['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
-                @endif
-            </div>
-            <div class="col-md-1 col-sm-2">
-                {!! Field::text('placa', null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
-            </div>
-            <div class="col-sm-1 d-none">
-                {!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}
-            </div>
-            <div class="col-md-2 col-sm-4">
-                @if(isset(\Auth::user()->employee->job_id) and (\Auth::user()->employee->job_id == 8 or \Auth::user()->id==3))
-                {!! Field::select('seller_id', [\Auth::user()->employee->id => \Auth::user()->employee->full_name], ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
-                @else
-                {!! Field::select('seller_id', $sellers, ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
-                @endif
-            </div>
-            <div class="col-md-2 col-sm-4">
-                {!! Field::text('attention', ['label' => 'Atención', 'class'=>'form-control-sm text-uppercase']) !!}
-            </div>
-        </div>
-
-        <div class="form-row">
-            {{--<div class="col-sm-2">
-                <div id="field_inventory_combustible" class="form-group">
-                    <label for="inventory_combustible">
-                        Combustible
-                    </label>
-                    <input class="" id="inventory_combustible" name="inventory[combustible]" type="range" step='25' value="{{(isset($model->inventory->combustible))? $model->inventory->combustible :''}}">
-                </div>
-            </div> --}}
+		<div class="form-row">
+			{{--<div class="col-sm-2">
+				<div id="field_inventory_combustible" class="form-group">
+					<label for="inventory_combustible">
+						Combustible
+					</label>
+					<input class="" id="inventory_combustible" name="inventory[combustible]" type="range" step='25' value="{{(isset($model->inventory->combustible))? $model->inventory->combustible :''}}">
+				</div>
+			</div> --}}
             <div class="col-sm-2">
                 {!! Field::select('inventory[combustible]', config('options.combustible'), (isset($model->inventory->combustible
                 ) ? $model->inventory->combustible : ''), ['empty'=>'SELECCIONAR', 'label'=>'Combustible', 'class'=>'form-control-sm']) !!}
@@ -85,11 +82,10 @@
                 {!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory->comprobante
                 ) ? $model->inventory->comprobante : ''), ['empty'=>'SIN COMPROBANTE', 'label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
             </div>
-            <div class="col-sm-2">
-                {!! Field::date('inventory[entrega]', (isset($model->inventory->entrega) ? $model->inventory->entrega : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
-            </div>
-        </div>
-
+			<div class="col-sm-2">
+				{!! Field::date('inventory[entrega]', (isset($model->inventory->entrega) ? $model->inventory->entrega : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
+			</div>
+		</div>
         <div class="form-row">
             <div class="col-sm-12">
                 <div id="field_inventory_combustible" class="form-group">
@@ -101,20 +97,8 @@
                 {!! Field::text('comment', ['label' => 'Comentarios', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingTwo">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          CheckList
-        </button>
-      </h2>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
-        <div class="form-row">
+		
+		<div class="form-row">
 
   <style>
     .radio-green input[type="radio"] + label { color: green; }
@@ -168,7 +152,7 @@
         height: auto;
     }
   </style>
-            @foreach($checklist_details as $index => $checklist)
+			@foreach($checklist_details as $index => $checklist)
                 @php
                 $checkeds = ['correcto' => '', 'recomendable' => '', 'urgente' => '', 'no_aplica' => '', '' => '']; 
                 $checkeds[$checklist->status] = 'checked';
@@ -202,21 +186,25 @@
                     </div>
                     <input class="form-control form-control-sm comment" type="text" name="order_checklist_details[{{ $index }}][comment]" value="{{ $checklist->comment }}" placeholder="">
                 </div>
-            @endforeach
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingThree">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          Daños
-        </button>
-      </h2>
-    </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
+			@endforeach
+		</div>
+
+	</div>
+	<div class="tab-pane fade mb-5 text-center" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+		{{--
+		<input type="hidden" id="mi_ot" value="{{ (isset($model) and \Storage::disk('public')->exists('ot_'.$model->id.'.jpg'))? $model->id : '' }}">
+		<input type="color"  class="js-color-picker color-picker" value="#fa0000">
+		<input type="range" class="js-line-range" min="4" max="30" value="4">
+		<label class="js-range-value">4</label>Px
+		<input type="hidden" name="image_base64" id="image_base64">
+		<button type="button" class="btn btn-sm btn-info" id="btn-image-load">Cargar imagen</button>
+		<button type="button" class="btn btn-sm btn-light" id="btn-reset">Limpiar imagen</button>
+
+		<div id="my-image-editor" width="600" height="300">
+			<canvas class="js-paint paint-canvas" id="canvas" style="max-widt=100%"></canvas>
+		</div>
+		--}}
+
         <div class="row justify-content-center">
             <div class="col-md-12 text-center">
                 <label for="imageSelector">Selecciona un tipo de vehículo:</label>
@@ -255,21 +243,6 @@
             </div>
         </div>
 
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingFour">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-          Fotos
-        </button>
-      </h2>
-    </div>
-    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
-      <div class="card-body text-center">
-
-        
 
         <input type="file" accept="image/*" id="photoInput" style="display:none;" capture="environment">
         <button type="button" class="btn btn-outline-primary mt-4" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
@@ -300,12 +273,8 @@
             @endif
         </div>
 
-      </div>
-    </div>
-  </div>
+	</div>
 </div>
-
-
 <script>
         let canvas = document.getElementById("damageCanvas");
         let ctx = canvas.getContext("2d");
