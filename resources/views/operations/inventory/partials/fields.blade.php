@@ -16,7 +16,7 @@
     </div>
 
     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
+      <div class="card-body m-0 p-0">
 
         <div class="form-row">
             <div class="col-md-1 col-sm-2">
@@ -113,7 +113,7 @@
       </h2>
     </div>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
+      <div class="card-body m-0 p-0">
         <div class="form-row">
 
   <style>
@@ -207,7 +207,7 @@
       </div>
     </div>
   </div>
-  <div class="card">
+  <div class="card m-0 p-0">
     <div class="card-header" id="headingThree">
       <h2 class="mb-0">
         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -216,11 +216,11 @@
       </h2>
     </div>
     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
+      <div class="card-body m-0 p-0">
         <div class="row justify-content-center">
             <div class="col-md-12 text-center">
                 <label for="imageSelector">Selecciona un tipo de vehículo:</label>
-                <select id="imageSelector" class="custom-select w-auto d-inline-block" onchange="changeImage()">
+                <select id="imageSelector" class="form-control-sm custom-select w-auto d-inline-block" onchange="changeImage()">
                     <option value="/img/inv-sedan.jpg">Sedán</option>
                     <option value="/img/inv-suv.jpg">SUV</option>
                     <option value="/img/inv-pickup.jpg">Pickup</option>
@@ -229,8 +229,8 @@
         </div>
         <div class="row justify-content-center mt-3">
             <div class="col-md-12 text-center">
-                <button type="button" class="btn btn-outline-danger" onclick="clearCanvas()"><i class="fas fa-trash"></i> Borrar marcas</button>
-                <button type="button" class="btn btn-outline-secondary" onclick="undoLastMark()"><i class="fas fa-undo"></i> Deshacer</button>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearCanvas()"><i class="fas fa-trash"></i> Borrar marcas</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="undoLastMark()"><i class="fas fa-undo"></i> Deshacer</button>
                 <div class="d-inline-block ml-3">
                     <div class="form-check form-check-inline radio-green">
                         <input class="form-check-input" type="radio" name="damageType" id="rayon" value="green" checked>
@@ -258,7 +258,7 @@
       </div>
     </div>
   </div>
-  <div class="card">
+  <div class="card m-0 p-0">
     <div class="card-header" id="headingFour">
       <h2 class="mb-0">
         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
@@ -267,7 +267,7 @@
       </h2>
     </div>
     <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
-      <div class="card-body text-center">
+      <div class="card-body text-center m-0 p-0">
 
         
 
