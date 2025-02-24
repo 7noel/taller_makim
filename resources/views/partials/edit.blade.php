@@ -7,7 +7,7 @@
 			<div class="card">
 				<h5 class="{{ config('options.styles.card_header') }}"> {{ $labels['edit'] }}
 				</h5>
-				<div class="card-body">
+				<div class="card-body padding-0">
 					{!! Form::model($model, ['route'=> [$routes['update'], $model] , 'method'=>'PUT', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
 						@if(Request::url() != URL::previous())
 						<input type="hidden" name="last_page" value="{{ URL::previous() }}">

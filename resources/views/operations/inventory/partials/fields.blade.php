@@ -7,7 +7,7 @@
 
 <div class="accordion" id="accordionExample">
   <div class="card">
-    <div class="card-header" id="headingOne">
+    <div class="card-header padding-1" id="headingOne">
       <h2 class="mb-0">
         <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           Vehículo
@@ -16,7 +16,7 @@
     </div>
 
     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body m-0 p-0">
+      <div class="card-body">
 
         <div class="form-row">
             <div class="col-md-1 col-sm-2">
@@ -105,7 +105,7 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-header" id="headingTwo">
+    <div class="card-header padding-1" id="headingTwo">
       <h2 class="mb-0">
         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
           CheckList
@@ -113,10 +113,12 @@
       </h2>
     </div>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body m-0 p-0">
+      <div class="card-body">
         <div class="form-row">
 
   <style>
+    .padding-1 {padding-bottom: 1px; padding-top: 1px;}
+    .padding-0 { padding-left:0; padding-right:0; }
     .radio-green input[type="radio"] + label { color: green; }
     .radio-amber input[type="radio"] + label { color: orange; }
     .radio-red input[type="radio"] + label { color: red; }
@@ -207,8 +209,8 @@
       </div>
     </div>
   </div>
-  <div class="card m-0 p-0">
-    <div class="card-header" id="headingThree">
+  <div class="card">
+    <div class="card-header padding-1" id="headingThree">
       <h2 class="mb-0">
         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
           Daños
@@ -216,7 +218,7 @@
       </h2>
     </div>
     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body m-0 p-0">
+      <div class="card-body">
         <div class="row justify-content-center">
             <div class="col-md-12 text-center">
                 <label for="imageSelector">Selecciona un tipo de vehículo:</label>
@@ -258,8 +260,8 @@
       </div>
     </div>
   </div>
-  <div class="card m-0 p-0">
-    <div class="card-header" id="headingFour">
+  <div class="card">
+    <div class="card-header padding-1" id="headingFour">
       <h2 class="mb-0">
         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
           Fotos
@@ -267,7 +269,7 @@
       </h2>
     </div>
     <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
-      <div class="card-body text-center m-0 p-0">
+      <div class="card-body text-center">
 
         
 
