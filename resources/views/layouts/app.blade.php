@@ -21,6 +21,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <style>
+/*        .form-group label{ font-weight:bold; }*/
         .paint-canvas {
           border: 1px black solid;
           display: block;
@@ -547,11 +548,20 @@ $(document).ready(function () {
     })
     $('#type_service').change(function (e) {
         if ('PREVENTIVO' == $('#type_service').val()) {
-            $('#preventivo').parent().parent().removeClass("d-none")
+            $('#preventivo').parent().parent().parent().removeClass("d-none")
+            $('#seguro').parent().parent().parent().addClass( "d-none")
             $('#preventivo').attr("required", "required")
-        } else {
-            $('#preventivo').parent().parent().addClass( "d-none")
+            $('#seguro').removeAttr("required", "required")
+        } else if ('SINIESTRO' == $('#type_service').val()) {
+            $('#preventivo').parent().parent().parent().addClass( "d-none")
+            $('#seguro').parent().parent().parent().removeClass( "d-none")
             $('#preventivo').removeAttr("required", "required")
+            $('#seguro').attr("required", "required")
+        } else {
+            $('#preventivo').parent().parent().parent().addClass( "d-none")
+            $('#seguro').parent().parent().parent().addClass( "d-none")
+            $('#preventivo').removeAttr("required", "required")
+            $('#seguro').removeAttr("required", "required")
         }
     })
    // $("#type_detail_p").prop("checked", true);

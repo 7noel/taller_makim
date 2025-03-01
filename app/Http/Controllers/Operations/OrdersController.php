@@ -108,7 +108,9 @@ class OrdersController extends Controller {
 		$bs = $model->company->branches->pluck('name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
 		$checklist_details = $this->checklistDetailRepo->all2();
-		return view('partials.show', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details'));
+		$car = $this->carRepo->findOrFail($car_id);
+		$client = $car->company;
+		return view('partials.show', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details'));
 	}
 
 	public function edit($id)
@@ -124,9 +126,11 @@ class OrdersController extends Controller {
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
 		$checklist_details = $this->orderChecklistDetailRepo->byOrder($model->id, '1');
+		$car = $this->carRepo->findOrFail($car_id);
+		$client = $car->company;
 		// $checklist_details = $this->checklistDetailRepo->all2();
 		// dd($checklist_details);
-		return view('partials.edit', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details'));
+		return view('partials.edit', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details'));
 	}
 
 	public function update($id)
@@ -287,7 +291,9 @@ class OrdersController extends Controller {
 		$bs = ['' => 'Seleccionar'];
 		$bs_shipper = ['' => 'Seleccionar'];
 		$car = $this->carRepo->findOrFail($car_id);
-		return view('operations.inventory.create', compact('car', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details'));
+		$client = $car->company;
+
+		return view('operations.inventory.create', compact('car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details'));
 	}
 	public function changeStatusOrder($id)
 	{
@@ -298,7 +304,7 @@ class OrdersController extends Controller {
 	{
 		$data = request()->all();
 		// dd($data['status']);
-		if ($data['action'] == 'cliente') {
+		if (isset($data['action']) and $data['action'] == 'cliente') {
 			$mensaje['DIAG'][0] = 'Lamentamos que no estés de acuerdo con tu orden de trabajo, ahora tu asesor encargado se comunicará contigo, recuerda que estamos para servirte';
 			$mensaje['DIAG'][1] = 'Ahora tu orden de trabajo avanzará a la fase de diagnóstico, recibirás una nueva notificación cuando el diagnóstico se haya completado';
 			$mensaje['REPAR'][0] = 'Lamentamos que nuestro diagnóstico no haya sido oportuno, ahora tu asesor encargado se comunicará contigo, recuerda que estamos para servirte';
@@ -317,9 +323,12 @@ class OrdersController extends Controller {
 				$data['status_msj'] = 'Rechazado por Cliente';
 				$data['status_aprobacion'] = 0;
 			}
+		} else {
+			$data['status_msj'] = 'Estado cambiado por '.Auth::user()->name . ' id = ' . Auth::user()->id . '.';
+			$data['status_aprobacion'] = 1;
 		}
 		$model = $this->repo->changeStatus($data, $id);
-		if ($data['action'] == 'cliente') {
+		if (isset($data['action']) and $data['action'] == 'cliente') {
 			return view('operations.taller.cliente_respuesta', compact('icon', 'msj', 'title'));
 		}
 		return redirect()->route('home2');

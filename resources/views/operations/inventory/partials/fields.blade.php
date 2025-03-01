@@ -1,122 +1,4 @@
-{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
-{!! Form::hidden('is_downloadable', 1, ['id'=>'is_downloadable']) !!}
-{!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
-{!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
-{!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
-{!! Form::hidden('action', $action, ['id'=>'action']) !!}
-
-<div class="accordion" id="accordionExample">
-  <div class="card">
-    <div class="card-header padding-1" id="headingOne">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Vehículo
-        </button>
-      </h2>
-    </div>
-
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
-
-        <div class="form-row">
-            <div class="col-md-1 col-sm-2">
-                {!! Form::label('sn', 'Inventario') !!}
-                @if(isset($model) and $model->order_type == 'inventory')
-                {!! Form::text('sn', null, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
-                @else
-                {!! Form::text('sn', '',['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
-                @endif
-            </div>
-            <div class="col-md-1 col-sm-2">
-                {!! Field::text('placa', null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
-            </div>
-            <div class="col-sm-1 d-none">
-                {!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}
-            </div>
-            <div class="col-md-2 col-sm-4">
-                @if(isset(\Auth::user()->employee->job_id) and (\Auth::user()->employee->job_id == 8 or \Auth::user()->id==3))
-                {!! Field::select('seller_id', [\Auth::user()->employee->id => \Auth::user()->employee->full_name], ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
-                @else
-                {!! Field::select('seller_id', $sellers, ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
-                @endif
-            </div>
-            <div class="col-md-2 col-sm-4">
-                {!! Field::text('attention', ['label' => 'Atención', 'class'=>'form-control-sm text-uppercase']) !!}
-            </div>
-        </div>
-
-        <div class="form-row">
-            {{--<div class="col-sm-2">
-                <div id="field_inventory_combustible" class="form-group">
-                    <label for="inventory_combustible">
-                        Combustible
-                    </label>
-                    <input class="" id="inventory_combustible" name="inventory[combustible]" type="range" step='25' value="{{(isset($model->inventory->combustible))? $model->inventory->combustible :''}}">
-                </div>
-            </div> --}}
-            <div class="col-sm-2">
-                {!! Field::select('inventory[combustible]', config('options.combustible'), (isset($model->inventory->combustible
-                ) ? $model->inventory->combustible : ''), ['empty'=>'SELECCIONAR', 'label'=>'Combustible', 'class'=>'form-control-sm']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::number('kilometraje', null, ['label' => 'Kilom.', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::select('inventory[tarjeta_propiedad]', config('options.tarjeta_propiedad'), (isset($model->inventory->tarjeta_propiedad
-                ) ? $model->inventory->tarjeta_propiedad : ''), ['empty'=>'SELECCIONAR', 'label'=>'TJ Propiedad', 'class'=>'form-control-sm']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::date('inventory[soat]', (isset($model->inventory->soat) ? $model->inventory->soat : ''), ['label'=>'Fecha de soat', 'class'=>'form-control-sm']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::date('inventory[revision_tecnica]', (isset($model->inventory->revision_tecnica) ? $model->inventory->revision_tecnica : ''), ['label'=>'Revisión Técnica', 'class'=>'form-control-sm']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::number('inventory[llaves]', (isset($model->inventory->llaves) ? $model->inventory->llaves : '0'), ['label'=>'Llaves', 'class'=>'form-control-sm']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::select('inventory[control_remoto]', ['SI'=>'SI', 'NO'=>'NO'], (isset($model->inventory->control_remoto
-                ) ? $model->inventory->control_remoto : ''), ['empty'=>'SIN control_remoto', 'label'=>'Control Rremoto', 'class'=>'form-control-sm']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory->comprobante
-                ) ? $model->inventory->comprobante : ''), ['empty'=>'SIN COMPROBANTE', 'label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
-            </div>
-            <div class="col-sm-2">
-                {!! Field::date('inventory[entrega]', (isset($model->inventory->entrega) ? $model->inventory->entrega : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="col-sm-12">
-                <div id="field_inventory_combustible" class="form-group">
-                    <label for="inventory_solicitud">Solicitud Cliente</label>
-                    <textarea class="form-control form-control-sm text-uppercase" id="inventory_solicitud" rows="2" name="inventory[solicitud]">{{(isset($model->inventory->solicitud))? trim($model->inventory->solicitud):''}}</textarea>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                {!! Field::text('comment', ['label' => 'Comentarios', 'class'=>'form-control-sm text-uppercase']) !!}
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header padding-1" id="headingTwo">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          CheckList
-        </button>
-      </h2>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
-        <div class="form-row">
-
-  <style>
+<style>
     .padding-1 {padding-bottom: 1px; padding-top: 1px;}
     .padding-0 { padding-left:0; padding-right:0; }
     .radio-green input[type="radio"] + label { color: green; }
@@ -169,7 +51,241 @@
         width: 100%;
         height: auto;
     }
-  </style>
+</style>
+
+{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('is_downloadable', 1, ['id'=>'is_downloadable']) !!}
+{!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
+{!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
+{!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
+{!! Form::hidden('action', $action, ['id'=>'action']) !!}
+
+<div class="accordion mb-4" id="accordionExample">
+  <div class="card">
+    <div class="card-header padding-1" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Vehículo
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <div class="mb-2">
+            <a href="{{ route('cars.create') }}" class="btn btn-sm btn-link">[[ Crear Vehiculo ]]</a>
+            <a href="{{ route('clients.create') }}" class="btn btn-sm btn-link">[[ Crear Cliente ]]</a>
+            
+        </div>
+
+        <div class="form-row">
+            <div class="col-sm-2">
+                <div class="form-group">
+                    {!! Form::label('sn', 'Inventario') !!}
+                    @if(isset($model) and $model->order_type == 'inventory')
+                    {!! Form::text('sn', null, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+                    @else
+                    {!! Form::text('sn', '',['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+                    @endif
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    @if(isset(\Auth::user()->employee->job_id) and (\Auth::user()->employee->job_id == 8 or \Auth::user()->id==3))
+                    {!! Field::select('seller_id', [\Auth::user()->employee->id => \Auth::user()->employee->full_name], ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
+                    @else
+                    {!! Field::select('seller_id', $sellers, ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
+                @endif
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    {!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
+                </div>
+            </div>
+            <div class="col-sm-2 d-none">
+                <div class="form-group">
+                    {!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}
+                </div>
+            </div>
+            <div class="col-sm-2 d-none">
+                <div class="form-group">
+                    {!! Field::select('seguro', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm']) !!}
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-sm-2">
+                {!! Field::text('placa', (isset($car)) ? $car->placa : null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="brand">Marca</label>
+                    {!! Form::text('brand', (isset($car->brand)) ? $car->brand->name : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="modelo">Modelo</label>
+                    {!! Form::text('modelo', (isset($car->modelo)) ? $car->modelo->name : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="year">Año</label>
+                    {!! Form::text('year', (isset($car)) ? $car->year : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="color">Color</label>
+                    {!! Form::text('color', (isset($car)) ? $car->color : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="vin">VIN</label>
+                    {!! Form::text('vin', (isset($car)) ? $car->vin : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="company_anme">Propietario</label>
+                    {!! Form::text('company_anme', (isset($client)) ? $client->company_name : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="doc">DOC</label>
+                    {!! Form::text('doc', (isset($client)) ? $client->doc : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="phone">Tel. Fijo</label>
+                    {!! Form::text('phone', (isset($client)) ? $client->phone : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="mobile">Celular</label>
+                    {!! Form::text('mobile', (isset($client)) ? $client->mobile : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    {!! Form::text('email', (isset($client)) ? $client->email : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            {{--<div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                        <label class="form-check-label" for="defaultCheck1">Agregar Usuario</label>
+                    </div>
+                </div>
+            </div>--}}
+            <div class="col-md-2 col-sm-4">
+                {!! Field::text('contact_name', null, ['label' => 'Contacto Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+            <div class="col-md-2 col-sm-4">
+                {!! Field::text('contact_mobile', null, ['label' => 'Contacto Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+            <div class="col-md-2 col-sm-4">
+                {!! Field::email('contact_email', null, ['label' => 'Contacto Email', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+            {{--<div class="col-md-2 col-sm-4">
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                        <label class="form-check-label" for="defaultCheck2">Agregar Contacto</label>
+                    </div>
+                </div>
+            </div>--}}
+            <div class="col-md-2 col-sm-4">
+                {!! Field::text('user_name', null, ['label' => 'Usuario Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+            <div class="col-md-2 col-sm-4">
+                {!! Field::text('user_mobile', null, ['label' => 'Usuario Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+            <div class="col-md-2 col-sm-4">
+                {!! Field::email('user_email', null, ['label' => 'Usuario Email', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+        </div>
+
+        <div class="form-row">
+            {{--<div class="col-sm-2">
+                <div id="field_inventory_combustible" class="form-group">
+                    <label for="inventory_combustible">
+                        Combustible <span class="badge badge-info">!</span>
+                    </label>
+                    <input class="" id="inventory_combustible" name="inventory[combustible]" type="range" step='25' value="{{(isset($model->inventory->combustible))? $model->inventory->combustible :''}}">
+                </div>
+            </div> --}}
+            <div class="col-sm-2">
+                {!! Field::select('inventory[combustible]', config('options.combustible'), (isset($model->inventory->combustible
+                ) ? $model->inventory->combustible : ''), ['empty'=>'SELECCIONAR', 'label'=>'Combustible', 'class'=>'form-control-sm', 'required']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::number('kilometraje', null, ['label' => 'Kilom.', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::select('inventory[tarjeta_propiedad]', config('options.tarjeta_propiedad'), (isset($model->inventory->tarjeta_propiedad
+                ) ? $model->inventory->tarjeta_propiedad : ''), ['empty'=>'SELECCIONAR', 'label'=>'TJ Propiedad', 'class'=>'form-control-sm', 'required']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::date('inventory[soat]', (isset($model->inventory->soat) ? $model->inventory->Soat : ''), ['label'=>'Fecha de soat', 'class'=>'form-control-sm']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::date('inventory[revision_tecnica]', (isset($model->inventory->revision_tecnica) ? $model->inventory->revision_tecnica : ''), ['label'=>'Revisión Técnica', 'class'=>'form-control-sm']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::number('inventory[llaves]', (isset($model->inventory->llaves) ? $model->inventory->llaves : '0'), ['label'=>'Llaves', 'class'=>'form-control-sm', 'required']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::select('inventory[control_remoto]', ['SI'=>'SI', 'NO'=>'NO'], (isset($model->inventory->control_remoto
+                ) ? $model->inventory->control_remoto : ''), ['empty'=>'SIN control_remoto', 'label'=>'Control Rremoto', 'class'=>'form-control-sm', 'required']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory->comprobante
+                ) ? $model->inventory->comprobante : ''), ['empty'=>'SIN COMPROBANTE', 'label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
+            </div>
+            <div class="col-sm-2">
+                {!! Field::date('inventory[entrega]', (isset($model->inventory->entrega) ? $model->inventory->entrega : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-sm-12">
+                <div id="field_inventory_combustible" class="form-group">
+                    <label for="inventory_solicitud">Solicitud del Cliente:</label>
+                    <textarea class="form-control form-control-sm text-uppercase" id="inventory_solicitud" rows="2" name="inventory[solicitud]">{{(isset($model->inventory->solicitud))? trim($model->inventory->solicitud):''}}</textarea>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header padding-1" id="headingTwo">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          CheckList
+        </button>
+      </h2>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+        <div class="form-row">
+            <div class="col-sm-12">
+
             @foreach($checklist_details as $index => $checklist)
                 @php
                 $checkeds = ['correcto' => '', 'recomendable' => '', 'urgente' => '', 'no_aplica' => '', '' => '']; 
@@ -205,6 +321,12 @@
                     <input class="form-control form-control-sm comment" type="text" name="order_checklist_details[{{ $index }}][comment]" value="{{ $checklist->comment }}" placeholder="">
                 </div>
             @endforeach
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-sm-12">
+                {!! Field::text('comment', ['label' => 'Comentarios:', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
         </div>
       </div>
     </div>

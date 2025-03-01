@@ -87,6 +87,7 @@
         	font-weight: bold;
         	width: 15%;
         	vertical-align: top;
+        	vertical-align: middle;
         }
 		.div_img{
 			margin-top: 0;
@@ -112,6 +113,12 @@
 		.mt-5{
 			margin-top: 5px;
 		}
+        .header-section {
+        	background-color: lightgray;
+        	text-align: center;
+        	font-weight: bold;
+        	text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -166,7 +173,7 @@
 		<td style="width:59%; border: none;">
 			<table class="table-datos">
 				<tr>
-					<th colspan="2">datos del CLIENTE</th>
+					<th colspan="2">Datos del Cliente</th>
 				</tr>
 				<tr>
 					<td class="label2">Propietario(a):</td>
@@ -195,7 +202,7 @@
 			</table>
 			<table class="table-datos">
 				<tr>
-					<th colspan="4">DATOS DEL VEHICULO</th>
+					<th colspan="4">Datos del Vehículo</th>
 				</tr>
 				<tr>
 					<td class="label2">Placa:</td>
@@ -309,7 +316,7 @@
 
 	<table class="mt-5" style="font-size: 9px;">
 		<tr>
-			<td style="width: 60%; text-align: center; font-weight: bold;">AUTORIZACIÓN CLIENTES</td>
+			<td class="header-section" style="width: 60%;">AUTORIZACIÓN CLIENTES</td>
 			<td rowspan="2" style="vertical-align: bottom;">
 				<div style="border-top: solid 1px; text-align: center;">AUTORIZADO / DNI</div>
 			</td>
@@ -321,7 +328,7 @@
 			<td>Por el presente autorizo las reparaciones autorizadas conjuntamente con el material que sea necesario usar en ellas. También autorizo a ustedes y sus empleados para que operen este vehículo por la calle, carreteras y otros sitios a fin de asegurar las pruebas e inspecciones pertinentes y para asegurar el pago por concepto de reparaciones y materiales este vehículo queda sujeto a las leyes que amparan los derechos de la empresa.</td>
 		</tr>
 		<tr>
-			<td style="width: 60%; text-align: center; font-weight: bold;">IMPORTANTE</td>
+			<td class="header-section" style="width: 60%;">IMPORTANTE</td>
 			<td rowspan="2" style="vertical-align: bottom;">
 				<div style="border-top: solid 1px; text-align: center;">RECIBI CONFORME / DNI</div>
 			</td>

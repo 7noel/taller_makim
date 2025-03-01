@@ -93,6 +93,9 @@ class CarsController extends Controller {
 		// dd(request()->all());
 		$data = request()->all();
 		$this->repo->save($data, $id);
+		if(isset($data['crear_ingreso'])) {
+			return redirect()->route('inventory.recepcion_by_car', ['car_id' => $model->id]);
+		}
 		if (isset($data['last_page'])) {
 			return redirect($data['last_page']);
 		}

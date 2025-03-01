@@ -7,7 +7,7 @@
 			<div class="card">
 				<h5 class="{{ config('options.styles.card_header') }}"> Nuevo Inventario
 				</h5>
-				<div class="card-body">
+				<div class="card-body padding-0">
 					{!! Form::open(['route'=> 'inventory.store' , 'method'=>'POST', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
 						@if(Request::url() != URL::previous())
 						<input type="hidden" name="last_page" value="{{ URL::previous() }}">
