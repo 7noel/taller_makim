@@ -241,7 +241,7 @@
                 ) ? $model->inventory->tarjeta_propiedad : ''), ['empty'=>'SELECCIONAR', 'label'=>'TJ Propiedad', 'class'=>'form-control-sm', 'required']) !!}
             </div>
             <div class="col-sm-2">
-                {!! Field::date('inventory[soat]', (isset($model->inventory->soat) ? $model->inventory->Soat : ''), ['label'=>'Fecha de soat', 'class'=>'form-control-sm']) !!}
+                {!! Field::date('inventory[soat]', (isset($model->inventory->soat) ? $model->inventory->soat : ''), ['label'=>'Fecha de soat', 'class'=>'form-control-sm']) !!}
             </div>
             <div class="col-sm-2">
                 {!! Field::date('inventory[revision_tecnica]', (isset($model->inventory->revision_tecnica) ? $model->inventory->revision_tecnica : ''), ['label'=>'Revisión Técnica', 'class'=>'form-control-sm']) !!}

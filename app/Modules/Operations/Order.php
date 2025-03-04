@@ -11,7 +11,7 @@ class Order extends Model implements Auditable
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['company_id', 'is_downloadable', 'order_type', 'car_id', 'placa', 'kilometraje', 'type_service', 'preventivo', 'branch_id', 'shipper_id', 'shipper_branch_id', 'my_company', 'document_type_id', 'payment_condition_id', 'currency_id', 'seller_id', 'repairman_id', 'attention', 'matter', 'approved_at', 'checked_at', 'invoiced_at', 'sent_at', 'canceled_at', 'gross_value', 'discount', 'discount_items', 'subtotal', 'tax', 'total', 'amortization', 'exchange', 'exchange_sunat', 'comment', 'status', 'delivery_period', 'installation_period', 'delivery_place', 'offer_period', 'mov', 'type_op', 'proof_id', 'user_id', 'sn', 'order_id', 'inventory', 'slug'];
+	protected $fillable = ['mov', 'is_downloadable', 'sn', 'series', 'number', 'order_type', 'type_op', 'document_type_id', 'company_id', 'car_id', 'placa', 'kilometraje', 'type_service', 'preventivo', 'branch_id', 'shipper_id', 'shipper_branch_id', 'payment_condition_id', 'currency_id', 'attention', 'matter', 'delivery_period', 'installation_period', 'delivery_place', 'offer_period', 'seller_id', 'repairman_id', 'diag_at', 'repu_at', 'approved_at', 'repar_at', 'checked_at', 'invoiced_at', 'sent_at', 'canceled_at', 'status', 'with_tax', 'gross_value', 'discount', 'discount_items', 'subtotal', 'tax', 'total', 'amortization', 'exchange', 'exchange_sunat', 'order_id', 'proof_id', 'user_id', 'comment', 'inventory', 'diagnostico', 'aprobacion', 'reparacion', 'control_calidad', 'status_lug', 'slug', 'my_company'];
 	// protected $casts = [
 	// 	'inventory' => 'array',
 	// ];

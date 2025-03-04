@@ -18,6 +18,8 @@ class CreateOrdersTable extends Migration
             $table->boolean('mov');
             $table->boolean('is_downloadable');
             $table->string('sn'); // numero correlativo para cotizaciones y pedidos para las 3 empresas
+            $table->string('series');
+            $table->string('number');
             $table->string('order_type'); // typo de documento {1=>'order', 2=>'quote'}
             $table->string('type_op'); // segun ello afecta el valor promedio
             $table->bigInteger('document_type_id')->unsigned();
@@ -39,8 +41,11 @@ class CreateOrdersTable extends Migration
             $table->string('delivery_place');
             $table->string('offer_period');
             $table->bigInteger('seller_id')->unsigned();
-            $table->bigInteger('repairman_id')->unsigned();
+            $table->bigInteger('repairman_id')->unsigned();();
+            $table->dateTime('diag_at')->nullable();
+            $table->dateTime('repu_at')->nullable();
             $table->dateTime('approved_at')->nullable();
+            $table->dateTime('repar_at')->nullable();
             $table->dateTime('checked_at')->nullable();
             $table->dateTime('invoiced_at')->nullable();
             $table->dateTime('sent_at')->nullable();
@@ -61,6 +66,12 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->text('comment');
             $table->json('inventory')->nullable();
+            $table->json('diagnostico')->nullable();
+            $table->json('aprobacion')->nullable();
+            $table->json('reparacion')->nullable();
+            $table->json('control_calidad')->nullable();
+            $table->json('status_log')->nullable();
+            // $table->json('custom_details')->nullable();
             $table->string('slug');
             $table->bigInteger('my_company')->unsigned();
 
