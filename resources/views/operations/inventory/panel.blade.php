@@ -18,25 +18,25 @@ $models_7 = $models->where('status', 'ENTR');
 		<div class="col-md-12">
 			<ul class="nav nav-tabs" id="myTab" role="tablist">
 				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="recepcion-tab" data-toggle="tab" data-target="#recepcion" type="button" role="tab" aria-controls="recepcion" aria-selected="true">{!! $icons['car'] !!} <br> <span class="badge badge-light">{{ $models_1->count() }}</span> </button>
+					<button class="nav-link active" id="pend-tab" data-toggle="tab" data-target="#recepcion" type="button" role="tab" aria-controls="recepcion" aria-selected="true">{!! $icons['car'] !!} <br> <span class="badge badge-light">{{ $models_1->count() }}</span> </button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="diagnostico-tab" data-toggle="tab" data-target="#diagnostico" type="button" role="tab" aria-controls="diagnostico" aria-selected="false">{!! $icons['view'] !!} <br> <span class="badge badge-light">{{ $models_2->count() }}</span> </button>
+					<button class="nav-link" id="diag-tab" data-toggle="tab" data-target="#diagnostico" type="button" role="tab" aria-controls="diagnostico" aria-selected="false">{!! $icons['view'] !!} <br> <span class="badge badge-light">{{ $models_2->count() }}</span> </button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="repuestos-tab" data-toggle="tab" data-target="#repuestos" type="button" role="tab" aria-controls="repuestos" aria-selected="false"><i class="fas fa-box"></i> <br> <span class="badge badge-light">{{ $models_3->count() }}</span> </button>
+					<button class="nav-link" id="repu-tab" data-toggle="tab" data-target="#repuestos" type="button" role="tab" aria-controls="repuestos" aria-selected="false"><i class="fas fa-box"></i> <br> <span class="badge badge-light">{{ $models_3->count() }}</span> </button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="aprobacion-tab" data-toggle="tab" data-target="#aprobacion" type="button" role="tab" aria-controls="aprobacion" aria-selected="false"><i class="fas fa-check"></i> <br> <span class="badge badge-light">{{ $models_4->count() }}</span> </button>
+					<button class="nav-link" id="aprob-tab" data-toggle="tab" data-target="#aprobacion" type="button" role="tab" aria-controls="aprobacion" aria-selected="false"><i class="fas fa-check"></i> <br> <span class="badge badge-light">{{ $models_4->count() }}</span> </button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="reparacion-tab" data-toggle="tab" data-target="#reparacion" type="button" role="tab" aria-controls="reparacion" aria-selected="false"><i class="fas fa-wrench"></i> <br> <span class="badge badge-light">{{ $models_5->count() }}</span> </button>
+					<button class="nav-link" id="repar-tab" data-toggle="tab" data-target="#reparacion" type="button" role="tab" aria-controls="reparacion" aria-selected="false"><i class="fas fa-wrench"></i> <br> <span class="badge badge-light">{{ $models_5->count() }}</span> </button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="control-tab" data-toggle="tab" data-target="#control" type="button" role="tab" aria-controls="control" aria-selected="false"><i class="fa-regular fa-circle-check"></i> <br> <span class="badge badge-light">{{ $models_6->count() }}</span> </button>
+					<button class="nav-link" id="contr-tab" data-toggle="tab" data-target="#control" type="button" role="tab" aria-controls="control" aria-selected="false"><i class="fa-regular fa-circle-check"></i> <br> <span class="badge badge-light">{{ $models_6->count() }}</span> </button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="entrega-tab" data-toggle="tab" data-target="#entrega" type="button" role="tab" aria-controls="entrega" aria-selected="false"><i class="fas fa-door-open"></i> <br> <span class="badge badge-light">{{ $models_7->count() }}</span> </button>
+					<button class="nav-link" id="entr-tab" data-toggle="tab" data-target="#entrega" type="button" role="tab" aria-controls="entrega" aria-selected="false"><i class="fas fa-door-open"></i> <br> <span class="badge badge-light">{{ $models_7->count() }}</span> </button>
 				</li>
 			</ul>
 			<div class="tab-content" id="myTabContent">
@@ -62,7 +62,7 @@ $models_7 = $models->where('status', 'ENTR');
 					</div>
 				</div>
 
-				<div class="tab-pane fade show active" id="recepcion" role="tabpanel" aria-labelledby="recepcion-tab">
+				<div class="tab-pane fade show active" id="recepcion" role="tabpanel" aria-labelledby="pend-tab">
 					<h3>RECEPCIÓN <a href="{{ route('inventory.create') }}" type="button" class="btn btn-primary btn-sm btn-circle">{!! $icons['add'] !!}</a></h3>
 					<div class="row">
 						@foreach ($models_1 as $model)
@@ -103,16 +103,18 @@ $models_7 = $models->where('status', 'ENTR');
 
 
 				</div>
-				<div class="tab-pane fade" id="diagnostico" role="tabpanel" aria-labelledby="diagnostico-tab">
+				<div class="tab-pane fade" id="diagnostico" role="tabpanel" aria-labelledby="diag-tab">
 					<h3>DIAGNÓSTICO</h3>
 					<div class="row">
 						@foreach ($models_2 as $model)
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }} 
-										<a href="{{ route( 'diagnostico.edit' , $model) }}" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+									<h5>
+										<a href="{{ route( 'output_quotes.by_inventory', $model) }}" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
+									</h5>
+									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }} 
 									</h5>
 									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
 									<p class="card-text">{{ $model->diag_at->diffForHumans() }}</p>
@@ -122,7 +124,7 @@ $models_7 = $models->where('status', 'ENTR');
 						@endforeach
 					</div>
 				</div>
-				<div class="tab-pane fade" id="repuestos" role="tabpanel" aria-labelledby="repuestos-tab">
+				<div class="tab-pane fade" id="repuestos" role="tabpanel" aria-labelledby="repu-tab">
 					<h3>REPUESTOS</h3>
 					<div class="row">
 						@foreach ($models_3 as $model)
@@ -141,7 +143,7 @@ $models_7 = $models->where('status', 'ENTR');
 						@endforeach
 					</div>
 				</div>
-				<div class="tab-pane fade" id="aprobacion" role="tabpanel" aria-labelledby="aprobacion-tab">
+				<div class="tab-pane fade" id="aprobacion" role="tabpanel" aria-labelledby="aprob-tab">
 					<h3>APROBACION</h3>
 					<div class="row">
 						@foreach ($models_4 as $model)
@@ -164,7 +166,7 @@ $models_7 = $models->where('status', 'ENTR');
 						@endforeach
 					</div>
 				</div>
-				<div class="tab-pane fade" id="reparacion" role="tabpanel" aria-labelledby="reparacion-tab">
+				<div class="tab-pane fade" id="reparacion" role="tabpanel" aria-labelledby="repar-tab">
 					<h3>REPARACION</h3>
 					<div class="row">
 						@foreach ($models_5 as $model)
@@ -183,7 +185,7 @@ $models_7 = $models->where('status', 'ENTR');
 						@endforeach
 					</div>
 				</div>
-				<div class="tab-pane fade" id="control" role="tabpanel" aria-labelledby="control-tab">
+				<div class="tab-pane fade" id="control" role="tabpanel" aria-labelledby="contr-tab">
 					<h3>CONTROL</h3>
 					<div class="row">
 						@foreach ($models_6 as $model)
@@ -202,7 +204,7 @@ $models_7 = $models->where('status', 'ENTR');
 						@endforeach
 					</div>
 				</div>
-				<div class="tab-pane fade" id="entrega" role="tabpanel" aria-labelledby="entrega-tab">
+				<div class="tab-pane fade" id="entrega" role="tabpanel" aria-labelledby="entr-tab">
 					<h3>ENTREGA</h3>
 					<div class="row">
 						@foreach ($models_7 as $model)
@@ -243,6 +245,12 @@ $(document).ready(function () {
 		mobile = $('#mobile').val()
     	$("#btn-whatsapp").attr('href', `https://wa.me/+51${mobile}?text=${window.texto}`)
     })
+    @if(session('panel-status'))
+    	status = '{{ session('panel-status') }}'
+    	id_tab = '#' + status.toLowerCase() + '-tab'
+    	console.log(id_tab)
+        $(id_tab).click()
+	@endif
 })
 </script>
 

@@ -4,19 +4,23 @@
 {!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
 {!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
 {!! Form::hidden('sn', null, ['id'=>'sn']) !!}
-<div class="form-row mb-3">
-	<div class="col-sm-2">
-		<div class="custom-control custom-switch">
-			{!! Form::checkbox('approved_at', ((isset($model)) ? $model->approved_at : "on"), null,['class'=>'custom-control-input', 'id'=>'approved_at']) !!}
-			<label class="custom-control-label" for="approved_at">Aprobado/Completado</label>
-		</div>
-	</div>
-</div>
+
 <div class="form-row">
 	<div class="col-md-1 col-sm-2">
-		{!! Form::label('sn', 'Cot') !!}
-		{!! Form::text('sn', null,['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+		{!! Form::label('sn', 'Presup.') !!}
+		@if(isset($model) and $model->order_type == 'output_quotes')
+		{!! Form::text('sn', null, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+		@else
+		{!! Form::text('sn', '',['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+		@endif
 	</div>
+	@if(isset($inventory->id))
+	<div class="col-md-1 col-sm-2">
+		{!! Form::hidden('order_id', $inventory->id, ['id'=>'order_id']) !!}
+		{!! Form::label('inventory_sn', 'Inventario') !!}
+		{!! Form::text('inventory_sn', $inventory->sn, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+	</div>
+	@endif
 	<div class="col-md-1 col-sm-2">
 		{!! Field::text('placa', null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
@@ -42,11 +46,19 @@
 	<div class="col-sm-2">
 		{!! Field::select('payment_condition_id', $payment_conditions, (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Cond. P.', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
-	<div class="col-md-2 col-sm-4">
-		{!! Field::text('attention', ['label' => 'Atención', 'class'=>'form-control-sm text-uppercase']) !!}
-	</div>
 	<div class="col-md-4 col-sm-6">
 		{!! Field::text('comment', ['label' => 'Comentarios', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
 </div>
-@include('operations.output_quotes.partials.details')
+@if(isset($model) and $model->order_type == 'output_quotes')
+<div class="form-row">
+	<div class="col-sm-2">
+		{!! Field::number('p_hora', null, ['label' => 'Precio x Hora', 'class'=>'form-control-sm text-uppercase']) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::number('p_paño', null, ['label' => 'Precio x Paño', 'class'=>'form-control-sm text-uppercase']) !!}
+	</div>
+</div>
+
+	@include('operations.output_quotes.partials.details')
+@endif

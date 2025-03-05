@@ -356,14 +356,14 @@ class ComposerServiceProvider extends ServiceProvider
             ],
 
             'output_quotes' => [
-                'index'=>'Cotizaciones',
-                'index.create'=>'Crear Cotización',
-                'create'=>'Nueva Cotización',
-                'create.create'=>'Crear Cotización',
-                'show'=>'Vizualizando Cotización:',
-                'edit'=>'Editar Cotización: ',
-                'edit.update'=>'Actualizar Cotización',
-                'edit.delete'=>'Eliminar Cotización',
+                'index'=>'Presupuestos',
+                'index.create'=>'Crear Presupuesto',
+                'create'=>'Nuevo Presupuesto',
+                'create.create'=>'Crear Presupuesto',
+                'show'=>'Vizualizando Presupuesto:',
+                'edit'=>'Editar Presupuesto: ',
+                'edit.update'=>'Actualizar Presupuesto',
+                'edit.delete'=>'Eliminar Presupuesto',
             ],
             'output_orders' => [
                 'index'=>'Ordenes de Trabajo',

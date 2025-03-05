@@ -171,6 +171,7 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::resource('appointments','AppointmentController');
 	Route::resource('input_quotes','OrdersController');
 	Route::resource('input_orders','OrdersController');
+	Route::get('output_quotes/by_inventory/{id}', ['as'=>'output_quotes.by_inventory', 'uses'=>'OrdersController@by_inventory']);
 	Route::get('orders/print/{id}', ['as' => 'print_order','uses' => 'OrdersController@print']);
 	Route::get('orders/inventory/{id}', ['as' => 'print_inventory','uses' => 'OrdersController@printInventory']);
 	Route::get('print_inventory/{id}', ['as' => 'order.print_inventory','uses' => 'OrdersController@print_inventory']);
@@ -189,7 +190,7 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::get('entrega/{id}', ['as' => 'entrega.edit', 'uses' => 'OrdersController@entrega_edit']);
 	Route::get('change_status_order/{id}', ['as' => 'change_status_order', 'uses' => 'OrdersController@changeStatusOrder']);
 	Route::put('update_status/{id}', ['as' => 'update_status_order', 'uses' => 'OrdersController@updateStatus']);
-	Route::get('panel', 'OrdersController@panel')->name('panel');
+	Route::get('panel/{status?}', 'OrdersController@panel')->name('panel');
 });
 
 Route::group(['prefix'=>'logistics', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Logistics'], function(){

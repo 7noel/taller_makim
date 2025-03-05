@@ -13,6 +13,7 @@ use App\Modules\Finances\CompanyRepo;
 use App\Modules\Base\CurrencyRepo;
 use App\Modules\Finances\BankRepo;
 use App\Modules\Operations\CarRepo;
+use App\Modules\Base\TableRepo;
 
 class OrdersController extends Controller {
 
@@ -22,7 +23,7 @@ class OrdersController extends Controller {
 	protected $bankRepo;
 	protected $carRepo;
 
-	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo) {
+	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo, TableRepo $tableRepo) {
 		$this->repo = $repo;
 		$this->paymentConditionRepo = $paymentConditionRepo;
 		$this->companyRepo = $companyRepo;
@@ -30,6 +31,7 @@ class OrdersController extends Controller {
 		$this->checklistDetailRepo = $checklistDetailRepo;
 		$this->orderChecklistDetailRepo = $orderChecklistDetailRepo;
 		$this->carRepo = $carRepo;
+		$this->tableRepo = $tableRepo;
 	}
 	public function index()
 	{
@@ -86,9 +88,12 @@ class OrdersController extends Controller {
 	{
 		$data = request()->all();
 		//dd($data);
-		$this->repo->save($data);
+		$model = $this->repo->save($data);
+		if (explode('.', \Request::route()->getName())[0] == 'output_quotes') {
+			return redirect()->route('output_quotes.edit', $model->id);
+		}
 		if (explode('.', \Request::route()->getName())[0] == 'inventory') {
-			return redirect()->route('panel');
+			return redirect()->route('panel', ['status' => $model->status]);
 		}
 		if (isset($data['last_page']) && $data['last_page'] != '') {
 			return redirect()->to($data['last_page']);
@@ -119,6 +124,7 @@ class OrdersController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		// dd($model->inventory);
 		$quote = $model->quote;
+		$inventory = $model->quote;
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
@@ -128,16 +134,22 @@ class OrdersController extends Controller {
 		$checklist_details = $this->orderChecklistDetailRepo->byOrder($model->id, '1');
 		$car = $model->car;
 		$client = $car->company;
+		$categories = $this->tableRepo->getListType('categories');
+		$units = $this->tableRepo->getListType('units');
 		// $checklist_details = $this->checklistDetailRepo->all2();
 		// dd($checklist_details);
-		return view('partials.edit', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details'));
+		return view('partials.edit', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'inventory', 'action', 'checklist_details', 'categories', 'units'));
 	}
 
 	public function update($id)
 	{
 		$data = request()->all();
 		// dd($data);
-		$this->repo->save($data, $id);
+		$model = $this->repo->save($data, $id);
+
+		if (explode('.', \Request::route()->getName())[0] == 'inventory') {
+			return redirect()->route('panel', ['status' => $model->status]);
+		}
 		if (isset($data['last_page']) && $data['last_page'] != '') {
 			return redirect()->to($data['last_page']);
 		}
@@ -233,9 +245,10 @@ class OrdersController extends Controller {
 		return view('partials.create', compact('payment_conditions', 'currencies', 'sellers', 'repairmens', 'company', 'action'));
 	}
 
-	public function panel()
+	public function panel($status='PEND')
 	{
 		$models = $this->repo->ordersRecepcion();
+		session()->flash('panel-status', $status);
 		return view('operations.inventory.panel', compact('models'));
 	}
 
@@ -324,14 +337,14 @@ class OrdersController extends Controller {
 				$data['status_aprobacion'] = 0;
 			}
 		} else {
-			$data['status_msj'] = 'Estado cambiado por '.Auth::user()->name . ' id = ' . Auth::user()->id . '.';
+			$data['status_msj'] = 'Estado cambiado por '.\Auth::user()->name . ' id = ' . \Auth::user()->id . '.';
 			$data['status_aprobacion'] = 1;
 		}
 		$model = $this->repo->changeStatus($data, $id);
 		if (isset($data['action']) and $data['action'] == 'cliente') {
 			return view('operations.taller.cliente_respuesta', compact('icon', 'msj', 'title'));
 		}
-		return redirect()->route('home2');
+		return redirect()->route('panel', ['status' => $model->status]);
 	}
 
 	public function generateSlug()
@@ -352,6 +365,19 @@ class OrdersController extends Controller {
 		$action = 'cliente';
 		$model = $this->repo->findBySlug($slug);
 		return view('operations.inventory.client_inventory', compact('model', 'action'));
+	}
+	public function by_inventory($id)
+	{
+		$action = "edit";
+		$model = $this->repo->findOrFail($id);
+		$inventory = $model;
+		$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
+		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
+		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
+		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
+		return view('operations.output_quotes.create_by_inventory', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'inventory', 'action'));
 	}
 	public function diagnostico_edit($id)
 	{

@@ -1,4 +1,7 @@
 @php $i=0; @endphp
+@if(request()->route()->getName() == 'output_quotes.edit')
+<a href="#" id="btnAddProduct" class="btn btn-outline-info btn-sm mb-3" data-toggle="modal" data-target="#exampleModalx" title="Agregar Producto">{!! $icons['add'] !!} Agregar</a>
+@endif
 <div class="">
 <table class="table table-sm table-responsive">
 	<thead>
@@ -50,34 +53,7 @@
 	</tbody>
 </table>
 </div>
-<template id="template-row-item">
-	<tr>
-		{!! Form::hidden('data1', null, ['class'=>'productId','data-productid'=>'']) !!}
-		{!! Form::hidden('data2', null, ['class'=>'unitId','data-unitid'=>'']) !!}
-		{!! Form::hidden('data0', null, ['class'=>'categoryId','data-categoryid'=>'']) !!}
-		{!! Form::hidden('data0', null, ['class'=>'subCategoryId','data-subcategoryid'=>'']) !!}
-		{!! Form::hidden('data5', null, ['class'=>'is_downloadable','data-is_downloadable'=>'']) !!}
-		<td width="100px"><span class='form-control-plaintext form-control-sm intern_code text-right' data-labelid></span></td>
-		<td width="100px">{!! Form::text('data3', null, ['class'=>'form-control form-control-sm txtProduct', 'data-product'=>'', 'required'=>'required']); !!}</td>
-		<td width="100px">{!! Form::text('data4', null, ['class'=>'form-control form-control-sm txtCantidad text-right', 'data-cantidad'=>'']) !!}</td>
-		@if(config('options.cambiar_precios'))
-			<td width="100px" class="withTax">{!! Form::text('data5', null, ['class'=>'form-control form-control-sm txtPrecio text-right', 'data-precio'=>'']) !!}</td>
-			<td width="100px" class="withoutTax">{!! Form::text('data7', null, ['class'=>'form-control form-control-sm txtValue text-right', 'data-value'=>'']) !!}</td>
-		@else
-			<td width="100px" class="withTax">{!! Form::text('data5', null, ['class'=>'form-control form-control-sm txtPrecio text-right', 'data-precio'=>'', 'readonly'=>'readonly']) !!}</td>
-			<td width="100px" class="withoutTax">{!! Form::text('data7', null, ['class'=>'form-control form-control-sm txtValue text-right', 'data-value'=>'', 'readonly'=>'readonly']) !!}</td>
-		@endif
-		<td width="100px">{!! Form::text('data6', null, ['class'=>'form-control form-control-sm txtDscto text-right', 'data-dscto'=>'']) !!}</td>
-		<td width="100px" class="d-none">{!! Form::text('data8', null, ['class'=>'form-control form-control-sm txtDscto2 text-right', 'data-dscto2'=>'']) !!}</td>
-		<td width="100px" class="withoutTax"> <span class='form-control form-control-sm txtTotal text-right' data-total></span> </td>
-		<td width="100px" class="withTax"> <span class='form-control form-control-sm txtPriceItem text-right' data-price_item></span> </td>
-		<td width="100px" class="text-center form-inline">
-			<a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar">{!! $icons['remove'] !!}</a>
-		</td>
-	</tr>
-</template>
-{!! Form::hidden('items', $i, ['id'=>'items']) !!}
-<a href="#" id="btnAddProduct" class="btn btn-success btn-sm" title="Agregar Producto">{!! $icons['add'] !!} Agregar</a>
+
 <table class="table table-condensed table-sm">
 	<thead>
 		<tr>
@@ -96,3 +72,60 @@
 		</tr>
 	</tbody>
 </table>
+
+
+{!! Form::hidden('items', $i, ['id'=>'items']) !!}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalx" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Agregar/Editar Servicio</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body form-row">
+				<div class="form-group col-sm-9">
+					{!! Field::select('categories', $categories, '', ['label'=>'Categoría', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
+				</div>
+				<div class="form-group col-sm-3">
+					{!! Field::select('unit', $units, '', ['label'=>'Unidad', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
+				</div>
+				<div class="form-group col-sm-12">
+					<label for="txtProducto">Producto</label>
+					<small id="txtCodigo"></small>
+					<input type="text" class="form-control form-control-sm" id="txtProducto">
+					<span class="badge badge-light" id="alert-items"></span>
+					<span class="badge badge-info" id="alert-stock"></span>
+					<input type="hidden" id="txtProduct">
+					<input type="hidden" id="unitId">
+				</div>
+				<div class="form-group col-3 text-center">
+					<label for="txtCantidad">Cantidad <span id="label-cantidad"></span> </label>
+					<input type="number" class="form-control form-control-sm text-center" id="txtCantidad">
+				</div>
+				<div class="form-group col-3 text-center">
+					<label for="txtValue">Valor</label>
+					<input type="number" class="form-control form-control-sm text-center" id="txtValue">
+				</div>
+				<div class="form-group col-3 text-center">
+					<label for="txtDscto2">Dscto2 (%)</label>
+					<input type="number" class="form-control form-control-sm text-center" id="txtDscto2">
+				</div>
+				<div class="form-group col-3 text-center">
+					<label>Total</label>
+					<span id="spanPriceItem" class="d-none form-control-sm form-control-plaintext"></span>
+					<span id="spanValueItem" class="form-control-sm form-control-plaintext"></span>
+					<input type="hidden" id="txtTotal">
+					<input type="hidden" id="txtPriceItem">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">{!! $icons['close'] !!} Cerrar</button>
+				<button type="button" class="btn btn-primary" id="btn-add-product">{!! $icons['add'] !!} Grabar</button>
+			</div>
+		</div>
+	</div>
+</div>
