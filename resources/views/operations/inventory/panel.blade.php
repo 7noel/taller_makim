@@ -111,7 +111,11 @@ $models_7 = $models->where('status', 'ENTR');
 							<div class="card">
 								<div class="card-body">
 									<h5>
+										@if(isset($model->orders[0]))
+										<a href="{{ route( 'output_quotes.edit', $model->orders[0]) }}" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										@else
 										<a href="{{ route( 'output_quotes.by_inventory', $model) }}" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										@endif
 										<a href="{{ route( 'change_status_order' , $model) }}" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }} 
