@@ -33,6 +33,26 @@ class TableRepo extends BaseRepo{
 		return Table::where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
 	}
 
+	public function getListCatSer()
+	{
+		return Table::with('childs')->where('type', 'categories')->where('value_3', '')->orderBy('name','ASC')->get();
+	}
+
+	public function getListCatPro()
+	{
+		return Table::with('childs')->where('type', 'categories')->where('value_3', '1')->orderBy('name','ASC')->get();
+	}
+
+	public function getListUnitSer()
+	{
+		return Table::where('type', 'units')->where('code', 'ZZ')->orderBy('name','ASC')->get();
+	}
+
+	public function getListUnitPro()
+	{
+		return Table::where('type', 'units')->where('code', '!=', 'ZZ')->orderBy('name','ASC')->get();
+	}
+
 	public function getListTypeByGroup($type, $group, $campo='name', $id='id')
 	{
 		return Table::where('relation_id', $group)->where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();

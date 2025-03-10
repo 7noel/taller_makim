@@ -57,7 +57,7 @@
 {!! Form::hidden('is_downloadable', 1, ['id'=>'is_downloadable']) !!}
 {!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
 {!! Form::hidden('company_id', (isset($car)) ? $car->company_id : null, ['id'=>'company_id']) !!}
-{!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
+{!! Form::hidden('car_id', (isset($car)) ? $car->id : null, ['id'=>'car_id']) !!}
 {!! Form::hidden('action', $action, ['id'=>'action']) !!}
 
 <div class="accordion mb-4" id="accordionExample">
@@ -110,7 +110,7 @@
             </div>
             <div class="col-sm-2 d-none">
                 <div class="form-group">
-                    {!! Field::select('seguro', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm']) !!}
+                    {!! Field::select('seguro', config('options.cia_seguros'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm']) !!}
                 </div>
             </div>
         </div>
@@ -121,31 +121,31 @@
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="brand">Marca</label>
-                    {!! Form::text('brand', (isset($car->brand)) ? $car->brand->name : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('brand', (isset($car->brand)) ? $car->brand->name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'brand', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="modelo">Modelo</label>
-                    {!! Form::text('modelo', (isset($car->modelo)) ? $car->modelo->name : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('modelo', (isset($car->modelo)) ? $car->modelo->name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'modelo', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="year">Año</label>
-                    {!! Form::text('year', (isset($car)) ? $car->year : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('year', (isset($car)) ? $car->year : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'year', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="color">Color</label>
-                    {!! Form::text('color', (isset($car)) ? $car->color : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('color', (isset($car)) ? $car->color : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'color', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="vin">VIN</label>
-                    {!! Form::text('vin', (isset($car)) ? $car->vin : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('vin', (isset($car)) ? $car->vin : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'vin', 'readonly']) !!}
                 </div>
             </div>
         </div>
@@ -154,31 +154,31 @@
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="company_anme">Propietario</label>
-                    {!! Form::text('company_anme', (isset($client)) ? $client->company_name : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('company_anme', (isset($client)) ? $client->company_name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'company_name', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="doc">DOC</label>
-                    {!! Form::text('doc', (isset($client)) ? $client->doc : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('doc', (isset($client)) ? $client->doc : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'doc', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="phone">Tel. Fijo</label>
-                    {!! Form::text('phone', (isset($client)) ? $client->phone : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('phone', (isset($client)) ? $client->phone : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'phone', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="mobile">Celular</label>
-                    {!! Form::text('mobile', (isset($client)) ? $client->mobile : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('mobile', (isset($client)) ? $client->mobile : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'mobile', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    {!! Form::text('email', (isset($client)) ? $client->email : '',['class'=>'form-control-sm form-control-plaintext', 'readonly']) !!}
+                    {!! Form::text('email', (isset($client)) ? $client->email : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'email', 'readonly']) !!}
                 </div>
             </div>
         </div>

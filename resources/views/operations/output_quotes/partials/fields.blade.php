@@ -1,6 +1,6 @@
 {!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
 {!! Form::hidden('is_downloadable', 0, ['id'=>'is_downloadable']) !!}
-{!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
+{!! Form::hidden('with_tax', 0, ['id'=>'with_tax']) !!}
 {!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
 {!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
 {!! Form::hidden('sn', null, ['id'=>'sn']) !!}

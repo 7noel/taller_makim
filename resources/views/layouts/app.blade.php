@@ -21,6 +21,70 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <style>
+        .ui-autocomplete {
+            max-height: 400px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .ui-autocomplete {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 160px;
+            padding: 5px 0;
+            margin: 2px 0 0;
+            list-style: none;
+            font-size: 13px;
+            text-align: left;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            background-clip: padding-box;
+        }
+
+        .ui-autocomplete > li > div {
+            display: block;
+            padding: 2px 10px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.42857143;
+            color: #333333;
+            white-space: nowrap;
+        }
+
+        .ui-state-hover,
+        .ui-state-active,
+        .ui-state-focus {
+            text-decoration: none;
+            color: #262626;
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+
+        .ui-helper-hidden-accessible {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+        .ui-menu-item div:hover {
+            /*background-color: #007bff;*/
+            background-color: #17a2b8;
+            color: white;
+        }
+        ul.ui-autocomplete.ui-menu {
+          z-index: 1050;
+        }
 /*        .form-group label{ font-weight:bold; }*/
         .paint-canvas {
           border: 1px black solid;
@@ -248,6 +312,88 @@
     </div>
     <script>
 $(document).ready(function () {
+    type_item = ''
+    window.descuento2 = 0
+    $('#btn-add-product').click(function(e){
+        e.preventDefault()
+        addRowProduct2()
+    })
+    
+    //Autocomplete de productos
+    $('#txtProducto').autocomplete({
+        source: "/api/products/autocompleteAjax",
+        minLength: 4,
+        select: function(event, ui){
+            $p = ui.item.id
+            console.log($p)
+            if (existCodeInList($p.intern_code)) {
+                alert(`El código "${$p.intern_code}" ya fue registrado.`)
+                setTimeout(function() {
+                    clearModalProduct()
+                }, 100)
+            } else {
+                $('#txtCodigo').text($p.intern_code)
+                $('#txtProId').text($p.id)
+                $('#txtProduct').val($p.name)
+                $('#unitId').val($p.unit_id)
+                $('#unit').val($p.unit_id)
+                $('#categories').val($p.category_id)
+                $('#txtValue').val(parseFloat($p.value)) // PRE_ACT es precio sin IGV
+                $('#txtPrecio').val((($p.value*118)/100).toFixed(6))
+                $('#txtDscto2').val(window.descuento2)
+                $('#txtCantidad').val(1)
+                // stk = 0
+                // if ($p.stock.hasOwnProperty('STSKDIS') && $p.stock.STSKDIS != null) {
+                //     stk = ($p.stock.STSKDIS*1).toFixed(0)
+                // }
+                // $('#alert-stock').text(`Stock: ${stk} ${$p.AUNIDAD}`)
+                // if (stk > 0) {
+                //     $('#alert-stock').addClass(`badge-info`)
+                //     $('#alert-stock').removeClass(`badge-danger`)
+                // } else {
+                //     $('#alert-stock').removeClass(`badge-info`)
+                //     $('#alert-stock').addClass(`badge-danger`)
+                // }
+                setTimeout(function() { // El retardo es necesario para los moviles
+                    $('#txtCantidad').focus()
+                    $('#txtCantidad').select()
+                }, 100)
+                $('#label-cantidad').text($p.unit_id)
+                calcTotalItem()
+            }
+        }
+    })
+
+    $(document).on('click', '.btn-edit-item', function (e) {
+        e.preventDefault()
+        window.el = $(this).parent().parent()
+        editModalProduct()
+        setTimeout(function() {
+            $('#txtCantidad').focus()
+            $('#txtCantidad').select()
+        }, 500)
+    })
+
+    $('#btnAddProduct').click(function(e){
+        window.type_item = 'pro'
+        e.preventDefault()
+        delete window.el
+        clearModalProduct()
+        setTimeout(function() {
+            $('#txtProducto').focus()
+        }, 500)
+    })
+
+    $('#btnAddService').click(function(e){
+        window.type_item = 'ser'
+        e.preventDefault()
+        delete window.el
+        clearModalProduct()
+        setTimeout(function() {
+            $('#txtProducto').focus()
+        }, 500)
+    })
+
     $('#link-crear-marca').click(function (e) {
         clearModalMarcaYModelo();
         setTimeout(function() {
@@ -369,9 +515,9 @@ $(document).ready(function () {
         calcTotal()
     })
 
-    $(document).on('change','.txtCantidad, .txtPrecio, .txtValue, .txtDscto, .txtDscto2', function (e) {
+    $(document).on('change','#txtCantidad, #txtPrecio, #txtValue, #txtDscto, #txtDscto2', function (e) {
         calcTotalItem(this)
-        calcTotal()
+        //calcTotal()
     });
 
     //autocomplete para elementos agregados por javascript
@@ -403,10 +549,10 @@ $(document).ready(function () {
         }
     })
 
-    $('#btnAddProduct').bind("click", function(e){
-        e.preventDefault()
-        addRowProduct()
-    });
+    // $('#btnAddProduct').bind("click", function(e){
+    //     e.preventDefault()
+    //     addRowProduct()
+    // });
 
     my_company = $('#my_company').val()
     $('#txtCompany').autocomplete({
@@ -581,6 +727,193 @@ $(document).ready(function () {
     })
 })
 
+function existCodeInList(code) {
+    existe_codigo = false
+    $('#tableItems tr').each(function (index, vtr) {
+        codigo = $(vtr).find('.productId').val()
+        if (codigo == code) {
+            existe_codigo = true
+        }
+    })
+    return existe_codigo
+}
+
+function addRowProduct2() {
+    //obteniendo los valores de los inputs
+    desc = $('#txtProducto').val()
+    codigo = $('#txtCodigo').text()
+    product_id = $('#txtProId').text()
+    if (codigo == "") {
+        $('#txtProducto').val("")
+        $('#txtProduct').val("")
+        $('#txtProducto').focus()
+        return false;
+    }
+    u = $('#unitId').val()
+    unidad = $("#unit option:selected").text()
+    console.log(unidad)
+    q = $('#txtCantidad').val()
+    if (!isNaN(q) && q <= 0) {
+        $('#txtCantidad').val("")
+        $('#txtCantidad').focus()
+        return false;
+    }
+    v = $('#txtValue').val()
+    if (!isNaN(v) && v <= 0) {
+        $('#txtValue').val("")
+        $('#txtValue').focus()
+        return false;
+    }
+    d1 = window.descuento1
+    d2 = parseFloat($('#txtDscto2').val())
+    t = $('#txtTotal').val()
+    if (typeof window.el === 'undefined') { // Si no existe la variable window.el (producto a editar) se agrega una fila
+        items = $('#items').val()
+        //preparando fila <tr>
+        tr = `<tr>
+            <input class="unitId" name="details[${items}][unit_id]" type="hidden" value="${u}">
+            <td><span class='spanCodigo text-right'>${codigo}</span><input class="productId" name="details[${items}][product_id]" type="hidden" value="${product_id}"></td>
+            <td><span class='spanProduct'>${desc}</span><input class="txtProduct" name="details[${items}][DFDESCRI]" type="hidden" value=""></td>
+            <td class="text-center"><span class='spanCantidad text-right'>${q} ${unidad}</span><input class="txtCantidad" name="details[${items}][quantity]" type="hidden" value="${q}"></td>
+            <td class="withTax text-right"><span class='spanPrecio'>${(v*1.18).toFixed(2)}</span><input class="txtPrecio" name="details[${items}][price]" type="hidden" value="${v*1.18}"></td>
+            <td class="withoutTax text-right"><span class='spanValue'>${v}</span><input class="txtValue" name="details[${items}][value]" type="hidden" value="${v}"></td>
+            <td class="text-center"><span class='spanDscto2'>${d2}</span><input class="txtDscto2" name="details[${items}][d2]" type="hidden" value="${d2}"></td>
+            <td class="withTax text-right"> <span class='txtPriceItem'>${(t*1.18).toFixed(2)}</span> </td>
+            <td class="withoutTax text-right"> <span class='txtTotal'>${t}</span> </td>
+            <td class="text-center" style="white-space: nowrap;">
+                <a href="#" class="btn btn-outline-primary btn-sm btn-edit-item" title="Editar">{!! $icons['edit'] !!}</a>
+                <a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar"><i class="far fa-trash-alt"></i></a>
+            </td>
+        </tr>`
+        //console.log(tr)
+
+        $("#tableItems").append(tr)
+        $(`input[name="details[${items}][DFDESCRI]"]`).val(desc)
+        items = parseInt(items) + 1
+        $('#items').val(items)
+
+        if ($('#with_tax').val() == 1){
+            $('.withTax').show()
+            $('.withoutTax').hide()
+        } else {
+            $('.withTax').hide()
+            $('.withoutTax').show()
+        }
+
+    } else {
+
+        // window.el.find('.txtProduct').val($('#txtProduct').val())
+        // window.el.find('.spanProduct').text($('#txtProduct').val())
+        // window.el.find('.txtCodigo').val($('#txtCodigo').val())
+        // window.el.find('.spanCodigo').text($('#txtCodigo').val())
+        // window.el.find('.unitId').val($('#unitId').val())
+        window.el.find('.txtCantidad').val(q)
+        window.el.find('.spanCantidad').text(q+' '+u)
+        window.el.find('.txtValue').val(v)
+        window.el.find('.spanValue').text(v)
+        window.el.find('.txtDscto2').val(d2)
+        window.el.find('.spanDscto2').text(d2)
+
+        $('#exampleModalx').modal('hide')
+    }
+    calcTotal()
+    // window.descuento2 = d2
+    clearModalProduct()
+
+    // Grabando en la base de datos
+    /*form = $(".form-loading")
+    var actionUrl = form.attr('action')
+    var formData = form.serialize()
+    $.ajax({
+        url: actionUrl, // Cambia esto por la URL de tu API
+        type: 'POST',
+        data: formData,
+        success: function(response) {
+            // Manejar la respuesta exitosa
+            console.log('Datos guardados con éxito: ' + response)
+        },
+        error: function(xhr, status, error) {
+            // Manejar el error
+            console.log('Error al guardar los datos: ' + error)
+        }
+    })*/
+
+}
+
+function clearModalProduct() {
+    type = window.type_item
+    // console.log(type)
+    if (type=='pro') {
+        document.getElementById("unit").innerHTML = window.opts_uni_pro;
+        document.getElementById("categories").innerHTML = window.opts_cat_pro;
+    } else if (type=='ser') {
+        // console.log('agregar servicio')
+        document.getElementById("unit").innerHTML = window.opts_uni_ser;
+        document.getElementById("categories").innerHTML = window.opts_cat_ser;
+    }
+    $('#txtProducto').addClass("form-control")
+    $('#txtProducto').removeClass("form-control-plaintext")
+    $('#txtProducto').attr('readonly', false)
+
+    $('#txtProducto').focus()
+    $('#txtProducto').val("")
+    $('#txtProduct').val("")
+    $('#txtCodigo').text("")
+    $('#unitId').val("")
+    $('#txtCantidad').val("0")
+    $('#txtValue').val("0")
+    $('#txtDscto2').val(window.descuento2)
+    $('#txtTotal').val("0.00")
+    $('#label-cantidad').text('')
+
+    $('#alert-stock').addClass("badge-info")
+    $('#alert-stock').removeClass("badge-danger")
+    $('#alert-stock').text("")
+    items = $('#items').val()
+    max = 50
+    $('#alert-items').text(`Items registrados: ${items}`)
+    if (items < max) {
+        $('#alert-items').removeClass("badge-danger")
+        $('#alert-items').addClass("badge-light")
+        $('#btn-add-product').prop("disabled", false);
+    } else {
+        $('#alert-items').addClass("badge-danger")
+        $('#alert-items').removeClass("badge-light")
+        $('#btn-add-product').prop("disabled", true);
+    }
+}
+
+function editModalProduct() {
+    items = $('#items').val()
+    max = 50
+    $('#alert-items').text(`Items registrados: ${items}`)
+    $('#btn-add-product').prop("disabled", false);
+    if (items < max) {
+        $('#alert-items').removeClass("badge-danger")
+        $('#alert-items').addClass("badge-light")
+    } else {
+        $('#alert-items').addClass("badge-danger")
+        $('#alert-items').removeClass("badge-light")
+    }
+
+    $('#txtProducto').removeClass("form-control")
+    $('#txtProducto').addClass("form-control-plaintext")
+    $('#txtProducto').attr('readonly', true)
+
+    $('#txtProducto').val(window.el.find('.txtProduct').val())
+    $('#txtProduct').val(window.el.find('.txtProduct').val())
+    $('#txtCodigo').text(window.el.find('.productId').val())
+    $('#unitId').val(window.el.find('.unitId').val())
+    $('#txtCantidad').val(window.el.find('.txtCantidad').val())
+    $('#txtValue').val(window.el.find('.txtValue').val())
+    $('#txtDscto2').val(window.el.find('.txtDscto2').val())
+    $('#txtTotal').val(window.el.find('.txtTotal').text())
+    $('#txtPriceItem').val(window.el.find('.txtPriceItem').text())
+    $('#spanPriceItem').text(window.el.find('.txtPriceItem').text())
+    $('#label-cantidad').text(window.el.find('.unitId').val())
+    $('#exampleModalx').modal('show')
+}
+
 function clearModalMarcaYModelo() {
     $('#marca_id').val('')
     $('#marca').removeClass('is-invalid')
@@ -669,6 +1002,68 @@ function cargaModelos(id=''){
     }
 }
 
+// function calcTotal () {
+//     var with_tax = false
+//     if ($('#with_tax').val() == 1) {
+//         with_tax = true
+//     }
+//     var gross_value = 0 // Valor Bruto, suma de subtotales
+//     var gross_precio = 0 // Precio Bruto, suma de subtotales
+//     var d_items = 0
+//     var subtotal = 0
+//     var total = 0
+//     var q,p,d1,d2,t,pu;
+//     $('#tableItems tr').each(function (index, vtr) {
+//         if (!($(vtr).find('.isdeleted').is(':checked'))) {
+//             q = parseFloat($(vtr).find('.txtCantidad').val())
+//             v = parseFloat($(vtr).find('.txtValue').val())
+//             p = parseFloat($(vtr).find('.txtPrecio').val())
+//             // v = p * 100 / (100 + 18);
+//             // v = parseFloat($(vtr).find('.txtValue').val());
+//             d1 = parseFloat($(vtr).find('.txtDscto').val())
+//             d2 = parseFloat($(vtr).find('.txtDscto2').val())
+//             vt = Math.round(q*v*(100-d1)*(100-d2)/100) / 100 // total por item
+//             t = Math.round(q*p*(100-d1)*(100-d2)/100) / 100
+//             console.log(vt)
+//             console.log(t)
+//             discount = Math.round(100*q*v)/100 - vt
+
+//             gross_value += Math.round(100*q*v)/100
+//             gross_precio += Math.round(100*q*p)/100
+//             d_items += discount
+//             subtotal += vt
+//             total += t
+//             // gross_value = (Math.round(q*v*100)/100) + gross_value;
+//             // discount = (Math.round(q*v*d)/100) + discount;
+//             // subtotal = gross_value - (Math.round(q*v*d)/100) + subtotal;
+//         }
+//     });
+//     gross_value = Math.round(100 * gross_value) / 100
+//     gross_precio = Math.round(100 * gross_precio) / 100
+//     subtotal = Math.round(100 * subtotal) / 100
+//     total = Math.round(100 * total) / 100
+//     if (with_tax) {
+//         subtotal = Math.round(10000 * total / 118) / 100
+//         gross_value = Math.round(10000 * gross_precio / 118) / 100
+//         d_items = gross_value - subtotal
+//         // gross_value = Math.round(subtotal*1000000/((100-d1)*(100-d2))) / 100
+//     } else {
+//         total = Math.round(118 * subtotal) / 100
+//     }
+//     // if ($('#with_tax').val() == 1){
+//     //  subtotal = Math.round(total * 10000 / (100 + 18)) / 100;
+//     // } else {
+//     //  total = Math.round(subtotal * (100 + 18))/100;
+//     // }
+//     // discount = (gross_value - subtotal);
+
+
+//     $('#mGrossValue').text(gross_value.toFixed(2))
+//     $('#mDiscount').text(d_items.toFixed(2))
+//     $('#mSubTotal').text(subtotal.toFixed(2))
+//     $('#mTotal').text(total.toFixed(2))
+// }
+
 function calcTotal () {
     var with_tax = false
     if ($('#with_tax').val() == 1) {
@@ -683,51 +1078,50 @@ function calcTotal () {
     $('#tableItems tr').each(function (index, vtr) {
         if (!($(vtr).find('.isdeleted').is(':checked'))) {
             q = parseFloat($(vtr).find('.txtCantidad').val())
+            // v = parseFloat((($(vtr).find('.txtPrecio').val()*100)/118).toFixed(6))
+            // p = parseFloat($(vtr).find('.txtPrecio').val())
             v = parseFloat($(vtr).find('.txtValue').val())
-            p = parseFloat($(vtr).find('.txtPrecio').val())
+            p = parseFloat((($(vtr).find('.txtValue').val()*118)/100).toFixed(6))
             // v = p * 100 / (100 + 18);
             // v = parseFloat($(vtr).find('.txtValue').val());
-            d1 = parseFloat($(vtr).find('.txtDscto').val())
+            d1 = parseFloat(window.descuento1)
+            _d1 = Math.round(q*v*d1*10000)/1000000
             d2 = parseFloat($(vtr).find('.txtDscto2').val())
-            vt = Math.round(q*v*(100-d1)*(100-d2)/100) / 100 // total por item
-            t = Math.round(q*p*(100-d1)*(100-d2)/100) / 100
-            console.log(vt)
-            console.log(t)
-            discount = Math.round(100*q*v)/100 - vt
+            _d2 = Math.round((q*v-_d1)*d2*10000)/1000000
+            discount = Math.round(1000000*(_d1 + _d2))/1000000
+            vt = Math.round(1000000*(q*v-discount))/1000000 // total por item
+            t = Math.round(1180000*(q*v-discount))/1000000
+            $(vtr).find('.txtTotal').text( vt.toFixed(2) )
+            $(vtr).find('.txtPriceItem').text( t.toFixed(2) )
+            //console.log(`cantidad: ${q}, valor: ${v}, precio: ${p}, d1: ${_d1}, d2: ${_d2}, descuento: ${discount} ValorItem: ${vt}, PrecioTotal: ${t}`)
+
 
             gross_value += Math.round(100*q*v)/100
             gross_precio += Math.round(100*q*p)/100
             d_items += discount
-            subtotal += vt
+            // subtotal += vt
             total += t
-            // gross_value = (Math.round(q*v*100)/100) + gross_value;
-            // discount = (Math.round(q*v*d)/100) + discount;
-            // subtotal = gross_value - (Math.round(q*v*d)/100) + subtotal;
         }
-    });
+    })
+    d_items = Math.round(100*d_items)/100
     gross_value = Math.round(100 * gross_value) / 100
     gross_precio = Math.round(100 * gross_precio) / 100
-    subtotal = Math.round(100 * subtotal) / 100
-    total = Math.round(100 * total) / 100
+    subtotal = Math.round(100*(gross_value - d_items))/100
+    //console.log(`vbruto: ${gross_value}, descuentos: ${d_items}, subtotal: ${subtotal}, total: ${total}`)
+    // subtotal = Math.round(100 * subtotal) / 100
+    // total = Math.round(100 * total) / 100
     if (with_tax) {
-        subtotal = Math.round(10000 * total / 118) / 100
-        gross_value = Math.round(10000 * gross_precio / 118) / 100
+        // subtotal = Math.round(10000 * total / 118) / 100
+        // gross_value = Math.round(10000 * gross_precio / 118) / 100
         d_items = gross_value - subtotal
-        // gross_value = Math.round(subtotal*1000000/((100-d1)*(100-d2))) / 100
     } else {
-        total = Math.round(118 * subtotal) / 100
+        // total = Math.round(118 * subtotal) / 100
     }
-    // if ($('#with_tax').val() == 1){
-    //  subtotal = Math.round(total * 10000 / (100 + 18)) / 100;
-    // } else {
-    //  total = Math.round(subtotal * (100 + 18))/100;
-    // }
-    // discount = (gross_value - subtotal);
-
 
     $('#mGrossValue').text(gross_value.toFixed(2))
     $('#mDiscount').text(d_items.toFixed(2))
     $('#mSubTotal').text(subtotal.toFixed(2))
+    $('#mIgv').text((total-subtotal).toFixed(2))
     $('#mTotal').text(total.toFixed(2))
 }
 
@@ -741,59 +1135,90 @@ function validateItem (myElement, id) {
     return n
 }
 
+// function calcTotalItem (myElement) {
+//     var with_tax = false
+//     if ($('#with_tax').val() == 1) {
+//         with_tax = true
+//     }
+//     cantidad = validateItem(myElement,'.txtCantidad')
+//     precio = validateItem(myElement,'.txtPrecio')
+//     value = validateItem(myElement,'.txtValue')
+//     dscto = validateItem(myElement,'.txtDscto')
+//     dscto2 = validateItem(myElement,'.txtDscto2')
+//     if ($(myElement).hasClass('txtPrecio')) {
+//         $(myElement).parent().parent().find('.txtValue').val( (precio/1.18).toFixed(2) )
+//         value = validateItem(myElement,'.txtValue')
+//     } else if($(myElement).hasClass('txtValue')) {
+//         $(myElement).parent().parent().find('.txtPrecio').val( (value*1.18).toFixed(2) )
+//         precio = validateItem(myElement,'.txtPrecio')
+//     }
+//     if (with_tax) {
+//         price_item = Math.round((cantidad*precio)*(100-dscto)*(100-dscto2)/100)/100;
+//         total = Math.round(price_item*10000/118)/100
+//     } else {
+//         total = Math.round((cantidad*value)*(100-dscto)*(100-dscto2)/100)/100;
+//         price_item = Math.round(total*118)/100
+//     }
+//     console.log("with_tax: "+with_tax)
+//     console.log("Valor Item: "+total)
+//     console.log("Precio Item: "+price_item)
+//     // D = Math.round(cantidad * value * dscto) / 100;
+//     D = Math.round(cantidad * value - total) / 100
+//     // total = Math.round((cantidad*value-D)*100)/100;
+//     $(myElement).parent().parent().find('.txtTotal').text( total.toFixed(2) )
+//     $(myElement).parent().parent().find('.txtPriceItem').text( price_item.toFixed(2) )
+// }
+ 
 function calcTotalItem (myElement) {
-    var with_tax = false
-    if ($('#with_tax').val() == 1) {
-        with_tax = true
+    q = parseFloat($('#txtCantidad').val())
+    v = parseFloat($('#txtValue').val())
+    p = parseFloat((v*118/100).toFixed(6))
+    d1 = parseFloat(window.descuento1)
+    d2 = parseFloat($('#txtDscto2').val())
+    if (isNaN(d1)) {
+        window.descuento1 = 0
+        d1 = window.descuento1
     }
-    cantidad = validateItem(myElement,'.txtCantidad')
-    precio = validateItem(myElement,'.txtPrecio')
-    value = validateItem(myElement,'.txtValue')
-    dscto = validateItem(myElement,'.txtDscto')
-    dscto2 = validateItem(myElement,'.txtDscto2')
-    if ($(myElement).hasClass('txtPrecio')) {
-        $(myElement).parent().parent().find('.txtValue').val( (precio/1.18).toFixed(2) )
-        value = validateItem(myElement,'.txtValue')
-    } else if($(myElement).hasClass('txtValue')) {
-        $(myElement).parent().parent().find('.txtPrecio').val( (value*1.18).toFixed(2) )
-        precio = validateItem(myElement,'.txtPrecio')
+    if (isNaN(q)) {
+        q = 1
+        $('#txtCantidad').val(q)
     }
-    if (with_tax) {
-        price_item = Math.round((cantidad*precio)*(100-dscto)*(100-dscto2)/100)/100;
-        total = Math.round(price_item*10000/118)/100
-    } else {
-        total = Math.round((cantidad*value)*(100-dscto)*(100-dscto2)/100)/100;
-        price_item = Math.round(total*118)/100
+    if (isNaN(v)) {
+        v = 0
+        $('#txtValue').val(v)
     }
-    console.log("with_tax: "+with_tax)
-    console.log("Valor Item: "+total)
-    console.log("Precio Item: "+price_item)
-    // D = Math.round(cantidad * value * dscto) / 100;
-    D = Math.round(cantidad * value - total) / 100
-    // total = Math.round((cantidad*value-D)*100)/100;
-    $(myElement).parent().parent().find('.txtTotal').text( total.toFixed(2) )
-    $(myElement).parent().parent().find('.txtPriceItem').text( price_item.toFixed(2) )
+    if (isNaN(d2)) {
+        d2 = 0
+        $('#txtDscto2').val(d2)
+    }
+    vt = 100*Math.round(q*v*(100-d1)*(100-d2))/1000000 // total por item
+    t = 100*Math.round(q*p*(100-d1)*(100-d2))/1000000
+    //console.log(`q: ${q}, v: ${v}, p: ${p}, d1: ${d1}, d2: ${d2}, vt: ${vt}, t: ${t}`)
+    $('#txtTotal').val( vt.toFixed(2) )
+    $('#txtPriceItem').val( t.toFixed(2) )
+    $('#spanValueItem').text( vt.toFixed(2) )
+    $('#spanPriceItem').text( t.toFixed(2) )
 }
 
-function addRowProduct(data='') {
-    var items = $('#items').val()
-    if (items>0) {
-        if ($("input[name='details["+(items-1)+"][product_id]']").val() == "") {
-            $("input[name='details["+(items-1)+"][txtProduct]']").focus()
-        } else{
-            renderTemplateRowProduct(data)
-        };
-    } else{
-        renderTemplateRowProduct(data)
-    };
-    if ($('#with_tax').val() == 1){
-        $('.withTax').show()
-        $('.withoutTax').hide()
-    } else {
-        $('.withTax').hide()
-        $('.withoutTax').show()
-    }
-}
+// function addRowProduct(data='') {
+//     var items = $('#items').val()
+//     if (items>0) {
+//         if ($("input[name='details["+(items-1)+"][product_id]']").val() == "") {
+//             $("input[name='details["+(items-1)+"][txtProduct]']").focus()
+//         } else{
+//             renderTemplateRowProduct(data)
+//         };
+//     } else{
+//         renderTemplateRowProduct(data)
+//     };
+//     if ($('#with_tax').val() == 1){
+//         $('.withTax').show()
+//         $('.withoutTax').hide()
+//     } else {
+//         $('.withTax').hide()
+//         $('.withoutTax').show()
+//     }
+// }
 
 function renderTemplateRowProduct (data) {
     if (data != "") {
@@ -987,20 +1412,30 @@ function changeCountry() {
         $('#field_ubigeo_code').parent().hide()
     }
 }
-function activateTemplate (id) {
-    var t = document.querySelector(id)
-    return document.importNode(t.content, true)
-}
+// function activateTemplate (id) {
+//     var t = document.querySelector(id)
+//     return document.importNode(t.content, true)
+// }
 function getCar() {
     placa = $('#placa').val().trim()
     url = `/getCar/${placa}`
     if (placa!='') {
         $.get(url, function(data){
             if (data.id) {
+                console.log(data.company.company_name)
                 $('#car_id').val(data.id)
                 $('#company_id').val(data.company_id)
                 $('#my_company').val(data.my_company)
-                $('#attention').val(data.contact_name)
+                $('#brand').val(data.modelo.brand.name)
+                $('#modelo').val(data.modelo.name)
+                $('#year').val(data.year)
+                $('#color').val(data.color)
+                $('#vin').val(data.vin)
+                $('#company_name').val(data.company.company_name)
+                $('#doc').val(data.company.doc)
+                $('#phone').val(data.company.phone)
+                $('#mobile').val(data.company.mobile)
+                $('#email').val(data.company.email)
             } else {
                 // Si no existe el input company_name (diferente a una cita), se blanquea los campos para agregar una placa que si existe en la BD.
                 if ($('#company_name').length == 0) {

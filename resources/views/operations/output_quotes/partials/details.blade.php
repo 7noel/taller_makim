@@ -1,21 +1,21 @@
 @php $i=0; @endphp
 @if(request()->route()->getName() == 'output_quotes.edit')
-<a href="#" id="btnAddProduct" class="btn btn-outline-info btn-sm mb-3" data-toggle="modal" data-target="#exampleModalx" title="Agregar Producto">{!! $icons['add'] !!} Agregar</a>
+<a href="#" id="btnAddService" class="btn btn-outline-info btn-sm mb-3" data-toggle="modal" data-target="#exampleModalx" title="Agregar Servicio">{!! $icons['add'] !!} Agregar Servicio</a>
+<a href="#" id="btnAddProduct" class="btn btn-outline-info btn-sm mb-3" data-toggle="modal" data-target="#exampleModalx" title="Agregar Producto">{!! $icons['add'] !!} Agregar Productos</a>
 @endif
-<div class="">
-<table class="table table-sm table-responsive">
+<div class="table-responsive">
+<table class="table table-sm table-hover">
 	<thead>
 		<tr>
-			<th width="100px">Código</th>
-			<th width="300px">Descripción</th>
-			<th width="100px">Cantidad</th>
-			<th class="withTax" width="100px">Precio</th>
-			<th class="withoutTax" width="100px">Valor</th>
-			<th width="100px">Dscto1(%)</th>
-			<th width="100px" class="d-none">Dscto2(%)</th>
-			<th class="withoutTax" width="100px">V.Total</th>
-			<th class="withTax" width="100px">P.Total</th>
-			<th>Acciones</th>
+			<th class="text-center">Código</th>
+			<th style="min-width: 250px">Descripción</th>
+			<th class="text-center">Cantidad</th>
+			<th class="text-center withTax">Precio</th>
+			<th class="text-center withoutTax">Valor</th>
+			<th class="text-center">Dscto(%)</th>
+			<th class="text-center withTax">V.Total</th>
+			<th class="text-center withoutTax">P.Total</th>
+			<th class="text-center text-center">Acciones</th>
 		</tr>
 	</thead>
 	<tbody id="tableItems">
@@ -29,21 +29,20 @@
 			{!! Form::hidden("details[$i][category_id]", $detail->category_id, ['class'=>'categoryId','data-categoryid'=>'']) !!}
 			{!! Form::hidden("details[$i][sub_category_id]", $detail->sub_category_id, ['class'=>'subCategoryId','data-subcategoryid'=>'']) !!}
 			{!! Form::hidden("details[$i][is_downloadable]", $detail->is_downloadable, ['class'=>'is_downloadable','data-is_downloadable'=>'']) !!}
-			<td><span class='form-control form-control-sm intern_code text-right' data-labelid>{{ $detail->product->intern_code }}</span></td>
-			<td>{!! Form::text("details[$i][txtProduct]", $detail->product->name, ['class'=>'form-control form-control-sm txtProduct', 'data-product'=>'', 'required'=>'required', 'disabled']); !!}</td>
-			<td>{!! Form::text("details[$i][quantity]", $detail->quantity, ['class'=>'form-control form-control-sm txtCantidad text-right', 'data-cantidad'=>'']) !!}</td>
-			@if(config('options.cambiar_precios'))
-				<td class="withTax">{!! Form::text("details[$i][price]", $detail->price, ['class'=>'form-control form-control-sm txtPrecio text-right', 'data-precio'=>'']) !!}</td>
-				<td class="withoutTax">{!! Form::text("details[$i][value]", $detail->value, ['class'=>'form-control form-control-sm txtValue text-right', 'data-value'=>'']) !!}</td>
-			@else
-				<td class="withTax">{!! Form::text("details[$i][price]", $detail->price, ['class'=>'form-control form-control-sm txtPrecio text-right', 'data-precio'=>'', 'readonly'=>'readonly']) !!}</td>
-				<td class="withoutTax">{!! Form::text("details[$i][value]", $detail->value, ['class'=>'form-control form-control-sm txtValue text-right', 'data-value'=>'', 'readonly'=>'readonly']) !!}</td>
-			@endif
-			<td>{!! Form::text("details[$i][d1]", $detail->d1, ['class'=>'form-control form-control-sm txtDscto text-right', 'data-dscto'=>'']) !!}</td>
-			<td class="d-none">{!! Form::text("details[$i][d2]", $detail->d2, ['class'=>'form-control form-control-sm txtDscto2 text-right', 'data-dscto'=>'']) !!}</td>
-			<td class="withoutTax"> <span class='form-control form-control-sm txtTotal text-right' data-total>{{ $detail->total }}</span> </td>
-			<td class="withTax"> <span class='form-control form-control-sm txtPriceItem text-right' data-price_item>{{ $detail->price_item }}</span> </td>
-			<td class="text-center form-inline">
+			<td><span class='spanCodigo text-right'>{{ $detail->product->intern_code }}</span></td>
+			<td><span class='spanProduct'>{{ $detail->product->name }}</span></td>
+			<td class="text-center"><span class='spanCantidad'>{{ $detail->quantity }} {{ $detail->unit->symbol }}</span><input class="txtCantidad" name="details[{{ $i }}][quantity]" type="hidden" value="{{ $detail->quantity }}"></td>
+
+			<td class="withTax text-right"><span class='spanPrecio'>{{ $detail->price_item }}</span><input class="txtPrecio" name="details[{{ $i }}][price]" type="hidden" value="{{ $detail->price_item }}"></td>
+            <td class="withoutTax text-right"><span class='spanValue'>{{ $detail->total }}</span><input class="txtValue" name="details[{{ $i }}][total]" type="hidden" value="{{ $detail->total }}"></td>
+
+			<td class="text-center"><span class='spanDscto2'>{{ $detail->d2 }}</span>{!! Form::hidden("details[$i][d2]", $detail->d2, ['class'=>'txtDscto2']) !!}</td>
+
+			<td class="withoutTax text-right"> <span class='txtTotal' data-total>{{ $detail->total }}</span> </td>
+			<td class="withTax text-right"> <span class='txtPriceItem' data-price_item>{{ $detail->price_item }}</span> </td>
+
+			<td class="text-center" style="white-space: nowrap;">
+                <a href="#" class="btn btn-outline-primary btn-sm btn-edit-item" title="Editar">{!! $icons['edit'] !!}</a>
 				<a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar">{!! $icons['remove'] !!}</a>
 			</td>
 		</tr>
@@ -88,15 +87,16 @@
 			</div>
 			<div class="modal-body form-row">
 				<div class="form-group col-sm-9">
-					{!! Field::select('categories', $categories, '', ['label'=>'Categoría', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
+					{!! Field::select('categories', [], '', ['label'=>'Categoría', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
 				</div>
 				<div class="form-group col-sm-3">
-					{!! Field::select('unit', $units, '', ['label'=>'Unidad', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
+					{!! Field::select('unit', [], '', ['label'=>'Unidad', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
 				</div>
 				<div class="form-group col-sm-12">
 					<label for="txtProducto">Producto</label>
 					<small id="txtCodigo"></small>
-					<input type="text" class="form-control form-control-sm" id="txtProducto">
+					<small id="txtProId" class="d-none"></small>
+					<input type="text" class="form-control form-control-sm text-uppercase" id="txtProducto">
 					<span class="badge badge-light" id="alert-items"></span>
 					<span class="badge badge-info" id="alert-stock"></span>
 					<input type="hidden" id="txtProduct">
@@ -129,3 +129,34 @@
 		</div>
 	</div>
 </div>
+
+<script>
+$(document).ready(function () {
+	@if(isset($model))
+		var categories_service = @json($categories_service);
+		window.opts_cat_ser = `<option value="">Seleccionar</option>`
+		categories_service.forEach(function (item) {
+			window.opts_cat_ser += `<option value="${item.id}">${item.name}</option>`
+		})
+		
+		var categories_product = @json($categories_product);
+		window.opts_cat_pro = `<option value="">Seleccionar</option>`
+		categories_product.forEach(function (item) {
+			window.opts_cat_pro += `<option value="${item.id}">${item.name}</option>`
+		})
+
+		var units_product = @json($units_product);
+		window.opts_uni_pro = `<option value="">Seleccionar</option>`
+		units_product.forEach(function (item) {
+			window.opts_uni_pro += `<option value="${item.id}">${item.symbol}</option>`
+		})
+
+		var units_service = @json($units_service);
+		window.opts_uni_ser = `<option value="">Seleccionar</option>`
+		units_service.forEach(function (item) {
+			window.opts_uni_ser += `<option value="${item.id}">${item.symbol}</option>`
+		})
+		document.getElementById("unit").innerHTML = opts_uni_ser;
+	@endif
+})
+</script>

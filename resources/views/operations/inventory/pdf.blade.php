@@ -273,7 +273,7 @@
 <table class="table-datos mt-5">
 	<tr>
 		<td class="label3">SOLICITUD DEL CLIENTE:</td>
-		<td>{{ $model->inventory->solicitud }} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat ipsum voluptate aliquid nostrum amet voluptatibus, maiores quisquam, saepe laborum nisi laudantium odio, quibusdam possimus. At unde quidem quia consequuntur, totam.</td>
+		<td>{{ $model->inventory->solicitud }}</td>
 	</tr>
 </table>
     <table class="legend-table mt-5">
@@ -310,7 +310,7 @@
 <table class="table-datos mt-5">
 	<tr>
 		<td class="label3">OBSERVACIONES:</td>
-		<td>{{ $model->comment }} Lorem, ipsum dolor sit amet, consectetur adipisicing elit. Minima quod quisquam a, odit magnam, repellat hic animi voluptate atque cumque sunt, ipsum et corrupti rerum magni. Qui eveniet, explicabo libero.</td>
+		<td>{{ $model->comment }}</td>
 	</tr>
 </table>
 

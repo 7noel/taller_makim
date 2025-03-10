@@ -11,7 +11,7 @@ class CarRepo extends BaseRepo{
 
 	public function getCar($placa)
 	{
-		return $this->model->where('placa',$placa)->first();
+		return $this->model->with('modelo.brand', 'company')->where('placa',$placa)->first();
 	}
 	public function index($filter = false, $search = false)
 	{

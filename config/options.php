@@ -1,5 +1,11 @@
 <?php 
 return array(
+	'cia_seguros' => [
+		'POSITIVA' => 'POSITIVA',
+		'PACIFICO' => 'PACIFICO',
+		'RIMAC' => 'RIMAC',
+		'MAPHRE' => 'MAPHRE',
+	],
 	'combustible' => [
 		'0' => 'VACIO',
 		'25' => '1/4',

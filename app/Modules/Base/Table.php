@@ -21,4 +21,8 @@ class Table extends Model implements Auditable
     {
     	return $this->belongsTo('App\Modules\Base\Table', 'relation_id');
     }
+    public function childs()
+    {
+        return $this->hasMany('App\Modules\Base\Table', 'relation_id')->orderBy('name', 'ASC');
+    }
 }

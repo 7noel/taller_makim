@@ -134,11 +134,13 @@ class OrdersController extends Controller {
 		$checklist_details = $this->orderChecklistDetailRepo->byOrder($model->id, '1');
 		$car = $model->car;
 		$client = $car->company;
-		$categories = $this->tableRepo->getListType('categories');
-		$units = $this->tableRepo->getListType('units');
+		$categories_service = $this->tableRepo->getListCatSer();
+		$categories_product = $this->tableRepo->getListCatPro();
+		$units_service = $this->tableRepo->getListUnitSer();
+		$units_product = $this->tableRepo->getListUnitPro();
 		// $checklist_details = $this->checklistDetailRepo->all2();
 		// dd($checklist_details);
-		return view('partials.edit', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'inventory', 'action', 'checklist_details', 'categories', 'units'));
+		return view('partials.edit', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'inventory', 'action', 'checklist_details', 'categories_service', 'categories_product', 'units_service', 'units_product'));
 	}
 
 	public function update($id)
