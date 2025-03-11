@@ -7,6 +7,12 @@
             <div class="card-group">
                 <div class="card">
                     <div class="card-body text-center">
+                        <a href="{{ route('panel') }}" class="card-title text-dark">TABLERO
+                        <img src="/img/procesos.png" class="card-img-top"></a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
                         <a href="{{ route('clients.index') }}" class="card-title text-dark">CLIENTES
                         <img src="/img/clientes.png" class="card-img-top"></a>
                     </div>
@@ -23,19 +29,13 @@
                         <img src="/img/cotizar.png" class="card-img-top"></a>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body text-center">
-                        <a href="{{ route('output_orders.index') }}" class="card-title text-dark">ÓRDENES
-                        <img src="/img/ordenes.png" class="card-img-top"></a>
-                    </div>
-                </div>
             </div>
 
             <div class="card-group">
                 <div class="card">
                     <div class="card-body text-center">
-                        <a href="{{ route('panel') }}" class="card-title text-dark">TABLERO
-                        <img src="/img/procesos.png" class="card-img-top"></a>
+                        <a href="{{ route('output_orders.index') }}" class="card-title text-dark">ÓRDENES
+                        <img src="/img/ordenes.png" class="card-img-top"></a>
                     </div>
                 </div>
                 <div class="card">
