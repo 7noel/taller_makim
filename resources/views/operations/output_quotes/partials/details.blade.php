@@ -36,7 +36,7 @@
 			<td class="withTax text-right"><span class='spanPrecio'>{{ $detail->price_item }}</span><input class="txtPrecio" name="details[{{ $i }}][price]" type="hidden" value="{{ $detail->price_item }}"></td>
             <td class="withoutTax text-right"><span class='spanValue'>{{ $detail->total }}</span><input class="txtValue" name="details[{{ $i }}][total]" type="hidden" value="{{ $detail->total }}"></td>
 
-			<td class="text-center"><span class='spanDscto2'>{{ $detail->d2 }}</span>{!! Form::hidden("details[$i][d2]", $detail->d2, ['class'=>'txtDscto2']) !!}</td>
+			<td class="text-center"><span class='spanDscto2'>{{ round($detail->d2) }}</span>{!! Form::hidden("details[$i][d2]", $detail->d2, ['class'=>'txtDscto2']) !!}</td>
 
 			<td class="withoutTax text-right"> <span class='txtTotal' data-total>{{ $detail->total }}</span> </td>
 			<td class="withTax text-right"> <span class='txtPriceItem' data-price_item>{{ $detail->price_item }}</span> </td>
@@ -90,7 +90,7 @@
 					{!! Field::select('categories', [], '', ['label'=>'Categoría', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
 				</div>
 				<div class="form-group col-sm-3">
-					{!! Field::select('unit', [], '', ['label'=>'Unidad', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
+					{!! Field::select('unitId', [], '', ['label'=>'Unidad', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
 				</div>
 				<div class="form-group col-sm-12">
 					<label for="txtProducto">Producto</label>
@@ -100,7 +100,7 @@
 					<span class="badge badge-light" id="alert-items"></span>
 					<span class="badge badge-info" id="alert-stock"></span>
 					<input type="hidden" id="txtProduct">
-					<input type="hidden" id="unitId">
+					<!-- <input type="hidden" id="unitId"> -->
 				</div>
 				<div class="form-group col-3 text-center">
 					<label for="txtCantidad">Cantidad <span id="label-cantidad"></span> </label>
@@ -156,7 +156,7 @@ $(document).ready(function () {
 		units_service.forEach(function (item) {
 			window.opts_uni_ser += `<option value="${item.id}">${item.symbol}</option>`
 		})
-		document.getElementById("unit").innerHTML = opts_uni_ser;
+		document.getElementById("unitId").innerHTML = opts_uni_ser;
 	@endif
 })
 </script>

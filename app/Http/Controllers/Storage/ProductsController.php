@@ -105,8 +105,9 @@ class ProductsController extends Controller {
 	public function ajaxAutocomplete()
 	{
 		$term = request()->get('term');
+		$type = request()->get('type');
 		ini_set('memory_limit','1024M');
-		$models = $this->repo->autocomplete($term);
+		$models = $this->repo->autocomplete($term, $type);
 		$result=[];
 		foreach ($models as $model) {
 			$result[]=[

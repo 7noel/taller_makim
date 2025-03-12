@@ -146,8 +146,15 @@ class OrdersController extends Controller {
 	public function update($id)
 	{
 		$data = request()->all();
+        // return response()->json(['id' => $id, 'message' => 'holaaaaaaa']);
 		// dd($data);
 		$model = $this->repo->save($data, $id);
+
+        // Si la peticion es ajax
+        if (request()->ajax()) {
+            $message = "Los datos se guardaron correctamente";
+            return response()->json(['id' => $id, 'message' => $message]);
+        }
 
 		if (explode('.', \Request::route()->getName())[0] == 'inventory') {
 			return redirect()->route('panel', ['status' => $model->status]);

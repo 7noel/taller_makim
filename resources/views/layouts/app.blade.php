@@ -321,7 +321,18 @@ $(document).ready(function () {
     
     //Autocomplete de productos
     $('#txtProducto').autocomplete({
-        source: "/api/products/autocompleteAjax",
+        //source: "/api/products/autocompleteAjax",
+        source: function(request, response) {
+            let url = "/api/products/autocompleteAjax?type=" + window.type; // URL dinámica
+            $.ajax({
+                url: url,
+                dataType: "json",
+                data: { term: request.term }, // Pasamos el término de búsqueda
+                success: function(data) {
+                    response(data);
+                }
+            });
+        },
         minLength: 4,
         select: function(event, ui){
             $p = ui.item.id
@@ -750,15 +761,15 @@ function addRowProduct2() {
         return false;
     }
     u = $('#unitId').val()
-    unidad = $("#unit option:selected").text()
-    console.log(unidad)
-    q = $('#txtCantidad').val()
+    unidad = $("#unitId option:selected").text()
+    // console.log(unidad)
+    q = parseFloat($('#txtCantidad').val())
     if (!isNaN(q) && q <= 0) {
         $('#txtCantidad').val("")
         $('#txtCantidad').focus()
         return false;
     }
-    v = $('#txtValue').val()
+    v = parseFloat($('#txtValue').val())
     if (!isNaN(v) && v <= 0) {
         $('#txtValue').val("")
         $('#txtValue').focus()
@@ -766,7 +777,7 @@ function addRowProduct2() {
     }
     d1 = window.descuento1
     d2 = parseFloat($('#txtDscto2').val())
-    t = $('#txtTotal').val()
+    t = parseFloat($('#txtTotal').val())
     if (typeof window.el === 'undefined') { // Si no existe la variable window.el (producto a editar) se agrega una fila
         items = $('#items').val()
         //preparando fila <tr>
@@ -774,12 +785,12 @@ function addRowProduct2() {
             <input class="unitId" name="details[${items}][unit_id]" type="hidden" value="${u}">
             <td><span class='spanCodigo text-right'>${codigo}</span><input class="productId" name="details[${items}][product_id]" type="hidden" value="${product_id}"></td>
             <td><span class='spanProduct'>${desc}</span><input class="txtProduct" name="details[${items}][DFDESCRI]" type="hidden" value=""></td>
-            <td class="text-center"><span class='spanCantidad text-right'>${q} ${unidad}</span><input class="txtCantidad" name="details[${items}][quantity]" type="hidden" value="${q}"></td>
+            <td class="text-center"><span class='spanCantidad text-right'>${q.toFixed(2)} ${unidad}</span><input class="txtCantidad" name="details[${items}][quantity]" type="hidden" value="${q}"></td>
             <td class="withTax text-right"><span class='spanPrecio'>${(v*1.18).toFixed(2)}</span><input class="txtPrecio" name="details[${items}][price]" type="hidden" value="${v*1.18}"></td>
-            <td class="withoutTax text-right"><span class='spanValue'>${v}</span><input class="txtValue" name="details[${items}][value]" type="hidden" value="${v}"></td>
-            <td class="text-center"><span class='spanDscto2'>${d2}</span><input class="txtDscto2" name="details[${items}][d2]" type="hidden" value="${d2}"></td>
+            <td class="withoutTax text-right"><span class='spanValue'>${v.toFixed(2)}</span><input class="txtValue" name="details[${items}][value]" type="hidden" value="${v}"></td>
+            <td class="text-center"><span class='spanDscto2'>${d2.toFixed(0)}</span><input class="txtDscto2" name="details[${items}][d2]" type="hidden" value="${d2}"></td>
             <td class="withTax text-right"> <span class='txtPriceItem'>${(t*1.18).toFixed(2)}</span> </td>
-            <td class="withoutTax text-right"> <span class='txtTotal'>${t}</span> </td>
+            <td class="withoutTax text-right"> <span class='txtTotal'>${t.toFixed(2)}</span> </td>
             <td class="text-center" style="white-space: nowrap;">
                 <a href="#" class="btn btn-outline-primary btn-sm btn-edit-item" title="Editar">{!! $icons['edit'] !!}</a>
                 <a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar"><i class="far fa-trash-alt"></i></a>
@@ -824,6 +835,7 @@ function addRowProduct2() {
     /*form = $(".form-loading")
     var actionUrl = form.attr('action')
     var formData = form.serialize()
+    console.log(actionUrl)
     $.ajax({
         url: actionUrl, // Cambia esto por la URL de tu API
         type: 'POST',
@@ -844,11 +856,11 @@ function clearModalProduct() {
     type = window.type_item
     // console.log(type)
     if (type=='pro') {
-        document.getElementById("unit").innerHTML = window.opts_uni_pro;
+        document.getElementById("unitId").innerHTML = window.opts_uni_pro;
         document.getElementById("categories").innerHTML = window.opts_cat_pro;
     } else if (type=='ser') {
         // console.log('agregar servicio')
-        document.getElementById("unit").innerHTML = window.opts_uni_ser;
+        document.getElementById("unitId").innerHTML = window.opts_uni_ser;
         document.getElementById("categories").innerHTML = window.opts_cat_ser;
     }
     $('#txtProducto').addClass("form-control")

@@ -73,9 +73,14 @@ class ProductRepo extends BaseRepo{
 		// }
 		return $model;
 	}
-	public function autocomplete($term)
+	public function autocomplete($term, $type='ser')
 	{
-		return Product::with('accessories.accessory.sub_category')->where('name','like',"%$term%")->orWhere('intern_code','like',"%$term%")->get();
+		if ($type=='pro') {
+		return Product::where('is_downloadable', true)->with('accessories.accessory.sub_category')->where('name','like',"%$term%")->orWhere('intern_code','like',"%$term%")->get();
+		} else {
+		return Product::where('is_downloadable', false)->with('accessories.accessory.sub_category')->where('name','like',"%$term%")->orWhere('intern_code','like',"%$term%")->get();
+		}
+		
 	}
 	public function ajaxGetData($warehouse_id, $product_id)
 	{
