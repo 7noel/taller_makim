@@ -110,7 +110,7 @@
             </div>
             <div class="col-sm-2 d-none">
                 <div class="form-group">
-                    {!! Field::select('seguro', config('options.cia_seguros'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm']) !!}
+                    {!! Field::select('inventory[seguro]', config('options.cia_seguros'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm']) !!}
                 </div>
             </div>
         </div>
@@ -153,8 +153,8 @@
         <div class="form-row">
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
-                    <label for="company_anme">Propietario</label>
-                    {!! Form::text('company_anme', (isset($client)) ? $client->company_name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'company_name', 'readonly']) !!}
+                    <label for="company_name">Propietario</label>
+                    {!! Form::text('company_name', (isset($client)) ? $client->company_name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'company_name', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
@@ -193,13 +193,16 @@
                 </div>
             </div>--}}
             <div class="col-md-2 col-sm-4">
-                {!! Field::text('contact_name', null, ['label' => 'Contacto Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
+                {!! Field::text('inventory[contact_name]', (isset($model->inventory->contact_name
+                ) ? $model->inventory->contact_name : ''), ['label' => 'Contacto Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
-                {!! Field::text('contact_mobile', null, ['label' => 'Contacto Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+                {!! Field::text('inventory[contact_mobile]', (isset($model->inventory->contact_mobile
+                ) ? $model->inventory->contact_mobile : ''), ['label' => 'Contacto Celular', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
-                {!! Field::email('contact_email', null, ['label' => 'Contacto Email', 'class'=>'form-control-sm text-uppercase']) !!}
+                {!! Field::email('inventory[contact_email]', (isset($model->inventory->contact_email
+                ) ? $model->inventory->contact_email : ''), ['label' => 'Contacto Email', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             {{--<div class="col-md-2 col-sm-4">
                 <div class="form-group">
@@ -210,13 +213,16 @@
                 </div>
             </div>--}}
             <div class="col-md-2 col-sm-4">
-                {!! Field::text('user_name', null, ['label' => 'Usuario Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
+                {!! Field::text('inventory[driver_name]', (isset($model->inventory->driver_name
+                ) ? $model->inventory->driver_name : ''), ['label' => 'Conductor Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
-                {!! Field::text('user_mobile', null, ['label' => 'Usuario Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+                {!! Field::text('inventory[driver_mobile]', (isset($model->inventory->driver_mobile
+                ) ? $model->inventory->driver_mobile : ''), ['label' => 'Conductor Celular', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
-                {!! Field::email('user_email', null, ['label' => 'Usuario Email', 'class'=>'form-control-sm text-uppercase']) !!}
+                {!! Field::email('inventory[driver_email]', (isset($model->inventory->driver_email
+                ) ? $model->inventory->driver_email : ''), ['label' => 'Conductor Email', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
         </div>
 
@@ -251,7 +257,7 @@
             </div>
             <div class="col-sm-2">
                 {!! Field::select('inventory[control_remoto]', ['SI'=>'SI', 'NO'=>'NO'], (isset($model->inventory->control_remoto
-                ) ? $model->inventory->control_remoto : ''), ['empty'=>'SIN control_remoto', 'label'=>'Control Rremoto', 'class'=>'form-control-sm', 'required']) !!}
+                ) ? $model->inventory->control_remoto : ''), ['empty'=>'Seleccionar', 'label'=>'Control Remoto', 'class'=>'form-control-sm', 'required']) !!}
             </div>
             <div class="col-sm-2">
                 {!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory->comprobante

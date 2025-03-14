@@ -30,7 +30,7 @@ class Order extends Model implements Auditable
 		'approved_at' => 'datetime',
 		'repar_at' => 'datetime',
 		'checked_at' => 'datetime',
-		'send_at' => 'datetime',
+		'sent_at' => 'datetime',
 	];
 	protected static function booted()
     {

@@ -84,9 +84,9 @@ $models_7 = $models->where('status', 'ENTR');
 										<input class="input_mobile" type="hidden" value="{{ $model->company->mobile }}">
 										<input class="input_texto" type="hidden" value="{{ $texto }}">
 										<!-- Button trigger modal -->
-										<button type="button" class="btn btn-outline-success btn-sm btn-circle btn-modal-mobile" data-toggle="modal" data-target="#exampleModal">
+										{{-- <button type="button" class="btn btn-outline-success btn-sm btn-circle btn-modal-mobile" data-toggle="modal" data-target="#exampleModal">
 										  {!! $icons['whatsapp'] !!}
-										</button>
+										</button> --}}
 										{{-- <a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a> --}}
 										<a href="{{ route( 'inventory.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'order.print_inventory' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="Inventario">{!! $icons['pdf'] !!}</a>
@@ -135,9 +135,11 @@ $models_7 = $models->where('status', 'ENTR');
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
+									<h5>
+										<a href="{{ route( 'repuestos.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
+									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
-										<a href="{{ route( 'recepcion.edit' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle">{!! $icons['edit'] !!}</a>
-										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
 									<p class="card-text">{{ $model->repu_at->diffForHumans() }}</p>
@@ -157,10 +159,12 @@ $models_7 = $models->where('status', 'ENTR');
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
+									<h5>
+										<a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-success btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
+										<a href="{{ route( 'approbation.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
+									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
-										<a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
-										<a href="{{ route( 'recepcion.edit' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle">{!! $icons['edit'] !!}</a>
-										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
 									<p class="card-text">{{ $model->approved_at->diffForHumans() }}</p>
@@ -177,9 +181,11 @@ $models_7 = $models->where('status', 'ENTR');
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
+									<h5>
+										<a href="{{ route( 'repair.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
+									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
-										<a href="{{ route( 'recepcion.edit' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle">{!! $icons['edit'] !!}</a>
-										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
 									<p class="card-text">{{ $model->repar_at->diffForHumans() }}</p>
@@ -196,9 +202,11 @@ $models_7 = $models->where('status', 'ENTR');
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
+									<h5>
+										<a href="{{ route( 'qc.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
+									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
-										<a href="{{ route( 'recepcion.edit' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle">{!! $icons['edit'] !!}</a>
-										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
 									<p class="card-text">{{ $model->checked_at->diffForHumans() }}</p>
@@ -218,13 +226,15 @@ $models_7 = $models->where('status', 'ENTR');
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
+									<h5>
+										<a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-success btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
+										<a href="{{ route( 'entrega.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
+									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
-										<a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
-										<a href="{{ route( 'recepcion.edit' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle">{!! $icons['edit'] !!}</a>
-										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
-									<p class="card-text">{{ $model->send_at->diffForHumans() }}</p>
+									<p class="card-text">{{ $model->sent_at->diffForHumans() }}</p>
 								</div>
 							</div>
 						</div>

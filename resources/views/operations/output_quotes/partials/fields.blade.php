@@ -5,6 +5,13 @@
 {!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
 {!! Form::hidden('sn', null, ['id'=>'sn']) !!}
 
+@if(isset($model))
+<div class="form-row">
+	<a href="{{ route( 'panel', 'DIAG' ) }}" class="btn btn-outline-info btn-sm" title="Tablero"><i class="fa-solid fa-arrow-left"></i> TABLERO</a>
+	<a href="{{ route( 'print_order' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF</a>
+	<br>
+</div>
+@endif
 <div class="form-row">
 	<div class="col-md-1 col-sm-2">
 		{!! Form::label('sn', 'Presup.') !!}

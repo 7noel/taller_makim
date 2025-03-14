@@ -31,6 +31,11 @@ class ProductRepo extends BaseRepo{
 	}
 	public function prepareData($data)
 	{
+		if ($data['intern_code']=='-') {
+			$ultimoId = Product::max('id'); // Obtiene el último ID
+			$data['intern_code'] = str_pad($ultimoId + 1, 6, "0", STR_PAD_LEFT);
+			
+		}
 		if (isset($data['last_purchase']) and isset($data['profit_margin']) and isset($data['admin_expense'])) {
 			$data['value'] = $data['last_purchase'] * (100 + $data['profit_margin']) * (100 + $data['admin_expense']) / 10000;
 		}

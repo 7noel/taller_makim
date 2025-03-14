@@ -8,13 +8,14 @@
 	<thead>
 		<tr>
 			<th class="text-center">Código</th>
+			<th style="min-width: 50px">Categoría</th>
 			<th style="min-width: 250px">Descripción</th>
 			<th class="text-center">Cantidad</th>
 			<th class="text-center withTax">Precio</th>
 			<th class="text-center withoutTax">Valor</th>
 			<th class="text-center">Dscto(%)</th>
-			<th class="text-center withTax">V.Total</th>
-			<th class="text-center withoutTax">P.Total</th>
+			<th class="text-center withoutTax">V.Total</th>
+			<th class="text-center withTax">P.Total</th>
 			<th class="text-center text-center">Acciones</th>
 		</tr>
 	</thead>
@@ -30,11 +31,12 @@
 			{!! Form::hidden("details[$i][sub_category_id]", $detail->sub_category_id, ['class'=>'subCategoryId','data-subcategoryid'=>'']) !!}
 			{!! Form::hidden("details[$i][is_downloadable]", $detail->is_downloadable, ['class'=>'is_downloadable','data-is_downloadable'=>'']) !!}
 			<td><span class='spanCodigo text-right'>{{ $detail->product->intern_code }}</span></td>
+			<td><span class='spanCategory'>{{ $detail->comment }}</span></td>
 			<td><span class='spanProduct'>{{ $detail->product->name }}</span></td>
 			<td class="text-center"><span class='spanCantidad'>{{ $detail->quantity }} {{ $detail->unit->symbol }}</span><input class="txtCantidad" name="details[{{ $i }}][quantity]" type="hidden" value="{{ $detail->quantity }}"></td>
 
 			<td class="withTax text-right"><span class='spanPrecio'>{{ $detail->price_item }}</span><input class="txtPrecio" name="details[{{ $i }}][price]" type="hidden" value="{{ $detail->price_item }}"></td>
-            <td class="withoutTax text-right"><span class='spanValue'>{{ $detail->total }}</span><input class="txtValue" name="details[{{ $i }}][total]" type="hidden" value="{{ $detail->total }}"></td>
+            <td class="withoutTax text-right"><span class='spanValue'>{{ $detail->value }}</span><input class="txtValue" name="details[{{ $i }}][value]" type="hidden" value="{{ $detail->value }}"></td>
 
 			<td class="text-center"><span class='spanDscto2'>{{ round($detail->d2) }}</span>{!! Form::hidden("details[$i][d2]", $detail->d2, ['class'=>'txtDscto2']) !!}</td>
 
@@ -80,26 +82,32 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Agregar/Editar Servicio</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Agregar/Editar <span class="spanTypeItem">Servicio</span></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body form-row">
-				<div class="form-group col-sm-9">
-					{!! Field::select('categories', [], '', ['label'=>'Categoría', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
+				<div class="form-group col-sm-5">
+					{!! Field::select('category', [], '', ['label'=>'Categoría', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
 				</div>
-				<div class="form-group col-sm-3">
+				<div class="form-group col-sm-5 d-none">
+					{!! Field::select('sub_category', [], '', ['label'=>'Sub_Categoría', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
+				</div>
+				<div class="form-group col-sm-2">
 					{!! Field::select('unitId', [], '', ['label'=>'Unidad', 'empty'=>'Seleccionar', 'class'=>'form-control form-control-sm']) !!}
 				</div>
 				<div class="form-group col-sm-12">
-					<label for="txtProducto">Producto</label>
+					<label for="txtProducto"><span class="spanTypeItem">Servicio</span></label>
 					<small id="txtCodigo"></small>
 					<small id="txtProId" class="d-none"></small>
+
 					<input type="text" class="form-control form-control-sm text-uppercase" id="txtProducto">
+
 					<span class="badge badge-light" id="alert-items"></span>
 					<span class="badge badge-info" id="alert-stock"></span>
 					<input type="hidden" id="txtProduct">
+					<input type="hidden" id="is_downloadable">
 					<!-- <input type="hidden" id="unitId"> -->
 				</div>
 				<div class="form-group col-3 text-center">
@@ -123,8 +131,9 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">{!! $icons['close'] !!} Cerrar</button>
-				<button type="button" class="btn btn-primary" id="btn-add-product">{!! $icons['add'] !!} Grabar</button>
+				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">{!! $icons['close'] !!} Cerrar</button>
+				<button type="button" class="btn btn-sm btn-outline-info d-none" id="btn-create-item">{!! $icons['add'] !!} Crear <span class="spanTypeItem">Servicio</span></button>
+				<button type="button" class="btn btn-sm btn-primary" id="btn-add-product">{!! $icons['add'] !!} Grabar</button>
 			</div>
 		</div>
 	</div>
@@ -157,6 +166,9 @@ $(document).ready(function () {
 			window.opts_uni_ser += `<option value="${item.id}">${item.symbol}</option>`
 		})
 		document.getElementById("unitId").innerHTML = opts_uni_ser;
+		ordenarTabla()
 	@endif
 })
+
+
 </script>

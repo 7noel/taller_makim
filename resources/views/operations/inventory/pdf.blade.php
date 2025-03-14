@@ -286,6 +286,7 @@
         </tr>
     </table>
     <table class="mt-5" style="font-size: 9px;">
+    	@if($checklist_details->isNotEmpty())
             @php
                 $numRows = ceil(count($checklist_details) / 3);
                 $numCols = 3;
@@ -305,6 +306,7 @@
                     @endfor
                 </tr>
             @endfor
+        @endif
     </table>
 
 <table class="table-datos mt-5">

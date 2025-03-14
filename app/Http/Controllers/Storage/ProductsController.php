@@ -53,10 +53,16 @@ class ProductsController extends Controller {
 		return view('partials.create', compact('sub_categories', 'units', 'brands', 'warehouses'));
 	}
 
-	public function store(FormProductRequest $request)
+	public function store()
 	{
 		$data = request()->all();
-		$this->repo->save($data);
+		$model = $this->repo->save($data);
+		if (request()->ajax()) {
+			if (!$model) {
+	            return response()->json(['error' => 'Item no fue creado'], 404);
+	        }
+			return response()->json ($model);
+		}
 		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}
 

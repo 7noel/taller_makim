@@ -2,6 +2,7 @@
 @php
     if (null == session('my_company')) {
         session(['my_company' => App\Modules\Finances\Company::find(1)]);
+        //dd("yaaaaaaa");
     }
     //dd(session('my_company')->config);
     //dd( get_defined_vars(session('my_company')->config['favicon']) );
@@ -312,11 +313,41 @@
     </div>
     <script>
 $(document).ready(function () {
+    $('#exampleModalx').on('hidden.bs.modal', function () {
+        $('#btnAddService').focus(); // Cambia esto a otro botón fuera del modal
+    });
+    $(".form-loading").on("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Evita que el formulario se envíe
+            return false;
+        }
+    })
+
+    n = $("#d1").val()
+    n = Math.round(parseFloat(n)*1000000)/1000000
+    if (isNaN(n)) {n = 0}
+    $("#d1").val(n)
+    window.descuento1 = n
+
     type_item = ''
     window.descuento2 = 0
     $('#btn-add-product').click(function(e){
         e.preventDefault()
         addRowProduct2()
+    })
+    $('#btn-create-item').click(function(e){
+        e.preventDefault()
+        createItem()
+    })
+
+    $('#txtProducto').on('keyup', function (e) {
+        if ($('#txtProducto').val() == $('#txtProduct').val()) {
+            $('#btn-create-item').addClass('d-none')
+            $('#btn-add-product').removeClass('d-none')
+        } else {
+            $('#btn-create-item').removeClass('d-none')
+            $('#btn-add-product').addClass('d-none')
+        }
     })
     
     //Autocomplete de productos
@@ -343,12 +374,25 @@ $(document).ready(function () {
                     clearModalProduct()
                 }, 100)
             } else {
+                $('#btn-create-item').addClass('d-none')
+                $('#btn-add-product').removeClass('d-none')
                 $('#txtCodigo').text($p.intern_code)
                 $('#txtProId').text($p.id)
                 $('#txtProduct').val($p.name)
                 $('#unitId').val($p.unit_id)
                 $('#unit').val($p.unit_id)
-                $('#categories').val($p.category_id)
+                // Si el valor $p.unit_id no está en la lista, buscar y seleccionar "und"
+                if ($('#unitId').val() === null) {
+                    let undOption = $('#unitId option').filter(function() {
+                        return $(this).text().trim().toLowerCase() === "und";
+                    });
+
+                    if (undOption.length > 0) {
+                        $('#unitId').val(undOption.val());
+                        $('#unit').val(undOption.val())
+                    }
+                }
+                $('#category').val($p.category_id)
                 $('#txtValue').val(parseFloat($p.value)) // PRE_ACT es precio sin IGV
                 $('#txtPrecio').val((($p.value*118)/100).toFixed(6))
                 $('#txtDscto2').val(window.descuento2)
@@ -369,7 +413,8 @@ $(document).ready(function () {
                     $('#txtCantidad').focus()
                     $('#txtCantidad').select()
                 }, 100)
-                $('#label-cantidad').text($p.unit_id)
+                // $('#label-cantidad').text($p.unit_id)
+                $('#label-cantidad').text($("#unitId option:selected").text())
                 calcTotalItem()
             }
         }
@@ -377,7 +422,16 @@ $(document).ready(function () {
 
     $(document).on('click', '.btn-edit-item', function (e) {
         e.preventDefault()
-        window.el = $(this).parent().parent()
+        // window.el = $(this).parent().parent()
+        window.el = $(this).closest("tr")
+        var isDownloadable = window.el.find(".is_downloadable").val()
+        if (isDownloadable == '1') {
+            window.type_item = 'pro'
+        } else {
+            window.type_item = 'ser'
+        }
+        console.log(isDownloadable+' '+window.type_item)
+        clearModalCategoryUnit()
         editModalProduct()
         setTimeout(function() {
             $('#txtCantidad').focus()
@@ -389,6 +443,7 @@ $(document).ready(function () {
         window.type_item = 'pro'
         e.preventDefault()
         delete window.el
+        clearModalCategoryUnit()
         clearModalProduct()
         setTimeout(function() {
             $('#txtProducto').focus()
@@ -399,6 +454,7 @@ $(document).ready(function () {
         window.type_item = 'ser'
         e.preventDefault()
         delete window.el
+        clearModalCategoryUnit()
         clearModalProduct()
         setTimeout(function() {
             $('#txtProducto').focus()
@@ -738,6 +794,71 @@ $(document).ready(function () {
     })
 })
 
+function createItem(){
+    //obteniendo los valores de los inputs
+    desc = $('#txtProducto').val()
+    codigo = $('#txtCodigo').text()
+    product_id = $('#txtProId').text()
+    is_downloadable = $('#is_downloadable').val()
+    currency = $('#currency_id').val()
+    // if (codigo == "") {
+    //     $('#txtProducto').val("")
+    //     $('#txtProduct').val("")
+    //     $('#txtProducto').focus()
+    //     return false;
+    // }
+    cat = $('#category').val()
+    if (cat == '') {
+        $('#category').focus()
+        return false
+    }
+
+    u = $('#unitId').val()
+    unidad = $("#unitId option:selected").text()
+
+    if (u == '') {
+        $('#unitId').focus()
+        return false
+    }
+    // console.log(unidad)
+    q = parseFloat($('#txtCantidad').val())
+    if (!isNaN(q) && q <= 0) {
+        $('#txtCantidad').val("")
+        $('#txtCantidad').focus()
+        return false;
+    }
+    v = parseFloat($('#txtValue').val())
+    if (!isNaN(v) && v <= 0) {
+        $('#txtValue').val("")
+        $('#txtValue').focus()
+        return false;
+    }
+    page = '/crear-item'
+    $.get(page, {intern_code: '-', category_id: cat, sub_category_id: '0', name: desc, unit_id: u, value: v, is_downloadable: is_downloadable, currency_id: currency}, function(data){
+        // if (data.error!=undefined) {
+        //     if(data.error.marca!=undefined) {
+        //         $('#marca').addClass('is-invalid')
+        //         $('#marcaFeedback').text(data.error.marca)
+        //         $('#modelo_name').removeClass('is-invalid')
+        //     }
+        //     if(data.error.modelo!=undefined) {
+        //         $('#modelo_name').removeClass('is-invalid')
+        //         $('#marcaFeedback').text(data.error.modelo)
+        //         $('#modelo_name').addClass('is-invalid')
+        //     }
+        // } else {
+            $('#txtProId').text(data.intern_code)
+            $('#txtCodigo').text(data.intern_code)
+            $('#txtProducto').text(data.name)
+            $('#txtProduct').text(data.name)
+            // $('#unitId').text(data.unit_id)
+            // $('#category').text(data.category_id)
+        // }
+        $('#btn-add-product').click()
+    })
+
+}
+
 function existCodeInList(code) {
     existe_codigo = false
     $('#tableItems tr').each(function (index, vtr) {
@@ -760,9 +881,20 @@ function addRowProduct2() {
         $('#txtProducto').focus()
         return false;
     }
+    is_downloadable = $('#is_downloadable').val()
     u = $('#unitId').val()
     unidad = $("#unitId option:selected").text()
     // console.log(unidad)
+    cat = $('#category').val()
+    category = $("#category option:selected").text()
+    sub_cat = $('#sub_category').val()
+    sub_category = $("#sub_category option:selected").text()
+    text_cat = category
+    if (sub_cat!==null && sub_cat!='' && sub_cat != '0') {
+        sub_cat = '0'
+        text_cat = `${category} - ${sub_category}`
+    }
+
     q = parseFloat($('#txtCantidad').val())
     if (!isNaN(q) && q <= 0) {
         $('#txtCantidad').val("")
@@ -782,8 +914,13 @@ function addRowProduct2() {
         items = $('#items').val()
         //preparando fila <tr>
         tr = `<tr>
+            <input class="categoryId" name="details[${items}][category_id]" type="hidden" value="${cat}">
+            <input class="is_downloadable" name="details[${items}][is_downloadable]" type="hidden" value="${is_downloadable}">
+            <input class="subCategoryId" name="details[${items}][sub_category_id]" type="hidden" value="${sub_cat}">
+            <input class="productId" name="details[${items}][comment]" type="hidden" value="${text_cat}">
             <input class="unitId" name="details[${items}][unit_id]" type="hidden" value="${u}">
             <td><span class='spanCodigo text-right'>${codigo}</span><input class="productId" name="details[${items}][product_id]" type="hidden" value="${product_id}"></td>
+            <td><span class='spanCategory'>${text_cat}</span></td>
             <td><span class='spanProduct'>${desc}</span><input class="txtProduct" name="details[${items}][DFDESCRI]" type="hidden" value=""></td>
             <td class="text-center"><span class='spanCantidad text-right'>${q.toFixed(2)} ${unidad}</span><input class="txtCantidad" name="details[${items}][quantity]" type="hidden" value="${q}"></td>
             <td class="withTax text-right"><span class='spanPrecio'>${(v*1.18).toFixed(2)}</span><input class="txtPrecio" name="details[${items}][price]" type="hidden" value="${v*1.18}"></td>
@@ -830,7 +967,7 @@ function addRowProduct2() {
     calcTotal()
     // window.descuento2 = d2
     clearModalProduct()
-
+    ordenarTabla()
     // Grabando en la base de datos
     /*form = $(".form-loading")
     var actionUrl = form.attr('action')
@@ -852,17 +989,56 @@ function addRowProduct2() {
 
 }
 
-function clearModalProduct() {
+function ordenarTabla() {
+    var filas = $("#tableItems tr").get();
+
+    filas.sort(function(a, b) {
+        var isDownloadableA = parseInt($(a).find(".is_downloadable").val()) || 0;
+        var isDownloadableB = parseInt($(b).find(".is_downloadable").val()) || 0;
+
+        var categoriaA = $(a).find(".spanCategory").text().trim().toLowerCase();
+        var categoriaB = $(b).find(".spanCategory").text().trim().toLowerCase();
+
+        // Ordenar primero por is_downloadable (0 antes que 1)
+        if (isDownloadableA !== isDownloadableB) {
+            return isDownloadableA - isDownloadableB;
+        }
+
+        // Si is_downloadable es igual, ordenar por categoría ascendente
+        return categoriaA.localeCompare(categoriaB);
+    });
+
+    // Reinsertar solo si hubo cambios en el orden
+    var ordenActual = $("#tableItems").children().map(function() {
+        return $(this).data("id");
+    }).get().join(",");
+
+    var nuevoOrden = filas.map(row => $(row).data("id")).join(",");
+
+    if (ordenActual !== nuevoOrden) {
+        $("#tableItems").append(filas); // Solo reinsertar si cambia el orden
+    }
+}
+
+function clearModalCategoryUnit() {
     type = window.type_item
     // console.log(type)
     if (type=='pro') {
         document.getElementById("unitId").innerHTML = window.opts_uni_pro;
-        document.getElementById("categories").innerHTML = window.opts_cat_pro;
+        document.getElementById("category").innerHTML = window.opts_cat_pro;
+        $(".spanTypeItem").text('Repuesto')
+        $("#is_downloadable").val('1')
     } else if (type=='ser') {
         // console.log('agregar servicio')
         document.getElementById("unitId").innerHTML = window.opts_uni_ser;
-        document.getElementById("categories").innerHTML = window.opts_cat_ser;
+        document.getElementById("category").innerHTML = window.opts_cat_ser;
+        $(".spanTypeItem").text('Servicio')
+        $("#is_downloadable").val('0')
     }
+}
+
+function clearModalProduct() {
+    $('#btn-create-item').addClass('d-none')
     $('#txtProducto').addClass("form-control")
     $('#txtProducto').removeClass("form-control-plaintext")
     $('#txtProducto').attr('readonly', false)
@@ -893,6 +1069,9 @@ function clearModalProduct() {
         $('#alert-items').removeClass("badge-light")
         $('#btn-add-product').prop("disabled", true);
     }
+
+    $('#btn-create-item').addClass('d-none')
+    $('#btn-add-product').removeClass('d-none')
 }
 
 function editModalProduct() {
@@ -912,9 +1091,11 @@ function editModalProduct() {
     $('#txtProducto').addClass("form-control-plaintext")
     $('#txtProducto').attr('readonly', true)
 
-    $('#txtProducto').val(window.el.find('.txtProduct').val())
-    $('#txtProduct').val(window.el.find('.txtProduct').val())
-    $('#txtCodigo').text(window.el.find('.productId').val())
+    $('#category').val(window.el.find('.categoryId').val())
+    $('#unitId').val(window.el.find('.unitId').val())
+    $('#txtProducto').val(window.el.find('.spanProduct').text())
+    $('#txtProduct').val(window.el.find('.spanProduct').text())
+    $('#txtCodigo').text(window.el.find('.spanCodigo').text())
     $('#unitId').val(window.el.find('.unitId').val())
     $('#txtCantidad').val(window.el.find('.txtCantidad').val())
     $('#txtValue').val(window.el.find('.txtValue').val())
@@ -923,6 +1104,7 @@ function editModalProduct() {
     $('#txtPriceItem').val(window.el.find('.txtPriceItem').text())
     $('#spanPriceItem').text(window.el.find('.txtPriceItem').text())
     $('#label-cantidad').text(window.el.find('.unitId').val())
+
     $('#exampleModalx').modal('show')
 }
 
@@ -1105,7 +1287,7 @@ function calcTotal () {
             t = Math.round(1180000*(q*v-discount))/1000000
             $(vtr).find('.txtTotal').text( vt.toFixed(2) )
             $(vtr).find('.txtPriceItem').text( t.toFixed(2) )
-            //console.log(`cantidad: ${q}, valor: ${v}, precio: ${p}, d1: ${_d1}, d2: ${_d2}, descuento: ${discount} ValorItem: ${vt}, PrecioTotal: ${t}`)
+            // console.log(`cantidad: ${q}, valor: ${v}, precio: ${p}, d1: ${_d1}, d2: ${_d2}, descuento: ${discount} ValorItem: ${vt}, PrecioTotal: ${t}`)
 
 
             gross_value += Math.round(100*q*v)/100
@@ -1450,7 +1632,7 @@ function getCar() {
                 $('#email').val(data.company.email)
             } else {
                 // Si no existe el input company_name (diferente a una cita), se blanquea los campos para agregar una placa que si existe en la BD.
-                if ($('#company_name').length == 0) {
+                if ($('#company_name').val().length == 0) {
                     alert("Placa no registrada en el sistema")
                     $('#placa').val('')
                     $('#placa').focus()

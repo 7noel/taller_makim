@@ -132,6 +132,9 @@ class OrdersController extends Controller {
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
 		$checklist_details = $this->orderChecklistDetailRepo->byOrder($model->id, '1');
+		if ($checklist_details->isEmpty()) {
+			$checklist_details = $this->checklistDetailRepo->all2();
+		}
 		$car = $model->car;
 		$client = $car->company;
 		$categories_service = $this->tableRepo->getListCatSer();
@@ -159,6 +162,9 @@ class OrdersController extends Controller {
 		if (explode('.', \Request::route()->getName())[0] == 'inventory') {
 			return redirect()->route('panel', ['status' => $model->status]);
 		}
+		if (explode('.', \Request::route()->getName())[0] == 'output_quotes') {
+			return redirect()->route('output_quotes.edit', $model->id);
+		}
 		if (isset($data['last_page']) && $data['last_page'] != '') {
 			return redirect()->to($data['last_page']);
 		}
@@ -185,6 +191,7 @@ class OrdersController extends Controller {
 		$checklist_details = $this->orderChecklistDetailRepo->byOrder($model->id, '1');
 		//dd($model->seller->company_name);
 		// \PDF::setOptions(['isPhpEnabled' => true]);
+		// dd($checklist_details);
 		$pdf = \PDF::loadView('operations.inventory.pdf', compact('model', 'cuentas', 'checklist_details'));
 		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
 		return $pdf->stream('Inventario_'.$model->id.'.pdf');
@@ -222,8 +229,8 @@ class OrdersController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		//dd($model->mycompany->company_name);
 		// \PDF::setOptions(['isPhpEnabled' => true]);
-		$pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
-		//$pdf = \PDF::loadView('pdfs.order_pdf', compact('model'));
+		// $pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
+		$pdf = \PDF::loadView('operations.output_quotes.pdf', compact('model', 'cuentas'));
 		return $pdf->stream();
 	}
 	/**
@@ -409,6 +416,10 @@ class OrdersController extends Controller {
 	public function aprobacion_edit($id)
 	{
 		dd('aprobacion_edit');
+	}
+	public function repair_edit($id)
+	{
+		dd('repair_edit');
 	}
 	public function controlcalidad_edit($id)
 	{

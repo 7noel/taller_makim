@@ -291,7 +291,7 @@ class OrderRepo extends BaseRepo{
 	}
 	public function changeStatus($data, $id=0)
 	{
-		$order_status = ['DIAG' => 'diag_at', 'REPU' => 'repu_at', 'APROB' => 'approved_at', 'REPAR' => 'repar_at', 'CONTR' => 'checked_at', 'ENTR' => 'send_at', 'ANUL' => 'canceled_at', 'CERR' => 'invoiced_at'];
+		$order_status = ['DIAG' => 'diag_at', 'REPU' => 'repu_at', 'APROB' => 'approved_at', 'REPAR' => 'repar_at', 'CONTR' => 'checked_at', 'ENTR' => 'sent_at', 'ANUL' => 'canceled_at', 'CERR' => 'invoiced_at'];
 		$data[$order_status[$data['status']]] = date("Y-m-d H:i:s");
 		$log['created_at'] = date("Y-m-d H:i:s");
 		

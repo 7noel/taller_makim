@@ -53,6 +53,7 @@ Route::get('excel_servicios', ['as' => 'excel2','uses' => 'Storage\ProductsContr
 Route::get('listarMarcas', ['as' => 'ajaxmarcas', 'uses' => 'Operations\BrandsController@ajaxMarcas']);
 Route::get('listarModelos/{brand_id}', ['as' => 'ajaxmodelos', 'uses' => 'Operations\BrandsController@ajaxModelos']);
 Route::get('crear-marca', ['as' => 'ajax_crear_marca', 'uses' => 'Operations\BrandsController@ajaxCrearMarca']);
+Route::get('crear-item', ['as' => 'ajax_crear_item', 'uses' => 'Storage\ProductsController@store']);
 
 Route::group(['middleware'=>['auth']], function(){
 	Route::get('change_password', ['as' => 'change_password', 'uses' => 'Security\UsersController@changePassword']);
@@ -184,8 +185,9 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::get('recepcion_edit/{id}', ['as' => 'reception.edit', 'uses' => 'OrdersController@recepcion_edit']);
 	Route::get('recepcion_by_car/{car_id}', ['as' => 'inventory.recepcion_by_car', 'uses' => 'OrdersController@recepcionByCar']);
 	Route::get('diagnostico/{id}', ['as' => 'diagnostic.edit', 'uses' => 'OrdersController@diagnostico_edit']);
-	Route::get('repuestos/{id}', ['as' => 'products.edit', 'uses' => 'OrdersController@repuestos_edit']);
+	Route::get('repuestos/{id}', ['as' => 'repuestos.edit', 'uses' => 'OrdersController@repuestos_edit']);
 	Route::get('aprobacion/{id}', ['as' => 'approbation.edit', 'uses' => 'OrdersController@aprobacion_edit']);
+	Route::get('reparacion/{id}', ['as' => 'repair.edit', 'uses' => 'OrdersController@repair_edit']);
 	Route::get('controlcalidad/{id}', ['as' => 'qc.edit', 'uses' => 'OrdersController@controlcalidad_edit']);
 	Route::get('entrega/{id}', ['as' => 'entrega.edit', 'uses' => 'OrdersController@entrega_edit']);
 	Route::get('change_status_order/{id}', ['as' => 'change_status_order', 'uses' => 'OrdersController@changeStatusOrder']);
