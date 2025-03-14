@@ -147,6 +147,15 @@ $(document).ready(function () {
 		categories_service.forEach(function (item) {
 			window.opts_cat_ser += `<option value="${item.id}">${item.name}</option>`
 		})
+
+		var category = categories_service.find(item => item.id === 17);
+		sub_categories_service = category.childs
+		// console.log(category.childs)
+		window.opts_sub_cat_ser = `<option value="0">Seleccionar</option>`
+		sub_categories_service.forEach(function (item) {
+			window.opts_sub_cat_ser += `<option value="${item.id}">${item.name}</option>`
+		})
+		document.getElementById("sub_category").innerHTML = opts_sub_cat_ser;
 		
 		var categories_product = @json($categories_product);
 		window.opts_cat_pro = `<option value="">Seleccionar</option>`

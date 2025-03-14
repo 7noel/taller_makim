@@ -313,6 +313,15 @@
     </div>
     <script>
 $(document).ready(function () {
+    $('#category').change(function () {
+        // console.log($('#category').val())
+        if ($('#category').val() == '17') {
+            $('#sub_category').parent().parent().removeClass('d-none')
+        } else {
+            $('#sub_category').parent().parent().addClass('d-none')
+            $('#sub_category').val('0')
+        }
+    })
     $('#exampleModalx').on('hidden.bs.modal', function () {
         $('#btnAddService').focus(); // Cambia esto a otro botón fuera del modal
     });
@@ -367,7 +376,7 @@ $(document).ready(function () {
         minLength: 4,
         select: function(event, ui){
             $p = ui.item.id
-            console.log($p)
+            // console.log($p)
             if (existCodeInList($p.intern_code)) {
                 alert(`El código "${$p.intern_code}" ya fue registrado.`)
                 setTimeout(function() {
@@ -393,6 +402,13 @@ $(document).ready(function () {
                     }
                 }
                 $('#category').val($p.category_id)
+                $('#sub_category').val($p.sub_category_id)
+                if ($('#sub_category').val() > 0) {
+                    $('#sub_category').parent().parent().removeClass('d-none')
+                } else {
+                    $('#sub_category').parent().parent().addClass('d-none')
+                    $('#sub_category').val('0')
+                }
                 $('#txtValue').val(parseFloat($p.value)) // PRE_ACT es precio sin IGV
                 $('#txtPrecio').val((($p.value*118)/100).toFixed(6))
                 $('#txtDscto2').val(window.descuento2)
@@ -891,8 +907,9 @@ function addRowProduct2() {
     sub_category = $("#sub_category option:selected").text()
     text_cat = category
     if (sub_cat!==null && sub_cat!='' && sub_cat != '0') {
-        sub_cat = '0'
         text_cat = `${category} - ${sub_category}`
+    } else {
+        sub_cat = '0'
     }
 
     q = parseFloat($('#txtCantidad').val())
@@ -910,13 +927,14 @@ function addRowProduct2() {
     d1 = window.descuento1
     d2 = parseFloat($('#txtDscto2').val())
     t = parseFloat($('#txtTotal').val())
+    // console.log(sub_cat)
     if (typeof window.el === 'undefined') { // Si no existe la variable window.el (producto a editar) se agrega una fila
         items = $('#items').val()
         //preparando fila <tr>
         tr = `<tr>
             <input class="categoryId" name="details[${items}][category_id]" type="hidden" value="${cat}">
-            <input class="is_downloadable" name="details[${items}][is_downloadable]" type="hidden" value="${is_downloadable}">
             <input class="subCategoryId" name="details[${items}][sub_category_id]" type="hidden" value="${sub_cat}">
+            <input class="is_downloadable" name="details[${items}][is_downloadable]" type="hidden" value="${is_downloadable}">
             <input class="productId" name="details[${items}][comment]" type="hidden" value="${text_cat}">
             <input class="unitId" name="details[${items}][unit_id]" type="hidden" value="${u}">
             <td><span class='spanCodigo text-right'>${codigo}</span><input class="productId" name="details[${items}][product_id]" type="hidden" value="${product_id}"></td>
@@ -1035,6 +1053,8 @@ function clearModalCategoryUnit() {
         $(".spanTypeItem").text('Servicio')
         $("#is_downloadable").val('0')
     }
+    $("#sub_category").parent().parent().addClass('d-none')
+    $("#sub_category").val('0')
 }
 
 function clearModalProduct() {
