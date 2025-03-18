@@ -11,10 +11,9 @@
 
     <style>
 		@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&family=Roboto:wght@100&display=swap');
-		@page { margin-top: 10px; }
+		@page { margin-top: 30px; }
 		body{
 			padding-top: 0px;
-			border-top: -10px;
 			/*font-family: 'Montserrat', sans-serif;*/
 			font-family: 'Roboto Condensed', sans-serif;
 /*            font-family: Arial, sans-serif;*/

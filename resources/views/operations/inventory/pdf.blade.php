@@ -4,10 +4,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title>INVENTARIO: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
     <style>
+		@page { margin-top: 30px; }
         body {
             font-family: Arial, sans-serif;
             font-size: 10px;
-            margin: 10px;
         }
         table {
             width: 100%;
