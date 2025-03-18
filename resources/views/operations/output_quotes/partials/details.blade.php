@@ -1,7 +1,7 @@
 @php $i=0; @endphp
 @if(request()->route()->getName() == 'output_quotes.edit')
 <a href="#" id="btnAddService" class="btn btn-outline-info btn-sm mb-3" data-toggle="modal" data-target="#exampleModalx" title="Agregar Servicio">{!! $icons['add'] !!} Agregar Servicio</a>
-<a href="#" id="btnAddProduct" class="btn btn-outline-info btn-sm mb-3" data-toggle="modal" data-target="#exampleModalx" title="Agregar Producto">{!! $icons['add'] !!} Agregar Productos</a>
+<a href="#" id="btnAddProduct" class="btn btn-outline-info btn-sm mb-3" data-toggle="modal" data-target="#exampleModalx" title="Agregar Producto">{!! $icons['add'] !!} Agregar Repuestos</a>
 @endif
 <div class="table-responsive">
 <table class="table table-sm table-hover">
@@ -118,7 +118,7 @@
 					<label for="txtValue">Valor</label>
 					<input type="number" class="form-control form-control-sm text-center" id="txtValue">
 				</div>
-				<div class="form-group col-3 text-center">
+				<div class="form-group col-3 text-center d-none">
 					<label for="txtDscto2">Dscto2 (%)</label>
 					<input type="number" class="form-control form-control-sm text-center" id="txtDscto2">
 				</div>
@@ -148,15 +148,6 @@ $(document).ready(function () {
 			window.opts_cat_ser += `<option value="${item.id}">${item.name}</option>`
 		})
 
-		var category = categories_service.find(item => item.id === 17);
-		sub_categories_service = category.childs
-		// console.log(category.childs)
-		window.opts_sub_cat_ser = `<option value="0">Seleccionar</option>`
-		sub_categories_service.forEach(function (item) {
-			window.opts_sub_cat_ser += `<option value="${item.id}">${item.name}</option>`
-		})
-		document.getElementById("sub_category").innerHTML = opts_sub_cat_ser;
-		
 		var categories_product = @json($categories_product);
 		window.opts_cat_pro = `<option value="">Seleccionar</option>`
 		categories_product.forEach(function (item) {
@@ -177,6 +168,29 @@ $(document).ready(function () {
 		document.getElementById("unitId").innerHTML = opts_uni_ser;
 		ordenarTabla()
 	@endif
+
+    $('#category').change(function () {
+    	my_cat = $('#category').val()
+    	if (window.type == 'ser') {
+			var category = categories_service.find(item => item.id == my_cat);
+    	} else {
+			var category = categories_product.find(item => item.id == my_cat);
+    	}
+		sub_categories_service = category.childs
+		// console.log(category.childs)
+		window.opts_sub_cat_ser = `<option value="0">Seleccionar</option>`
+		sub_categories_service.forEach(function (item) {
+			window.opts_sub_cat_ser += `<option value="${item.id}">${item.name}</option>`
+		})
+		document.getElementById("sub_category").innerHTML = opts_sub_cat_ser;
+        console.log(category.childs.length)
+        if (category.childs.length) {
+            $('#sub_category').parent().parent().removeClass('d-none')
+        } else {
+            $('#sub_category').parent().parent().addClass('d-none')
+            $('#sub_category').val('0')
+        }
+    })
 })
 
 

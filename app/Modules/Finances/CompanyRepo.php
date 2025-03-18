@@ -42,7 +42,7 @@ class CompanyRepo extends BaseRepo{
 		//dd($data);
 		if ($data['entity_type'] != 'employees') {
 			if ($data['entity_type'] != 'branches') {
-				$data['brand_name'] = trim($data['brand_name']);
+				// $data['brand_name'] = trim($data['brand_name']);
 			}
 			$data['company_name'] = trim($data['company_name']);
 		}

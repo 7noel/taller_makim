@@ -8,9 +8,9 @@
 	<div class="col-sm-4">
 		{!! Field::text('company_name', ['label' => 'Razón Social', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
-	<div class="col-sm-4">
+	<!-- <div class="col-sm-4">
 		{!! Field::text('brand_name', ['label' => 'Marca', 'class'=>'form-control-sm text-uppercase']) !!}
-	</div>
+	</div> -->
 	<div class="col-sm-2">
 		{!! Field::text('paternal_surname', ['label' => 'Ap Paterno', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
@@ -42,7 +42,7 @@
 		{!! Field::text('mobile', ['label' => 'Celular', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::email('email', ['label' => 'Email', 'class'=>'form-control-sm']) !!}
+		{!! Field::email('email', ['label' => 'Email', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 </div>
 @if(!isset($model))

@@ -229,10 +229,55 @@ class OrdersController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		//dd($model->mycompany->company_name);
 		// \PDF::setOptions(['isPhpEnabled' => true]);
-		// $pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
-		$pdf = \PDF::loadView('operations.output_quotes.pdf', compact('model', 'cuentas'));
+		$pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
+		// $pdf = \PDF::loadView('operations.output_quotes.pdf', compact('model', 'cuentas'));
 		return $pdf->stream();
 	}
+
+	/**
+	 * Envía Correo al generar cotización
+	 * @param  Obj $model Modelo de la cotización
+	 * @return boolean        Retorna true indicando que se envió con exito
+	 */
+
+	/**
+	 * CREA UN PDF EN EL NAVEGADOR
+	 * @param  [integer] $id [Es el id de la cotizacion]
+	 * @return [pdf]     [Retorna un pdf]
+	 */
+	public function print_quotes_details($id)
+	{
+		$cuentas = $this->bankRepo->mostrar();
+		$model = $this->repo->findOrFail($id);
+		//dd($model->mycompany->company_name);
+		// \PDF::setOptions(['isPhpEnabled' => true]);
+		// $pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
+		$pdf = \PDF::loadView('operations.output_quotes.pdf_details', compact('model', 'cuentas'));
+		return $pdf->stream();
+	}
+
+	/**
+	 * Envía Correo al generar cotización
+	 * @param  Obj $model Modelo de la cotización
+	 * @return boolean        Retorna true indicando que se envió con exito
+	 */
+
+	/**
+	 * CREA UN PDF EN EL NAVEGADOR
+	 * @param  [integer] $id [Es el id de la cotizacion]
+	 * @return [pdf]     [Retorna un pdf]
+	 */
+	public function print_quotes_categories($id)
+	{
+		$cuentas = $this->bankRepo->mostrar();
+		$model = $this->repo->findOrFail($id);
+		//dd($model->mycompany->company_name);
+		// \PDF::setOptions(['isPhpEnabled' => true]);
+		// $pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
+		$pdf = \PDF::loadView('operations.output_quotes.pdf_categories', compact('model', 'cuentas'));
+		return $pdf->stream();
+	}
+
 	/**
 	 * Envía Correo al generar cotización
 	 * @param  Obj $model Modelo de la cotización
@@ -384,7 +429,7 @@ class OrdersController extends Controller {
 	}
 	public function by_inventory($id)
 	{
-		$action = "edit";
+		$action = "create";
 		$model = $this->repo->findOrFail($id);
 		$inventory = $model;
 		$my_companies = $this->companyRepo->getListMyCompany();

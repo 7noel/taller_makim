@@ -40,17 +40,26 @@ class ProductsController extends Controller {
 	public function create()
 	{
 		$tipo = explode('.', request()->route()->getName())[0];
+		if($tipo == 'services') {
+			$categories_models = $this->tableRepo->getListCatSer();
+		} else {
+			$categories_models = $this->tableRepo->getListCatPro();
+		}
+		$categories = $categories_models->pluck('name', 'id')->toArray();
+		$sub_categories = [];
+		$units = $this->tableRepo->getListUnt($tipo);
 		$warehouses = $this->warehouseRepo->all();
 		// $sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
-		if ($tipo == 'services') {
-			$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '17');
-		} else {
-			$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '18');
-		}
-		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
+		// $categories = $this->tableRepo->getListCat($tipo);
+		// if ($tipo == 'services') {
+		// 	$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '17');
+		// } else {
+		// 	$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '18');
+		// }
+		// $units = $this->tableRepo->getListGroupType('units', 'unit_types');
 		$brands = $this->tableRepo->getListType('marcas', 'name', 'name');
 		
-		return view('partials.create', compact('sub_categories', 'units', 'brands', 'warehouses'));
+		return view('partials.create', compact('units', 'brands', 'warehouses', 'categories', 'categories_models', 'sub_categories'));
 	}
 
 	public function store()
@@ -68,27 +77,51 @@ class ProductsController extends Controller {
 
 	public function show($id)
 	{
-		$warehouses = $this->warehouseRepo->all();
 		$model = $this->repo->findOrFail($id);
-		$sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
-		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
+		$tipo = explode('.', request()->route()->getName())[0];
+		if($tipo == 'services') {
+			$categories_models = $this->tableRepo->getListCatSer();
+		} else {
+			$categories_models = $this->tableRepo->getListCatPro();
+		}
+		$categories = $categories_models->pluck('name', 'id')->toArray();
+		$sub_categories = $this->tableRepo->getListSubCat($model->category_id);
+		$units = $this->tableRepo->getListUnt($tipo);
+		$warehouses = $this->warehouseRepo->all();
+		// $categories = $this->tableRepo->getListCat($tipo);
+		// $sub_categories = $this->tableRepo->getListSubCat($model->category_id);
+
+		// $sub_categories = $this->tableRepo->getListGroupType('sub_categories', 'pather', 0);
+		// $units = $this->tableRepo->getListGroupType('units', 'unit_types');
 		$brands = $this->tableRepo->getListType('marcas', 'name', 'name');
-		return view('partials.show', compact('model', 'sub_categories', 'units', 'brands', 'warehouses'));
+		return view('partials.show', compact('type', 'model', 'units', 'brands', 'warehouses', 'categories_service', 'categories_product', 'sub_categories'));
 	}
 
 	public function edit($id)
 	{
-		$tipo = explode('.', request()->route()->getName())[0];
-		$warehouses = $this->warehouseRepo->all();
 		$model = $this->repo->findOrFail($id);
-		if ($tipo == 'services') {
-			$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '17');
+		$tipo = explode('.', request()->route()->getName())[0];
+		if($tipo == 'services') {
+			$categories_models = $this->tableRepo->getListCatSer();
 		} else {
-			$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '18');
+			$categories_models = $this->tableRepo->getListCatPro();
 		}
-		$units = $this->tableRepo->getListGroupType('units', 'unit_types');
+		$categories = $categories_models->pluck('name', 'id')->toArray();
+		$sub_categories = $this->tableRepo->getListSubCat($model->category_id);
+		$units = $this->tableRepo->getListUnt($tipo);
+		$warehouses = $this->warehouseRepo->all();
+		
+		// $categories = $this->tableRepo->getListCat($tipo);
+		// if ($tipo == 'services') {
+		// 	$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '17');
+		// } else {
+		// 	$sub_categories = $this->tableRepo->getListTypeByGroup('sub_categories', '18');
+		// }
+		// $units = $this->tableRepo->getListGroupType('units', 'unit_types');
 		$brands = $this->tableRepo->getListType('marcas', 'name', 'name');
-		return view('partials.edit', compact('model', 'sub_categories', 'units', 'brands', 'warehouses'));
+		$units_service = $this->tableRepo->getListUnitSer();
+		$units_product = $this->tableRepo->getListUnitPro();
+		return view('partials.edit', compact('model', 'units', 'brands', 'warehouses', 'categories_models', 'categories', 'sub_categories'));
 	}
 
 	public function update($id, FormProductRequest $request)
@@ -112,8 +145,10 @@ class ProductsController extends Controller {
 	{
 		$term = request()->get('term');
 		$type = request()->get('type');
+		$cat = request()->get('category_id');
+		$sub_cat = request()->get('sub_category_id');
 		ini_set('memory_limit','1024M');
-		$models = $this->repo->autocomplete($term, $type);
+		$models = $this->repo->autocomplete($term, $type, $cat, $sub_cat);
 		$result=[];
 		foreach ($models as $model) {
 			$result[]=[

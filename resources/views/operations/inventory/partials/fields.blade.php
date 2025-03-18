@@ -110,7 +110,7 @@
             </div>
             <div class="col-sm-2 d-none">
                 <div class="form-group">
-                    {!! Field::select('inventory[seguro]', config('options.cia_seguros'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm']) !!}
+                    {!! Field::select('inventory[seguro]', config('options.cia_seguros'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm', 'id'=>'seguro']) !!}
                 </div>
             </div>
         </div>
@@ -121,7 +121,7 @@
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="brand">Marca</label>
-                    {!! Form::text('brand', (isset($car->brand)) ? $car->brand->name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'brand', 'readonly']) !!}
+                    {!! Form::text('brand', (isset($car->modelo->brand)) ? $car->modelo->brand->name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'brand', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
@@ -263,9 +263,9 @@
                 {!! Field::select('inventory[comprobante]', ['FACTURA'=>'FACTURA', 'BOLETA'=>'BOLETA'], (isset($model->inventory->comprobante
                 ) ? $model->inventory->comprobante : ''), ['empty'=>'SIN COMPROBANTE', 'label'=>'Comprobante', 'class'=>'form-control-sm']) !!}
             </div>
-            <div class="col-sm-2">
+            <!-- <div class="col-sm-2">
                 {!! Field::date('inventory[entrega]', (isset($model->inventory->entrega) ? $model->inventory->entrega : date('Y-m-d')), ['label'=>'Fecha de Entrega', 'class'=>'form-control-sm']) !!}
-            </div>
+            </div> -->
         </div>
 
         <div class="form-row">

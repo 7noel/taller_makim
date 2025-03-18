@@ -313,15 +313,6 @@
     </div>
     <script>
 $(document).ready(function () {
-    $('#category').change(function () {
-        // console.log($('#category').val())
-        if ($('#category').val() == '17') {
-            $('#sub_category').parent().parent().removeClass('d-none')
-        } else {
-            $('#sub_category').parent().parent().addClass('d-none')
-            $('#sub_category').val('0')
-        }
-    })
     $('#exampleModalx').on('hidden.bs.modal', function () {
         $('#btnAddService').focus(); // Cambia esto a otro botón fuera del modal
     });
@@ -363,11 +354,13 @@ $(document).ready(function () {
     $('#txtProducto').autocomplete({
         //source: "/api/products/autocompleteAjax",
         source: function(request, response) {
+            cat = $('#category').val()
+            sub_cat = $('#sub_category').val()
             let url = "/api/products/autocompleteAjax?type=" + window.type; // URL dinámica
             $.ajax({
                 url: url,
                 dataType: "json",
-                data: { term: request.term }, // Pasamos el término de búsqueda
+                data: { term: request.term, category_id: cat, sub_category_id: sub_cat }, // Pasamos el término de búsqueda
                 success: function(data) {
                     response(data);
                 }
@@ -907,7 +900,7 @@ function addRowProduct2() {
     sub_category = $("#sub_category option:selected").text()
     text_cat = category
     if (sub_cat!==null && sub_cat!='' && sub_cat != '0') {
-        text_cat = `${category} - ${sub_category}`
+        text_cat = sub_category
     } else {
         sub_cat = '0'
     }

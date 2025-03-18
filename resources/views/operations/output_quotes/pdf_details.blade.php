@@ -162,8 +162,10 @@
 		<tr>
 			<td class="label">Asesor:</td>
 			<td class="col2">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
-			<td class="label"></td>
-			<td class=""></td>
+			<td class="label">Días de trabajo:</td>
+			@if(isset($model->diagnostico->tiempo))
+			<td class="">{{ $model->diagnostico->tiempo }}</td>
+			@endif
 		</tr>
 		<tr>
 			<td class="label">Propietario(a):</td>
@@ -218,9 +220,9 @@
         <tr>
             <th class="th1 border center">ITEM</th>
             <th class="th2 border center">DESCRIPCIÓN</th>
-            <th class="th3 border center">UND</th>
+            <th class="th3 border center">CANT.</th>
             <th class="th4 border center">V. UNIT.</th>
-            <th class="th5 border center">DSCT.</th>
+            <!-- <th class="th5 border center">DSCT.</th> -->
             <th class="th6 border center">TOTAL</th>
         </tr>
     </thead>
@@ -230,7 +232,7 @@
             @if ($comentario_actual !== $detail->comment)
                 {{-- Agregar título cada vez que cambia comment --}}
                 <tr>
-                    <td class="border title" colspan="6"><strong>{{ $detail->comment }}</strong></td>
+                    <td class="border title" colspan="5"><strong>{{ $detail->comment }}</strong></td>
                 </tr>
                 @php
                     $comentario_actual = $detail->comment;
@@ -241,7 +243,7 @@
                 <td class="border">{{ $detail->product->name }}</td>
                 <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
                 <td class="border center">{{ $detail->value }}</td>
-                <td class="border center">{{ $detail->d1 }} %</td>
+                <!-- <td class="border center">{{ $detail->d1 }} %</td> -->
                 <td class="border center">{{ $detail->total }}</td>
             </tr>
         @endforeach
@@ -249,7 +251,7 @@
         {{-- Grupo de is_downloadable = 1 --}}
         @if($detalles_repuestos->isNotEmpty())
             <tr>
-                <td class="border title" colspan="6"><strong>REPUESTOS</strong></td>
+                <td class="border title" colspan="5"><strong>REPUESTOS</strong></td>
             </tr>
             @foreach($detalles_repuestos as $key => $detail)
                 <tr>
@@ -257,7 +259,7 @@
                     <td class="border">{{ $detail->product->name }}</td>
                     <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
                     <td class="border center">{{ $detail->price }}</td>
-                    <td class="border center">{{ $detail->d1 }} %</td>
+                    <!-- <td class="border center">{{ $detail->d1 }} %</td> -->
                     <td class="border center">{{ $detail->price_item }}</td>
                 </tr>
             @endforeach

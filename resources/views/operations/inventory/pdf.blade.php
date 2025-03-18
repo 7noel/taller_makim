@@ -164,8 +164,8 @@
 	<tr>
 		<td class="label">Asesor:</td>
 		<td class="col1">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
-		<td class="label">F. Entrega:</td>
-		<td>{{ ($model->inventory->entrega == '') ? '' : date('d/m/Y', strtotime($model->inventory->entrega)) }}</td>
+		<td class="label"></td>
+		<td></td>
 	</tr>
 </table>
 <table>
@@ -189,15 +189,27 @@
 				</tr>
 				<tr>
 					<td class="label2">Cia. de seguro:</td>
-					<td>PACIFICO</td>
+					@if(isset($model->inventory->seguro))
+					<td>{{ $model->inventory->seguro }}</td>
+					@else
+					<td></td>
+					@endif
 				</tr>
 				<tr>
-					<td class="label2">Usuario:</td>
-					<td>percy rojas</td>
+					<td class="label2">Conductor:</td>
+					@if(isset($model->inventory->driver_name))
+					<td>{{ $model->inventory->driver_name }} {{ $model->inventory->driver_mobile }}</td>
+					@else
+					<td></td>
+					@endif
 				</tr>
 				<tr>
 					<td class="label2">Contacto:</td>
-					<td>juan perez</td>
+					@if(isset($model->inventory->contact_name))
+					<td>{{ $model->inventory->contact_name }} {{ $model->inventory->contact_mobile }}</td>
+					@else
+					<td></td>
+					@endif
 				</tr>
 			</table>
 			<table class="table-datos">

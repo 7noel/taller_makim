@@ -3,7 +3,7 @@
 		<tr>
 			<th>Código</th>
 			<th>Nombre</th>
-			<th>Sub Categoría</th>
+			<th>Categoría</th>
 			<th>Unidad</th>
 			<th>Acciones</th>
 		</tr>
@@ -13,7 +13,7 @@
 		<tr data-id="{{ $model->id }}">
 			<td>{{ $model->intern_code }}</td>
 			<td>{{ $model->name }} </td>
-			<td>{{ $model->sub_category->name }} </td>
+			<td>{{ $model->category->name }} - {{ (isset($model->sub_category->name)) ? $model->sub_category->name : '' }} </td>
 			<td>{{ $model->unit->symbol }} </td>
 			<td>
 				<a href="{{ route( $routes['edit'] , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>

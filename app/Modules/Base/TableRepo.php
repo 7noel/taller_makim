@@ -43,6 +43,27 @@ class TableRepo extends BaseRepo{
 		return Table::with('childs')->where('type', 'categories')->where('value_3', '1')->orderBy('name','ASC')->get();
 	}
 
+	public function getListCat($type='products')
+	{
+		if ($type=='products') {
+			return Table::where('type', 'categories')->where('value_3', '1')->orderBy('name','ASC')->pluck('name', 'id')->toArray();
+		}
+		return Table::where('type', 'categories')->where('value_3', '')->orderBy('name','ASC')->pluck('name', 'id')->toArray();
+	}
+
+	public function getListSubCat($relation_id)
+	{
+		return Table::where('type', 'sub_categories')->where('relation_id', $relation_id)->orderBy('name','ASC')->pluck('name', 'id')->toArray();
+	}
+
+	public function getListUnt($type='products')
+	{
+		if ($type=='products') {
+			return Table::where('type', 'units')->where('code', '!=', 'ZZ')->orderBy('name','ASC')->pluck('name', 'id')->toArray();
+		}
+		return Table::where('type', 'units')->where('code', 'ZZ')->orderBy('name','ASC')->pluck('name', 'id')->toArray();
+	}
+
 	public function getListUnitSer()
 	{
 		return Table::where('type', 'units')->where('code', 'ZZ')->orderBy('name','ASC')->get();

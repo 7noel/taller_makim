@@ -3,12 +3,13 @@
 {!! Form::hidden('with_tax', 0, ['id'=>'with_tax']) !!}
 {!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
 {!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
-{!! Form::hidden('sn', null, ['id'=>'sn']) !!}
+<!-- {!! Form::hidden('sn', null, ['id'=>'sn']) !!} -->
 
 @if(isset($model))
 <div class="form-row">
 	<a href="{{ route( 'panel', 'DIAG' ) }}" class="btn btn-outline-info btn-sm" title="Tablero"><i class="fa-solid fa-arrow-left"></i> TABLERO</a>
-	<a href="{{ route( 'print_order' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF</a>
+	<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF por Items</a>
+	<a href="{{ route( 'output_quotes.print_categories' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF por Categorías</a>
 	<br>
 </div>
 @endif
@@ -50,8 +51,11 @@
 		{!! Field::select('seller_id', $sellers, ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
 		@endif
 	</div>
+	<div class="col-sm-2">
+		{!! Field::number('diagnostico[tiempo]', (isset($model->diagnostico->tiempo)) ? $model->diagnostico->tiempo : null, ['label' => 'Días de trabajo', 'class'=>'form-control-sm text-uppercase text-center', ]) !!}
+	</div>
 	<div class="col-md-4 col-sm-6">
-		{!! Field::text('comment', ['label' => 'Comentarios', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::text('comment', ($action=='create') ? '' : null,['label' => 'Comentarios', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
 </div>
 @if(isset($model) and $model->order_type == 'output_quotes')

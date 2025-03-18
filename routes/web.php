@@ -174,6 +174,8 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::resource('input_orders','OrdersController');
 	Route::get('output_quotes/by_inventory/{id}', ['as'=>'output_quotes.by_inventory', 'uses'=>'OrdersController@by_inventory']);
 	Route::get('orders/print/{id}', ['as' => 'print_order','uses' => 'OrdersController@print']);
+	Route::get('output_quotes/print_details/{id}', ['as' => 'output_quotes.print_details','uses' => 'OrdersController@print_quotes_details']);
+	Route::get('output_quotes/print_categories/{id}', ['as' => 'output_quotes.print_categories','uses' => 'OrdersController@print_quotes_categories']);
 	Route::get('orders/inventory/{id}', ['as' => 'print_inventory','uses' => 'OrdersController@printInventory']);
 	Route::get('print_inventory/{id}', ['as' => 'order.print_inventory','uses' => 'OrdersController@print_inventory']);
 	Route::get('orders/createByCompany/{company_id}', ['as' => 'create_order_by_company','uses' => 'OrdersController@createByCompany']);
