@@ -213,6 +213,15 @@
     $detalles_repuestos = $model->details->where('is_downloadable', 1);
 
     $comentario_actual = null; // Para el control de cambios en comment
+
+    // Filtrar repuestos en dos subgrupos
+    $repuestos_pagados = $detalles_repuestos->where('value', '>', 0);
+    $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
+
+    // Calcular los totales con dos decimales
+    $total_normales = number_format($detalles_normales->sum('total'), 2, '.', ',');
+    $total_repuestos_pagados = number_format($repuestos_pagados->sum('price_item'), 2, '.', ',');
+    $total_repuestos_compania = number_format($repuestos_compania->sum('price_item'), 2, '.', ',');
 @endphp
 
 <table class="table-items">
@@ -248,19 +257,36 @@
             </tr>
         @endforeach
 
-        {{-- Grupo de is_downloadable = 1 --}}
-        @if($detalles_repuestos->isNotEmpty())
+        {{-- Grupo de REPUESTOS (value > 0) --}}
+        @if($repuestos_pagados->isNotEmpty())
             <tr>
                 <td class="border title" colspan="5"><strong>REPUESTOS</strong></td>
             </tr>
-            @foreach($detalles_repuestos as $key => $detail)
+            @foreach($repuestos_pagados as $key => $detail)
                 <tr>
                     <td class="border center">{{ $loop->iteration + count($detalles_normales) }}</td>
                     <td class="border">{{ $detail->product->name }}</td>
                     <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
-                    <td class="border center">{{ $detail->price }}</td>
+                    <td class="border center">{{ $detail->value }}</td>
                     <!-- <td class="border center">{{ $detail->d1 }} %</td> -->
-                    <td class="border center">{{ $detail->price_item }}</td>
+                    <td class="border center">{{ $detail->total }}</td>
+                </tr>
+            @endforeach
+        @endif
+
+        {{-- Grupo de REPUESTOS POR COMPAÑÍA (value = 0) --}}
+        @if($repuestos_compania->isNotEmpty())
+            <tr>
+                <td class="border title" colspan="5"><strong>REPUESTOS POR COMPAÑÍA</strong></td>
+            </tr>
+            @foreach($repuestos_compania as $key => $detail)
+                <tr>
+                    <td class="border center">{{ $loop->iteration + count($detalles_normales) }}</td>
+                    <td class="border">{{ $detail->product->name }}</td>
+                    <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
+                    <td class="border center"></td>
+                    <!-- <td class="border center">{{ $detail->d1 }} %</td> -->
+                    <td class="border center"></td>
                 </tr>
             @endforeach
         @endif

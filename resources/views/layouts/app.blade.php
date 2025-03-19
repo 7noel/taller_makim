@@ -912,10 +912,12 @@ function addRowProduct2() {
         return false;
     }
     v = parseFloat($('#txtValue').val())
-    if (!isNaN(v) && v <= 0) {
-        $('#txtValue').val("")
-        $('#txtValue').focus()
-        return false;
+    if (window.type != 'pro') {
+        if (!isNaN(v) && v <= 0) {
+            $('#txtValue').val("")
+            $('#txtValue').focus()
+            return false;
+        }
     }
     d1 = window.descuento1
     d2 = parseFloat($('#txtDscto2').val())
@@ -1060,7 +1062,7 @@ function clearModalProduct() {
     $('#txtProducto').val("")
     $('#txtProduct').val("")
     $('#txtCodigo').text("")
-    $('#unitId').val("")
+    // $('#unitId').val("")
     $('#txtCantidad').val("0")
     $('#txtValue').val("0")
     $('#txtDscto2').val(window.descuento2)
@@ -1071,7 +1073,7 @@ function clearModalProduct() {
     $('#alert-stock').removeClass("badge-danger")
     $('#alert-stock').text("")
     items = $('#items').val()
-    max = 50
+    max = 500
     $('#alert-items').text(`Items registrados: ${items}`)
     if (items < max) {
         $('#alert-items').removeClass("badge-danger")

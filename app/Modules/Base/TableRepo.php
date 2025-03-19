@@ -59,9 +59,9 @@ class TableRepo extends BaseRepo{
 	public function getListUnt($type='products')
 	{
 		if ($type=='products') {
-			return Table::where('type', 'units')->where('code', '!=', 'ZZ')->orderBy('name','ASC')->pluck('name', 'id')->toArray();
+			return Table::where('type', 'units')->where('code', '!=', 'ZZ')->orderBy('id','ASC')->pluck('symbol', 'id')->toArray();
 		}
-		return Table::where('type', 'units')->where('code', 'ZZ')->orderBy('name','ASC')->pluck('name', 'id')->toArray();
+		return Table::where('type', 'units')->where('code', 'ZZ')->orderBy('id','ASC')->pluck('symbol', 'id')->toArray();
 	}
 
 	public function getListUnitSer()
@@ -100,5 +100,15 @@ class TableRepo extends BaseRepo{
 			return Table::where('type', $type)->where('value_3',1)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
 		}
 		return Table::where('type', $type)->where('value_3',0)->where('name', $serie)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
+	}
+
+	public function save($data, $id=0){
+		$data = $this->prepareData($data);
+		$modeloRepo= new TableRepo;
+		$model = parent::save($data, $id);
+		if (isset($data['modelos'])) {
+			$modeloRepo->saveMany2($data['modelos'], ['key' => 'relation_id', 'value' => $model->id]);
+		}
+		return $model;
 	}
 }

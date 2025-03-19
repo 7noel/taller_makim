@@ -38,7 +38,10 @@ class TableController extends Controller {
 	public function create()
 	{
 		$list = $this->list;
-		return view('partials.create', compact('list'));
+		$units_service = $this->repo->getListUnitSer()->pluck('symbol', 'id')->toArray();
+		$units_product = $this->repo->getListUnitPro()->pluck('symbol', 'id')->toArray();
+		// dd($units_service);
+		return view('partials.create', compact('list', 'units_service', 'units_product'));
 	}
 
 	public function store()
@@ -50,18 +53,23 @@ class TableController extends Controller {
 	public function show($id)
 	{
 		$list = $this->list;
-		return view('partials.show', compact('model', 'list'));
+		$units_service = $this->repo->getListUnitSer()->pluck('symbol', 'id')->toArray();
+		$units_product = $this->repo->getListUnitPro()->pluck('symbol', 'id')->toArray();
+		return view('partials.show', compact('model', 'list', 'units_service', 'units_product'));
 	}
 
 	public function edit($id)
 	{
 		$list = $this->list;
 		$model = $this->repo->findOrFail($id);
-		return view('partials.edit', compact('model', 'list'));
+		$units_service = $this->repo->getListUnt('services');
+		$units_product = $this->repo->getListUnt('products');
+		return view('partials.edit', compact('model', 'list', 'units_service', 'units_product'));
 	}
 
 	public function update($id)
 	{
+		// dd(request()->all());
 		$this->repo->save(request()->all(), $id);
 		return redirect()->route(explode('.', request()->route()->getName())[0].'.index');
 	}

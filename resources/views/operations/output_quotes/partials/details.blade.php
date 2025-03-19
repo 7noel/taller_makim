@@ -176,6 +176,11 @@ $(document).ready(function () {
     	} else {
 			var category = categories_product.find(item => item.id == my_cat);
     	}
+    	unit = category.description
+    	if (unit !='') {
+    		$('#unitId').val(unit)
+            $('#unit').val(unit)
+    	}
 		sub_categories_service = category.childs
 		// console.log(category.childs)
 		window.opts_sub_cat_ser = `<option value="0">Seleccionar</option>`
