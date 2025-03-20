@@ -1,5 +1,5 @@
-<table class="table table-hover table-sm">
-	<thead class="thead-dark">
+<table class="{{ config('options.styles.table') }}">
+	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
 			<th>#</th>
 			<th>Grupo</th>

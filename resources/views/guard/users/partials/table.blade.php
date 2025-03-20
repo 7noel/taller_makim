@@ -4,8 +4,8 @@
 			<th>#</th>
 			<th>Usuario</th>
 			<th>Email</th>
-			<th>Super Usuario</th>
-			<th>Acciones</th>
+			<th class="text-center">Super Usuario</th>
+			<th class="text-center">Acciones</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -19,7 +19,7 @@
 				{!! $icons['check'] !!}
 				@endif
 			</td>
-			<td>
+			<td class="text-center">
 				<a href="{{ route( $routes['edit'] , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
 				<a href="#" class="btn-delete btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>
 			</td>

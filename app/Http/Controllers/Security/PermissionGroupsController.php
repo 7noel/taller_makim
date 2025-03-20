@@ -15,7 +15,7 @@ class PermissionGroupsController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', request()->get('name'));
+		$models = $this->repo->index2('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 
