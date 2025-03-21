@@ -90,7 +90,7 @@ class UsersController extends Controller {
 
 	public function ajaxAutocomplete()
 	{
-		$term = \Input::get('term');
+		$term = request()->get('term');
 		$models = $this->repo->autocomplete($term);
 		$result = [];
 		foreach ($models as $model) {

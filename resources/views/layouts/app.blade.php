@@ -308,6 +308,16 @@
     </div>
     <script>
 $(document).ready(function () {
+    
+    $('#txtuser').autocomplete({
+        source: "/guard/users/autocomplete",
+        minLength: 1,
+        select: function(event, ui){
+            var cod=ui.item.id;
+            $('#user_id').val(cod);
+        }
+    });
+
     $('#exampleModalx').on('hidden.bs.modal', function () {
         $('#btnAddService').focus(); // Cambia esto a otro botón fuera del modal
     });
