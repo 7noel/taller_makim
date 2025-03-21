@@ -229,12 +229,10 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     @if($logo && \Storage::disk('public')->exists($logo))
-                        <img src="{{ \Storage::url( session('my_company')->config['logo']) }}" alt="" height="50px">
+                        <img src="{{ \Storage::url($logo) }}" alt="" height="50px">
                     @else
                         {{ config('app.name', 'Laravel') }}
                     @endif
-
-                    
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
