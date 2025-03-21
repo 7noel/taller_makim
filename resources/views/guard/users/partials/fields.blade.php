@@ -1,12 +1,15 @@
 <div class="form-row">
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		{!! Field::text('name', ['label' => 'Nombre', 'class'=>'form-control-sm', 'required'=>'required']) !!}
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		{!! Field::email('email', ['label' => 'Correo Electrónico', 'class'=>'form-control-sm', 'required'=>'required']) !!}
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-3">
 		{!! Field::password('password', ['label' => 'Contraseña', 'class'=>'form-control-sm']) !!}
+	</div>
+	<div class="col-sm-3">
+		{!! Field::select('my_company', $locales, ['label' => 'Local', 'class'=>'form-control-sm', 'required'=>'required']) !!}
 	</div>
 </div>
 <div  class="form-row">

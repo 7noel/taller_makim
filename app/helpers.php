@@ -63,3 +63,4 @@ if (! function_exists('generateSlug')) {
 		return bin2hex(random_bytes($bits));
 	}
 }
+

@@ -4,6 +4,7 @@
 			<th>#</th>
 			<th>Usuario</th>
 			<th>Email</th>
+			<th>Local</th>
 			<th class="text-center">Super Usuario</th>
 			<th class="text-center">Acciones</th>
 		</tr>
@@ -14,6 +15,7 @@
 			<td>{{ $model->id }}</td>
 			<td>{{ $model->name }} </td>
 			<td>{{ $model->email }} </td>
+			<td>{{ $model->mycompany->brand_name }} </td>
 			<td align="center">
 				@if($model->is_superuser)
 				{!! $icons['check'] !!}

@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Modules\Security\UserRepo;
 use App\Modules\Security\RoleRepo;
+use App\Modules\Finances\CompanyRepo;
 use App\Http\Requests\Security\FormUserRequest;
 
 use App\Http\Requests\Security\ChangePasswordRequest;
@@ -13,10 +14,12 @@ class UsersController extends Controller {
 
 	protected $repo;
 	protected $roleRepo;
+	protected $companyRepo;
 
-	public function __construct(UserRepo $repo, RoleRepo $roleRepo) {
+	public function __construct(UserRepo $repo, RoleRepo $roleRepo, CompanyRepo $companyRepo) {
 		$this->repo = $repo;
 		$this->roleRepo = $roleRepo;
+		$this->companyRepo = $companyRepo;
 	}
 
 	public function index()
@@ -28,7 +31,8 @@ class UsersController extends Controller {
 	public function create()
 	{
 		$roles = $this->roleRepo->all();
-		return view('partials.create', compact('roles'));
+		$locales = $this->companyRepo->locales();
+		return view('partials.create', compact('roles', 'locales'));
 	}
 
 	public function store(FormUserRequest $request)
@@ -46,7 +50,8 @@ class UsersController extends Controller {
 	{
 		$model = $this->repo->findOrFail($id);
 		$roles = $this->roleRepo->all();
-		return view('partials.edit', compact('model', 'roles'));
+		$locales = $this->companyRepo->getListMyCompany();
+		return view('partials.edit', compact('model', 'roles', 'locales'));
 	}
 
 	public function update($id, FormUserRequest $request)

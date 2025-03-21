@@ -92,4 +92,8 @@ class User extends Authenticatable implements Auditable {
 			->get();
     	return $join;
     }
+	public function mycompany()
+	{
+		return $this->belongsTo('App\Modules\Finances\Company', 'my_company');
+	}
 }

@@ -92,7 +92,7 @@ class CompanyRepo extends BaseRepo{
 
 	public function getListMyCompany()
 	{
-		return [""=>"Seleccionar"] + Company::where('entity_type', 'companies')->pluck('company_name', 'id')->toArray();
+		return [""=>"Seleccionar"] + Company::where('entity_type', 'companies')->pluck('brand_name', 'id')->toArray();
 	}
 	public function getOtherCompanies($id=1)
 	{
