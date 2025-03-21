@@ -156,16 +156,10 @@
 
 <table class="table-ingreso">
 	<tr>
-		<td class="label">Tipo de Servicio:</td>
-		<td class="col1">{{ $model->type_service }}</td>
-		<td class="label">F. Emisión:</td>
-		<td>{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
-	</tr>
-	<tr>
 		<td class="label">Asesor:</td>
 		<td class="col1">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
-		<td class="label"></td>
-		<td></td>
+		<td class="label">F. Emisión:</td>
+		<td>{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
 	</tr>
 </table>
 <table>

@@ -81,13 +81,34 @@ class ProductRepo extends BaseRepo{
 	public function autocomplete($term, $type='ser', $cat=0, $sub_cat=0)
 	{
 		if ($type=='pro') {
-		return Product::where('is_downloadable', true)->with('sub_category','category')->where('name','like',"%$term%")->orWhere('intern_code','like',"%$term%")->get();
+			return Product::where('is_downloadable', true)
+			    ->with('sub_category', 'category')
+			    ->where(function ($q) use ($term) {
+			        $q->where('name', 'like', "%$term%")
+			          ->orWhere('intern_code', 'like', "%$term%");
+			    })
+			    ->get();
 		} else {
 			if ($sub_cat==0) {
 				// dd(' subcat = 0');
-				return Product::where('is_downloadable', false)->with('category','sub_category')->where('category_id', $cat)->where('name','like',"%$term%")->orWhere('intern_code','like',"%$term%")->get();
+				return Product::where('is_downloadable', false)
+				    ->with('category', 'sub_category')
+				    ->where('category_id', $cat)
+				    ->where(function ($q) use ($term) {
+				        $q->where('name', 'like', "%$term%")
+				          ->orWhere('intern_code', 'like', "%$term%");
+				    })
+				    ->get();
 			}
-			return Product::where('is_downloadable', false)->with('category','sub_category')->where('category_id', $cat)->where('sub_category_id', $sub_cat)->where('name','like',"%$term%")->orWhere('intern_code','like',"%$term%")->get();
+			return Product::where('is_downloadable', false)
+			    ->with('category', 'sub_category')
+			    ->where('category_id', $cat)
+			    ->where('sub_category_id', $sub_cat)
+			    ->where(function ($q) use ($term) {
+			        $q->where('name', 'like', "%$term%")
+			          ->orWhere('intern_code', 'like', "%$term%");
+			    })
+			    ->get();
 		}
 	}
 	public function ajaxGetData($warehouse_id, $product_id)

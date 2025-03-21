@@ -149,7 +149,8 @@ $(document).ready(function () {
 		})
 
 		var categories_product = @json($categories_product);
-		window.opts_cat_pro = `<option value="">Seleccionar</option>`
+		window.opts_cat_pro = ``
+		// window.opts_cat_pro = `<option value="">Seleccionar</option>`
 		categories_product.forEach(function (item) {
 			window.opts_cat_pro += `<option value="${item.id}">${item.name}</option>`
 		})
@@ -195,6 +196,13 @@ $(document).ready(function () {
             $('#sub_category').parent().parent().addClass('d-none')
             $('#sub_category').val('0')
         }
+
+    	if ($('#unitId option:selected').text()=='pño' && $('#diagnostico_p_paño').val()!='') {
+    		$('#txtValue').val($('#diagnostico_p_paño').val())
+    	}
+    	if ($('#unitId option:selected').text()=='hr' && $('#diagnostico_p_hora').val()!='') {
+    		$('#txtValue').val($('#diagnostico_p_hora').val())
+    	}
     })
 })
 

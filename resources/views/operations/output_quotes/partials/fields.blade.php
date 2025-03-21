@@ -61,10 +61,10 @@
 @if(isset($model) and $model->order_type == 'output_quotes')
 <div class="form-row">
 	<div class="col-sm-2">
-		{!! Field::number('p_hora', null, ['label' => 'Precio x Hora', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::number('diagnostico[p_hora]', null, ['label' => 'Precio x Hora', 'class'=>'form-control-sm text-uppercase', 'step'=>"0.01", 'min'=>"0.00"]) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::number('p_paño', null, ['label' => 'Precio x Paño', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::number('diagnostico[p_paño]', null, ['label' => 'Precio x Paño', 'class'=>'form-control-sm text-uppercase', 'step'=>"0.01", 'min'=>"0.00"]) !!}
 	</div>
 </div>
 

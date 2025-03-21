@@ -398,6 +398,14 @@ $(document).ready(function () {
                     $('#sub_category').val('0')
                 }
                 $('#txtValue').val(parseFloat($p.value)) // PRE_ACT es precio sin IGV
+
+                if ($('#unitId option:selected').text()=='pño' && $('#diagnostico_p_paño').val()!='') {
+                    $('#txtValue').val($('#diagnostico_p_paño').val())
+                }
+                if ($('#unitId option:selected').text()=='hr' && $('#diagnostico_p_hora').val()!='') {
+                    $('#txtValue').val($('#diagnostico_p_hora').val())
+                    console.log($('#diagnostico_p_hora').val())
+                }
                 $('#txtPrecio').val((($p.value*118)/100).toFixed(6))
                 $('#txtDscto2').val(window.descuento2)
                 $('#txtCantidad').val(1)
@@ -832,10 +840,12 @@ function createItem(){
         return false;
     }
     v = parseFloat($('#txtValue').val())
-    if (!isNaN(v) && v <= 0) {
-        $('#txtValue').val("")
-        $('#txtValue').focus()
-        return false;
+    if (window.type != 'pro') {
+        if (!isNaN(v) && v <= 0) {
+            $('#txtValue').val("")
+            $('#txtValue').focus()
+            return false;
+        }
     }
     page = '/crear-item'
     $.get(page, {intern_code: '-', category_id: cat, sub_category_id: '0', name: desc, unit_id: u, value: v, is_downloadable: is_downloadable, currency_id: currency}, function(data){

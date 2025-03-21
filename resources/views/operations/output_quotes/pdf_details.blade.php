@@ -164,7 +164,11 @@
 			<td class="col2">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
 			<td class="label">Días de trabajo:</td>
 			@if(isset($model->diagnostico->tiempo))
-			<td class="">{{ $model->diagnostico->tiempo }}</td>
+				@if($model->diagnostico->tiempo > 0)
+				<td class="">{{ $model->diagnostico->tiempo }} hábiles</td>
+				@else
+				<td class=""></td>
+				@endif
 			@endif
 		</tr>
 		<tr>
