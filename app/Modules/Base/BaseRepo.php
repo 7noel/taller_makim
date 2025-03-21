@@ -126,7 +126,10 @@ abstract class BaseRepo{
 	public function save($data, $id=0)
 	{
 		$data = $this->prepareData($data);
-		$data['my_company'] = session('my_company')->id;
+		if(!isset($data['my_company'])){
+			// dd('no hay local');
+			$data['my_company'] = session('my_company')->id;
+		}
 		return $this->model->updateOrCreate([$this->model->getKeyName() => $id], $data);
 	}
 	public function prepareData($data)

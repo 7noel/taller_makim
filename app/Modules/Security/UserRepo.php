@@ -20,6 +20,10 @@ class UserRepo extends BaseRepo{
 		} else {
 			$model = $this->model->fill($data);
 		}
+		// Si el usuario editado es el que está logueado, actualiza la variable de sesión
+		if (auth()->id() == $model->id) {
+	        session(['my_company' => $model->mycompany]);
+	    }
 		if ($model->save()) {
 			$model->roles()->sync($data['roles']);
 			return $model;

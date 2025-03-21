@@ -20,7 +20,7 @@ class Permissions {
         //     $c = new CompanyRepo;
         //     session(['my_company' => $c->find(1)]);
         // }
-        $this->getMyCompany();
+        // $this->getMyCompany();
         
 		if (\Auth::user()->is_superuser) {
 			return $next($request);

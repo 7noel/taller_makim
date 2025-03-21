@@ -1,10 +1,10 @@
 <!doctype html>
 @php
     if (null == session('my_company')) {
-        session(['my_company' => App\Modules\Finances\Company::find(1)]);
+        //session(['my_company' => App\Modules\Finances\Company::find(1)]);
         //dd("yaaaaaaa");
     }
-    //dd(session('my_company')->config);
+    //dd(session('my_company'));
     //dd( get_defined_vars(session('my_company')->config['favicon']) );
     //dd(\Storage::url( session('my_company')->config['favicon']));
 @endphp
@@ -12,7 +12,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @if(!is_null(session('my_company')->config) and get_defined_vars(session('my_company')->config['favicon']) and \Storage::disk('public')->exists(session('my_company')->config['favicon']) )
+    @if(!is_null(session('my_company')) and get_defined_vars(session('my_company')->config['favicon']) and \Storage::disk('public')->exists(session('my_company')->config['favicon']) )
     <link rel="icon" type="image/jpeg" href="{{ \Storage::url( session('my_company')->config['favicon']) }}" />
     @else
     <link rel="icon" type="image/jpeg" href="/img/favicon.png" />
@@ -232,7 +232,7 @@
         <nav class="{{ config('options.styles.navbar') }}">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    @if(!is_null(session('my_company')->config) and get_defined_vars(session('my_company')->config['logo']) and \Storage::disk('public')->exists(session('my_company')->config['logo']) )
+                    @if(!is_null(session('my_company')) and get_defined_vars(session('my_company')->config['logo']) and \Storage::disk('public')->exists(session('my_company')->config['logo']) )
                     <img src="{{ \Storage::url( session('my_company')->config['logo']) }}" alt="" height="50px">
                     @else
                     <!-- <img src="/img/logo_makim_doc.jpg" alt="" height="50px"> -->

@@ -30,7 +30,7 @@ class UsersController extends Controller {
 
 	public function create()
 	{
-		$roles = $this->roleRepo->all();
+		$roles = $this->roleRepo->all2();
 		$locales = $this->companyRepo->locales();
 		return view('partials.create', compact('roles', 'locales'));
 	}
@@ -49,7 +49,7 @@ class UsersController extends Controller {
 	public function edit($id)
 	{
 		$model = $this->repo->findOrFail($id);
-		$roles = $this->roleRepo->all();
+		$roles = $this->roleRepo->all2();
 		$locales = $this->companyRepo->getListMyCompany();
 		return view('partials.edit', compact('model', 'roles', 'locales'));
 	}

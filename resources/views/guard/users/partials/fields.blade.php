@@ -9,7 +9,7 @@
 		{!! Field::password('password', ['label' => 'Contraseña', 'class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-sm-3">
-		{!! Field::select('my_company', $locales, ['label' => 'Local', 'class'=>'form-control-sm', 'required'=>'required']) !!}
+		{!! Field::select('my_company', $locales, ['label' => 'Local', 'empty'=>'Seleccionar', 'class'=>'form-control-sm', 'required'=>'required']) !!}
 	</div>
 </div>
 <div  class="form-row">

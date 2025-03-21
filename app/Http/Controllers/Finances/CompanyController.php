@@ -33,7 +33,7 @@ class CompanyController extends Controller {
 
 	public function my_company()
 	{
-		$id = 1;
+		$id = session('my_company')->id;
 		$model = $this->repo->findOrFail($id);
 		// dd($model);
 		$jobs = $this->tableRepo->getListType('jobs');
@@ -42,11 +42,16 @@ class CompanyController extends Controller {
 	}
 	public function save_my_company($id)
 	{
-		$id = 1;
+		// $id = session('my_company')->id;
 		$data = request()->all();
 		//dd($data);
 		
-		$this->repo->save($data, $id);
+		$model = $this->repo->save($data, $id);
+
+		// Si el usuario editado es el que está logueado, actualiza la variable de sesión
+		if (auth()->user()->my_company == $model->id) {
+	        session(['my_company' => $model]);
+	    }
 		return redirect()->to('/');
 		// if (isset($data['last_page']) && $data['last_page'] != '') {
 		// 	return redirect()->to($data['last_page']);

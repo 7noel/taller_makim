@@ -26,7 +26,7 @@ class User extends Authenticatable implements Auditable {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['name', 'email', 'password', 'remember_token', 'is_superuser'];
+	protected $fillable = ['name', 'email', 'password', 'remember_token', 'is_superuser', 'my_company'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.
