@@ -25,7 +25,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body text-center">
-                        <a href="{{ route('output_quotes.index') }}" class="card-title text-dark">COTIZACIONES
+                        <a href="{{ route('output_quotes.index') }}" class="card-title text-dark">PRESUPUESTOS
                         <img src="/img/cotizar.png" class="card-img-top"></a>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
             <div class="card-group">
                 <div class="card">
                     <div class="card-body text-center">
-                        <a href="{{ route('output_orders.index') }}" class="card-title text-dark">ÓRDENES
+                        <a href="#" class="card-title text-dark">INVENTARIOS
                         <img src="/img/ordenes.png" class="card-img-top"></a>
                     </div>
                 </div>
