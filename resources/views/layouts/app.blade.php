@@ -308,7 +308,34 @@
     </div>
     <script>
 $(document).ready(function () {
-    
+
+    let input = document.getElementById('placa');
+    input.addEventListener('input', function(event) {
+        let valor = input.value.toUpperCase(); // Convertir a mayúsculas automáticamente
+        
+        // Filtrar caracteres no permitidos y limitar a 6 caracteres
+        let nuevoValor = valor.replace(/[^A-Z0-9]/g, '').slice(0, 6);
+        
+        // Actualizar el valor del input si hubo modificaciones
+        //if (valor !== nuevoValor) {
+            input.value = nuevoValor;
+        //}
+
+        // console.log("Valor actual:", nuevoValor); // Para depuración en la consola
+
+        // Validar estructura (1 letra + 4 o 5 alfanuméricos)
+        let regex = /^[A-Z0-9]{5,6}$/;
+        // let regex = /^[A-Z][A-Z0-9]{4,5}$/; //En caso de autos
+
+        if (nuevoValor.length === 0) {
+            input.setCustomValidity(""); // No mostrar error si está vacío
+        } else if (!regex.test(nuevoValor)) {
+            input.setCustomValidity("Debe comenzar con una letra y tener 5 o 6 caracteres alfanuméricos.");
+        } else {
+            input.setCustomValidity("");
+        }
+    });
+
     $('#txtuser').autocomplete({
         source: "/guard/users/autocomplete",
         minLength: 1,
