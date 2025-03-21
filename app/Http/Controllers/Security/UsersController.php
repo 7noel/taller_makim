@@ -31,7 +31,7 @@ class UsersController extends Controller {
 	public function create()
 	{
 		$roles = $this->roleRepo->all2();
-		$locales = $this->companyRepo->locales();
+		$locales = $this->companyRepo->getListMyCompany();
 		return view('partials.create', compact('roles', 'locales'));
 	}
 
