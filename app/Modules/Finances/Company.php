@@ -14,10 +14,14 @@ class Company extends Model implements Auditable {
 		'config' => 'array',
 	];
 
+	public function user()
+	{
+		return $this->belongsto('App\Modules\Security\User');
+	}
 	public function ubigeo()
 	{
 		return $this->belongsto('App\Modules\Base\Ubigeo', 'ubigeo_code', 'code');
-	}	
+	}
 	public function my_company()
 	{
 		return $this->belongsto('App\Modules\Finances\Company', 'my_company');
