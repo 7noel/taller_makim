@@ -26,10 +26,11 @@ class ChecklistRepo extends BaseRepo{
 
 	public function prepareData($data)
 	{
-		// dd($data);
-		foreach ($data['modelos'] as $key => $detail) {
-			$data['modelos'][$key]['type'] = $data['type'];
-			$data['modelos'][$key]['category'] = $data['modelos'][$key]['description'];
+		if (isset($data['modelos'])) {
+			foreach ($data['modelos'] as $key => $detail) {
+				$data['modelos'][$key]['type'] = $data['type'];
+				$data['modelos'][$key]['category'] = $data['modelos'][$key]['description'];
+			}
 		}
 		return $data;
 	}
