@@ -378,7 +378,7 @@ class ComposerServiceProvider extends ServiceProvider
             'inventory' => [
                 'index'=>'Inventarios',
                 'index.create'=>'Crear Inventario',
-                'create'=>'Nueva Inventario',
+                'create'=>'Nuevo Inventario',
                 'create.create'=>'Crear Inventario',
                 'show'=>'Vizualizando Inventario:',
                 'edit'=>'Editar Inventario: ',
