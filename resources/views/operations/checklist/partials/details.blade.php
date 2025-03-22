@@ -28,7 +28,7 @@
 	<template id="template-row-modelo">
 		<tr>
 			<td>{!! Form::text('data1', null, ['class'=>'form-control form-control-sm name text-uppercase', 'data-name'=>'', 'required']) !!}</td>
-			<td>{!! Form::select('data2', $categories, null, ['class'=>'form-control form-control-sm description text-uppercase', 'data-description'=>'', 'required']) !!}</td>
+			<td>{!! Form::select('data2', $categories, null, ['class'=>'form-control form-control-sm description text-uppercase', 'data-description'=>'']) !!}</td>
 			<td class="text-center form-inline">
 				<a href="#" class="btn btn-outline-danger btn-sm btn-delete-item" title="Eliminar">{!! $icons['remove'] !!}</a>
 			</td>
