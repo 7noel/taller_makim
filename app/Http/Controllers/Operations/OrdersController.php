@@ -22,6 +22,7 @@ class OrdersController extends Controller {
 	protected $companyRepo;
 	protected $bankRepo;
 	protected $carRepo;
+	protected $tableRepo;
 
 	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo, TableRepo $tableRepo) {
 		$this->repo = $repo;
@@ -87,7 +88,6 @@ class OrdersController extends Controller {
 	public function store()
 	{
 		$data = request()->all();
-		//dd($data);
 		$model = $this->repo->save($data);
 		if (explode('.', \Request::route()->getName())[0] == 'output_quotes') {
 			return redirect()->route('output_quotes.edit', $model->id);

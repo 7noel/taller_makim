@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Modules\Finances\Exchange;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -53,5 +55,30 @@ class HomeController extends Controller
                                     ],
                                 ]
         ];
+    }
+
+    public function uploadPhoto(Request $request)
+    {
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+
+            // Validar que sea una imagen y pese menos de 5MB
+            $request->validate([
+                'photo' => 'image|mimes:jpeg,jpg,png|max:5120',
+            ]);
+
+            // Generar nombre único
+            $filename = now()->format('Ymd_His') . '_' . Str::random(6) . '.jpg';
+
+            // Guardar en disco (ej: public/photos)
+            $path = $file->storeAs('public/photos', $filename);
+
+            return response()->json([
+                'status' => 'success',
+                'filename' => 'photos/' . $filename // importante: quitar 'public/' para que se use en storage
+            ]);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'No se subió ninguna imagen'], 422);
     }
 }

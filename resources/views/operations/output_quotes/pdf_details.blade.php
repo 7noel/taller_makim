@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<link rel="icon" type="image/jpeg" href="./img/logo_makim_01.jpg" />
 
-	<title>Cotización: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
+	<title>Presupuesto: {{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
@@ -145,7 +145,7 @@
 				<td class="border" width="39" align="center" style="font-size: 18px; font-weight: bold;">
 					<div>RUC: {{ $model->mycompany->doc }}</div>
 					<div>PRESUPUESTO</div>
-					<div>P001-{{ str_pad($model->sn, 7, '0', STR_PAD_LEFT) }}  {{-- $model->created_at->formatLocalized('%Y') --}}</div>
+					<div>{{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</div>
 					
 				</td>
 			</tr>

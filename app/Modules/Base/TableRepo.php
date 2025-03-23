@@ -97,9 +97,14 @@ class TableRepo extends BaseRepo{
 	public function getListDoc($type, $campo='name', $id='id', $serie='')
 	{
 		if ($serie=='') {
-			return Table::where('type', $type)->where('value_3',1)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
+			return Table::where('my_company', session('my_company')->id)->where('type', $type)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
 		}
-		return Table::where('type', $type)->where('value_3',0)->where('name', $serie)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
+		return Table::where('my_company', session('my_company')->id)->where('type', $type)->where('name', $serie)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
+	}
+
+	public function getFirstSerie($type_doc='output_quotes')
+	{
+		return Table::where('my_company', session('my_company')->id)->where('value_1', $type_doc)->first();
 	}
 
 	public function save($data, $id=0){

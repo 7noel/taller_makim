@@ -56,6 +56,8 @@ Route::get('crear-marca', ['as' => 'ajax_crear_marca', 'uses' => 'Operations\Bra
 Route::get('crear-item', ['as' => 'ajax_crear_item', 'uses' => 'Storage\ProductsController@store']);
 
 Route::group(['middleware'=>['auth']], function(){
+	Route::post('upload-photo', ['HomeController@uploadPhoto'])->name('upload_photo');
+
 	Route::get('change_password', ['as' => 'change_password', 'uses' => 'Security\UsersController@changePassword']);
 	Route::post('update_password', ['as' => 'update_password', 'uses'=>'Security\UsersController@updatePassword']);
 

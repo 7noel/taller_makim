@@ -534,38 +534,54 @@ $(document).ready(function () {
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                const resizedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
-                const blob = dataURLtoBlob(resizedDataUrl);
-                const formData = new FormData();
-                formData.append('photo', blob, 'photo.jpg');
+                const originalDataUrl = e.target.result;
+                const originalImage = new Image();
 
-                $.ajax({
-                    url: "{{ route('upload_photo') }}",
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        const imageId = `image-${imageCount}`;
-                        thumbnails.append(`
-                            <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('/storage/${response.filename}')">
-                                <img src="/storage/${response.filename}" alt="Foto ${imageCount + 1}">
-                                <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
-                            </div>
-                        `);
-                        $('#multimedia').append(`<input type="hidden" id="input-${imageId}" name="inventory[photos][${imageCount}]" value="${response.filename}">`);
-                        imageCount++;
-                        showImage('/storage/' + response.filename);
-                    },
-                    error: function(xhr) {
-                        alert("Error al subir la imagen");
-                        console.log(xhr.responseText);
+                originalImage.onload = function() {
+                    let w = originalImage.width, h = originalImage.height;
+                    let newW = w, newH = h;
+
+                    // Si el ancho es mayor a 1600, se reduce
+                    if (w > 1600) {
+                        const factor = 1600 / w;
+                        newW = 1600;
+                        newH = h * factor;
                     }
-                });
+                    // Si la altura es menor a 1200, se amplía
+                    else if (h < 1200) {
+                        const factor = 1200 / h;
+                        newW = w * factor;
+                        newH = 1200;
+                    }
 
+                    // Crear canvas para redimensionar la imagen
+                    const canvas = document.createElement('canvas');
+                    canvas.width = newW;
+                    canvas.height = newH;
+                    const ctx = canvas.getContext('2d');
+                    // Rellenar con fondo blanco
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, newW, newH);
+
+                    // Dibujar la imagen sobre el fondo blanco
+                    ctx.drawImage(originalImage, 0, 0, newW, newH);
+
+                    // Convertir a JPEG
+                    const resizedDataUrl = canvas.toDataURL('image/jpeg');
+
+                    const imageId = `image-${imageCount}`;
+                    thumbnails.append(`
+                        <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('${resizedDataUrl}')">
+                            <img src="${resizedDataUrl}" alt="Foto ${imageCount + 1}">
+                            <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
+                        </div>
+                    `);
+                    $('#multimedia').append(`<input type="hidden" id="input-${imageId}" name="inventory[photos][${imageCount}]" value="${resizedDataUrl.replace(/^data:image\/jpeg;base64,/, "")}">`);
+                    imageCount++;
+                    showImage(resizedDataUrl);
+                };
+
+                originalImage.src = originalDataUrl;
             };
 
             reader.readAsDataURL(file);
@@ -634,15 +650,6 @@ $(document).ready(function () {
     });
 });
 
-function dataURLtoBlob(dataurl) {
-    const arr = dataurl.split(',');
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while(n--) u8arr[n] = bstr.charCodeAt(n);
-    return new Blob([u8arr], { type: mime });
-}
 // Actualización de removeThumbnail para mostrar la primera miniatura disponible o ocultar el visualizador si no hay ninguna.
 function removeThumbnail(id) {
     if (confirm("¿Estás seguro de que quieres eliminar esta foto o video?")) {

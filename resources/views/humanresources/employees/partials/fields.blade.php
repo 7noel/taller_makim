@@ -1,5 +1,8 @@
 <div class="form-row">
 	<div class="col-sm-2">
+		{!! Field::select('my_company', $locales, ['label' => 'Local', 'empty'=>'Seleccionar', 'class'=>'form-control-sm', 'required'=>'required']) !!}
+	</div>
+	<div class="col-sm-2">
 		{!! Field::select('id_type', config('options.employee_doc'), ['empty'=>'Seleccionar', 'label' => 'Tipo', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">

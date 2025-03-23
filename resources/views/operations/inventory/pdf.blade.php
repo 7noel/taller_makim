@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>INVENTARIO: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title>
+	<title>INVENTARIO: {{ $model->sn }}</title>
+	<!-- <title>INVENTARIO: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title> -->
     <style>
 		@page { margin-top: 30px; }
         body {
@@ -147,7 +148,7 @@
 				<td width="39" align="center" style="font-size: 18px; font-weight: bold;">
 					<div>RUC: {{ $model->mycompany->doc }}</div>
 					<div>INVENTARIO VEHICULAR</div>
-					<div>V001-{{ str_pad($model->sn, 7, '0', STR_PAD_LEFT) }}  {{-- $model->created_at->formatLocalized('%Y') --}}</div>
+					<div>{{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</div>
 					
 				</td>
 			</tr>

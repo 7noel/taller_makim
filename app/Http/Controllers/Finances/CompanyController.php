@@ -69,7 +69,8 @@ class CompanyController extends Controller {
 	{
 		$jobs = $this->tableRepo->getListType('jobs');
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
-		return view('partials.create', compact('ubigeo', 'jobs'));
+		$locales = $this->repo->getListMyCompany();
+		return view('partials.create', compact('ubigeo', 'jobs', 'locales'));
 	}
 
 	public function store(FormCompanyRequest $request)
@@ -90,7 +91,8 @@ class CompanyController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		$jobs = $this->tableRepo->getListType('jobs');
 		$ubigeo = $this->ubigeoRepo->listUbigeo($model->ubigeo_code);
-		return view('partials.show', compact('model', 'jobs', 'ubigeo'));
+		$locales = $this->repo->getListMyCompany();
+		return view('partials.show', compact('model', 'jobs', 'ubigeo', 'locales'));
 	}
 
 	public function edit($id)
@@ -98,7 +100,8 @@ class CompanyController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		$jobs = $this->tableRepo->getListType('jobs');
 		$ubigeo = $this->ubigeoRepo->listUbigeo($model->ubigeo_code);
-		return view('partials.edit', compact('model', 'ubigeo', 'jobs'));
+		$locales = $this->repo->getListMyCompany();
+		return view('partials.edit', compact('model', 'ubigeo', 'jobs', 'locales'));
 	}
 
 	public function update($id, FormCompanyRequest $request)

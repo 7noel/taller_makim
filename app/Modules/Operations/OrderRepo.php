@@ -7,6 +7,7 @@ use App\Modules\Storage\MoveRepo;
 use App\Modules\Operations\OrderDetailRepo;
 use App\Modules\Operations\OrderChecklistDetailRepo;
 use App\Modules\Storage\Stock;
+use App\Modules\Base\Table;
 
 class OrderRepo extends BaseRepo{
 
@@ -26,10 +27,15 @@ class OrderRepo extends BaseRepo{
 	}
 	public function save($data, $id=0)
 	{
-		// dd($data);
 		$data['order_type'] = explode('.', \Request::route()->getName())[0];
 		if ($id == 0) {
-			$data['sn'] = $this->getNextNumber($data['order_type'], session('my_company')->id);
+			$sn = $this->getNextNumber($data['order_type'], session('my_company')->id);
+
+			$data['series'] = $sn['series'];
+			$data['number'] = $sn['number'];
+			$data['sn'] = $sn['series'] . '-' . $sn['number'];
+
+			// $data['sn'] = $this->getNextNumber($data['order_type'], session('my_company')->id);
 		}
 		$data = $this->prepareData($data);
 
@@ -87,14 +93,24 @@ class OrderRepo extends BaseRepo{
 		return $model;
 	}
 
-	public function getNextNumber($order_type, $my_company)
+	public function getNextNumber($order_type)
 	{
-		$last = Order::where('my_company', $my_company)->where('order_type', $order_type)->orderBy('id', 'desc')->first();
-		if (isset($last) && $last->sn > 0) {
-			return $last->sn + 1;
+		$my_company = session('my_company')->id;
+		$doc = Table::where('my_company', $my_company)->where('value_1', $order_type)->first();
+		$last = Order::where('my_company', $my_company)->where('order_type', $order_type)->where('series', $doc->name)->orderByRaw('CONVERT(number, SIGNED) desc')->first();
+		// dd(session('my_company'));
+		if ($last) {
+			return ['id' => $doc->id, 'series' => $doc->name, 'number'=> ($last->number + 1)];
 		} else {
-			return 1;
+			return ['id' => $doc->id, 'series' => $doc->name, 'number'=> 1];
 		}
+
+		// $last = Order::where('my_company', $my_company)->where('order_type', $order_type)->orderBy('id', 'desc')->first();
+		// if (isset($last) && $last->sn > 0) {
+		// 	return $last->number + 1;
+		// } else {
+		// 	return 1;
+		// }
 	}
 
 	public function prepareData($data)

@@ -22,9 +22,9 @@ class Company extends Model implements Auditable {
 	{
 		return $this->belongsto('App\Modules\Base\Ubigeo', 'ubigeo_code', 'code');
 	}
-	public function my_company()
+	public function mycompany()
 	{
-		return $this->belongsto('App\Modules\Finances\Company', 'my_company');
+		return $this->belongsTo('App\Modules\Finances\Company', 'my_company');
 	}
 	public function my_companies()
 	{
