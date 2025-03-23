@@ -531,44 +531,78 @@ $(document).ready(function () {
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
+
+            // ✅ Leer la imagen seleccionada con FileReader
             const reader = new FileReader();
-
             reader.onload = function (e) {
-                const resizedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
-                const blob = dataURLtoBlob(resizedDataUrl);
-                const formData = new FormData();
-                formData.append('photo', blob, 'photo.jpg');
+                const originalDataUrl = e.target.result;
 
-                $.ajax({
-                    url: "{{ route('upload_photo') }}",
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        const imageId = `image-${imageCount}`;
-                        thumbnails.append(`
-                            <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('/storage/${response.filename}')">
-                                <img src="/storage/${response.filename}" alt="Foto ${imageCount + 1}">
-                                <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
-                            </div>
-                        `);
-                        $('#multimedia').append(`<input type="hidden" id="input-${imageId}" name="inventory[photos][${imageCount}]" value="${response.filename}">`);
-                        imageCount++;
-                        showImage('/storage/' + response.filename);
-                    },
-                    error: function(xhr) {
-                        alert("Error al subir la imagen");
-                        console.log(xhr.responseText);
+                const originalImage = new Image();
+                originalImage.onload = function () {
+                    // ✅ Crear un canvas temporal
+                    const canvas = document.createElement('canvas');
+
+                    // ⚙️ Redimensionar
+                    let w = originalImage.width, h = originalImage.height;
+                    let newW = w, newH = h;
+                    if (w > 1600 || h > 1200) {
+                        const factor = Math.min(1600 / w, 1200 / h);
+                        newW = w * factor;
+                        newH = h * factor;
                     }
-                });
 
+                    canvas.width = newW;
+                    canvas.height = newH;
+                    const ctx = canvas.getContext('2d');
+
+                    // Fondo blanco (opcional)
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, newW, newH);
+
+                    // ✅ Dibujar solo la imagen cargada desde el input
+                    ctx.drawImage(originalImage, 0, 0, newW, newH);
+
+                    // ✅ Convertir a Blob
+                    const dataURL = canvas.toDataURL('image/jpeg', 0.6);
+                    const blob = dataURLtoBlob(dataURL);
+
+                    // ✅ Subir al servidor
+                    const formData = new FormData();
+                    formData.append('photo', blob, 'photo.jpg');
+
+                    $.ajax({
+                        url: "{{ route('upload_photo') }}",
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            const imageId = `image-${imageCount}`;
+                            const publicUrl = '/storage/' + response.filename;
+                            thumbnails.append(`
+                                <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('/storage/${response.filename}')">
+                                    <img src="/storage/${response.filename}" alt="Foto ${imageCount + 1}">
+                                    <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
+                                </div>
+                            `);
+                            $('#multimedia').append(`<input type="hidden" id="input-${imageId}" name="inventory[photos][${imageCount}]" value="${response.filename}">`);
+                            // ✅ Mostrar inmediatamente
+                            showImage(publicUrl);
+                            imageCount++;
+                        },
+                        error: function () {
+                            alert('Error al subir la foto');
+                        }
+                    });
+                };
+
+                originalImage.src = originalDataUrl; // ✅ Asegúrate que esto venga del archivo seleccionado
             };
 
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file); // ✅ Esto es la clave para que no tomes la imagen del canvas por error
         }
     });
 

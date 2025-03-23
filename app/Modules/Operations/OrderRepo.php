@@ -38,6 +38,7 @@ class OrderRepo extends BaseRepo{
 			// $data['sn'] = $this->getNextNumber($data['order_type'], session('my_company')->id);
 		}
 		$data = $this->prepareData($data);
+		// dd($data);
 
 		if ($id==0) {
 			$my_id = Order::orderBy('id', 'desc')->first()->id + 1;
@@ -46,21 +47,21 @@ class OrderRepo extends BaseRepo{
 		}
 		
 
-		if (isset($data['inventory']['photos'][0])) {
-			$i = 0;
-			foreach ($data['inventory']['photos'] as $key => $photo) {
-				if (strlen($photo) < 30) {
-					$name_files[$key] = $photo;
-				} else {
-					$name = 'ot_'.$my_id.'_'.str_pad($key, 3, "0", STR_PAD_LEFT);
-					// $name = 'ot_'.$my_id.'_'.str_pad($i, 3, "0", STR_PAD_LEFT);
-					$this->saveImageBase64($photo, $name);
-					$name_files[$key] = $name.".jpg";
-				}
-				$i = $i + 1;
-			}
-			$data['inventory']['photos'] = $name_files;
-		}
+		// if (isset($data['inventory']['photos'][0])) {
+		// 	$i = 0;
+		// 	foreach ($data['inventory']['photos'] as $key => $photo) {
+		// 		if (strlen($photo) < 30) {
+		// 			$name_files[$key] = $photo;
+		// 		} else {
+		// 			$name = 'ot_'.$my_id.'_'.str_pad($key, 3, "0", STR_PAD_LEFT);
+		// 			// $name = 'ot_'.$my_id.'_'.str_pad($i, 3, "0", STR_PAD_LEFT);
+		// 			$this->saveImageBase64($photo, $name);
+		// 			$name_files[$key] = $name.".jpg";
+		// 		}
+		// 		$i = $i + 1;
+		// 	}
+		// 	$data['inventory']['photos'] = $name_files;
+		// }
 		$model = parent::save($data, $id);
 
 		if (isset($data['items']) and $data['items']>0) {
