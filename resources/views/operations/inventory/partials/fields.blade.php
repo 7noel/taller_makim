@@ -524,7 +524,7 @@ $(document).ready(function () {
     $('#addPhoto').on('click', function () {
         $('#photoInput').click();
     });
-
+    
     $('#photoInput').on('change', function (event) {
         const files = event.target.files;
         const thumbnails = $('.thumbnails');
@@ -532,79 +532,78 @@ $(document).ready(function () {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
 
-            // ✅ Leer la imagen seleccionada con FileReader
             const reader = new FileReader();
             reader.onload = function (e) {
                 const originalDataUrl = e.target.result;
 
                 const originalImage = new Image();
                 originalImage.onload = function () {
-                    // ✅ Crear un canvas temporal
-                    const canvas = document.createElement('canvas');
+                    // 🔧 Establecer límite máximo de dimensiones
+                    const MAX_WIDTH = 1200;
+                    const MAX_HEIGHT = 1200;
 
-                    // ⚙️ Redimensionar
-                    let w = originalImage.width, h = originalImage.height;
-                    let newW = w, newH = h;
-                    if (w > 1600 || h > 1200) {
-                        const factor = Math.min(1600 / w, 1200 / h);
-                        newW = w * factor;
-                        newH = h * factor;
+                    let w = originalImage.width;
+                    let h = originalImage.height;
+
+                    if (w > MAX_WIDTH || h > MAX_HEIGHT) {
+                        const factor = Math.min(MAX_WIDTH / w, MAX_HEIGHT / h);
+                        w = Math.floor(w * factor);
+                        h = Math.floor(h * factor);
                     }
 
-                    canvas.width = newW;
-                    canvas.height = newH;
+                    // 🎯 Canvas temporal con fondo blanco
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
                     const ctx = canvas.getContext('2d');
-
-                    // Fondo blanco (opcional)
                     ctx.fillStyle = "#ffffff";
-                    ctx.fillRect(0, 0, newW, newH);
+                    ctx.fillRect(0, 0, w, h);
+                    ctx.drawImage(originalImage, 0, 0, w, h);
 
-                    // ✅ Dibujar solo la imagen cargada desde el input
-                    ctx.drawImage(originalImage, 0, 0, newW, newH);
+                    // ⚡ Convertir directamente a Blob (evita usar mucha RAM)
+                    canvas.toBlob(function (blob) {
+                        const formData = new FormData();
+                        formData.append('photo', blob, 'photo.jpg');
 
-                    // ✅ Convertir a Blob
-                    const dataURL = canvas.toDataURL('image/jpeg', 0.6);
-                    const blob = dataURLtoBlob(dataURL);
+                        $.ajax({
+                            url: "{{ route('upload_photo') }}",
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                const imageId = `image-${imageCount}`;
+                                const publicUrl = '/storage/' + response.filename;
 
-                    // ✅ Subir al servidor
-                    const formData = new FormData();
-                    formData.append('photo', blob, 'photo.jpg');
+                                thumbnails.append(`
+                                    <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('${publicUrl}')">
+                                        <img src="${publicUrl}" alt="Foto ${imageCount + 1}">
+                                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
+                                    </div>
+                                `);
 
-                    $.ajax({
-                        url: "{{ route('upload_photo') }}",
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            const imageId = `image-${imageCount}`;
-                            const publicUrl = '/storage/' + response.filename;
-                            thumbnails.append(`
-                                <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('/storage/${response.filename}')">
-                                    <img src="/storage/${response.filename}" alt="Foto ${imageCount + 1}">
-                                    <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
-                                </div>
-                            `);
-                            $('#multimedia').append(`<input type="hidden" id="input-${imageId}" name="inventory[photos][${imageCount}]" value="${response.filename}">`);
-                            // ✅ Mostrar inmediatamente
-                            showImage(publicUrl);
-                            imageCount++;
-                        },
-                        error: function () {
-                            alert('Error al subir la foto');
-                        }
-                    });
+                                $('#multimedia').append(`<input type="hidden" id="input-${imageId}" name="inventory[photos][${imageCount}]" value="${response.filename}">`);
+
+                                showImage(publicUrl);
+                                imageCount++;
+                            },
+                            error: function () {
+                                alert('Error al subir la foto');
+                            }
+                        });
+                    }, 'image/jpeg', 0.6); // 👈 Calidad ajustada (60%)
                 };
 
-                originalImage.src = originalDataUrl; // ✅ Asegúrate que esto venga del archivo seleccionado
+                originalImage.src = originalDataUrl;
             };
 
-            reader.readAsDataURL(file); // ✅ Esto es la clave para que no tomes la imagen del canvas por error
+            reader.readAsDataURL(file);
         }
     });
+
 
     $('#addVideo').on('click', function () {
         $('#videoInput').click();
