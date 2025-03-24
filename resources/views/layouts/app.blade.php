@@ -308,6 +308,7 @@
     </div>
     <script>
 $(document).ready(function () {
+    $('#type_service').change(); // 🔁 Ejecuta la lógica de visibilidad al cargar
 
     $('#placa').on('keyup', function (e) {
         let valor = $('#placa').val().toUpperCase()// Convertir a mayúsculas automáticamente
