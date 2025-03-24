@@ -4,7 +4,7 @@ return array(
 		'POSITIVA' => 'POSITIVA',
 		'PACIFICO' => 'PACIFICO',
 		'RIMAC' => 'RIMAC',
-		'MAPHRE' => 'MAPHRE',
+		'MAPFRE' => 'MAPFRE',
 	],
 	'combustible' => [
 		'0' => 'RESERVA',
