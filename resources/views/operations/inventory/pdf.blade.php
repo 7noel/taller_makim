@@ -139,7 +139,7 @@
 			<tr>
 				<td width="20%" align="center" style="border: none;">
                     @if($logo && \Storage::disk('public')->exists($logo))
-                        <img src="{{ \Storage::url($logo) }}" alt="" width="100px">
+                        <img src="{{ public_path('storage/' . $logo) }}" alt="" width="100px">
                     @else
 						<img src="./img/favicon.png" alt="" width="100px">
                     @endif
