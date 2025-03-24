@@ -98,7 +98,7 @@ class OrderRepo extends BaseRepo{
 	{
 		$my_company = session('my_company')->id;
 		$doc = Table::where('my_company', $my_company)->where('value_1', $order_type)->first();
-		dd($doc);
+		dd($my_company);
 		$last = Order::where('my_company', $my_company)->where('order_type', $order_type)->where('series', $doc->name)->orderByRaw('CONVERT(number, SIGNED) desc')->first();
 		// dd(session('my_company'));
 		if ($last) {
