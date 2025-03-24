@@ -20,7 +20,7 @@
 	<div class="col-sm-2">
 		{!! Field::text('name', ['label' => 'Nombre', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
-	<div class="col-sm-2">
+	<div class="col-sm-2 d-none">
 		{!! Field::select('country', config('countries'), (isset($model) ? null : 'PE'), ['empty'=>'Seleccionar', 'label'=>'País', 'class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-sm-2">
