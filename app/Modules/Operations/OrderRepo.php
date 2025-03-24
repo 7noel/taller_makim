@@ -41,7 +41,13 @@ class OrderRepo extends BaseRepo{
 		// dd($data);
 
 		if ($id==0) {
-			$my_id = Order::orderBy('id', 'desc')->first()->id + 1;
+			$last = Order::orderBy('id', 'desc')->first()->id;
+			if ($last) {
+				$my_id = $last->id + 1;
+			} else {
+				$my_id = 1;
+			}
+			
 		} else {
 			$my_id = $id;
 		}
