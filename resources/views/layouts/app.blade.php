@@ -308,7 +308,6 @@
     </div>
     <script>
 $(document).ready(function () {
-    $('#type_service').change(); // 🔁 Ejecuta la lógica de visibilidad al cargar
 
     $('#placa').on('keyup', function (e) {
         let valor = $('#placa').val().toUpperCase()// Convertir a mayúsculas automáticamente
@@ -834,24 +833,12 @@ $(document).ready(function () {
     $('#txtplaca').change(function (e) {
         checkCar()
     })
-    $('#type_service').change(function (e) {
-        if ('PREVENTIVO' == $('#type_service').val()) {
-            $('#preventivo').parent().parent().parent().removeClass("d-none")
-            $('#seguro').parent().parent().parent().addClass( "d-none")
-            $('#preventivo').attr("required", "required")
-            $('#seguro').removeAttr("required", "required")
-        } else if ('SINIESTRO' == $('#type_service').val()) {
-            $('#preventivo').parent().parent().parent().addClass( "d-none")
-            $('#seguro').parent().parent().parent().removeClass( "d-none")
-            $('#preventivo').removeAttr("required", "required")
-            $('#seguro').attr("required", "required")
-        } else {
-            $('#preventivo').parent().parent().parent().addClass( "d-none")
-            $('#seguro').parent().parent().parent().addClass( "d-none")
-            $('#preventivo').removeAttr("required", "required")
-            $('#seguro').removeAttr("required", "required")
-        }
-    })
+    
+    $('#type_service').on('change', updateTipoServicio);
+
+    // 🔁 Ejecutar inmediatamente al cargar
+    updateTipoServicio();
+
    // $("#type_detail_p").prop("checked", true);
     $(".send_cpe").submit(function(e) {
         e.preventDefault()
@@ -868,6 +855,28 @@ $(document).ready(function () {
 
     })
 })
+function updateTipoServicio() {
+    const tipo = $('#type_service').val();
+
+    const $preventivo = $('#preventivo').closest('.form-group');
+    const $seguro = $('#seguro').closest('.form-group');
+
+    if (tipo === 'PREVENTIVO') {
+        $preventivo.removeClass('d-none');
+        $seguro.addClass('d-none');
+        $('#preventivo').attr('required', true);
+        $('#seguro').removeAttr('required');
+    } else if (tipo === 'SINIESTRO') {
+        $preventivo.addClass('d-none');
+        $seguro.removeClass('d-none');
+        $('#preventivo').removeAttr('required');
+        $('#seguro').attr('required', true);
+    } else {
+        $preventivo.addClass('d-none');
+        $seguro.addClass('d-none');
+        $('#preventivo, #seguro').removeAttr('required');
+    }
+}
 
 function createItem(){
     //obteniendo los valores de los inputs
