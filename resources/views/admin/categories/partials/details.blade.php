@@ -13,6 +13,7 @@
 		@foreach($model->childs as $modelo)
 			<tr data-id="{{ $modelo->id }}">
 				{!! Form::hidden("modelos[$i][id]", $modelo->id, ['class'=>'modeloId','data-modeloId'=>'']) !!}
+				{!! Form::hidden("modelos[$i][type]", "sub_categories", ['data-modeloId'=>'']) !!}
 				<td>{!! Form::text("modelos[$i][name]", $modelo->name, ['class'=>'form-control form-control-sm name text-uppercase', 'data-name'=>'']) !!}</td>
 				<td>{!! Form::select("modelos[$i][description]", $units, $modelo->description, ['class'=>'form-control form-control-sm description', 'data-description'=>'']) !!}</td>
 
@@ -27,6 +28,7 @@
 	</table>
 	<template id="template-row-modelo">
 		<tr>
+			{!! Form::hidden('data0', 'sub_categories', ['data-sub_categories' =>'']) !!}
 			<td>{!! Form::text('data1', null, ['class'=>'form-control form-control-sm name text-uppercase', 'data-name'=>'', 'required']) !!}</td>
 			<td>{!! Form::select('data2', $units, null, ['class'=>'form-control form-control-sm description', 'data-description'=>'', 'required']) !!}</td>
 			<td class="text-center form-inline">

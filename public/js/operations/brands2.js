@@ -62,6 +62,10 @@ function renderTemplateRowModelo () {
 	clone.querySelector("[data-name]").setAttribute("name", "modelos[" + items + "][name]");
 	clone.querySelector("[data-description]").setAttribute("name", "modelos[" + items + "][description]");
 
+	var subCategoryEl = clone.querySelector("[data-sub_categories]");
+	if (subCategoryEl) {
+		subCategoryEl.setAttribute("name", "modelos[" + items + "][type]");
+	}
 	//clone.querySelector("[data-isdeleted]").setAttribute("name", "modelos[" + items + "][is_deleted]");
 	
 	items = parseInt(items) + 1;

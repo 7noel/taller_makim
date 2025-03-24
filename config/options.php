@@ -7,7 +7,7 @@ return array(
 		'MAPHRE' => 'MAPHRE',
 	],
 	'combustible' => [
-		'0' => 'VACIO',
+		'0' => 'RESERVA',
 		'25' => '1/4',
 		'50' => 'MEDIO',
 		'75' => '3/4',
@@ -75,7 +75,7 @@ return array(
 		'4' => 'CEX',
 		'7' => 'PAS',
 	],
-	'bodies' => ['COMPACT / HATCHBACK' => 'COMPACT / HATCHBACK', 'CONVERTIBLE' => 'CONVERTIBLE', 'COUPE' => 'COUPE', 'OFF-ROAD' => 'OFF-ROAD', 'OTRO' => 'OTRO', 'PICK UP' => 'PICK UP', 'SEDAN' => 'SEDAN', 'STATION WAGON' => 'STATION WAGON', 'SUV' => 'SUV', 'TRANSPORTER' => 'TRANSPORTER', 'VAN' => 'VAN', ],
+	'bodies' => ['COMPACT / HATCHBACK' => 'COMPACT / HATCHBACK', 'COUPE' => 'COUPE', 'OFF-ROAD' => 'OFF-ROAD', 'OTRO' => 'OTRO', 'PICKUP' => 'PICKUP', 'SEDAN' => 'SEDAN', 'STATION WAGON' => 'STATION WAGON', 'SUV' => 'SUV', 'VAN' => 'VAN', ],
 	'payment_conditions' => ['1'=>'CONTADO', '2'=>'CRÉDITO', '3'=>'LETRA'],
 	'unit_types' => ['UNIDAD', 'LONGITUD', 'VOLUMEN', 'MASA', 'SERVICIO'],
 	'entity_types' => ['my_company', 'client', 'provider', 'shipper', 'bank', 'employee'],
