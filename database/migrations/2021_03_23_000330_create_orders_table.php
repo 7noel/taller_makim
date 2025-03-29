@@ -44,6 +44,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('repairman_id')->unsigned();
             $table->dateTime('diag_at')->nullable();
             $table->dateTime('repu_at')->nullable();
+            $table->dateTime('pre_approved_at')->nullable();
             $table->dateTime('approved_at')->nullable();
             $table->dateTime('repar_at')->nullable();
             $table->dateTime('checked_at')->nullable();
@@ -67,6 +68,7 @@ class CreateOrdersTable extends Migration
             $table->text('comment');
             $table->json('inventory')->nullable();
             $table->json('diagnostico')->nullable();
+            $table->json('pre_aprobacion')->nullable();
             $table->json('aprobacion')->nullable();
             $table->json('reparacion')->nullable();
             $table->json('control_calidad')->nullable();

@@ -97,7 +97,8 @@
 			margin-top: 0;
 		}
 		.inventory-image{
-			width: 270px;
+			width: 350px;
+/*        	border: solid 1px black;*/
 		}
 		.table-ingreso{
 			border: none;
@@ -108,11 +109,11 @@
 		}
 		.table-ingreso .label{
         	font-weight: bold;
-        	width: 15%;
+        	width: 25%;
         	vertical-align: top;
 		}
 		.table-ingreso .col1{
-			width: 45%;
+			width: 30%;
 		}
 		.mt-5{
 			margin-top: 5px;
@@ -153,26 +154,31 @@
 					<div>Correo: {{ $model->mycompany->email }}</div>
 				</td>
 				<td width="39" align="center" style="font-size: 18px; font-weight: bold;">
-					<div>RUC: {{ $model->mycompany->doc }}</div>
 					<div>INVENTARIO VEHICULAR</div>
 					<div>{{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</div>
+					<div>{{ $model->placa }}</div>
+					@if(isset($model->inventory->seguro))
+						<div>{{ $model->inventory->seguro }}</div>
+					@endif
 					
 				</td>
 			</tr>
 		</table>
 	</div>
 
-<table class="table-ingreso">
-	<tr>
-		<td class="label">Asesor:</td>
-		<td class="col1">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
-		<td class="label">F. Emisión:</td>
-		<td>{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
-	</tr>
-</table>
 <table>
 	<tr>
-		<td style="width:59%; border: none;">
+		<td style="width:50%; border: none;">
+			<table class="table-ingreso">
+				<tr>
+					<td class="label">Asesor:</td>
+					<td class="">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
+				</tr>
+				<tr>
+					<td class="label">F. Emisión:</td>
+					<td>{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
+				</tr>
+			</table>
 			<table class="table-datos">
 				<tr>
 					<th colspan="2">Datos del Cliente</th>
@@ -244,27 +250,35 @@
 				</tr>
 				<tr>
 					<td class="label2">Color:</td>
-					<td colspan="">{{ $model->car->color }}</td>
+					<td colspan="3">{{ $model->car->color }}</td>
+				</tr>
+				<tr>
 					<td class="label2">Combustible:</td>
-					<td>{{ config('options.combustible.'.$model->inventory->combustible) }}</td>
+					<td colspan="3">{{ config('options.combustible.'.$model->inventory->combustible) }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Kilometraje:</td>
-					<td>{{ number_format($model->kilometraje) }} km</td>
+					<td colspan="3">{{ number_format($model->kilometraje) }} km</td>
+				</tr>
+				<tr>
 					<td class="label2">Tj propiedad:</td>
-					<td>{{ $model->inventory->tarjeta_propiedad }}</td>
+					<td colspan="3">{{ $model->inventory->tarjeta_propiedad }}</td>
 				</tr>
 				<tr>
 					<td class="label2">soat:</td>
-					<td>{{ ($model->inventory->soat == '') ? '' : date('d/m/Y', strtotime($model->inventory->soat)) }}</td>
+					<td colspan="3">{{ ($model->inventory->soat == '') ? '' : date('d/m/Y', strtotime($model->inventory->soat)) }}</td>
+				</tr>
+				<tr>
 					<td class="label2">revision Tec:</td>
-					<td>{{ ($model->inventory->revision_tecnica == '') ? '' : date('d/m/Y', strtotime($model->inventory->revision_tecnica)) }}</td>
+					<td colspan="3">{{ ($model->inventory->revision_tecnica == '') ? '' : date('d/m/Y', strtotime($model->inventory->revision_tecnica)) }}</td>
 				</tr>
 				<tr>
 					<td class="label2">llaves:</td>
-					<td>{{ $model->inventory->llaves }}</td>
+					<td colspan="3">{{ $model->inventory->llaves }}</td>
+				</tr>
+				<tr>
 					<td class="label2">c. remoto:</td>
-					<td>{{ $model->inventory->control_remoto }}</td>
+					<td colspan="3">{{ $model->inventory->control_remoto }}</td>
 				</tr>
 			</table>
 			
@@ -287,9 +301,10 @@
 <table class="table-datos mt-5">
 	<tr>
 		<td class="label3">SOLICITUD DEL CLIENTE:</td>
-		<td>{{ $model->inventory->solicitud }}</td>
+		<td>{{ $model->inventory->solicitud }} Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam quod quos in praesentium dolore nisi voluptate voluptatibus eligendi explicabo dicta sit, quo. Aut voluptates sed explicabo asperiores nulla veritatis totam.</td>
 	</tr>
 </table>
+<br>
     <table class="legend-table mt-5">
         <tr>
             <th>Leyenda Checklist:</th>
@@ -326,10 +341,10 @@
 <table class="table-datos mt-5">
 	<tr>
 		<td class="label3">OBSERVACIONES:</td>
-		<td>{{ $model->comment }}</td>
+		<td>{{ $model->comment }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint architecto ipsa consequatur minus labore voluptas assumenda possimus doloremque in quis sunt commodi, animi, eaque temporibus dolorem voluptates suscipit a, facilis?</td>
 	</tr>
 </table>
-
+<br>
 	<table class="mt-5" style="font-size: 9px;">
 		<tr>
 			<td class="header-section" style="width: 60%;">AUTORIZACIÓN CLIENTES</td>

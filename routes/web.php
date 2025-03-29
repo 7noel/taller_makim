@@ -190,7 +190,8 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::get('recepcion_by_car/{car_id}', ['as' => 'inventory.recepcion_by_car', 'uses' => 'OrdersController@recepcionByCar']);
 	Route::get('diagnostico/{id}', ['as' => 'diagnostic.edit', 'uses' => 'OrdersController@diagnostico_edit']);
 	Route::get('repuestos/{id}', ['as' => 'repuestos.edit', 'uses' => 'OrdersController@repuestos_edit']);
-	Route::get('aprobacion/{id}', ['as' => 'approbation.edit', 'uses' => 'OrdersController@aprobacion_edit']);
+	Route::get('aprobacion/{id}', ['as' => 'aprobacion.edit', 'uses' => 'OrdersController@aprobacion_edit']);
+	Route::get('pre_aprobacion/{id}', ['as' => 'pre_aprobacion.edit', 'uses' => 'OrdersController@pre_aprobacion_edit']);
 	Route::get('reparacion/{id}', ['as' => 'repair.edit', 'uses' => 'OrdersController@repair_edit']);
 	Route::get('controlcalidad/{id}', ['as' => 'qc.edit', 'uses' => 'OrdersController@controlcalidad_edit']);
 	Route::get('entrega/{id}', ['as' => 'entrega.edit', 'uses' => 'OrdersController@entrega_edit']);

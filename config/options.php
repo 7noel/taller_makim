@@ -105,9 +105,12 @@ return array(
 
 	'inventory_status' => ['PEND' => 'RECEPCION', 'DIAG' => 'DIAGNÓSTICO', 'REPU' => 'REPUESTOS', 'APROB' => 'APROBACION', 'REPAR' => 'REPARACIÓN', 'CONTR' => 'CONTROL DE CALIDAD', 'ENTR' => 'ENTREGA', 'ANUL' => 'ANULADO', 'CERR' => 'CERR'],
 	'inventory_status_PEND' => ['DIAG' => 'DIAGNÓSTICO'],
-	'inventory_status_DIAG' => ['REPU' => 'REPUESTOS'],
+	// 'inventory_status_DIAG' => ['REPU' => 'REPUESTOS'],
+	'inventory_status_DIAG' => ['PREAP' => 'APROBACIÓN DEL SEGURO'],
+	'inventory_status_PREAP' => ['APROB' => 'APROBACIÓN DEL CLIENTE'],
 	'inventory_status_REPU' => ['APROB' => 'APROBACION'],
-	'inventory_status_APROB' => ['DIAG' => 'DIAGNÓSTICO', 'REPU' => 'REPUESTOS', 'REPAR' => 'REPARACIÓN'],
+	// 'inventory_status_APROB' => ['DIAG' => 'DIAGNÓSTICO', 'REPU' => 'REPUESTOS', 'REPAR' => 'REPARACIÓN'],
+	'inventory_status_APROB' => ['DIAG' => 'DIAGNÓSTICO', 'REPAR' => 'REPARACIÓN'],
 	'inventory_status_REPAR' => ['CONTR' => 'CONTROL DE CALIDAD'],
 	'inventory_status_CONTR' => ['REPAR' => 'REPARACIÓN', 'ENTR' => 'ENTREGA'],
 

@@ -8,6 +8,7 @@
 $models_1 = $models->where('status', 'PEND');
 $models_2 = $models->where('status', 'DIAG');
 $models_3 = $models->where('status', 'REPU');
+$models_3_2 = $models->where('status', 'PREAP');
 $models_4 = $models->where('status', 'APROB');
 $models_5 = $models->where('status', 'REPAR');
 $models_6 = $models->where('status', 'CONTR');
@@ -23,11 +24,14 @@ $models_7 = $models->where('status', 'ENTR');
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="diag-tab" data-toggle="tab" data-target="#diagnostico" type="button" role="tab" aria-controls="diagnostico" aria-selected="false">{!! $icons['view'] !!} <br> <span class="badge badge-light">{{ $models_2->count() }}</span> </button>
 				</li>
-				<li class="nav-item" role="presentation">
+				<!-- <li class="nav-item" role="presentation">
 					<button class="nav-link" id="repu-tab" data-toggle="tab" data-target="#repuestos" type="button" role="tab" aria-controls="repuestos" aria-selected="false"><i class="fas fa-box"></i> <br> <span class="badge badge-light">{{ $models_3->count() }}</span> </button>
+				</li> -->
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="repu-tab" data-toggle="tab" data-target="#pre_aprobacion" type="button" role="tab" aria-controls="pre_aprobacion" aria-selected="false"><i class="fas fa-check"></i> <br> <span class="badge badge-light">{{ $models_3_2->count() }}</span> </button>
 				</li>
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="aprob-tab" data-toggle="tab" data-target="#aprobacion" type="button" role="tab" aria-controls="aprobacion" aria-selected="false"><i class="fas fa-check"></i> <br> <span class="badge badge-light">{{ $models_4->count() }}</span> </button>
+					<button class="nav-link" id="aprob-tab" data-toggle="tab" data-target="#aprobacion" type="button" role="tab" aria-controls="aprobacion" aria-selected="false"><i class="fa-solid fa-check-double"></i> <br> <span class="badge badge-light">{{ $models_4->count() }}</span> </button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="repar-tab" data-toggle="tab" data-target="#reparacion" type="button" role="tab" aria-controls="reparacion" aria-selected="false"><i class="fas fa-wrench"></i> <br> <span class="badge badge-light">{{ $models_5->count() }}</span> </button>
@@ -63,7 +67,7 @@ $models_7 = $models->where('status', 'ENTR');
 				</div>
 
 				<div class="tab-pane fade show active" id="recepcion" role="tabpanel" aria-labelledby="pend-tab">
-					<h3>RECEPCIÓN <a href="{{ route('inventory.create') }}" type="button" class="btn btn-primary btn-sm btn-circle">{!! $icons['add'] !!}</a></h3>
+					<h3>INVENTARIO VEHICULAR <a href="{{ route('inventory.create') }}" type="button" class="btn btn-primary btn-sm btn-circle">{!! $icons['add'] !!}</a></h3>
 					<div class="row">
 						@foreach ($models_1 as $model)
 						@php
@@ -104,7 +108,7 @@ $models_7 = $models->where('status', 'ENTR');
 
 				</div>
 				<div class="tab-pane fade" id="diagnostico" role="tabpanel" aria-labelledby="diag-tab">
-					<h3>DIAGNÓSTICO</h3>
+					<h3>DIAGNÓSTICO (PRESUPUESTO)</h3>
 					<div class="row">
 						@foreach ($models_2 as $model)
 						<div class="col-sm-6 col-md-4">
@@ -128,7 +132,7 @@ $models_7 = $models->where('status', 'ENTR');
 						@endforeach
 					</div>
 				</div>
-				<div class="tab-pane fade" id="repuestos" role="tabpanel" aria-labelledby="repu-tab">
+				<!-- <div class="tab-pane fade" id="repuestos" role="tabpanel" aria-labelledby="repu-tab">
 					<h3>REPUESTOS</h3>
 					<div class="row">
 						@foreach ($models_3 as $model)
@@ -148,9 +152,30 @@ $models_7 = $models->where('status', 'ENTR');
 						</div>
 						@endforeach
 					</div>
+				</div> -->
+				<div class="tab-pane fade" id="pre_aprobacion" role="tabpanel" aria-labelledby="repu-tab">
+					<h3>APROBACIÓN DEL SEGURO</h3>
+					<div class="row">
+						@foreach ($models_3_2 as $model)
+						<div class="col-sm-6 col-md-4">
+							<div class="card">
+								<div class="card-body">
+									<h5>
+										<a href="{{ route( 'pre_aprobacion.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
+									</h5>
+									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
+									</h5>
+									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
+									<p class="card-text">{{ $model->pre_approved_at->diffForHumans() }}</p>
+								</div>
+							</div>
+						</div>
+						@endforeach
+					</div>
 				</div>
 				<div class="tab-pane fade" id="aprobacion" role="tabpanel" aria-labelledby="aprob-tab">
-					<h3>APROBACION</h3>
+					<h3>APROBACION DEL CLIENTE</h3>
 					<div class="row">
 						@foreach ($models_4 as $model)
 						@php
@@ -161,7 +186,7 @@ $models_7 = $models->where('status', 'ENTR');
 								<div class="card-body">
 									<h5>
 										<a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-success btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
-										<a href="{{ route( 'approbation.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<a href="{{ route( 'aprobacion.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
@@ -196,7 +221,7 @@ $models_7 = $models->where('status', 'ENTR');
 					</div>
 				</div>
 				<div class="tab-pane fade" id="control" role="tabpanel" aria-labelledby="contr-tab">
-					<h3>CONTROL</h3>
+					<h3>CONTROL DE CALIDAD</h3>
 					<div class="row">
 						@foreach ($models_6 as $model)
 						<div class="col-sm-6 col-md-4">

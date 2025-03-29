@@ -40,10 +40,16 @@
 						</div>
 						<div class="form-row">
 							<div class="col-md-4 col-sm-6">
-
 								{!! Field::select('status', config('options.inventory_status_'.$model->status) , null, ['label' => 'Siguiente Status', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 							</div>
 						</div>
+						@if($model->status == 'PREAP')
+						<div class="form-row">
+							<div class="col-md-4 col-sm-6">
+								{!! Field::date('diagnostico[f_preparobación]', null, ['label' => 'F Apro. Seguro', 'class'=>'form-control-sm', 'required']) !!}
+							</div>
+						</div>
+						@endif
 						<div class="form-row">
 							<div class="col-sm-offset-2 col-sm-10">
 								<button type="submit" class="btn btn-outline-success" id="submit">{!! $icons['save'] !!} Guardar</button>

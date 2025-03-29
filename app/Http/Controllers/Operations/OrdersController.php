@@ -458,6 +458,10 @@ class OrdersController extends Controller {
 	{
 		dd('repuestos_edit');
 	}
+	public function pre_aprobacion_edit($id)
+	{
+		dd('pre_aprobacion_edit');
+	}
 	public function aprobacion_edit($id)
 	{
 		dd('aprobacion_edit');
