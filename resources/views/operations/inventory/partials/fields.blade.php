@@ -1,4 +1,17 @@
 <style>
+    #selectedImage.zoomed {
+        transform: scale(2);
+        cursor: zoom-out;
+    }
+
+    #selectedImage {
+        transition: transform 0.3s ease;
+        max-width: 100%;
+        height: auto;
+        cursor: zoom-in;
+    }
+
+
     .padding-1 {padding-bottom: 1px; padding-top: 1px;}
     .padding-0 { padding-left:0; padding-right:0; }
     .radio-green input[type="radio"] + label { color: green; }
@@ -437,6 +450,10 @@
 
 
 <script>
+    $('#selectedImage').on('click', function () {
+        $(this).toggleClass('zoomed');
+    });
+
         let canvas = document.getElementById("damageCanvas");
         let ctx = canvas.getContext("2d");
         let img = new Image();
