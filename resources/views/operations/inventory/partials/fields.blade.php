@@ -448,7 +448,8 @@
   </div>
 </div>
 
-<script src="https://unpkg.com/@panzoom/panzoom@9.4.3/dist/panzoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+
 
 <script>
 
@@ -530,17 +531,11 @@
         }
 
 $(document).ready(function () {
-    const image = document.getElementById('selectedImage');
-    if (image && typeof Panzoom !== 'undefined') {
-        const panzoom = Panzoom(image, {
-            maxScale: 5,
-            contain: 'outside'
-        });
-
-        image.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
-    } else {
-        console.warn('Panzoom no está disponible o el elemento #selectedImage no existe.');
-    }
+    mediumZoom('#selectedImage', {
+      margin: 24,
+      background: '#000'
+    });
+s
 
     @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
         showImage("/storage/{{ current($model->inventory->photos) }}")
