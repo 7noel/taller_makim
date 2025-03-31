@@ -99,7 +99,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <!-- Jquery ui js -->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
+    <!-- PanZoom -->
+    <script src="https://cdn.jsdelivr.net/npm/panzoom@9.4.3/dist/panzoom.min.js"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Fonts -->
@@ -853,7 +855,7 @@ $(document).ready(function () {
     }
 
     // $('#type_service').change(); // 🔁 Ejecuta la lógica de visibilidad al cargar
-    
+
     $('#type_service').change(function (e) {
         if ('PREVENTIVO' == $('#type_service').val()) {
             $('#preventivo').parent().parent().parent().removeClass("d-none")

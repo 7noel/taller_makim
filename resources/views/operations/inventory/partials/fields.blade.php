@@ -532,6 +532,14 @@
         }
 
 $(document).ready(function () {
+    const imageElement = document.getElementById('selectedImage');
+    const panzoom = Panzoom(imageElement, {
+        maxScale: 5,
+        contain: 'outside',
+    });
+
+    imageElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+    
     @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
         showImage("/storage/{{ current($model->inventory->photos) }}")
     @endif
