@@ -449,7 +449,7 @@
 </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/panzoom@9.4.3/dist/panzoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/panzoom@9.4.3/dist/panzoom.min.js" integrity="sha256-EXkj2hNRjkwrQpvsP/7ePHObzow5rTByiCRLFIWCE/Y=" crossorigin="anonymous"></script>
 <script>
 
         let canvas = document.getElementById("damageCanvas");
@@ -530,14 +530,18 @@
         }
 
 $(document).ready(function () {
-    const imageElement = document.getElementById('selectedImage');
-    const panzoom = Panzoom(imageElement, {
-        maxScale: 5,
-        contain: 'outside',
-    });
+    const image = document.getElementById('selectedImage');
+    if (image && typeof Panzoom !== 'undefined') {
+        const panzoom = Panzoom(image, {
+            maxScale: 5,
+            contain: 'outside'
+        });
 
-    imageElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
-
+        image.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+    } else {
+        console.warn('Panzoom no está disponible o el elemento #selectedImage no existe.');
+    }
+    
     @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
         showImage("/storage/{{ current($model->inventory->photos) }}")
     @endif
