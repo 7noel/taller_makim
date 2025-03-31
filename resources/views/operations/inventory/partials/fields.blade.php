@@ -1,16 +1,20 @@
 <style>
-/*    #selectedImage.zoomed {
-        transform: scale(2);
-        cursor: zoom-out;
+    .medium-zoom-image {
+        max-width: 90vw;
+        max-height: 90vh;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain;
+        display: block;
+        margin: auto;
+    }
+    @media (max-width: 768px) {
+      .medium-zoom-image {
+        max-width: 95vw;
+        max-height: 90vh;
+      }
     }
 
-    #selectedImage {
-        transition: transform 0.3s ease;
-        max-width: 100%;
-        height: auto;
-        cursor: zoom-in;
-    }
-*/
 
     .padding-1 {padding-bottom: 1px; padding-top: 1px;}
     .padding-0 { padding-left:0; padding-right:0; }
