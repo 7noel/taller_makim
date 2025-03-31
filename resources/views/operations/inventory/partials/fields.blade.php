@@ -449,10 +449,8 @@
 </div>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/panzoom@9.4.3/dist/panzoom.min.js"></script>
 <script>
-    // $('#selectedImage').on('click', function () {
-    //     $(this).toggleClass('zoomed');
-    // });
 
         let canvas = document.getElementById("damageCanvas");
         let ctx = canvas.getContext("2d");
@@ -539,7 +537,7 @@ $(document).ready(function () {
     });
 
     imageElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
-    
+
     @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
         showImage("/storage/{{ current($model->inventory->photos) }}")
     @endif
