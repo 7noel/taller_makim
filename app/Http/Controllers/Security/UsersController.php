@@ -7,6 +7,7 @@ use App\Modules\Security\UserRepo;
 use App\Modules\Security\RoleRepo;
 use App\Modules\Finances\CompanyRepo;
 use App\Http\Requests\Security\FormUserRequest;
+use Illuminate\Http\Request;
 
 use App\Http\Requests\Security\ChangePasswordRequest;
 
