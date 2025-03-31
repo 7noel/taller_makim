@@ -409,7 +409,7 @@
         <div class="media-container">
             <div id="imageView" class="image-view" style="display:none;">
                 <img id="selectedImage" src="" alt="Imagen seleccionada">
-                <button class="btn btn-secondary full-screen-btn" id="fullScreenBtn"><i class="fas fa-expand"></i></button>
+                <button type="button" class="btn btn-secondary full-screen-btn" id="fullScreenBtn"><i class="fas fa-expand"></i></button>
             </div>
             <div id="videoPlayer" class="video-player" style="display:none;">
                 <video class="embed-responsive-item" controls></video>
@@ -422,7 +422,7 @@
                     @php $imageId = "image-".$imageCount; @endphp
                 <div class="thumbnail" id="thumbnail-{{ $imageId }}" onclick="showImage('/storage/{{ $photo }}')">
                     <img src="/storage/{{ $photo }}" alt="Foto {{ $imageCount + 1 }}">
-                    <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('{{ $imageId }}')">X</button>
+                    <button type="button" class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('{{ $imageId }}')">X</button>
                 </div>
                 <input type="hidden" id="input-{{ $imageId }}" name="inventory[photos][{{ $imageCount }}]" value="{{ $photo }}">
                 @endforeach
@@ -581,7 +581,7 @@ $(document).ready(function () {
                                 thumbnails.append(`
                                     <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('${publicUrl}')">
                                         <img src="${publicUrl}" alt="Foto ${imageCount + 1}">
-                                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
+                                        <button type="button" class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
                                     </div>
                                 `);
 
@@ -622,7 +622,7 @@ $(document).ready(function () {
                 thumbnails.append(`
                     <div class="thumbnail" id="thumbnail-${videoId}" onclick="playVideo('${e.target.result}')">
                         <video src="${e.target.result}" muted></video>
-                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${videoId}')">X</button>
+                        <button type="button" class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${videoId}')">X</button>
                     </div>
                 `);
                 $('#multimedia').append(`<input type="hidden" id="input-${videoId}" name="inventory[videos][${videoCount}]" value="${e.target.result}">`);
