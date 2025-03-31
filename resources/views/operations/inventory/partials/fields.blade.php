@@ -535,7 +535,7 @@ $(document).ready(function () {
       margin: 24,
       background: '#000'
     });
-s
+
 
     @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
         showImage("/storage/{{ current($model->inventory->photos) }}")
