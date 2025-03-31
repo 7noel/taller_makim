@@ -1,5 +1,5 @@
 <style>
-    .medium-zoom-image {
+/*    .medium-zoom-image {
         max-width: 90vw;
         max-height: 90vh;
         width: auto !important;
@@ -14,7 +14,7 @@
         max-height: 90vh;
       }
     }
-
+*/
 
     .padding-1 {padding-bottom: 1px; padding-top: 1px;}
     .padding-0 { padding-left:0; padding-right:0; }
@@ -452,7 +452,7 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script> -->
 
 
 <script>
@@ -535,10 +535,10 @@
         }
 
 $(document).ready(function () {
-    mediumZoom('#selectedImage', {
-      margin: 24,
-      background: '#000'
-    });
+    // mediumZoom('#selectedImage', {
+    //   margin: 24,
+    //   background: '#000'
+    // });
 
 
     @if(isset($model->inventory->photos) and !is_null($model->inventory->photos))
