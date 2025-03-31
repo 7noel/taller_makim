@@ -1,5 +1,5 @@
 <style>
-    #selectedImage.zoomed {
+/*    #selectedImage.zoomed {
         transform: scale(2);
         cursor: zoom-out;
     }
@@ -10,7 +10,7 @@
         height: auto;
         cursor: zoom-in;
     }
-
+*/
 
     .padding-1 {padding-bottom: 1px; padding-top: 1px;}
     .padding-0 { padding-left:0; padding-right:0; }
@@ -450,9 +450,9 @@
 
 
 <script>
-    $('#selectedImage').on('click', function () {
-        $(this).toggleClass('zoomed');
-    });
+    // $('#selectedImage').on('click', function () {
+    //     $(this).toggleClass('zoomed');
+    // });
 
         let canvas = document.getElementById("damageCanvas");
         let ctx = canvas.getContext("2d");
