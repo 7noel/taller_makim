@@ -448,8 +448,8 @@
   </div>
 </div>
 
+<script src="https://unpkg.com/@panzoom/panzoom@9.4.3/dist/panzoom.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/panzoom@9.4.3/dist/panzoom.min.js" integrity="sha256-EXkj2hNRjkwrQpvsP/7ePHObzow5rTByiCRLFIWCE/Y=" crossorigin="anonymous" defer></script>
 <script>
 
         let canvas = document.getElementById("damageCanvas");
