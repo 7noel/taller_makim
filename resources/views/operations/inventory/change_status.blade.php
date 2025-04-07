@@ -44,7 +44,7 @@
 							</div>
 							@if($model->status == 'PREAP')
 								<div class="col-md-4 col-sm-6">
-									{!! Field::date('diagnostico[f_preparobación]', null, ['label' => 'Fecha Apro. Seguro', 'class'=>'form-control-sm', 'required']) !!}
+									{!! Field::date('pre_aprobacion[f_pre_parobacion]', null, ['label' => 'Fecha Apro. Seguro', 'class'=>'form-control-sm', 'required']) !!}
 								</div>
 							@endif
 						</div>

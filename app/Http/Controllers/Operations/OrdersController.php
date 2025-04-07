@@ -468,6 +468,8 @@ class OrdersController extends Controller {
 	}
 	public function repair_edit($id)
 	{
+		$model = $this->repo->findOrFail($id);
+		return view('operations.inventory.reparacion', compact('model'));
 		dd('repair_edit');
 	}
 	public function controlcalidad_edit($id)

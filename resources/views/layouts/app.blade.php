@@ -839,17 +839,17 @@ $(document).ready(function () {
     // Ejecutar directamente la lógica sin necesidad del evento
     const type_service = $('#type_service').val();
     if (type_service === 'PREVENTIVO') {
-        $('#preventivo').parent().parent().parent().removeClass("d-none");
-        $('#seguro').parent().parent().parent().addClass("d-none");
+        $('#preventivo').parent().parent().removeClass("d-none");
+        $('#seguro').parent().parent().addClass("d-none");
         $('#preventivo').attr("required", "required");
         $('#seguro').removeAttr("required");
     } else if (type_service === 'SINIESTRO') {
-        $('#preventivo').parent().parent().parent().addClass("d-none");
-        $('#seguro').parent().parent().parent().removeClass("d-none");
+        $('#preventivo').parent().parent().addClass("d-none");
+        $('#seguro').parent().parent().removeClass("d-none");
         $('#preventivo').removeAttr("required");
         $('#seguro').attr("required", "required");
     } else {
-        $('#preventivo').parent().parent().parent().addClass("d-none");
+        $('#preventivo').parent().parent().addClass("d-none");
         $('#seguro').parent().parent().parent().addClass("d-none");
         $('#preventivo').removeAttr("required");
         $('#seguro').removeAttr("required");
@@ -859,18 +859,18 @@ $(document).ready(function () {
 
     $('#type_service').change(function (e) {
         if ('PREVENTIVO' == $('#type_service').val()) {
-            $('#preventivo').parent().parent().parent().removeClass("d-none")
-            $('#seguro').parent().parent().parent().addClass( "d-none")
+            $('#preventivo').parent().parent().removeClass("d-none")
+            $('#seguro').parent().parent().addClass( "d-none")
             $('#preventivo').attr("required", "required")
             $('#seguro').removeAttr("required", "required")
         } else if ('SINIESTRO' == $('#type_service').val()) {
-            $('#preventivo').parent().parent().parent().addClass( "d-none")
-            $('#seguro').parent().parent().parent().removeClass( "d-none")
+            $('#preventivo').parent().parent().addClass( "d-none")
+            $('#seguro').parent().parent().removeClass( "d-none")
             $('#preventivo').removeAttr("required", "required")
             $('#seguro').attr("required", "required")
         } else {
-            $('#preventivo').parent().parent().parent().addClass( "d-none")
-            $('#seguro').parent().parent().parent().addClass( "d-none")
+            $('#preventivo').parent().parent().addClass( "d-none")
+            $('#seguro').parent().parent().addClass( "d-none")
             $('#preventivo').removeAttr("required", "required")
             $('#seguro').removeAttr("required", "required")
         }

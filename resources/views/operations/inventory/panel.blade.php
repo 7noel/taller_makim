@@ -110,7 +110,7 @@ $models_7 = $models->where('status', 'ENTR');
 				<div class="tab-pane fade" id="diagnostico" role="tabpanel" aria-labelledby="diag-tab">
 					<h3>DIAGNÓSTICO (PRESUPUESTO)</h3>
 					<div class="row">
-						@foreach ($models_2 as $model)
+						@foreach ($models_2->sortByDesc('diag_at') as $model)
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
@@ -156,12 +156,12 @@ $models_7 = $models->where('status', 'ENTR');
 				<div class="tab-pane fade" id="pre_aprobacion" role="tabpanel" aria-labelledby="repu-tab">
 					<h3>APROBACIÓN DEL SEGURO</h3>
 					<div class="row">
-						@foreach ($models_3_2 as $model)
+						@foreach ($models_3_2->sortByDesc('pre_approved_at') as $model)
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
 									<h5>
-										<a href="{{ route( 'pre_aprobacion.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<!-- <a href="{{ route( 'pre_aprobacion.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a> -->
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
@@ -177,7 +177,7 @@ $models_7 = $models->where('status', 'ENTR');
 				<div class="tab-pane fade" id="aprobacion" role="tabpanel" aria-labelledby="aprob-tab">
 					<h3>APROBACION DEL CLIENTE</h3>
 					<div class="row">
-						@foreach ($models_4 as $model)
+						@foreach ($models_4->sortByDesc('approved_at') as $model)
 						@php
 						$texto = "Hola, el diagnóstico de tu vehículo {$model->car->modelo->brand->name} {$model->car->modelo->name} placa: {$model->car->placa} ya está listo, puedes ver los detalles y aprobar la reparación en el siguiente link {route( 'order_client' , $model->slug)}";
 						@endphp
@@ -186,7 +186,7 @@ $models_7 = $models->where('status', 'ENTR');
 								<div class="card-body">
 									<h5>
 										<a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-success btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
-										<a href="{{ route( 'aprobacion.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										<!-- <a href="{{ route( 'aprobacion.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a> -->
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
 									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
@@ -202,7 +202,7 @@ $models_7 = $models->where('status', 'ENTR');
 				<div class="tab-pane fade" id="reparacion" role="tabpanel" aria-labelledby="repar-tab">
 					<h3>REPARACION</h3>
 					<div class="row">
-						@foreach ($models_5 as $model)
+						@foreach ($models_5->sortByDesc('repar_at') as $model)
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
@@ -223,7 +223,7 @@ $models_7 = $models->where('status', 'ENTR');
 				<div class="tab-pane fade" id="control" role="tabpanel" aria-labelledby="contr-tab">
 					<h3>CONTROL DE CALIDAD</h3>
 					<div class="row">
-						@foreach ($models_6 as $model)
+						@foreach ($models_6->sortByDesc('checked_at') as $model)
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
@@ -244,7 +244,7 @@ $models_7 = $models->where('status', 'ENTR');
 				<div class="tab-pane fade" id="entrega" role="tabpanel" aria-labelledby="entr-tab">
 					<h3>ENTREGA</h3>
 					<div class="row">
-						@foreach ($models_7 as $model)
+						@foreach ($models_7->sortByDesc('sent_at') as $model)
 						@php
 						$texto = "Hola, desde ".env('APP_NAME').". queremos agradecerte por usar nuestros servicios, por favor calificanos aquí ".route( 'order_client' , $model->slug) . ", queremos mejorar para ti";
 						@endphp

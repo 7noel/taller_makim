@@ -337,6 +337,9 @@ class OrderRepo extends BaseRepo{
 		$status_log[] = $log;
 		$model->status_log = $status_log;
 		$model->status = $data['status'];
+		if ( isset($data['pre_aprobacion']) ) {
+			$model->pre_aprobacion = $data['pre_aprobacion'];
+		}
 		if ($data['status'] != 'PEND') {
 			$_at = $order_status[$data['status']];
 			$model->$_at = $data[$order_status[$data['status']]];
