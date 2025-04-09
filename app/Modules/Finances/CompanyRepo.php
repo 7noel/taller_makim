@@ -23,11 +23,17 @@ class CompanyRepo extends BaseRepo{
 	
 	public function autocomplete($type, $my_company, $term)
 	{
+		// $matriz = array('clients', 'shippers', 'providers', 'my_company');
+		// if (in_array($type, $matriz)) {
+		// 	return Company::where('my_company', $my_company)->where('entity_type', $type)->where(function ($query) use ($term) {$query->where('company_name','like',"%$term%")->orWhere('doc','like',"%$term%");})->with('branches')->get();
+		// } else {
+		// 	return Company::where('my_company', $my_company)->where('company_name','like',"%$term%")->orWhere('doc','like',"%$term%")->with('branches')->get();
+		// }
 		$matriz = array('clients', 'shippers', 'providers', 'my_company');
 		if (in_array($type, $matriz)) {
-			return Company::where('my_company', $my_company)->where('entity_type', $type)->where(function ($query) use ($term) {$query->where('company_name','like',"%$term%")->orWhere('doc','like',"%$term%");})->with('branches')->get();
+			return Company::where('entity_type', $type)->where(function ($query) use ($term) {$query->where('company_name','like',"%$term%")->orWhere('doc','like',"%$term%");})->with('branches')->get();
 		} else {
-			return Company::where('my_company', $my_company)->where('company_name','like',"%$term%")->orWhere('doc','like',"%$term%")->with('branches')->get();
+			return Company::where('company_name','like',"%$term%")->orWhere('doc','like',"%$term%")->with('branches')->get();
 		}
 	}
 		// } elseif ($type == 'shippers') {
