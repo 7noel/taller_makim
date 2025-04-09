@@ -107,28 +107,20 @@
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
-                <div class="form-group">
-                    @if(isset(\Auth::user()->employee->job_id) and (\Auth::user()->employee->job_id == 8 or \Auth::user()->id==3))
+                @if(isset(\Auth::user()->employee->job_id) and (\Auth::user()->employee->job_id == 8 or \Auth::user()->id==3))
                     {!! Field::select('seller_id', [\Auth::user()->employee->id => \Auth::user()->employee->full_name], ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
-                    @else
+                @else
                     {!! Field::select('seller_id', $sellers, ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}
                 @endif
-                </div>
             </div>
             <div class="col-sm-2">
-                <div class="form-group">
-                    {!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
-                </div>
+                {!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
             </div>
             <div class="col-sm-2 d-none">
-                <div class="form-group">
-                    {!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}
-                </div>
+                {!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}
             </div>
             <div class="col-sm-2 d-none">
-                <div class="form-group">
-                    {!! Field::select('inventory[seguro]', config('options.cia_seguros'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm', 'id'=>'seguro']) !!}
-                </div>
+                {!! Field::select('inventory[seguro]', config('options.cia_seguros'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm', 'id'=>'seguro']) !!}
             </div>
         </div>
         <div class="form-row">

@@ -850,9 +850,9 @@ $(document).ready(function () {
         $('#seguro').attr("required", "required");
     } else {
         $('#preventivo').parent().parent().addClass("d-none");
-        $('#seguro').parent().parent().parent().addClass("d-none");
-        $('#preventivo').removeAttr("required");
-        $('#seguro').removeAttr("required");
+        $('#seguro').parent().parent().addClass("d-none");
+        // $('#preventivo').removeAttr("required");
+        // $('#seguro').removeAttr("required");
     }
 
     // $('#type_service').change(); // 🔁 Ejecuta la lógica de visibilidad al cargar
