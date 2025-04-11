@@ -254,7 +254,11 @@
 				</tr>
 				<tr>
 					<td class="label2">Combustible:</td>
+					@if(isset($model->inventory->combustible))
 					<td colspan="3">{{ config('options.combustible.'.$model->inventory->combustible) }}</td>
+					@else
+					<td colspan="3"></td>
+					@endif
 				</tr>
 				<tr>
 					<td class="label2">Kilometraje:</td>
