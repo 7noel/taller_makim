@@ -1060,7 +1060,7 @@ function addRowProduct2() {
         // window.el.find('.spanCodigo').text($('#txtCodigo').val())
         // window.el.find('.unitId').val($('#unitId').val())
         window.el.find('.txtCantidad').val(q)
-        window.el.find('.spanCantidad').text(q+' '+u)
+        window.el.find('.spanCantidad').text(q + ' ' + unidad)
         window.el.find('.txtValue').val(v)
         window.el.find('.spanValue').text(v)
         window.el.find('.txtDscto2').val(d2)
