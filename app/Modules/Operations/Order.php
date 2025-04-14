@@ -78,7 +78,7 @@ class Order extends Model implements Auditable
 	}
 	public function user()
 	{
-		return $this->belongsTo('App\Modules\Security\Company','user_id');
+		return $this->belongsTo('App\Modules\Security\User','user_id');
 	}
 	public function currency()
 	{

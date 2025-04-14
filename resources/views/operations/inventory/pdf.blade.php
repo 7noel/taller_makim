@@ -170,6 +170,10 @@
 	<tr>
 		<td style="width:50%; border: none;">
 			<table class="table-ingreso">
+				<!-- <tr>
+					<td class="label">Inventariado por:</td>
+					<td class="">{{ $model->id }}</td>
+				</tr> -->
 				<tr>
 					<td class="label">Asesor:</td>
 					<td class="">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
