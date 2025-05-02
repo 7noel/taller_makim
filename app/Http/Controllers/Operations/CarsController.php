@@ -35,7 +35,7 @@ class CarsController extends Controller {
 	public function create()
 	{
 		$bodies = config('options.bodies');
-		$brands = $this->brandRepo->getList();
+		$brands = $this->brandRepo->getList2();
 		// $modelos = $this->modeloRepo->getListGroup('brand');
 		$modelos = [];
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
@@ -45,7 +45,7 @@ class CarsController extends Controller {
 	public function createByClient($client_id)
 	{
 		$client = $this->companyRepo->find($client_id);
-		$brands = $this->brandRepo->getList();
+		$brands = $this->brandRepo->getList22();
 		$modelos = [];
 		$bodies = config('options.bodies');
 		$modelos = $this->modeloRepo->getListGroup('brand');
@@ -71,7 +71,7 @@ class CarsController extends Controller {
 	public function show($id)
 	{
 		$model = $this->repo->findOrFail($id);
-		$brands = $this->brandRepo->getList();
+		$brands = $this->brandRepo->getList2();
 		$modelos = $model->brand->modelos->sortBy('name')->pluck('name', 'id')->toArray();
 		$bodies = config('options.bodies');
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
@@ -81,7 +81,7 @@ class CarsController extends Controller {
 	public function edit($id)
 	{
 		$model = $this->repo->findOrFail($id);
-		$brands = $this->brandRepo->getList();
+		$brands = $this->brandRepo->getList2();
 		$modelos = $model->brand->modelos->sortBy('name')->pluck('name', 'id')->toArray();
 		$bodies = config('options.bodies');
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
