@@ -21,7 +21,7 @@ class BrandRepo extends BaseRepo{
 
 	public function getList2($name='name', $id='id')
 	{
-		return Brand::where('is_car',true)->pluck($name, $id)->toArray();
+		return Brand::pluck($name, $id)->toArray();
 	}
 	public function allOrderName($name='name', $id='id')
 	{
