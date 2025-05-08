@@ -12,7 +12,7 @@
 		{!! Field::select('seller_id', $sellers, ['empty' => 'Todos', 'label'=>'Asesor','class'=>'form-control-sm']) !!}
 	</div> -->
 	<div class="col-sm-2">
-		{!! Field::select('status_id', config('options.inventory_status'), ['empty' => 'Seleccionar', 'label'=>'Status','class'=>'form-control-sm']) !!}
+		{!! Field::select('status_id', config('options.inventory_status'), ['empty' => 'Todos', 'label'=>'Status','class'=>'form-control-sm']) !!}
 	</div>
 </div>
 
