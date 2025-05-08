@@ -85,6 +85,7 @@ class ComposerServiceProvider extends ServiceProvider
             'email' => '<i class="far fa-envelope"></i>',
             'send' => '<i class="far fa-paper-plane"></i>',
             'printer' => '<i class="fas fa-print"></i>',
+            'excel' => '<i class="fa-solid fa-file-excel"></i>',
             'pdf' => '<i class="fas fa-file-pdf"></i>',
             'xml' => '<i class="far fa-file-code"></i>',
             'list' => '<i class="fas fa-list"></i>',

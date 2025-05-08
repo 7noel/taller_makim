@@ -14,6 +14,7 @@ use App\Modules\Base\CurrencyRepo;
 use App\Modules\Finances\BankRepo;
 use App\Modules\Operations\CarRepo;
 use App\Modules\Base\TableRepo;
+use App\Exports\OrdersExport;
 
 class OrdersController extends Controller {
 
@@ -50,6 +51,9 @@ class OrdersController extends Controller {
 
 		$sellers = $this->companyRepo->getListSellers();
 		$locals = $this->companyRepo->getListMyCompany();
+		if (isset($filter->excel)) {
+	        return \Excel::download(new OrdersExport('operations.inventory.export_excel', $models), 'inventarios_vehicular.xlsx');
+		}
 		return view('partials.filter',compact('models', 'filter', 'sellers', 'locals'));
 	}
 	public function byQuote($quote_id)
