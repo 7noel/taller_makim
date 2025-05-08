@@ -8,12 +8,12 @@
 	<div class="col-sm-2">
 		{!! Field::select('mycompany_id', $locals, ['empty' => 'Todos', 'label'=>'Taller','class'=>'form-control-sm']) !!}
 	</div>
-	<div class="col-sm-2">
+	<!-- <div class="col-sm-2">
 		{!! Field::select('seller_id', $sellers, ['empty' => 'Todos', 'label'=>'Asesor','class'=>'form-control-sm']) !!}
-	</div><!-- 
-	<div class="col-sm-2">
-		{!! Field::select('status_id', config('options.quote_status'), ['empty' => 'Seleccionar', 'label'=>'Status','class'=>'form-control-sm']) !!}
 	</div> -->
+	<div class="col-sm-2">
+		{!! Field::select('status_id', config('options.inventory_status'), ['empty' => 'Seleccionar', 'label'=>'Status','class'=>'form-control-sm']) !!}
+	</div>
 </div>
 
 <div class="form-row">
