@@ -361,31 +361,27 @@ $(document).ready(function () {
         }
     });
 
-    $('#placa').on('keyup', function (e) {
-        let valor = $('#placa').val().toUpperCase()// Convertir a mayúsculas automáticamente
-        
+    $('#placa, #txtplaca').on('keyup', function (e) {
+        let $input = $(this);
+        let valor = $input.val().toUpperCase(); // Convertir a mayúsculas
+
         // Filtrar caracteres no permitidos y limitar a 6 caracteres
         let nuevoValor = valor.replace(/[^A-Z0-9]/g, '').slice(0, 6);
-        
-        // Actualizar el valor del input si hubo modificaciones
-        //if (valor !== nuevoValor) {
-            $('#placa').val(nuevoValor)
-        //}
 
-        // console.log("Valor actual:", nuevoValor); // Para depuración en la consola
+        // Actualizar el valor del input si hubo modificaciones
+        $input.val(nuevoValor);
 
         // Validar estructura (1 letra + 4 o 5 alfanuméricos)
         let regex = /^[A-Z0-9]{5,6}$/;
-        // let regex = /^[A-Z][A-Z0-9]{4,5}$/; //En caso de autos
 
         if (nuevoValor.length === 0) {
-            $('#placa')[0].setCustomValidity(""); // No mostrar error si está vacío
+            $input[0].setCustomValidity(""); // No mostrar error si está vacío
         } else if (!regex.test(nuevoValor)) {
-            $('#placa')[0].setCustomValidity("Debe comenzar con una letra y tener 5 o 6 caracteres alfanuméricos.");
+            $input[0].setCustomValidity("Debe tener 5 o 6 caracteres alfanuméricos.");
         } else {
-            $('#placa')[0].setCustomValidity("");
+            $input[0].setCustomValidity("");
         }
-    })
+    });
     // let input = document.getElementById('placa');
     // input.addEventListener('input', function(event) {
     //     let valor = input.value.toUpperCase(); // Convertir a mayúsculas automáticamente

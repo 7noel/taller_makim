@@ -40,6 +40,7 @@ class OrdersController extends Controller {
 		if( !((array) $filter) ) {
 			$filter->sn = '';
 			$filter->placa = '';
+			$filter->mycompany_id = '';
 			$filter->seller_id = '';
 			$filter->status = '';
 			$filter->f1 = date('Y-m-d', strtotime('first day of this month'));
@@ -48,7 +49,8 @@ class OrdersController extends Controller {
 		$models = $this->repo->filter($filter);
 
 		$sellers = $this->companyRepo->getListSellers();
-		return view('partials.filter',compact('models', 'filter', 'sellers'));
+		$locals = $this->companyRepo->getListMyCompany();
+		return view('partials.filter',compact('models', 'filter', 'sellers', 'locals'));
 	}
 	public function byQuote($quote_id)
 	{

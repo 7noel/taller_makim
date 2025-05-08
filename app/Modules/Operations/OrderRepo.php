@@ -270,7 +270,7 @@ class OrderRepo extends BaseRepo{
 	public function filter($filter)
 	{
 		$order_type = explode('.', \Request::route()->getName())[0];
-		$q = Order::with('proof', 'company')->where('my_company', session('my_company')->id)->where('order_type', $order_type);
+		$q = Order::with('proof', 'company')->where('order_type', $order_type);
 		if ($filter->sn > 0) {
 			return $q->where('sn', $filter->sn)->orderBy('id', 'desc')->get();
 		} elseif (trim($filter->placa) != '') {
@@ -278,6 +278,9 @@ class OrderRepo extends BaseRepo{
 			//return Order::where('placa', $filter->placa)->orderBy('sn', 'desc')->get();
 		} else {
 			$q->where('created_at', '>=', $filter->f1)->where('created_at', '<=', $filter->f2.' 23:59:59');
+			if(isset($filter->mycompany_id) && $filter->mycompany_id != '') {
+				$q->where('my_company', $filter->mycompany_id);
+			}
 			if(isset($filter->seller_id) && $filter->seller_id != '') {
 				$q->where('seller_id', $filter->seller_id);
 			}

@@ -6,11 +6,14 @@
 		{!! Field::date('f2', ['label'=>'Hasta','class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::select('seller_id', $sellers, ['empty' => 'Seleccionar', 'label'=>'Asesor','class'=>'form-control-sm']) !!}
+		{!! Field::select('mycompany_id', $locals, ['empty' => 'Todos', 'label'=>'Taller','class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-sm-2">
+		{!! Field::select('seller_id', $sellers, ['empty' => 'Todos', 'label'=>'Asesor','class'=>'form-control-sm']) !!}
+	</div><!-- 
+	<div class="col-sm-2">
 		{!! Field::select('status_id', config('options.quote_status'), ['empty' => 'Seleccionar', 'label'=>'Status','class'=>'form-control-sm']) !!}
-	</div>
+	</div> -->
 </div>
 
 <div class="form-row">
@@ -18,6 +21,6 @@
 		{!! Field::text('placa', ['label'=>'Placa','class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::text('sn', ['label'=>'Número OT','class'=>'form-control-sm']) !!}
+		{!! Field::text('sn', ['label'=>'Número','class'=>'form-control-sm']) !!}
 	</div>
 </div>
