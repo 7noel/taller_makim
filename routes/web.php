@@ -19,6 +19,7 @@ Route::get('houses', function () {
 Route::get('demo2', function () {
 	return view('demo2');
 });
+Route::get('dataTable', 'HomeController@dataTable');
 Route::get('/', 'HomeController@index');
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 
@@ -77,6 +78,10 @@ Route::group(['middleware'=>['auth']], function(){
 	Route::get('storage/products/autocomplete/{warehouse_id}', ['as' => 'productsAutocomplete','uses' => 'Storage\ProductsController@ajaxAutocomplete']);
 	Route::get('storage/products/ajaxGetData/{warehouse_id}/{product_id}', ['as' => 'ajaxGetData','uses' => 'Storage\ProductsController@ajaxGetData']);
 	Route::get('guard/users/autocomplete', ['as' => 'usersAutocomplete','uses' => 'Security\UsersController@ajaxAutocomplete']);
+
+	Route::get('clients/ajax-list', 'Finances\CompanyController@ajaxList')->name('clients.ajaxList');
+	Route::get('providers/ajax-list', 'Finances\CompanyController@ajaxList')->name('providers.ajaxList');
+	Route::get('employees/ajax-list', 'Finances\CompanyController@ajaxList')->name('employees.ajaxList');
 	Route::get('api/companies/autocompleteAjax/{type}/{my_company}/', ['as' => 'companiesAutocomplete','uses' => 'Finances\CompanyController@ajaxAutocomplete']);
 	Route::get('api/sellers/autocompleteAjax', ['as' => 'sellersAutocomplete','uses' => 'HumanResources\EmployeesController@ajaxAutocompleteSellers']);
 	Route::get('api/products/autocompleteAjax', ['as' => 'productsAutocomplete','uses' => 'Storage\ProductsController@ajaxAutocomplete']);

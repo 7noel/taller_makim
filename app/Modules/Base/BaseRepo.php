@@ -36,17 +36,17 @@ abstract class BaseRepo{
 	public function index($filter = false, $search = false)
 	{
 		if ($filter and $search) {
-			return $this->model->where('my_company', session('my_company')->id)->$filter($search)->orderBy("$filter", 'ASC')->paginate();
+			return $this->model->where('my_company', session('my_company')->id)->$filter($search)->orderBy("$filter", 'ASC')->get();
 		} else {
-			return $this->model->where('my_company', session('my_company')->id)->orderBy('id', 'DESC')->paginate();
+			return $this->model->where('my_company', session('my_company')->id)->orderBy('id', 'DESC')->get();
 		}
 	}
 	public function index2($filter = false, $search = false)
 	{
 		if ($filter and $search) {
-			return $this->model->$filter($search)->orderBy("$filter", 'ASC')->paginate();
+			return $this->model->$filter($search)->orderBy("$filter", 'ASC')->get();
 		} else {
-			return $this->model->orderBy('id', 'DESC')->paginate();
+			return $this->model->orderBy('id', 'DESC')->get();
 		}
 	}
 

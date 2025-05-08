@@ -18,10 +18,8 @@
 								{!! $icons['add'] !!} {{ $labels['index.create'] }}
 							</a>
 						</div>
-						@include('partials.search')
 					</div>
 					@include($views['table'])
-					{!! $models->appends(\Request::only(['name']))->render() !!}
 				</div>
 			</div>
 		</div>

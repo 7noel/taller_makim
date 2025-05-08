@@ -14,9 +14,9 @@ class PermissionRepo extends BaseRepo{
 	public function index($filter = false, $search = false)
 	{
 		if ($filter and $search) {
-			return Permission::$filter($search)->with('permission_group')->orderBy("$filter", 'ASC')->paginate();
+			return Permission::$filter($search)->with('permission_group')->orderBy("$filter", 'ASC')->get();
 		} else {
-			return Permission::with('permission_group')->orderBy('id', 'DESC')->paginate();
+			return Permission::with('permission_group')->orderBy('id', 'DESC')->get();
 		}
 	}
 

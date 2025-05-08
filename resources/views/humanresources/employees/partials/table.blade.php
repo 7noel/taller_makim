@@ -1,4 +1,4 @@
-<table class="{{ config('options.styles.table') }}">
+<table id="miTablaAjax" class="{{ config('options.styles.table') }}">
 	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
 			<th>#</th>
@@ -14,7 +14,7 @@
 		<tr data-id="{{ $model->id }}">
 			<td>{{ $model->id }}</td>
 			<td>{{ $model->company_name }}</td>
-			<td>{{ config('options.id_types.'.$model->id_type).' '.$model->doc }}</td>
+			<td>{{ config('options.client_doc.'.$model->id_type).' '.$model->doc }}</td>
 			<td>{{ $model->job->name }}</td>
 			<td>{{ $model->mycompany->brand_name }}</td>
 			<td>
@@ -25,3 +25,26 @@
 		@endforeach
 	</tbody>
 </table>
+
+<script>
+$(document).ready(function () {
+    $('#miTablaAjax').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route("employees.ajaxList") }}',
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'company_name', name: 'company_name' },
+            { data: 'doc', name: 'doc' },
+            { data: 'job', name: 'job' },
+            { data: 'local', name: 'local' },
+            { data: 'acciones', name: 'acciones', orderable: false, searchable: false }
+        ],
+        lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
+        pageLength: 50,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+        }
+    });
+});
+</script>

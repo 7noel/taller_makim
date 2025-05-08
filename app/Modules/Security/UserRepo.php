@@ -35,9 +35,9 @@ class UserRepo extends BaseRepo{
 	public function index($filter = false, $search = false)
 	{
 		if ($filter and $search) {
-			return User::$filter($search)->orderBy("$filter", 'ASC')->paginate();
+			return User::$filter($search)->orderBy("$filter", 'ASC')->get();
 		} else {
-			return User::orderBy('id', 'DESC')->paginate();
+			return User::orderBy('id', 'DESC')->get();
 		}
 	}
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Modules\Finances\CompanyRepo;
+use App\Modules\Finances\Company;
 use App\Modules\Base\UbigeoRepo;
 use App\Modules\Base\TableRepo;
 
@@ -59,9 +60,69 @@ class CompanyController extends Controller {
 		// return redirect()->route($this->getType().'.index');
 	}
 
+	public function ajaxList(Request $request)
+	{
+	    $type = explode('.', \Request::route()->getName())[0];
+	    //dd(\Request::route()->getName());
+
+	    $query = Company::where('entity_type', $type);
+
+	    // Búsqueda general
+	    if ($search = $request->input('search.value')) {
+	        $query->where(function ($q) use ($search) {
+	            $q->where('company_name', 'like', "%{$search}%")
+	              ->orWhere('doc', 'like', "%{$search}%");
+	        });
+	    }
+
+	    $total = $query->count();
+
+	    // Ordenamiento
+	    if ($order = $request->input('order')) {
+	        $columns = ['id', 'company_name', 'doc'];
+	        $columnIndex = $order[0]['column'];
+	        $dir = $order[0]['dir'];
+	        $query->orderBy($columns[$columnIndex], $dir);
+	    }
+
+	    // Paginación
+	    $start = intval($request->input('start'));
+		$length = intval($request->input('length'));
+		$page = ($start / $length) + 1;
+		$query->forPage($page, $length);
+
+
+	    $models = $query->get();
+
+	    $data = $models->map(function ($model) use ($type) {
+			if ($type=='employees') {
+				$dir_view_actions ="humanresources.{$type}.partials.actions";
+			} else {
+				$dir_view_actions ="finances.{$type}.partials.actions";
+			}
+			return [
+				'id' => $model->id,
+				'company_name' => $model->company_name,
+	            'doc'        => config('options.client_doc.'.$model->id_type).' '.$model->doc,
+	            'job'        => optional($model->job)->name,
+	            'local'      => optional($model->mycompany)->brand_name,
+				'acciones' => view($dir_view_actions, compact('model', 'type'))->render()
+			];
+
+	    });
+
+	    return response()->json([
+	        'draw' => intval($request->input('draw')),
+	        'recordsTotal' => $total,
+	        'recordsFiltered' => $total,
+	        'data' => $data,
+	    ]);
+	}
+
 	public function index()
 	{
-		$models = $this->repo->index('name', request()->get('name'));
+		$models = [];
+		// $models = $this->repo->index('name', request()->get('name'));
 		return view('partials.index',compact('models'));
 	}
 

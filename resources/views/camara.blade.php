@@ -4,217 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Vehículo</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        .thumbnail {
-    position: relative;
-    cursor: pointer;
-    margin: 5px;
-    width: 100px; /* Ancho de la miniatura */
-    height: 56.25px; /* Proporción 16:9 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Evitar que se salgan las imágenes */
-    background-color: black; /* Fondo negro */
-    border-radius: 4px; /* Opcional: esquinas redondeadas */
-}
+    
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-.thumbnail img, .thumbnail video {
-    max-width: 100%; /* No exceder el ancho de la miniatura */
-    max-height: 100%; /* No exceder la altura de la miniatura */
-    object-fit: cover; /* Mantener la proporción */
-}
-.thumbnails {
-    display: flex;
-    flex-wrap: wrap; /* Permitir que se envuelvan las miniaturas */
-    justify-content: center; /* Centrar miniaturas */
-    margin-top: 10px; /* Espaciado superior */
-}
+    <!-- Jquery ui js -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
-        .remove-btn { position: absolute; top: 5px; right: 5px; }
-        .full-screen-btn { position: absolute; bottom: 5px; right: 5px; }
-        .media-container { background-color: gray; margin-top: 10px; }
-        .video-player, .image-view {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            overflow: hidden;
-        }
-        #videoPlayer video, #selectedImage {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-    </style>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap4.css">
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Botones -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap4.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
 </head>
 <body>
     <div class="container">
         <h1>Formulario de Vehículo</h1>
 
-        <form>
+        <table id="miTabla" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cliente</th>
+                    <th>Placa</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+        </table>
 
-      <label for="validationServer03">City</label>
-      <input type="text" class="form-control is-invalid" id="validationServer03" aria-describedby="" required>
-      <div id="validationServer03Feedback" class="invalid-feedback">
-        Please provide a valid city.
-      </div>
-
-        </form>
-
-        <form id="vehicleForm">
-            <div class="form-group">
-                <label for="placa">Placa</label>
-                <input type="text" class="form-control" id="placa" required>
-            </div>
-            <div class="form-group">
-                <label for="kilometraje">Kilometraje</label>
-                <input type="number" class="form-control" id="kilometraje" required>
-            </div>
-            <div class="form-group">
-                <label for="contacto">Contacto</label>
-                <input type="text" class="form-control" id="contacto" required>
-            </div>
-            <div class="form-group">
-                <label for="celular">Celular</label>
-                <input type="tel" class="form-control" id="celular" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" required>
-            </div>
-            <input type="file" accept="image/*" id="photoInput" style="display:none;" capture="camera">
-            <button type="button" class="btn btn-outline-primary" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
-            <input type="file" accept="video/*" id="videoInput" style="display:none;" capture="camera">
-            <button type="button" class="btn btn-outline-primary" id="addVideo"><i class="fas fa-video"></i> Grabar Video</button>
-            
-            <div class="media-container">
-                <div id="imageView" class="image-view" style="display:none;">
-                    <img id="selectedImage" src="" alt="Imagen seleccionada">
-                    <button class="btn btn-secondary full-screen-btn" id="fullScreenBtn"><i class="fas fa-expand"></i></button>
-                </div>
-                <div id="videoPlayer" class="video-player" style="display:none;">
-                    <video class="embed-responsive-item" controls></video>
-                </div>
-            </div>
-            <div class="thumbnails d-flex flex-wrap mt-2"></div>
-            <h3>Estado de Componentes</h3>
-            <div class="form-group">
-                <label>Aceite de Motor</label>
-                <input type="text" class="form-control mb-2" placeholder="Comentario">
-                <div>
-                    <label><input type="radio" name="oil" value="ok"> <span style="color:green;">Ok</span></label>
-                    <label><input type="radio" name="oil" value="suggested"> <span style="color:gold;">Sugerido</span></label>
-                    <label><input type="radio" name="oil" value="urgent"> <span style="color:red;">Urgente</span></label>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-success">Enviar</button>
-        </form>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script>
-$(document).ready(function () {
-    let imageCount = 0;
-    let videoCount = 0;
-
-    $('#addPhoto').on('click', function () {
-        $('#photoInput').click();
-    });
-
-    $('#photoInput').on('change', function (event) {
-        const files = event.target.files;
-        const thumbnails = $('.thumbnails');
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const imageId = `image-${imageCount}`;
-                thumbnails.append(`
-                    <div class="thumbnail" id="thumbnail-${imageId}" onclick="showImage('${e.target.result}')">
-                        <img src="${e.target.result}" alt="Foto ${imageCount + 1}">
-                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${imageId}')">X</button>
-                    </div>
-                `);
-                $('#vehicleForm').append(`<input type="hidden" id="input-${imageId}" name="image[${imageCount}]" value="${e.target.result}">`);
-                imageCount++;
-                showImage(e.target.result);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    });
-
-    $('#addVideo').on('click', function () {
-        $('#videoInput').click();
-    });
-
-    $('#videoInput').on('change', function (event) {
-        const files = event.target.files;
-        const thumbnails = $('.thumbnails');
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const videoId = `video-${videoCount}`;
-                thumbnails.append(`
-                    <div class="thumbnail" id="thumbnail-${videoId}" onclick="playVideo('${e.target.result}')">
-                        <video src="${e.target.result}" muted></video>
-                        <button class="btn btn-danger btn-sm remove-btn" onclick="removeThumbnail('${videoId}')">X</button>
-                    </div>
-                `);
-                $('#vehicleForm').append(`<input type="hidden" id="input-${videoId}" name="video[${videoCount}]" value="${e.target.result}">`);
-                videoCount++;
-                playVideo(e.target.result);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    });
-
-    $('#fullScreenBtn').on('click', function () {
-        const img = document.getElementById('selectedImage');
-        if (img) {
-            if (img.requestFullscreen) {
-                img.requestFullscreen();
-            } else if (img.mozRequestFullScreen) {
-                img.mozRequestFullScreen();
-            } else if (img.webkitRequestFullscreen) {
-                img.webkitRequestFullscreen();
-            } else if (img.msRequestFullscreen) {
-                img.msRequestFullscreen();
-            }
+$(document).ready(function() {
+    $('#miTabla').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route("ordens.ajax") }}',
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'cliente', name: 'cliente' },
+            { data: 'placa', name: 'placa' },
+            { data: 'servicio', name: 'servicio' },
+            { data: 'fecha', name: 'fecha' }
+        ],
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
         }
     });
 });
-
-function showImage(src) {
-    $('#videoPlayer').hide();
-    $('#selectedImage').attr('src', src);
-    $('#imageView').show();
-}
-
-function playVideo(src) {
-    $('#imageView').hide();
-    $('#videoPlayer video').attr('src', src).show();
-    $('#videoPlayer').show();
-}
-
-function removeThumbnail(id) {
-    if (confirm("¿Estás seguro de que quieres eliminar esta foto o video?")) {
-        $(`#thumbnail-${id}`).remove();
-        $(`#input-${id}`).remove();
-    }
-}
 </script>
+
 
 </body>
 </html>

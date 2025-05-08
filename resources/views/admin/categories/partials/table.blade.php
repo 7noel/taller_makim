@@ -1,4 +1,4 @@
-					<table class="table table-hover table-sm">
+					<table id="miTabla" class="table table-hover table-sm">
 						<thead>
 							<tr>
 								<th>#</th>

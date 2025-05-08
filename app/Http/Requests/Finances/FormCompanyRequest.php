@@ -62,7 +62,7 @@ class FormCompanyRequest extends Request {
 			            ->where('id_type', $id_type)
 			            ->where('entity_type', $entity_type);
 			        })->ignore($id)],
-				'company_name'=>'required_if:id_type,1,6',
+				'company_name'=>'required_if:id_type,0,-,6',
 				'name'=>'required_if:id_type,1,4,7,A',
 				'paternal_surname'=>'required_if:id_type,1,4,7,A',
 				'address'=>'required',
@@ -76,7 +76,7 @@ class FormCompanyRequest extends Request {
 			            ->where('id_type', $id_type)
 			            ->where('entity_type', $entity_type);
 			        })->ignore($id)],
-				'company_name'=>'required_if:id_type,1,6',
+				'company_name'=>'required_if:id_type,0,-,6',
 				'name'=>'required_if:id_type,1,4,7,A',
 				'paternal_surname'=>'required_if:id_type,1,4,7,A',
 				'address'=>'required',
@@ -91,8 +91,9 @@ class FormCompanyRequest extends Request {
 			            ->where('id_type', $id_type)
 			            ->where('entity_type', $entity_type);
 			        })->ignore($id)],
-				'name'=>'required',
-				'paternal_surname'=>'required',
+				'company_name'=>'required_if:id_type,0,-,6',
+				'name'=>'required_if:id_type,1,4,7,A',
+				'paternal_surname'=>'required_if:id_type,1,4,7,A',
 				'address'=>'required',
 				'ubigeo_code'=>'required',
 				'email'=>'email',

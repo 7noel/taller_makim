@@ -13,9 +13,9 @@ class ExchangeRepo extends BaseRepo{
 	public function index($filter = false, $search = false)
 	{
 		if ($filter and $search) {
-			return Exchange::$filter($search)->orderBy("$filter", 'ASC')->paginate();
+			return Exchange::$filter($search)->orderBy("$filter", 'ASC')->get();
 		} else {
-			return Exchange::orderBy('id', 'DESC')->paginate();
+			return Exchange::orderBy('id', 'DESC')->get();
 		}
 	}
 	public function prepareData($data)

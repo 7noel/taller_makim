@@ -1,4 +1,4 @@
-<table class="{{ config('options.styles.table') }}">
+<table id="miTabla" class="{{ config('options.styles.table') }}">
 	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
 			<th>#</th>

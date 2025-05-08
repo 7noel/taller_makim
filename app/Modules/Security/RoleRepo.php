@@ -18,9 +18,9 @@ class RoleRepo extends BaseRepo{
 	public function index($filter = false, $search = false)
 	{
 		if ($filter and $search) {
-			return Role::$filter($search)->orderBy("$filter", 'ASC')->paginate();
+			return Role::$filter($search)->orderBy("$filter", 'ASC')->get();
 		} else {
-			return Role::orderBy('id', 'DESC')->paginate();
+			return Role::orderBy('id', 'DESC')->get();
 		}
 	}
 
