@@ -36,6 +36,9 @@ class OrderRepo extends BaseRepo{
 			$data['sn'] = $sn['series'] . '-' . $sn['number'];
 
 			// $data['sn'] = $this->getNextNumber($data['order_type'], session('my_company')->id);
+			
+			// asignar usuario que crea el registro
+			$data['user_id'] = \Auth::user()->id;
 		}
 		$data = $this->prepareData($data);
 		// dd($data);

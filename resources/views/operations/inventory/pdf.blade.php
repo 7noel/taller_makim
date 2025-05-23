@@ -170,14 +170,14 @@
 	<tr>
 		<td style="width:50%; border: none;">
 			<table class="table-ingreso">
-				<!-- <tr>
-					<td class="label">Inventariado por:</td>
-					<td class="">{{ $model->id }}</td>
-				</tr> -->
 				<tr>
+					<td class="label">Creado por:</td>
+					<td class="">{{ isset($model->user->name) ? $model->user->name : '' }}</td>
+				</tr>
+				<!-- <tr>
 					<td class="label">Asesor:</td>
 					<td class="">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
-				</tr>
+				</tr> -->
 				<tr>
 					<td class="label">F. Emisión:</td>
 					<td>{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
