@@ -52,7 +52,7 @@ class OrdersController extends Controller {
 		$sellers = $this->companyRepo->getListSellers();
 		$locals = $this->companyRepo->getListMyCompany();
 		if (isset($filter->excel)) {
-	        return \Excel::download(new OrdersExport('operations.inventory.export_excel', $models), 'inventarios_vehicular.xlsx');
+	        return \Excel::download(new OrdersExport('operations.inventory.export_excel', $models), 'inventarios_vehiculares_'.date("Ymd_His").'.xlsx');
 		}
 		return view('partials.filter',compact('models', 'filter', 'sellers', 'locals'));
 	}

@@ -1,12 +1,13 @@
 <table class="{{ config('options.styles.table') }}">
 	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
-			<th>#</th>
-			<th>Fecha</th>
-			<th>Placa</th>
+			<th class="text-center">#</th>
+			<th class="text-center">Fecha</th>
+			<th class="text-center">Placa</th>
+			<th class="text-center">Marca</th>
 			<th>Cliente</th>
-			<th>Estado</th>
-			<th>Acciones</th>
+			<th class="text-center">Estado</th>
+			<th class="text-center">Acciones</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -23,20 +24,21 @@
 		}
 		@endphp
 		<tr data-id="{{ $model->id }}" data-tipo="OT">
-			<td>{{ $model->sn }}</td>
-			<td>{{ $model->created_at->formatLocalized('%d/%m/%Y') }}</td>
-			<td style="white-space: nowrap;">{{ $model->placa }}</td>
+			<td class="text-center">{{ $model->sn }}</td>
+			<td class="text-center">{{ $model->created_at->formatLocalized('%d/%m/%Y') }}</td>
+			<td class="text-center" style="white-space: nowrap;">{{ $model->placa }}</td>
+			<td class="" style="white-space: nowrap;">{{ $model->car->brand->name }}</td>
 			<td>{{ $model->company->company_name }} </td>
-			<td class="status"><span class="{{ $clase }}">{{ $model->status }}</span></td>
-			<td style="white-space: nowrap;">
-				<a href="{{ route( 'print_inventory' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="Inventario">{!! $icons['car'] !!}</a>
+			<td class="status text-center"><span class="{{ $clase }}">{{ $model->status }}</span></td>
+			<td class="text-center" style="white-space: nowrap;">
+				<a href="{{ route( 'order.print_inventory' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="Inventario">{!! $icons['pdf'] !!}</a>
 			@if($model->status=='APROB')
 				<a href="{{ route('output_vouchers.by_order', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Generar Venta">{!! $icons['invoice'] !!}</a>
 			@endif
 			@if(in_array($model->status,['CERR', 'ANUL']))
 				<a href="{{ route('output_orders.show', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Ver OT">{!! $icons['view'] !!}</a>
 			@else
-				<a href="{{ route( 'output_orders.edit' , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
+				<a href="{{ route( 'inventory.edit' , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
 				<a href="#" class="btn-anular btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>
 			@endif
 			</td>

@@ -1,5 +1,5 @@
-<table class="table table-hover table-sm">
-	<thead>
+<table id="miTablaAjax" class="{{ config('options.styles.table') }}">
+	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
 			<th>#</th>
 			<th>Placa</th>
@@ -28,3 +28,27 @@
 		@endforeach
 	</tbody>
 </table>
+
+<script>
+$(document).ready(function () {
+    $('#miTablaAjax').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route("cars.ajaxList") }}',
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'placa', name: 'placa' },
+            { data: 'marca_modelo', name: 'marca_modelo' },
+            { data: 'year', name: 'year' },
+            { data: 'vin', name: 'vin' },
+            { data: 'company_name', name: 'company_name' },
+            { data: 'acciones', name: 'acciones', orderable: false, searchable: false }
+        ],
+        lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"] ],
+        pageLength: 50,
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+        }
+    });
+});
+</script>

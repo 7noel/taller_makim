@@ -68,6 +68,18 @@ class UsersController extends Controller {
 		return redirect()->route('users.index');
 	}
 
+	public function changeLocal()
+	{
+		$locales = $this->companyRepo->getListMyCompany();
+		return view('auth.change_local', compact('locales'));
+	}
+
+    public function updateLocal(Request $request)
+    {
+    	$this->repo->updateLocal(request()->input('my_company'));
+        return redirect()->to('/');
+    }
+
 	public function changePassword()
 	{
 		return view('auth.change_password');

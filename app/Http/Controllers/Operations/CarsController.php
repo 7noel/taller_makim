@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Modules\Operations\BrandRepo;
 use App\Modules\Operations\ModeloRepo;
 use App\Modules\Operations\CarRepo;
+use App\Modules\Operations\Car;
 use App\Modules\Finances\CompanyRepo;
 use App\Modules\Base\UbigeoRepo;
 
@@ -24,6 +25,62 @@ class CarsController extends Controller {
 		$this->modeloRepo = $modeloRepo;
 		$this->companyRepo = $companyRepo;
 		$this->ubigeoRepo = $ubigeoRepo;
+	}
+
+	public function ajaxList(Request $request)
+	{
+	    $type = explode('.', \Request::route()->getName())[0];
+	    //dd(\Request::route()->getName());
+
+	    $query = Car::with('modelo.brand', 'company');
+
+	    // Búsqueda general
+	    if ($search = $request->input('search.value')) {
+	        $query->where(function ($q) use ($search) {
+	            $q->where('placa', 'like', "%{$search}%")
+	              ->orWhere('vin', 'like', "%{$search}%");
+	        });
+	    }
+
+	    $total = $query->count();
+
+	    // Ordenamiento
+	    if ($order = $request->input('order')) {
+	        $columns = ['id', 'placa', 'vin'];
+	        $columnIndex = $order[0]['column'];
+	        $dir = $order[0]['dir'];
+	        $query->orderBy($columns[$columnIndex], $dir);
+	    }
+
+	    // Paginación
+	    $start = intval($request->input('start'));
+		$length = intval($request->input('length'));
+		$page = ($start / $length) + 1;
+		$query->forPage($page, $length);
+
+
+	    $models = $query->get();
+
+	    $data = $models->map(function ($model) use ($type) {
+			$dir_view_actions ="operations.{$type}.partials.actions";
+			return [
+				'id' => $model->id,
+				'placa' => $model->placa,
+	            'marca_modelo' => $model->modelo->brand->name." ".$model->modelo->name,
+	            'year' => $model->year,
+	            'vin' => $model->vin,
+	            'company_name' => $model->company->company_name,
+				'acciones' => view($dir_view_actions, compact('model', 'type'))->render()
+			];
+
+	    });
+
+	    return response()->json([
+	        'draw' => intval($request->input('draw')),
+	        'recordsTotal' => $total,
+	        'recordsFiltered' => $total,
+	        'data' => $data,
+	    ]);
 	}
 
 	public function index()

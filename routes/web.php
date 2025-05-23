@@ -59,6 +59,8 @@ Route::get('crear-item', ['as' => 'ajax_crear_item', 'uses' => 'Storage\Products
 	Route::post('upload-photo', ['as'=>'upload_photo', 'uses'=>'HomeController@uploadPhoto']);
 Route::group(['middleware'=>['auth']], function(){
 
+	Route::get('change_local', ['as' => 'change_local', 'uses' => 'Security\UsersController@changeLocal']);
+	Route::post('update_local', ['as' => 'update_local', 'uses'=>'Security\UsersController@updateLocal']);
 	Route::get('change_password', ['as' => 'change_password', 'uses' => 'Security\UsersController@changePassword']);
 	Route::post('update_password', ['as' => 'update_password', 'uses'=>'Security\UsersController@updatePassword']);
 
@@ -79,6 +81,7 @@ Route::group(['middleware'=>['auth']], function(){
 	Route::get('storage/products/ajaxGetData/{warehouse_id}/{product_id}', ['as' => 'ajaxGetData','uses' => 'Storage\ProductsController@ajaxGetData']);
 	Route::get('guard/users/autocomplete', ['as' => 'usersAutocomplete','uses' => 'Security\UsersController@ajaxAutocomplete']);
 
+	Route::get('cars/ajax-list', 'Operations\CarsController@ajaxList')->name('cars.ajaxList');
 	Route::get('clients/ajax-list', 'Finances\CompanyController@ajaxList')->name('clients.ajaxList');
 	Route::get('providers/ajax-list', 'Finances\CompanyController@ajaxList')->name('providers.ajaxList');
 	Route::get('employees/ajax-list', 'Finances\CompanyController@ajaxList')->name('employees.ajaxList');

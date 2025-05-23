@@ -11,6 +11,21 @@ class UserRepo extends BaseRepo{
 	public function getModel(){
 		return new User;
 	}
+
+	public function updateLocal($my_company)
+	{
+		$user = \Auth::user();
+		$user->my_company = $my_company;
+		$user->save();
+		// Recargar la instancia con los datos actualizados de la base de datos
+		$user->refresh();
+		// Ahora Auth::user() tiene los datos actualizados
+	    session(['my_company' => $user->mycompany]);
+	    // se actualiza la variable de sesion my_company
+	    // dd($user->mycompany);
+	    return true;
+	}
+
 	public function save($data, $id=0)
 	{
 		$data = $this->prepareData($data);

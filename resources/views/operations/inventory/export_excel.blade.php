@@ -1,11 +1,12 @@
 <table class="{{ config('options.styles.table') }}">
 	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
-			<th>#</th>
-			<th>Fecha</th>
-			<th>Placa</th>
-			<th>Cliente</th>
-			<th>Estado</th>
+			<th><strong>#</strong></th>
+			<th><strong>Fecha</strong></th>
+			<th><strong>Placa</strong></th>
+			<th><strong>Marca</strong></th>
+			<th><strong>Cliente</strong></th>
+			<th><strong>Estado</strong></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -25,6 +26,7 @@
 			<td>{{ $model->sn }}</td>
 			<td>{{ $model->created_at->formatLocalized('%d/%m/%Y') }}</td>
 			<td>{{ $model->placa }}</td>
+			<td>{{ $model->car->brand->name }}</td>
 			<td>{{ $model->company->company_name }} </td>
 			<td class="status">{{ $model->status }}</td>
 		</tr>
