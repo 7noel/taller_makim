@@ -1139,34 +1139,77 @@ function addRowProduct2() {
 
 }
 
+// function ordenarTabla() {
+//     var filas = $("#tableItems tr").get();
+
+//     filas.sort(function(a, b) {
+//         var isDownloadableA = parseInt($(a).find(".is_downloadable").val()) || 0;
+//         var isDownloadableB = parseInt($(b).find(".is_downloadable").val()) || 0;
+
+//         var categoriaA = $(a).find(".spanCategory").text().trim().toLowerCase();
+//         var categoriaB = $(b).find(".spanCategory").text().trim().toLowerCase();
+
+//         // Ordenar primero por is_downloadable (0 antes que 1)
+//         if (isDownloadableA !== isDownloadableB) {
+//             return isDownloadableA - isDownloadableB;
+//         }
+
+//         // Si is_downloadable es igual, ordenar por categoría ascendente
+//         return categoriaA.localeCompare(categoriaB);
+//     });
+
+//     // Reinsertar solo si hubo cambios en el orden
+//     var ordenActual = $("#tableItems").children().map(function() {
+//         return $(this).data("id");
+//     }).get().join(",");
+
+//     var nuevoOrden = filas.map(row => $(row).data("id")).join(",");
+
+//     if (ordenActual !== nuevoOrden) {
+//         $("#tableItems").append(filas); // Solo reinsertar si cambia el orden
+//     }
+// }
+
 function ordenarTabla() {
-    var filas = $("#tableItems tr").get();
+    const $tabla = $("#tableItems");
+    const filas = $tabla.find("tr").get();
 
-    filas.sort(function(a, b) {
-        var isDownloadableA = parseInt($(a).find(".is_downloadable").val()) || 0;
-        var isDownloadableB = parseInt($(b).find(".is_downloadable").val()) || 0;
+    // Mapa para recordar el orden de aparición de cada categoría
+    const ordenCategoria = new Map();
+    let ordenActual = 0;
 
-        var categoriaA = $(a).find(".spanCategory").text().trim().toLowerCase();
-        var categoriaB = $(b).find(".spanCategory").text().trim().toLowerCase();
-
-        // Ordenar primero por is_downloadable (0 antes que 1)
-        if (isDownloadableA !== isDownloadableB) {
-            return isDownloadableA - isDownloadableB;
+    // Detectar orden de aparición
+    filas.forEach((fila) => {
+        const comment = $(fila).find(".spanCategory").text().trim().toLowerCase();
+        if (!ordenCategoria.has(comment)) {
+            ordenCategoria.set(comment, ordenActual++);
         }
-
-        // Si is_downloadable es igual, ordenar por categoría ascendente
-        return categoriaA.localeCompare(categoriaB);
     });
 
-    // Reinsertar solo si hubo cambios en el orden
-    var ordenActual = $("#tableItems").children().map(function() {
+    // Ordenar las filas respetando is_downloadable y luego el orden de aparición
+    filas.sort(function (a, b) {
+        const isDownloadableA = parseInt($(a).find(".is_downloadable").val()) || 0;
+        const isDownloadableB = parseInt($(b).find(".is_downloadable").val()) || 0;
+
+        if (isDownloadableA !== isDownloadableB) {
+            return isDownloadableA - isDownloadableB; // primero los normales (0), luego descargables (1)
+        }
+
+        const categoriaA = $(a).find(".spanCategory").text().trim().toLowerCase();
+        const categoriaB = $(b).find(".spanCategory").text().trim().toLowerCase();
+
+        return ordenCategoria.get(categoriaA) - ordenCategoria.get(categoriaB);
+    });
+
+    // Comparar orden actual vs. nuevo
+    const ordenAnterior = $tabla.children().map(function () {
         return $(this).data("id");
     }).get().join(",");
 
-    var nuevoOrden = filas.map(row => $(row).data("id")).join(",");
+    const nuevoOrden = filas.map(row => $(row).data("id")).join(",");
 
-    if (ordenActual !== nuevoOrden) {
-        $("#tableItems").append(filas); // Solo reinsertar si cambia el orden
+    if (ordenAnterior !== nuevoOrden) {
+        $tabla.append(filas); // Reinsertar solo si cambió el orden
     }
 }
 

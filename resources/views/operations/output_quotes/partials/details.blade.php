@@ -21,7 +21,7 @@
 	</thead>
 	<tbody id="tableItems">
 	@if(isset($model->details))
-	@foreach($model->details as $detail)
+	@foreach($model->details->sortBy('id') as $detail)
 		@php $categories=[]; @endphp
 		<tr data-id="{{ $detail->id }}">
 			{!! Form::hidden("details[$i][id]", $detail->id, ['class'=>'detailId','data-detailId'=>'']) !!}

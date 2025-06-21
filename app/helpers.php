@@ -12,7 +12,7 @@ if (! function_exists('numero_letras')) {
 if (! function_exists('getTipoCambio')) {
     function getTipoCambio($fecha)
     {
-		$token = 'apis-token-1023.w5G1lEE2hQQ-mO6JwuSY3K812hvT0Ttl';
+		$token = 'apis-token-4614.TQ4y0Hx1PBGUUXxkLI4qPeB9DpkVbwpi';
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
 		  CURLOPT_URL => 'https://api.apis.net.pe/v1/tipo-cambio-sunat?fecha=' . $fecha,
@@ -39,7 +39,8 @@ if (! function_exists('getTipoCambio')) {
 if (! function_exists('getTipoCambioMes')) {
 	function getTipoCambioMes($y, $m)
 	{
-		$token = 'apis-token-1023.w5G1lEE2hQQ-mO6JwuSY3K812hvT0Ttl';
+		$token = 'apis-token-4614.TQ4y0Hx1PBGUUXxkLI4qPeB9DpkVbwpi';
+		// $token = 'apis-token-1023.w5G1lEE2hQQ-mO6JwuSY3K812hvT0Ttl';
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, "https://api.apis.net.pe/v1/tipo-cambio-sunat?month=$m&year=$y");
 		curl_setopt(

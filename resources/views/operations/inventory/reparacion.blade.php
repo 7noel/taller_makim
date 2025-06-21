@@ -39,6 +39,12 @@
 				            </div>
 						</div>
 
+                        <div class="form-row">
+                            <div class="col-md-2 col-sm-4">
+                                {!! Field::select('my_company', $locales, \Auth::user()->my_company, ['label' => 'Local de Trabajos', 'empty'=>'Seleccionar', 'class'=>'form-control-sm', 'required'=>'required']) !!}
+                            </div>
+                        </div>
+
 @if($model->orders[0])
 	@foreach($model->orders as $quote)
 @php

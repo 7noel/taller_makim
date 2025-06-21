@@ -213,7 +213,20 @@
 	<div class="container-items">
 @php
     // Separar los detalles en dos grupos
-    $detalles_normales = $model->details->where('is_downloadable', 0)->sortBy('comment');
+	$detalles_normales = $model->details->where('is_downloadable', 0)->sortBy('id');
+
+	// Agrupar dinámicamente según orden de aparición
+	$grupos = [];
+	$categoriasVistas = [];
+
+	foreach ($detalles_normales as $detail) {
+	    $categoria = $detail->comment;
+	    if (!in_array($categoria, $categoriasVistas)) {
+	        $categoriasVistas[] = $categoria;
+	        $grupos[$categoria] = [];
+	    }
+	    $grupos[$categoria][] = $detail;
+	}
     $detalles_repuestos = $model->details->where('is_downloadable', 1);
 
     $comentario_actual = null; // Para el control de cambios en comment
@@ -241,25 +254,22 @@
     </thead>
     <tbody>
         {{-- Grupo de is_downloadable = 0 --}}
-        @foreach($detalles_normales as $key => $detail)
-            @if ($comentario_actual !== $detail->comment)
-                {{-- Agregar título cada vez que cambia comment --}}
-                <tr>
-                    <td class="border title" colspan="5"><strong>{{ $detail->comment }}</strong></td>
-                </tr>
-                @php
-                    $comentario_actual = $detail->comment;
-                @endphp
-            @endif
-            <tr>
-                <td class="border center">{{ $loop->iteration }}</td>
-                <td class="border">{{ $detail->product->name }}</td>
-                <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
-                <td class="border center">{{ $detail->value }}</td>
-                <!-- <td class="border center">{{ $detail->d1 }} %</td> -->
-                <td class="border center">{{ $detail->total }}</td>
-            </tr>
-        @endforeach
+        @php $item = 1; @endphp
+		@foreach($grupos as $comment => $detalles)
+		    <tr>
+		        <td class="border title" colspan="5"><strong>{{ $comment }}</strong></td>
+		    </tr>
+		    @foreach($detalles as $detail)
+		    <tr>
+		        <td class="border center">{{ $item++ }}</td>
+		        <td class="border">{{ $detail->product->name }}</td>
+		        <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
+		        <td class="border center">{{ $detail->value }}</td>
+		        <td class="border center">{{ $detail->total }}</td>
+		    </tr>
+		    @endforeach
+		@endforeach
+
 
         {{-- Grupo de REPUESTOS (value > 0) --}}
         @if($repuestos_pagados->isNotEmpty())

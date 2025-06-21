@@ -212,8 +212,22 @@
 	<div class="container-items">
 @php
     // Separar los detalles en dos grupos
-    $detalles_normales = $model->details->where('is_downloadable', 0)->sortBy('comment');
-    $detalles_repuestos = $model->details->where('is_downloadable', 1);
+    $detalles_normales = $model->details->where('is_downloadable', 0)->sortBy('id');
+
+	// Agrupar dinámicamente por comment según orden de ingreso
+	$grupos = [];
+	$comentariosVistos = [];
+
+	foreach ($detalles_normales as $detalle) {
+	    $comment = $detalle->comment;
+	    if (!in_array($comment, $comentariosVistos)) {
+	        $comentariosVistos[] = $comment;
+	        $grupos[$comment] = [];
+	    }
+	    $grupos[$comment][] = $detalle;
+	}
+	
+	$detalles_repuestos = $model->details->where('is_downloadable', 1);
 
     $comentario_actual = null; // Para el control de cambios en comment
 
@@ -238,24 +252,23 @@
     </thead>
     <tbody>
         {{-- Grupo de is_downloadable = 0 --}}
-        @foreach($detalles_normales as $key => $detail)
-            @if ($comentario_actual !== $detail->comment)
-                {{-- Agregar título y total de la categoría --}}
-                <tr>
-                    <td class="border title" colspan="3"><strong>{{ $detail->comment }}</strong></td>
-                    <td class="border center"><strong>{{ number_format($detalles_normales->where('comment', $detail->comment)->sum('total'), 2, '.', ',') }}</strong></td>
-                </tr>
-                @php
-                    $comentario_actual = $detail->comment;
-                @endphp
-            @endif
-            <tr>
-                <td class="border center">{{ $loop->iteration }}</td>
-                <td class="border">{{ $detail->product->name }}</td>
-                <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
-                <td class="border center"></td>
-            </tr>
-        @endforeach
+        @php $item = 1; @endphp
+		@foreach($grupos as $comment => $detalles)
+		    <tr>
+		        <td class="border title" colspan="3"><strong>{{ $comment }}</strong></td>
+		        <td class="border center">
+		            <strong>{{ number_format(collect($detalles)->sum('total'), 2, '.', ',') }}</strong>
+		        </td>
+		    </tr>
+		    @foreach($detalles as $detalle)
+		    <tr>
+		        <td class="border center">{{ $item++ }}</td>
+		        <td class="border">{{ $detalle->product->name }}</td>
+		        <td class="border center">{{ $detalle->quantity.' '.$detalle->unit->symbol }}</td>
+		        <td class="border center"></td>
+		    </tr>
+		    @endforeach
+		@endforeach
 
         {{-- Grupo de REPUESTOS (value > 0) --}}
         @if($repuestos_pagados->isNotEmpty())
