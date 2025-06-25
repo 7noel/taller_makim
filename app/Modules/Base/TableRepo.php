@@ -14,7 +14,9 @@ class TableRepo extends BaseRepo{
 	public function prepareData($data)
 	{
 		$data['type'] = explode('.', request()->route()->getName())[0];
-		
+		if (!isset($data['data'])) {
+			$data['data'] = null;
+		}
 		return $data;
 	}
 	public function indexTable($filter = false, $search = false, $type)

@@ -476,7 +476,8 @@ class OrdersController extends Controller {
 	{
 		$model = $this->repo->findOrFail($id);
 		$locales = $this->companyRepo->getListMyCompany();
-		return view('operations.inventory.reparacion', compact('model', 'locales'));
+		$masters = $this->companyRepo->getMastersByCat();
+		return view('operations.inventory.reparacion', compact('model', 'locales', 'masters'));
 		dd('repair_edit');
 	}
 	public function controlcalidad_edit($id)

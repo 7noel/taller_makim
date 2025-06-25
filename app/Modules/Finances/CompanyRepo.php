@@ -3,7 +3,9 @@
 namespace App\Modules\Finances;
 
 use App\Modules\Base\BaseRepo;
+use App\Modules\Base\Table;
 use App\Modules\Finances\Company;
+use Illuminate\Support\Str;
 
 class CompanyRepo extends BaseRepo{
 
@@ -51,6 +53,10 @@ class CompanyRepo extends BaseRepo{
 				// $data['brand_name'] = trim($data['brand_name']);
 			}
 			$data['company_name'] = trim($data['company_name']);
+		} else {
+			if (!isset($data['config']['vale'])) {
+				$data['config']['vale'] = "";
+			}
 		}
 		if (in_array($data['id_type'], ['1','4','7','A'])) {
 			$data['paternal_surname'] = trim($data['paternal_surname']);
@@ -112,4 +118,39 @@ class CompanyRepo extends BaseRepo{
 	{
 		return Company::where('entity_type', 'employees')->where('my_company', session('my_company')->id)->where('job_id', config('options.repairman_id'))->pluck('company_name', 'id')->toArray();
 	}
+	public function getListMaestros()
+	{
+		$models = Company::with('mycompany')->whereJsonContains('config->vale', 'on')->get();
+		$r = [];
+		foreach ($models as $key => $model) {
+			$r[$model->id] = $model->company_name . " (" . $model->mycompany->brand_name . ")";
+		}
+		return $r;
+	}
+
+	public function getMastersByCat()
+	{
+	    $tablas = Table::whereNotNull('data')->get();
+
+	    $allIds = $tablas->flatMap(function($tabla) {
+	        return collect($tabla->data)->values();
+	    })->unique()->all();
+
+	    $companies = Company::whereIn('id', $allIds)->get()->keyBy('id');
+
+	    $agrupado = [];
+
+	    foreach ($tablas as $tabla) {
+	        $ids = collect($tabla->data)->values();
+
+	        $slug = Str::slug($tabla->name, '_'); // <- esta es la clave segura para JS
+
+	        $agrupado[$slug] = $ids->map(function ($id) use ($companies) {
+	            return $companies->get((int) $id);
+	        })->filter();
+	    }
+
+	    return $agrupado;
+	}
+
 }

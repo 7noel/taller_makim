@@ -6,16 +6,19 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Modules\Base\TableRepo;
+use App\Modules\Finances\CompanyRepo;
 
 
 class TableController extends Controller {
 
 	protected $repo;
+	protected $companyRepo;
 	protected $controller;
 	protected $list;
 
-	public function __construct(TableRepo $repo) {
+	public function __construct(TableRepo $repo, CompanyRepo $companyRepo) {
 		$this->repo = $repo;
+		$this->companyRepo = $companyRepo;
 		$uri = request()->server('REQUEST_URI');
         $uri = explode('?', $uri);
         $url = explode('/', $uri[0]);
@@ -64,7 +67,8 @@ class TableController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		$units_service = $this->repo->getListUnt('services');
 		$units_product = $this->repo->getListUnt('products');
-		return view('partials.edit', compact('model', 'list', 'units_service', 'units_product'));
+		$maestros = $this->companyRepo->getListMaestros();
+		return view('partials.edit', compact('model', 'list', 'units_service', 'units_product', 'maestros'));
 	}
 
 	public function update($id)

@@ -54,11 +54,21 @@
 		{!! Field::text('bank_other', ['label' => 'Otro Banco', 'class'=>'form-control-sm']) !!}
 	</div>
 </div>
-
-					<div class="form-group  form-group-sm">
-						{!! Form::label('user','Usuario', ['class'=>'col-sm-2 control-label']) !!}
-						<div class="col-sm-8">
-							{!! Form::hidden('user_id', null, ['id'=>'user_id']) !!}
-							{!! Form::text('user', ((isset($model->user->email)) ? $model->user->email.' '.$model->user->name : ''), ['class'=>'form-control', 'id'=>'txtuser']) !!}
-						</div>
-					</div>
+<div class="form-row">
+	<div class="col-sm-12">
+		<div class="custom-control custom-switch">
+			<input type="checkbox" class="custom-control-input" id="customSwitch1" name="config[vale]" {{ (isset($model->config['vale']) and $model->config['vale']!='' ) ? 'checked' : '' }}>
+			<label class="custom-control-label" for="customSwitch1">Se le genera Vales (para maestros pintores, planchadores, etc que necesiten vales)</label>
+		</div>
+	</div>
+</div>
+<br>
+<div class="form-row">
+	<div class="col-sm-12">
+		<div class="form-group">
+			{!! Form::label('user','Usuario', ['class'=>'control-label']) !!}
+			{!! Form::hidden('user_id', null, ['id'=>'user_id']) !!}
+			{!! Form::text('user', ((isset($model->user->email)) ? $model->user->email.' '.$model->user->name : ''), ['class'=>'form-control', 'id'=>'txtuser']) !!}
+		</div>
+	</div>
+</div>

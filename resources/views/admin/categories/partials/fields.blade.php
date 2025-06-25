@@ -23,7 +23,14 @@ if (isset($model)) {
 
 	</div>
 </div>
+<div class="form-row">
+	<label for="">Seleccionar los maestros</label>
+</div>
+<div class="form-row">
+{!! Form::checkboxes('data', $maestros, $model->data) !!}
 
+</div>
+<br>
 {{-- Pasamos los datos de Laravel a JavaScript --}}
 <script>
     let unitsService = @json($units_service);

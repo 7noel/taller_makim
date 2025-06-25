@@ -11,8 +11,11 @@ class Table extends Model implements Auditable
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['type', 'my_company', 'name', 'description', 'symbol', 'code', 'value_1', 'value_2', 'value_3', 'relation_id', 'table_id', 'table_type'];
+	protected $fillable = ['type', 'my_company', 'name', 'description', 'symbol', 'code', 'value_1', 'value_2', 'value_3', 'relation_id', 'table_id', 'table_type', 'data'];
 
+    protected $casts = [
+        'data' => 'object',
+    ];
     public function scopeName($query, $name){
         if (trim($name) != "") {
             $query->where('name', 'LIKE', "%$name%");

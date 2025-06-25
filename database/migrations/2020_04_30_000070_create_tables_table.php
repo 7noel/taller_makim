@@ -27,6 +27,7 @@ class CreateTablesTable extends Migration {
             $table->bigInteger('relation_id')->unsigned();
             $table->bigInteger('table_id')->unsigned();
             $table->string('table_type');
+            $table->json('data')->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();

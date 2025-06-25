@@ -106,6 +106,7 @@ class CompanyController extends Controller {
 	            'doc'        => config('options.client_doc.'.$model->id_type).' '.$model->doc,
 	            'job'        => optional($model->job)->name,
 	            'local'      => optional($model->mycompany)->brand_name,
+	            'vale'       => (isset($model->config['vale']) and $model->config['vale']!='' ) ? 'SI' : 'NO',
 				'acciones' => view($dir_view_actions, compact('model', 'type'))->render()
 			];
 
@@ -168,7 +169,7 @@ class CompanyController extends Controller {
 	public function update($id, FormCompanyRequest $request)
 	{
 		$data = request()->all();
-		// dd($data);
+		//dd($data);
 		
 		$this->repo->save($data, $id);
 		if (isset($data['last_page']) && $data['last_page'] != '') {

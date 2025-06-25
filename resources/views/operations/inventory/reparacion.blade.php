@@ -92,8 +92,8 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                 <td>{{ $detail->product->name }}</td>
                 <td class="cantidad">{{ $detail->quantity }}</td>
                 <td>{{ $detail->total }}</td>
-                <td>{!! Form::number("details[$quote->id][$detail->id]['costo_soles']", 0.00, ['class'=>'form-control form-control-sm costo-item']) !!}</td>
-                <td>{!! Form::select("details[$quote->id][$detail->id]['asignado_a']", ['JUAN'=>'JUAN', 'LUIS'=>'LUIS'], null, ['class'=>'form-control form-control-sm asignado-individual']) !!}</td>
+                <td>{!! Form::number("details[$quote->id][$detail->id]['cost']", 0.00, ['class'=>'form-control form-control-sm costo-item']) !!}</td>
+                <td>{!! Form::select("details[$quote->id][$detail->id]['technician_id']", ['JUAN'=>'JUAN', 'LUIS'=>'LUIS'], null, ['class'=>'form-control form-control-sm asignado-individual']) !!}</td>
             </tr>
         @endforeach
 
@@ -151,7 +151,50 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
 @section('scripts')
 <script>
 $(function(){
-    // Asignar personal a todos los ítems del grupo
+    const masters = @json($masters); // { categoria1: [...companies], categoria2: [...companies], ... }
+    console.log(masters)
+
+
+    function actualizarSelectsPorLocal(myCompanyId) {
+        $('.asignado-grupo').each(function() {
+            const grupo = $(this).data('group'); // por ejemplo "PINTURA"
+            console.log(grupo)
+            const $select = $(this);
+            $select.empty().append(`<option value="">-- Asignar --</option>`);
+
+            const opciones = masters[grupo] || [];
+            opciones.forEach(company => {
+                if (parseInt(company.my_company) === parseInt(myCompanyId)) {
+                    $select.append(`<option value="${company.id}">${company.company_name}</option>`);
+                }
+            });
+        });
+
+        $('.asignado-individual').each(function() {
+            const grupo = $(this).closest('tr').data('group'); // usa el mismo grupo que el padre
+            const $select = $(this);
+            $select.empty().append(`<option value="">-- Asignar --</option>`);
+
+            const opciones = masters[grupo] || [];
+            opciones.forEach(company => {
+                if (parseInt(company.my_company) === parseInt(myCompanyId)) {
+                    $select.append(`<option value="${company.id}">${company.company_name}</option>`);
+                }
+            });
+        });
+    }
+
+    // Inicializa al cargar
+    const myCompanyInicial = $('select[name="my_company"]').val();
+    actualizarSelectsPorLocal(myCompanyInicial);
+
+    // Cambia dinámicamente si el local cambia
+    $('select[name="my_company"]').change(function(){
+        const nuevoLocal = $(this).val();
+        actualizarSelectsPorLocal(nuevoLocal);
+    });
+
+    // Copia selección de grupo a ítems del grupo
     $('.asignado-grupo').change(function(){
         let grupo = $(this).data('group');
         let val = $(this).val();

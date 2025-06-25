@@ -18,6 +18,9 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <style>
+        .custom-checkbox {
+            margin-right: 2em;
+        }
         .ui-autocomplete {
             max-height: 400px;
             overflow-y: auto;

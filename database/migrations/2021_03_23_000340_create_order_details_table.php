@@ -31,7 +31,10 @@ class CreateOrderDetailsTable extends Migration
             $table->decimal('total',15,2);
             $table->decimal('price_item',15,2);
             $table->text('comment');
-            $table->bigInteger('my_company')->unsigned();
+            $table->decimal('cost',15,2);
+            $table->bigInteger('technician_id')->unsigned();
+            $table->json('data')->nullable();
+            $table->bigInteger('voucher_id')->unsigned();
 
             $table->foreign('my_company')->references('id')->on('companies');
             $table->foreign('order_id')->references('id')->on('orders');
