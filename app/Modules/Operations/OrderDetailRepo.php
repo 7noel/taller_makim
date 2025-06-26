@@ -10,4 +10,15 @@ class OrderDetailRepo extends BaseRepo{
 		return new OrderDetail;
 	}
 
+	public function repair_update($details)
+	{
+		foreach ($details as $key => $detail) {
+			// dd($detail['cost']);
+			$item = OrderDetail::find($key);
+			$item->cost = $detail['cost'];
+			$item->technician_id = $detail['technician_id'];
+			$item->save();
+		}
+		return true;
+	}
 }

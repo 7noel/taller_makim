@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Modules\Operations\ChecklistDetailRepo;
 use App\Modules\Operations\OrderChecklistDetailRepo;
 use App\Modules\Operations\OrderRepo;
+use App\Modules\Operations\OrderDetailRepo;
 use App\Modules\Finances\PaymentConditionRepo;
 use App\Modules\Finances\CompanyRepo;
 use App\Modules\Base\CurrencyRepo;
@@ -19,14 +20,16 @@ use App\Exports\OrdersExport;
 class OrdersController extends Controller {
 
 	protected $repo;
+	protected $orderDetailRepo;
 	protected $paymentConditionRepo;
 	protected $companyRepo;
 	protected $bankRepo;
 	protected $carRepo;
 	protected $tableRepo;
 
-	public function __construct(OrderRepo $repo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo, TableRepo $tableRepo) {
+	public function __construct(OrderRepo $repo, OrderDetailRepo $orderDetailRepo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo, TableRepo $tableRepo) {
 		$this->repo = $repo;
+		$this->orderDetailRepo = $orderDetailRepo;
 		$this->paymentConditionRepo = $paymentConditionRepo;
 		$this->companyRepo = $companyRepo;
 		$this->bankRepo = $bankRepo;
@@ -479,6 +482,15 @@ class OrdersController extends Controller {
 		$masters = $this->companyRepo->getMastersByCat();
 		return view('operations.inventory.reparacion', compact('model', 'locales', 'masters'));
 		dd('repair_edit');
+	}
+	public function repair_update($id)
+	{
+		$data = request()->all();
+		// dd($data);
+		if ($data['details']) {
+			$this->orderDetailRepo->repair_update($data['details']);
+		}
+		dd('repair_update');
 	}
 	public function controlcalidad_edit($id)
 	{

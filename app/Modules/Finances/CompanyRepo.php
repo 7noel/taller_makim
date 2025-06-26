@@ -69,7 +69,7 @@ class CompanyRepo extends BaseRepo{
 		if (isset($data['branches'])) {
 			foreach ($data['branches'] as $key => $value) {
 				$data['branches'][$key]['entity_type'] = 'branches';
-				$data['branches'][$key]['my_company'] = session('my_company')->id;
+				$data['branches'][$key]['my_company'] = \Auth::user()->my_company;
 			}
 		}
 		return $data;
@@ -112,11 +112,11 @@ class CompanyRepo extends BaseRepo{
 	}
 	public function getListSellers()
 	{
-		return Company::where('entity_type', 'employees')->where('my_company', session('my_company')->id)->where('job_id', config('options.seller_id'))->pluck('company_name', 'id')->toArray();
+		return Company::where('entity_type', 'employees')->where('my_company', \Auth::user()->my_company)->where('job_id', config('options.seller_id'))->pluck('company_name', 'id')->toArray();
 	}
 	public function getListRepairmens()
 	{
-		return Company::where('entity_type', 'employees')->where('my_company', session('my_company')->id)->where('job_id', config('options.repairman_id'))->pluck('company_name', 'id')->toArray();
+		return Company::where('entity_type', 'employees')->where('my_company', \Auth::user()->my_company)->where('job_id', config('options.repairman_id'))->pluck('company_name', 'id')->toArray();
 	}
 	public function getListMaestros()
 	{

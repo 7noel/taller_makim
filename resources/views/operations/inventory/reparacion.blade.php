@@ -8,7 +8,7 @@
 				<h5 class="{{ config('options.styles.card_header') }}"> REPARACIÓN #{{ $model->sn }}
 				</h5>
 				<div class="card-body">
-					{!! Form::model($model, ['route'=> ['update_status_order', $model] , 'method'=>'PUT', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
+					{!! Form::model($model, ['route'=> ['repair.update', $model] , 'method'=>'PUT', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
 						@if(Request::url() != URL::previous())
 						<input type="hidden" name="last_page" value="{{ URL::previous() }}">
 						@endif
@@ -82,8 +82,6 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                     <td>
                         <select class="form-control form-control-sm asignado-grupo" data-group="{{ $idGrupo }}">
                             <option value="">-- Asignar --</option>
-                            <option value="JUAN">JUAN</option>
-                            <option value="LUIS">LUIS</option>
                         </select>
                     </td>
                 </tr>
@@ -92,8 +90,8 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                 <td>{{ $detail->product->name }}</td>
                 <td class="cantidad">{{ $detail->quantity }}</td>
                 <td>{{ $detail->total }}</td>
-                <td>{!! Form::number("details[$quote->id][$detail->id]['cost']", 0.00, ['class'=>'form-control form-control-sm costo-item']) !!}</td>
-                <td>{!! Form::select("details[$quote->id][$detail->id]['technician_id']", ['JUAN'=>'JUAN', 'LUIS'=>'LUIS'], null, ['class'=>'form-control form-control-sm asignado-individual']) !!}</td>
+                <td>{!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item']) !!}</td>
+                <td>{!! Form::select("details[$detail->id][technician_id]", [], $detail->technician_id, ['class'=>'form-control form-control-sm asignado-individual']) !!}</td>
             </tr>
         @endforeach
 
@@ -220,6 +218,18 @@ $(function(){
             let prorrateado = (costoTotal * proporción).toFixed(2);
             $(this).find('.costo-item').val(prorrateado);
         });
+    });
+
+    // Recalcular el costo total al modificar individualmente los costos
+    $('.costo-item').on('change', function() {
+        let grupo = $(this).closest('tr').data('group');
+        let totalGrupo = 0;
+
+        $(`tr[data-group="${grupo}"] .costo-item`).each(function() {
+            totalGrupo += parseFloat($(this).val()) || 0;
+        });
+
+        $(`.costo-total[data-group="${grupo}"]`).val(totalGrupo.toFixed(2));
     });
 });
 </script>
