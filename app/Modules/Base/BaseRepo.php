@@ -13,21 +13,21 @@ abstract class BaseRepo{
 	abstract public function getModel();
 	
 	public function find($id){
-		return $this->model->where('my_company', session('my_company')->id)->where('id', $id)->first();
+		return $this->model->where('my_company', \Auth::user()->my_company)->where('id', $id)->first();
 	}
 	public function find2($id){
 		return $this->model->where('id', $id)->first();
 	}
 	public function findOrFail($id){
 		return $this->model->where('id', $id)->firstOrFail();
-		//return $this->model->where('my_company', session('my_company')->id)->where('id', $id)->firstOrFail();
+		//return $this->model->where('my_company', \Auth::user()->my_company)->where('id', $id)->firstOrFail();
 	}
 	public function firstOrCreate($atributes, $values){
 		return $this->model->firstOrCreate($atributes, $values);
 	}
 	public function all()
 	{
-		return $this->model->where('my_company', session('my_company')->id)->get();
+		return $this->model->where('my_company', \Auth::user()->my_company)->get();
 	}
 	public function all2()
 	{
@@ -36,9 +36,9 @@ abstract class BaseRepo{
 	public function index($filter = false, $search = false)
 	{
 		if ($filter and $search) {
-			return $this->model->where('my_company', session('my_company')->id)->$filter($search)->orderBy("$filter", 'ASC')->get();
+			return $this->model->where('my_company', \Auth::user()->my_company)->$filter($search)->orderBy("$filter", 'ASC')->get();
 		} else {
-			return $this->model->where('my_company', session('my_company')->id)->orderBy('id', 'DESC')->get();
+			return $this->model->where('my_company', \Auth::user()->my_company)->orderBy('id', 'DESC')->get();
 		}
 	}
 	public function index2($filter = false, $search = false)
@@ -52,7 +52,7 @@ abstract class BaseRepo{
 
 	public function getList($name='name', $id='id')
 	{
-		return $list = [""=>'Seleccionar'] + $this->model->where('my_company', session('my_company')->id)->orderBy($name, 'ASC')->pluck($name, $id)->toArray();
+		return $list = [""=>'Seleccionar'] + $this->model->where('my_company', \Auth::user()->my_company)->orderBy($name, 'ASC')->pluck($name, $id)->toArray();
 	}
 	public function getList2($name='name', $id='id')
 	{
@@ -61,7 +61,7 @@ abstract class BaseRepo{
 	
 	public function getListGroup($group, $name='name', $id='id')
 	{
-		foreach ($this->model->where('my_company', session('my_company')->id)->with($group)->oederBy($name, 'ASC')->get() as $key => $u) {
+		foreach ($this->model->where('my_company', \Auth::user()->my_company)->with($group)->oederBy($name, 'ASC')->get() as $key => $u) {
 			$r[$u->$group->name][$u->$id] = $u->$name;
 		}
 		if (isset($r)) {
@@ -85,11 +85,11 @@ abstract class BaseRepo{
 	}
 	public function all_with_deleted()
 	{
-		return $this->model->where('my_company', session('my_company')->id)->withTrashed()->get();
+		return $this->model->where('my_company', \Auth::user()->my_company)->withTrashed()->get();
 	}
 	public function all_only_deleted()
 	{
-		return $this->model->where('my_company', session('my_company')->id)->onlyTrashed()->get();
+		return $this->model->where('my_company', \Auth::user()->my_company)->onlyTrashed()->get();
 	}
 	public function all_with_deleted2()
 	{
@@ -128,7 +128,7 @@ abstract class BaseRepo{
 		$data = $this->prepareData($data);
 		if(!isset($data['my_company'])){
 			// dd('no hay local');
-			$data['my_company'] = session('my_company')->id;
+			$data['my_company'] = \Auth::user()->my_company;
 		}
 		return $this->model->updateOrCreate([$this->model->getKeyName() => $id], $data);
 	}
@@ -163,7 +163,7 @@ abstract class BaseRepo{
 		}
 		# Guardar registros
 		foreach ($allData as $key => $data) {
-			$data['my_company'] = session('my_company')->id;
+			$data['my_company'] = \Auth::user()->my_company;
 			$data[$k1['key']] = $k1['value'];
 			if (empty($k3)) {
 				$model = $this->model->updateOrCreate([$k1['key'] => $k1['value'], $k2 => $data[$k2]], $data);
@@ -210,7 +210,7 @@ abstract class BaseRepo{
 		}
 		# Guardar registros
 		foreach ($toSave as $key => $data) {
-			$data['my_company'] = session('my_company')->id;
+			$data['my_company'] = \Auth::user()->my_company;
 			$data[$k1['key']] = $k1['value'];
 			if (empty($k3)) {
 				$model = $this->model->updateOrCreate([$k1['key'] => $k1['value'], $k2 => $data[$k2]], $data);
@@ -244,7 +244,7 @@ abstract class BaseRepo{
 			$this->model->where($k1['key'], $k1['value'])->whereIn($k2,$toDelete)->delete();
 		}
 		foreach ($allData as $key => $data) {
-			$data['my_company'] = session('my_company')->id;
+			$data['my_company'] = \Auth::user()->my_company;
 			if (in_array($data[$k2], $toSave)) {
 				$data[$k1['key']] = $k1['value'];
 				$this->save($data);
@@ -305,7 +305,7 @@ abstract class BaseRepo{
 	{
 		foreach ($items as $key => $data) {
 			$data = $this->prepareData($data);
-			$data['my_company'] = session('my_company')->id;
+			$data['my_company'] = \Auth::user()->my_company;
 			$data[$k['key']] = $k['value'];
 			if (isset($data['id'])) {
 				$model = $this->findOrFail($data['id']);
@@ -344,7 +344,7 @@ abstract class BaseRepo{
 		}
 		# Guardar registros
 		foreach ($toSave as $key => $data) {
-			$data['my_company'] = session('my_company')->id;
+			$data['my_company'] = \Auth::user()->my_company;
 			$data[$k['key']] = $k['value'];
 			if (isset($data['id'])) {
 				$model = $this->model->updateOrCreate(['id' => $data['id']], $data);
