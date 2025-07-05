@@ -41,7 +41,9 @@
 				@endif
 			</td>
 			<td>
-				<a href="{{ route( 'print_order' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="Imprimir">{!! $icons['printer'] !!}</a>
+				<!-- <a href="{{ route( 'print_order' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="Imprimir">{!! $icons['printer'] !!}</a> -->
+				<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF por Items</a>
+				<a href="{{ route( 'output_quotes.print_categories' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF por Categorías</a>
 			@if($model->status=='APROB')
 				<a href="{{ route('orders.by_quote', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Generar Pedido">{!! $icons['invoice'] !!}</a>
 			@endif
