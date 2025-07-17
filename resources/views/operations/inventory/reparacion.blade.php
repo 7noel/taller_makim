@@ -86,6 +86,10 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                         </select>
                     </td>
                     <td>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input voucher-grupo" id="voucherGrupo{{ $idGrupo }}" data-group="{{ $idGrupo }}">
+                            <label class="custom-control-label" for="voucherGrupo{{ $idGrupo }}">Voucher</label>
+                        </div>
                     </td>
                 </tr>
             @endif
@@ -95,7 +99,15 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                 <td>{{ $detail->total }}</td>
                 <td>{!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item']) !!}</td>
                 <td>{!! Form::select("details[$detail->id][technician_id]", [$detail->technician_id => $detail->technician_id], $detail->technician_id, ['class'=>'form-control form-control-sm asignado-individual']) !!}</td>
-                <td>{!! Form::checkbox("details[$detail->id][voucher]", 'on', false, ['class'=>'form-control form-control-sm']) !!}
+                <td>
+                    <div class="custom-control custom-switch">
+                        {!! Form::checkbox("details[$detail->id][voucher]", 'on', false, [
+                            'class' => 'custom-control-input voucher-individual',
+                            'id' => 'customSwitch'.$detail->id,
+                            'data-group' => $idGrupo
+                        ]) !!}
+                        <label class="custom-control-label" for="customSwitch{{$detail->id}}">Voucher</label>
+                    </div>
                 </td>
             </tr>
         @endforeach
@@ -103,7 +115,7 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
         {{-- Repuestos pagados --}}
         @if($repuestos_pagados->isNotEmpty())
             <tr class="table-secondary font-weight-bold">
-                <td colspan="5">REPUESTOS</td>
+                <td colspan="6">REPUESTOS</td>
             </tr>
             @foreach($repuestos_pagados as $detail)
                 <tr>
@@ -112,6 +124,7 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                     <td>{{ $detail->total }}</td>
                     <td>{!! Form::number("details[$quote->id][$detail->id]['costo_soles']", 0.00, ['class'=>'form-control form-control-sm']) !!}</td>
                     <td>{!! Form::select("details[$quote->id][$detail->id]['asignado_a']", ['JUAN'=>'JUAN', 'LUIS'=>'LUIS'], null, ['class'=>'form-control form-control-sm']) !!}</td>
+                    <td></td>
                 </tr>
             @endforeach
         @endif
@@ -119,7 +132,7 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
         {{-- Repuestos por compañía --}}
         @if($repuestos_compania->isNotEmpty())
             <tr class="table-secondary font-weight-bold">
-                <td colspan="5">REPUESTOS POR COMPAÑÍA</td>
+                <td colspan="6">REPUESTOS POR COMPAÑÍA</td>
             </tr>
             @foreach($repuestos_compania as $detail)
                 <tr>
@@ -128,6 +141,7 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                     <td>{{ $detail->total }}</td>
                     <td>{!! Form::number("details[$quote->id][$detail->id]['costo_soles']", 0.00, ['class'=>'form-control form-control-sm']) !!}</td>
                     <td>{!! Form::select("details[$quote->id][$detail->id]['asignado_a']", ['JUAN'=>'JUAN', 'LUIS'=>'LUIS'], null, ['class'=>'form-control form-control-sm']) !!}</td>
+                    <td></td>
                 </tr>
             @endforeach
         @endif
@@ -156,6 +170,14 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
 $(function(){
     const masters = @json($masters); // { categoria1: [...companies], categoria2: [...companies], ... }
     console.log(masters)
+
+    // Al marcar/desmarcar el switch de grupo, aplicar a todos los del grupo
+    $('.voucher-grupo').change(function() {
+        const grupo = $(this).data('group');
+        const checked = $(this).is(':checked');
+
+        $(`.voucher-individual[data-group="${grupo}"]`).prop('checked', checked);
+    });
 
     function actualizarSelectsPorLocal(myCompanyId) {
         // 🔹 PRIMERO: actualizar los selects individuales
