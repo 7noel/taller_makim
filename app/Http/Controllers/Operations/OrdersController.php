@@ -11,6 +11,7 @@ use App\Modules\Operations\OrderRepo;
 use App\Modules\Operations\OrderDetailRepo;
 use App\Modules\Finances\PaymentConditionRepo;
 use App\Modules\Finances\CompanyRepo;
+use App\Modules\Finances\ProofRepo;
 use App\Modules\Base\CurrencyRepo;
 use App\Modules\Finances\BankRepo;
 use App\Modules\Operations\CarRepo;
@@ -26,8 +27,9 @@ class OrdersController extends Controller {
 	protected $bankRepo;
 	protected $carRepo;
 	protected $tableRepo;
+	protected $proofRepo;
 
-	public function __construct(OrderRepo $repo, OrderDetailRepo $orderDetailRepo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo, TableRepo $tableRepo) {
+	public function __construct(OrderRepo $repo, OrderDetailRepo $orderDetailRepo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo, TableRepo $tableRepo, ProofRepo $proofRepo) {
 		$this->repo = $repo;
 		$this->orderDetailRepo = $orderDetailRepo;
 		$this->paymentConditionRepo = $paymentConditionRepo;
@@ -37,6 +39,7 @@ class OrdersController extends Controller {
 		$this->orderChecklistDetailRepo = $orderChecklistDetailRepo;
 		$this->carRepo = $carRepo;
 		$this->tableRepo = $tableRepo;
+		$this->proofRepo = $proofRepo;
 	}
 	public function index()
 	{
@@ -481,15 +484,44 @@ class OrdersController extends Controller {
 		$locales = $this->companyRepo->getListMyCompany();
 		$masters = $this->companyRepo->getMastersByCat();
 		return view('operations.inventory.reparacion', compact('model', 'locales', 'masters'));
-		dd('repair_edit');
 	}
 	public function repair_update($id)
 	{
 		$data = request()->all();
-		// dd($data);
 		if ($data['details']) {
 			$this->orderDetailRepo->repair_update($data['details']);
 		}
+		$vouchers = [];
+
+	    foreach ($data['details'] as $detailId => $detail) {
+	        if (!empty($detail['voucher']) && !empty($detail['technician_id'])) {
+	            $tecnicoId = $detail['technician_id'];
+	            $monto = floatval($detail['cost']);
+
+	            // Inicializar si no existe
+	            if (!isset($vouchers[$tecnicoId])) {
+	                $vouchers[$tecnicoId] = [
+	                    'total' => 0,
+	                    'items' => [],
+	                ];
+	            }
+
+	            // Sumar al total
+	            $vouchers[$tecnicoId]['total'] += $monto;
+
+	            // Agregar ítem
+	            $vouchers[$tecnicoId]['items'][] = [
+	                'detalle_id' => $detailId,
+	                'monto' => $monto,
+	            ];
+	        }
+	    }
+
+	    $this->proofRepo->generarVouchers($vouchers);
+	    
+		dd($vouchers);
+
+
 		dd('repair_update');
 	}
 	public function controlcalidad_edit($id)

@@ -62,6 +62,7 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
         <th>Venta</th>
         <th width="100px">Costo S/</th>
         <th>Asignado a:</th>
+        <th>Generar Voucher</th>
     </thead>
     <tbody>
         {{-- DETALLES NORMALES agrupados por comment --}}
@@ -84,6 +85,8 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                             <option value="">-- Asignar --</option>
                         </select>
                     </td>
+                    <td>
+                    </td>
                 </tr>
             @endif
             <tr class="detalle" data-group="{{ $idGrupo }}">
@@ -91,7 +94,9 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                 <td class="cantidad">{{ $detail->quantity }}</td>
                 <td>{{ $detail->total }}</td>
                 <td>{!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item']) !!}</td>
-                <td>{!! Form::select("details[$detail->id][technician_id]", [], $detail->technician_id, ['class'=>'form-control form-control-sm asignado-individual']) !!}</td>
+                <td>{!! Form::select("details[$detail->id][technician_id]", [$detail->technician_id => $detail->technician_id], $detail->technician_id, ['class'=>'form-control form-control-sm asignado-individual']) !!}</td>
+                <td>{!! Form::checkbox("details[$detail->id][voucher]", 'on', false, ['class'=>'form-control form-control-sm']) !!}
+                </td>
             </tr>
         @endforeach
 
@@ -152,39 +157,94 @@ $(function(){
     const masters = @json($masters); // { categoria1: [...companies], categoria2: [...companies], ... }
     console.log(masters)
 
-
     function actualizarSelectsPorLocal(myCompanyId) {
-        $('.asignado-grupo').each(function() {
-            const grupo = $(this).data('group'); // por ejemplo "PINTURA"
-            console.log(grupo)
+        // 🔹 PRIMERO: actualizar los selects individuales
+        $('.asignado-individual').each(function() {
+            const grupo = $(this).closest('tr').data('group');
             const $select = $(this);
+            const valorActual = $select.val();
+
             $select.empty().append(`<option value="">-- Asignar --</option>`);
 
             const opciones = masters[grupo] || [];
+            let encontrado = false;
+
             opciones.forEach(company => {
                 if (parseInt(company.my_company) === parseInt(myCompanyId)) {
-                    $select.append(`<option value="${company.id}">${company.company_name}</option>`);
+                    const selected = (parseInt(company.id) === parseInt(valorActual)) ? 'selected' : '';
+                    if (selected) encontrado = true;
+
+                    $select.append(`<option value="${company.id}" ${selected}>${company.company_name}</option>`);
                 }
             });
+
+            if (!encontrado) {
+                $select.val('');
+            }
         });
 
-        $('.asignado-individual').each(function() {
-            const grupo = $(this).closest('tr').data('group'); // usa el mismo grupo que el padre
+        // 🔹 LUEGO: actualizar los selects de grupo según la mayoría
+        $('.asignado-grupo').each(function() {
+            const grupo = $(this).data('group');
             const $select = $(this);
+
+            // Contar valores de los selects individuales ya actualizados
+            let conteo = {};
+            $(`tr[data-group="${grupo}"] select.asignado-individual`).each(function() {
+                const val = $(this).val();
+                if (val !== "") {
+                    conteo[val] = (conteo[val] || 0) + 1;
+                }
+            });
+
+            let valorMayoría = null;
+            let max = 0;
+            Object.entries(conteo).forEach(([valor, cantidad]) => {
+                if (cantidad > max) {
+                    max = cantidad;
+                    valorMayoría = valor;
+                }
+            });
+
+            const valorActual = $select.val();
             $select.empty().append(`<option value="">-- Asignar --</option>`);
 
             const opciones = masters[grupo] || [];
+            let seleccionado = false;
+
             opciones.forEach(company => {
                 if (parseInt(company.my_company) === parseInt(myCompanyId)) {
-                    $select.append(`<option value="${company.id}">${company.company_name}</option>`);
+                    const selected =
+                        (company.id == valorActual || company.id == valorMayoría) ? 'selected' : '';
+                    if (selected) seleccionado = true;
+
+                    $select.append(`<option value="${company.id}" ${selected}>${company.company_name}</option>`);
                 }
             });
+
+            if (!seleccionado) {
+                $select.val('');
+            }
+        });
+    }
+
+    function actualizarTotalesDeGrupo() {
+        $('.costo-total').each(function() {
+            const grupo = $(this).data('group');
+            let total = 0;
+
+            $(`tr[data-group="${grupo}"] .costo-item`).each(function() {
+                total += parseFloat($(this).val()) || 0;
+            });
+
+            $(this).val(total.toFixed(2));
         });
     }
 
     // Inicializa al cargar
     const myCompanyInicial = $('select[name="my_company"]').val();
     actualizarSelectsPorLocal(myCompanyInicial);
+    actualizarTotalesDeGrupo();
 
     // Cambia dinámicamente si el local cambia
     $('select[name="my_company"]').change(function(){

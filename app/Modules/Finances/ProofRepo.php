@@ -537,4 +537,32 @@ class ProofRepo extends BaseRepo{
 		return $model;
 	}
 
+	public function generarVouchers($vouchers)
+	{
+		foreach ($vouchers as $key => $voucher) {
+			
+			$last = Proof::where('series', 'VALE')->orderByRaw('CONVERT(number, SIGNED) desc')->first();
+			// dd(session('my_company'));
+			if ($last) {
+				$next = ['series' => 'VALE', 'number'=> ($last->number + 1)];
+			} else {
+				$next = ['series' => 'VALE', 'number'=> 1];
+			}
+			//dd($next);
+
+			Proof::create([
+				'issued_at' => date('Y-m-d'),
+				'proof_type' => 'vales',
+				'series' => $next['series'],
+				'number' => $next['number'],
+				'sn' => $next['series'] . '-' . $next['number'],
+				'my_company' => 1,
+				'company_id' => $key,
+				'total' => $voucher['total'],
+
+			]);
+		}
+		return true;
+	}
+
 }

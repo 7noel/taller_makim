@@ -126,6 +126,7 @@ Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'name
 	Route::get('output_vouchers/by_order/{order_id}', ['as' => 'output_vouchers.by_order', 'uses' => 'ProofsController@byOrder']);
 	Route::get('input_vouchers/print/{id}', ['as' => 'input_vouchers.print', 'uses' => 'ProofsController@input_vouchers_print']);
 	Route::get('input_vouchers/by_order/{order_id}', ['as' => 'input_vouchers.by_order', 'uses' => 'ProofsController@byOrder']);
+	Route::resource('vales','ProofsController');
 	Route::resource('output_vouchers','ProofsController');
 	Route::resource('input_vouchers','ProofsController');
 	Route::resource('output_letters','ProofsController');

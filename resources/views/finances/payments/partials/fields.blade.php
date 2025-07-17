@@ -7,7 +7,8 @@
 <div class="form-row">
 	<div class="col-sm-2">
 		<label>Comprobante</label>
-		<p class="form-control-plaintext">{{ $proof->document_type->description." ".$proof->sn }}</p>
+		{{-- <p class="form-control-plaintext">{{ $proof->document_type->description." ".$proof->sn }}</p> --}}
+		<p class="form-control-plaintext">{{ $proof->sn }}</p>
 	</div>
 	<div class="col-sm-4">
 		<label>Cliente/Proveedor</label>

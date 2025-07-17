@@ -165,6 +165,16 @@ class ComposerServiceProvider extends ServiceProvider
                 'edit.update'=>'Actualizar Empresa',
                 'edit.delete'=>'Eliminar Empresa',
             ],
+            'vales' => [
+                'index'=>'Vales',
+                'index.create'=>'Crear Vale',
+                'create'=>'Nuevo Vale',
+                'create.create'=>'Crear Vale',
+                'show'=>'Vizualizando Vale:',
+                'edit'=>'Editar Vale: ',
+                'edit.update'=>'Actualizar Vale',
+                'edit.delete'=>'Eliminar Vale',
+            ],
             'output_vouchers' => [
                 'index'=>'Comprobantes de Venta',
                 'index.create'=>'Crear Comprobante',
