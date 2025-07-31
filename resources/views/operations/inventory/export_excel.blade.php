@@ -3,9 +3,15 @@
 		<tr>
 			<th><strong>#</strong></th>
 			<th><strong>Fecha</strong></th>
+			<th><strong>Hora</strong></th>
+			<th><strong>Cliente</strong></th>
+			<th><strong>Contacto</strong></th>
+			<th><strong>Celular</strong></th>
 			<th><strong>Placa</strong></th>
 			<th><strong>Marca</strong></th>
-			<th><strong>Cliente</strong></th>
+			<th><strong>Modelo</strong></th>
+			<th><strong>Año</strong></th>
+			<th><strong>Color</strong></th>
 			<th><strong>Estado</strong></th>
 		</tr>
 	</thead>
@@ -24,10 +30,16 @@
 		@endphp
 		<tr data-id="{{ $model->id }}" data-tipo="OT">
 			<td>{{ $model->sn }}</td>
-			<td>{{ $model->created_at->formatLocalized('%d/%m/%Y') }}</td>
+			<td>{{ $model->created_at->format('d/m/Y') }}</td>
+			<td>{{ $model->created_at->format('H:i:s') }}</td>
+			<td>{{ optional($model->company)->company_name }} </td>
+			<td>{{ optional($model->inventory)->contact_name }}</td>
+			<td>{{ optional($model->inventory)->contact_mobile }}</td>
 			<td>{{ $model->placa }}</td>
-			<td>{{ $model->car->brand->name }}</td>
-			<td>{{ $model->company->company_name }} </td>
+			<td>{{ optional($model->car->brand)->name }}</td>
+			<td>{{ optional($model->car->modelo)->name }}</td>
+			<td>{{ optional($model->car)->year }}</td>
+			<td>{{ optional($model->car)->color }}</td>
 			<td class="status">{{ $model->status }}</td>
 		</tr>
 		@endforeach

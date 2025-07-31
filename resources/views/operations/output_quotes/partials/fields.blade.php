@@ -13,6 +13,7 @@
 	<br>
 </div>
 @endif
+<br>
 <div class="form-row">
 	<div class="col-md-1 col-sm-2">
 		{!! Form::label('sn', 'Presup.') !!}
@@ -41,6 +42,9 @@
 	<div class="col-sm-2">
 		{!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
+	<div class="col-sm-2">
+		{!! Field::select('inventory[seguro]', config('options.cia_seguros'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm', 'id'=>'seguro']) !!}
+	</div>
 	<div class="col-sm-1 d-none">
 		{!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}
 	</div>
@@ -54,6 +58,14 @@
 	<div class="col-sm-2">
 		{!! Field::number('diagnostico[tiempo]', (isset($model->diagnostico->tiempo)) ? $model->diagnostico->tiempo : null, ['label' => 'Días de trabajo', 'class'=>'form-control-sm text-uppercase text-center', ]) !!}
 	</div>
+    <div class="col-md-2 col-sm-4">
+        {!! Field::text('inventory[contact_name]', (isset($model->inventory->contact_name
+        ) ? $model->inventory->contact_name : ''), ['label' => 'Contacto Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
+    </div>
+    <div class="col-md-2 col-sm-4">
+        {!! Field::text('inventory[contact_mobile]', (isset($model->inventory->contact_mobile
+        ) ? $model->inventory->contact_mobile : ''), ['label' => 'Contacto Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+    </div>
 	<div class="col-md-4 col-sm-6">
 		{!! Field::text('comment', ($action=='create') ? '' : null,['label' => 'Comentarios', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>

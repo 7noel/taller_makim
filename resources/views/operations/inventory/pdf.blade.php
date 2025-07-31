@@ -157,10 +157,7 @@
 					<div>INVENTARIO VEHICULAR</div>
 					<div>{{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</div>
 					<div>{{ $model->placa }}</div>
-					@if(isset($model->inventory->seguro))
-						<div>{{ $model->inventory->seguro }}</div>
-					@endif
-					
+					<div>{{ optional($model->inventory)->seguro }}</div>
 				</td>
 			</tr>
 		</table>
@@ -172,7 +169,7 @@
 			<table class="table-ingreso">
 				<tr>
 					<td class="label">Creado por:</td>
-					<td class="">{{ isset($model->user->name) ? $model->user->name : '' }}</td>
+					<td class="">{{ optional($model->user)->name }}</td>
 				</tr>
 				<!-- <tr>
 					<td class="label">Asesor:</td>
@@ -197,31 +194,19 @@
 				</tr>
 				<tr>
 					<td class="label2">Dirección:</td>
-					<td>{{ $model->company->address . ' ' . $model->company->ubigeo->departamento . '-' . $model->company->ubigeo->provincia . '-' . $model->company->ubigeo->distrito }}</td>
+					<td>{{ optional($model->company)->address . ' ' . optional($model->company->ubigeo)->departamento . '-' . optional($model->company->ubigeo)->provincia . '-' . optional($model->company->ubigeo)->distrito }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Cia. de seguro:</td>
-					@if(isset($model->inventory->seguro))
-					<td>{{ $model->inventory->seguro }}</td>
-					@else
-					<td></td>
-					@endif
+					<td>{{ optional($model->inventory)->seguro }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Conductor:</td>
-					@if(isset($model->inventory->driver_name))
-					<td>{{ $model->inventory->driver_name }} {{ $model->inventory->driver_mobile }}</td>
-					@else
-					<td></td>
-					@endif
+					<td>{{ optional($model->inventory)->driver_name }} {{ optional($model->inventory)->driver_mobile }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Contacto:</td>
-					@if(isset($model->inventory->contact_name))
-					<td>{{ $model->inventory->contact_name }} {{ $model->inventory->contact_mobile }}</td>
-					@else
-					<td></td>
-					@endif
+					<td>{{ optional($model->inventory)->contact_name }} {{ optional($model->inventory)->contact_mobile }}</td>
 				</tr>
 			</table>
 			<table class="table-datos">
@@ -230,31 +215,31 @@
 				</tr>
 				<tr>
 					<td class="label2">Placa:</td>
-					<td colspan="3">{{ $model->car->placa }}</td>
+					<td colspan="3">{{ optional($model->car)->placa }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Marca:</td>
-					<td colspan="3">{{ $model->car->modelo->brand->name }}</td>
+					<td colspan="3">{{ optional($model->car->modelo->brand)->name }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Modelo:</td>
-					<td colspan="3">{{ $model->car->modelo->name }}</td>
+					<td colspan="3">{{ optional($model->car->modelo)->name }}</td>
 				</tr>
 				<tr>
 					<td class="label2">VIN:</td>
-					<td colspan="3">{{ $model->car->vin }}</td>
+					<td colspan="3">{{ optional($model->car)->vin }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Año:</td>
-					<td colspan="3">{{ $model->car->year }}</td>
+					<td colspan="3">{{ optional($model->car)->year }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Motor:</td>
-					<td colspan="3">{{ $model->car->motor }}</td>
+					<td colspan="3">{{ optional($model->car)->motor }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Color:</td>
-					<td colspan="3">{{ $model->car->color }}</td>
+					<td colspan="3">{{ optional($model->car)->color }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Combustible:</td>
@@ -270,7 +255,7 @@
 				</tr>
 				<tr>
 					<td class="label2">Tj propiedad:</td>
-					<td colspan="3">{{ $model->inventory->tarjeta_propiedad }}</td>
+					<td colspan="3">{{ optional($model->inventory)->tarjeta_propiedad }}</td>
 				</tr>
 				<tr>
 					<td class="label2">soat:</td>
@@ -282,11 +267,11 @@
 				</tr>
 				<tr>
 					<td class="label2">llaves:</td>
-					<td colspan="3">{{ $model->inventory->llaves }}</td>
+					<td colspan="3">{{ optional($model->inventory)->llaves }}</td>
 				</tr>
 				<tr>
 					<td class="label2">c. remoto:</td>
-					<td colspan="3">{{ $model->inventory->control_remoto }}</td>
+					<td colspan="3">{{ optional($model->inventory)->control_remoto }}</td>
 				</tr>
 			</table>
 			

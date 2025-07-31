@@ -71,7 +71,7 @@ $models_7 = $models->where('status', 'ENTR');
 					<div class="row">
 						@foreach ($models_1 as $model)
 						@php
-						$texto = "Hola, Bienvenido a ".env('APP_NAME').". Gracias por preferirnos. Estamos a punto de ingresar tu vehículo {$model->car->modelo->brand->name} {$model->car->modelo->name} placa: {$model->car->placa}, es necesario aprobar el ingreso al taller en el siguiente link: ".route( 'order_client' , $model->slug);
+						$texto = "Hola, Bienvenido a ".env('APP_NAME').". Gracias por preferirnos. Estamos a punto de ingresar tu vehículo {optional($model->car->modelo->brand)->name} {optional($model->car)->modelo)->name} placa: {optional($model->car)->placa}, es necesario aprobar el ingreso al taller en el siguiente link: ".route( 'order_client' , $model->slug);
 						$status_logs = collect($model->status_log);
 						if( $status_logs->isNotEmpty() ) {
 							$last_log = $status_logs->last();
@@ -85,19 +85,19 @@ $models_7 = $models->where('status', 'ENTR');
 							<div class="card">
 								<div class="card-body">
 									<h5>
-										<input class="input_mobile" type="hidden" value="{{ $model->company->mobile }}">
+										<input class="input_mobile" type="hidden" value="{{ optional($model->company)->mobile }}">
 										<input class="input_texto" type="hidden" value="{{ $texto }}">
 										<!-- Button trigger modal -->
 										{{-- <button type="button" class="btn btn-outline-success btn-sm btn-circle btn-modal-mobile" data-toggle="modal" data-target="#exampleModal">
 										  {!! $icons['whatsapp'] !!}
 										</button> --}}
-										{{-- <a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a> --}}
+										{{-- <a href="https://wa.me/+51{{ optional($model->company)->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-info btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a> --}}
 										<a href="{{ route( 'inventory.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'order.print_inventory' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="Inventario">{!! $icons['pdf'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}</h5>
-									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
+									<h5 class="card-title">#{{ $model->sn }} - {{ optional($model->car->modelo->brand)->name }} {{ optional($model->car->modelo)->name }} {{ optional($model->car)->placa }}</h5>
+									<h6 class="card-subtitle mb-2 text-muted">{{ optional($model->company)->company_name }}</h6>
 									<p class="card-text {{ $class }}">{{ $last_log->message }} {{ $last_log->created_at->diffForHumans() }}</p>
 								</div>
 							</div>
@@ -122,9 +122,9 @@ $models_7 = $models->where('status', 'ENTR');
 										@endif
 										<a href="{{ route( 'change_status_order' , $model) }}" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }} 
+									<h5 class="card-title">#{{ $model->sn }} - {{ optional($model->car->modelo->brand)->name }} {{ optional($model->car->modelo)->name }} {{ optional($model->car)->placa }} 
 									</h5>
-									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
+									<h6 class="card-subtitle mb-2 text-muted">{{ optional($model->company)->company_name }}</h6>
 									<p class="card-text">{{ $model->diag_at->diffForHumans() }}</p>
 								</div>
 							</div>
@@ -143,9 +143,9 @@ $models_7 = $models->where('status', 'ENTR');
 										<a href="{{ route( 'repuestos.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
+									<h5 class="card-title">#{{ $model->sn }} - {{ optional($model->car->modelo->brand)->name }} {{ optional($model->car->modelo)->name }} {{ optional($model->car)->placa }}
 									</h5>
-									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
+									<h6 class="card-subtitle mb-2 text-muted">{{ optional($model->company)->company_name }}</h6>
 									<p class="card-text">{{ $model->repu_at->diffForHumans() }}</p>
 								</div>
 							</div>
@@ -169,9 +169,9 @@ $models_7 = $models->where('status', 'ENTR');
 										<!-- <a href="{{ route( 'pre_aprobacion.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a> -->
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
+									<h5 class="card-title">#{{ $model->sn }} - {{ optional($model->car->modelo->brand)->name }} {{ optional($model->car->modelo)->name }} {{ optional($model->car)->placa }}
 									</h5>
-									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
+									<h6 class="card-subtitle mb-2 text-muted">{{ optional($model->company)->company_name }}</h6>
 									<p class="card-text">{{ $model->pre_approved_at->diffForHumans() }}</p>
 								</div>
 							</div>
@@ -184,19 +184,19 @@ $models_7 = $models->where('status', 'ENTR');
 					<div class="row">
 						@foreach ($models_4->sortByDesc('approved_at') as $model)
 						@php
-						$texto = "Hola, el diagnóstico de tu vehículo {$model->car->modelo->brand->name} {$model->car->modelo->name} placa: {$model->car->placa} ya está listo, puedes ver los detalles y aprobar la reparación en el siguiente link {route( 'order_client' , $model->slug)}";
+						$texto = "Hola, el diagnóstico de tu vehículo {optional($model->car->modelo->brand)->name} {optional($model->car->modelo)->name} placa: {optional($model->car)->placa} ya está listo, puedes ver los detalles y aprobar la reparación en el siguiente link {route( 'order_client' , $model->slug)}";
 						@endphp
 						<div class="col-sm-6 col-md-4">
 							<div class="card">
 								<div class="card-body">
 									<h5>
-										<a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-success btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
+										<a href="https://wa.me/+51{{ optional($model->company)->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-success btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
 										<!-- <a href="{{ route( 'aprobacion.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a> -->
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
+									<h5 class="card-title">#{{ $model->sn }} - {{ optional($model->car->modelo->brand)->name }} {{ optional($model->car->modelo)->name }} {{ optional($model->car)->placa }}
 									</h5>
-									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
+									<h6 class="card-subtitle mb-2 text-muted">{{ optional($model->company)->company_name }}</h6>
 									<p class="card-text">{{ $model->approved_at->diffForHumans() }}</p>
 								</div>
 							</div>
@@ -215,9 +215,9 @@ $models_7 = $models->where('status', 'ENTR');
 										<a href="{{ route( 'repair.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
+									<h5 class="card-title">#{{ $model->sn }} - {{ optional($model->car->modelo->brand)->name }} {{ optional($model->car->modelo)->name }} {{ optional($model->car)->placa }}
 									</h5>
-									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
+									<h6 class="card-subtitle mb-2 text-muted">{{ optional($model->company)->company_name }}</h6>
 									<p class="card-text">{{ $model->repar_at->diffForHumans() }}</p>
 								</div>
 							</div>
@@ -236,9 +236,9 @@ $models_7 = $models->where('status', 'ENTR');
 										<a href="{{ route( 'qc.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
+									<h5 class="card-title">#{{ $model->sn }} - {{ optional($model->car->modelo->brand)->name }} {{ optional($model->car->modelo)->name }} {{ optional($model->car)->placa }}
 									</h5>
-									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
+									<h6 class="card-subtitle mb-2 text-muted">{{ optional($model->company)->company_name }}</h6>
 									<p class="card-text">{{ $model->checked_at->diffForHumans() }}</p>
 								</div>
 							</div>
@@ -257,13 +257,13 @@ $models_7 = $models->where('status', 'ENTR');
 							<div class="card">
 								<div class="card-body">
 									<h5>
-										<a href="https://wa.me/+51{{ $model->company->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-success btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
+										<a href="https://wa.me/+51{{ optional($model->company)->mobile }}?text={{ $texto }}" target="_blank" class="btn btn-outline-success btn-sm btn-circle">{!! $icons['whatsapp'] !!}</a>
 										<a href="{{ route( 'entrega.edit' , $model) }}" type="button" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle"><i class="fa-solid fa-arrow-right"></i></a>
 									</h5>
-									<h5 class="card-title">#{{ $model->sn }} - {{ $model->car->modelo->brand->name }} {{ $model->car->modelo->name }} {{ $model->car->placa }}
+									<h5 class="card-title">#{{ $model->sn }} - {{ optional($model->car->modelo->brand)->name }} {{ optional($model->car->modelo)->name }} {{ optional($model->car)->placa }}
 									</h5>
-									<h6 class="card-subtitle mb-2 text-muted">{{ $model->company->company_name }}</h6>
+									<h6 class="card-subtitle mb-2 text-muted">{{ optional($model->company)->company_name }}</h6>
 									<p class="card-text">{{ $model->sent_at->diffForHumans() }}</p>
 								</div>
 							</div>

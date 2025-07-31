@@ -3,8 +3,10 @@
 		<tr>
 			<th class="text-center">#</th>
 			<th class="text-center">Fecha</th>
+			<th class="text-center">Hora</th>
 			<th class="text-center">Placa</th>
 			<th class="text-center">Marca</th>
+			<th class="text-center">Modelo</th>
 			<th>Cliente</th>
 			<th class="text-center">Estado</th>
 			<th class="text-center">Acciones</th>
@@ -25,10 +27,12 @@
 		@endphp
 		<tr data-id="{{ $model->id }}" data-tipo="OT">
 			<td class="text-center">{{ $model->sn }}</td>
-			<td class="text-center">{{ $model->created_at->formatLocalized('%d/%m/%Y') }}</td>
+			<td class="text-center">{{ $model->created_at->format('d/m/Y') }}</td>
+			<td class="text-center">{{ $model->created_at->format('H:i:s') }}</td>
 			<td class="text-center" style="white-space: nowrap;">{{ $model->placa }}</td>
-			<td class="" style="white-space: nowrap;">{{ $model->car->brand->name }}</td>
-			<td>{{ $model->company->company_name }} </td>
+			<td class="" style="white-space: nowrap;">{{ optional($model->car->brand)->name }}</td>
+			<td class="" style="white-space: nowrap;">{{ optional($model->car->modelo)->name }}</td>
+			<td>{{ optional($model->company)->company_name }} </td>
 			<td class="status text-center"><span class="{{ $clase }}">{{ $model->status }}</span></td>
 			<td class="text-center" style="white-space: nowrap;">
 				<a href="{{ route( 'order.print_inventory' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="Inventario">{!! $icons['pdf'] !!}</a>

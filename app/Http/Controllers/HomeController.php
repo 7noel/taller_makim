@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Modules\Finances\Exchange;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Modules\Operations\Order;
 
 class HomeController extends Controller
 {
@@ -82,5 +83,22 @@ class HomeController extends Controller
         }
 
         return response()->json(['status' => 'error', 'message' => 'No se subió ninguna imagen'], 422);
+    }
+
+    public function prueba()
+    {
+        $orders = Order::with('quote')->has('quote')->where('order_type', 'output_quotes')->whereNull('inventory')->get();
+        // dd($orders);
+        foreach ($orders as $key => $order) {
+            $inventory = $order->inventory ?? (object) [];
+            $inventory->seguro = $order->quote->inventory->seguro;
+            $inventory->contact_name = $order->quote->inventory->contact_name;
+            $inventory->contact_email = $order->quote->inventory->contact_email;
+            $inventory->contact_mobile = $order->quote->inventory->contact_mobile;
+            //dd($order);
+            $order->inventory = $inventory;
+            $order->save();
+        }
+        return "finnnn";
     }
 }
