@@ -13,7 +13,8 @@ class BankRepo extends BaseRepo{
 	
 	public function mostrar()
 	{
-		return Bank::where('my_company', session('my_company')->id)->where('show', 1)->get();
+		return Bank::where('show', 1)->get();
+		// return Bank::where('my_company', session('my_company')->id)->where('show', 1)->get();
 	}
 
 	public function findOrFail($id)

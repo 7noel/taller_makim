@@ -42,9 +42,19 @@
 		{!! Field::text('mobile', ['label' => 'Celular', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::email('email', ['label' => 'Email', 'class'=>'form-control-sm', 'required']) !!}
+		{!! Field::email('email', ['label' => 'Email', 'class'=>'form-control-sm', 'required']) !!} 
 	</div>
 </div>
+
+<div class="form-row">
+	<div class="col-sm-2 mb-3">
+    	{!! Field::select('config[seguro]', ['on'=>'SI'], ['empty'=>'No', 'label'=>'Es Aseguradora', 'class'=>'form-control-sm']) !!}
+	</div>
+	<div class="col-sm-4">
+		{!! Field::text('brand_name', ['label' => 'Nombre Comercial', 'class'=>'form-control-sm text-uppercase']) !!}
+	</div>
+</div>
+
 @if(!isset($model))
 <div class="form-row">
 	<div class="col-sm-2 mb-3">
