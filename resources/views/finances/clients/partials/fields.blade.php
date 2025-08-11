@@ -53,6 +53,15 @@
 	<div class="col-sm-4">
 		{!! Field::text('brand_name', ['label' => 'Nombre Comercial', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
+	<div class="col-sm-2">
+		{!! Field::select('config[currency_id]', config('options.table_sunat.moneda'), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm']) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::number('config[p_hora]', null, ['label' => 'Precio x Hora', 'class'=>'form-control-sm text-uppercase', 'step'=>"0.01", 'min'=>"0.00"]) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::number('config[p_paño]', null, ['label' => 'Precio x Paño', 'class'=>'form-control-sm text-uppercase', 'step'=>"0.01", 'min'=>"0.00"]) !!}
+	</div>
 </div>
 
 @if(!isset($model))
@@ -97,3 +106,26 @@
 <a href="{!! route('cars.create_by_client', $model->id) !!}" id="btnAddCar" class="btn btn-outline-primary btn-sm" title="Agregar Vehículo">{!! $icons['add'] !!} Agregar Vehículo</a>
 @endisset
 <br><br>
+
+<script>
+$(document).ready(function(){
+	actualizar_campos()
+	$('#config_seguro').change(function() {
+		actualizar_campos()
+	})
+})
+function actualizar_campos() {
+	seguro = $('#config_seguro').val()
+	if (seguro == 'on') {
+		$('#field_brand_name').show()
+		$('#field_config_currency_id').show()
+		$('#field_config_p_hora').show()
+		$('#field_config_p_paño').show()
+	} else {
+		$('#field_brand_name').hide()
+		$('#field_config_currency_id').hide()
+		$('#field_config_p_hora').hide()
+		$('#field_config_p_paño').hide()
+	}
+}
+</script>
