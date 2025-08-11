@@ -969,14 +969,14 @@ function createItem(){
     }
     // console.log(unidad)
     q = parseFloat($('#txtCantidad').val())
-    if (!isNaN(q) && q <= 0) {
+    if (isNaN(q) || q <= 0) {
         $('#txtCantidad').val("")
         $('#txtCantidad').focus()
         return false;
     }
     v = parseFloat($('#txtValue').val())
     if (window.type != 'pro') {
-        if (!isNaN(v) && v <= 0) {
+        if (isNaN(v) || v <= 0) {
             $('#txtValue').val("")
             $('#txtValue').focus()
             return false;

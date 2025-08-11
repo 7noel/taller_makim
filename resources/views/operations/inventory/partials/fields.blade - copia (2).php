@@ -17,7 +17,7 @@
 */
 
     .padding-1 {padding-bottom: 1px; padding-top: 1px;}
-    /*.padding-0 { padding-left:0; padding-right:0; }*/
+    .padding-0 { padding-left:0; padding-right:0; }
     .radio-green input[type="radio"] + label { color: green; }
     .radio-amber input[type="radio"] + label { color: orange; }
     .radio-red input[type="radio"] + label { color: red; }
@@ -77,6 +77,18 @@
 {!! Form::hidden('car_id', (isset($car)) ? $car->id : null, ['id'=>'car_id']) !!}
 {!! Form::hidden('action', $action, ['id'=>'action']) !!}
 
+<div class="accordion mb-4" id="accordionExample">
+  <div class="card">
+    <div class="card-header padding-1" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Vehículo
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
         <div class="mb-2">
             <a href="{{ route('cars.create') }}" class="btn btn-sm btn-link">[[ Crear Vehiculo ]]</a>
             <a href="{{ route('clients.create') }}" class="btn btn-sm btn-link">[[ Crear Cliente ]]</a>
@@ -273,10 +285,19 @@
                 </div>
             </div>
         </div>
-
-<br>
-<!-- Checklist -->
-<h5><strong>CheckList</strong></h5>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header padding-1" id="headingTwo">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          CheckList
+        </button>
+      </h2>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
         <div class="form-row">
             <div class="col-sm-12">
 
@@ -322,10 +343,19 @@
                 {!! Field::text('comment', ['label' => 'Comentarios:', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
         </div>
-
-<br>
-<!-- Daños -->
-<h5><strong>Daños</strong></h5>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header padding-1" id="headingThree">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Daños
+        </button>
+      </h2>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div class="card-body">
         <div class="row justify-content-center">
             <div class="col-md-12 text-center">
                 <label for="imageSelector">Selecciona un tipo de vehículo:</label>
@@ -364,16 +394,26 @@
             </div>
         </div>
 
-<br>
-<!-- Fotos -->
-<h5><strong>Fotos</strong></h5>
-        <div class="text-center">
-            <input type="file" accept="image/*" id="photoInput" style="display:none;" capture="environment">
-            <button type="button" class="btn btn-outline-primary mt-4" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
-            <input type="file" accept="video/*" id="videoInput" style="display:none;" capture="environment">
-            <button type="button" style="display:none;" class="btn btn-outline-primary" id="addVideo"><i class="fas fa-video"></i> Grabar Video</button>
-            
-        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header padding-1" id="headingFour">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+          Fotos
+        </button>
+      </h2>
+    </div>
+    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+      <div class="card-body text-center">
+
+        
+
+        <input type="file" accept="image/*" id="photoInput" style="display:none;" capture="environment">
+        <button type="button" class="btn btn-outline-primary mt-4" id="addPhoto"><i class="fas fa-camera"></i> Tomar Foto</button>
+        <input type="file" accept="video/*" id="videoInput" style="display:none;" capture="environment">
+        <button type="button" style="display:none;" class="btn btn-outline-primary" id="addVideo"><i class="fas fa-video"></i> Grabar Video</button>
 
         <div class="media-container">
             <div id="imageView" class="image-view" style="display:none;">
@@ -398,10 +438,11 @@
                 @php $imageCount = $imageCount + 1; @endphp
             @endif
         </div>
-<br>
 
-
-
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script> -->
 
