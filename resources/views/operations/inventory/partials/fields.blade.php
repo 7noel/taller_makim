@@ -108,7 +108,7 @@
                 {!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}
             </div>
             <div class="col-sm-2 d-none">
-                {!! Field::select('inventory[seguro]', config('options.cia_seguros'), ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm', 'id'=>'seguro']) !!}
+                {!! Field::select('insurance_company_id', $insurance_companies, ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm', 'id'=>'seguro']) !!}
             </div>
         </div>
         <div class="form-row">

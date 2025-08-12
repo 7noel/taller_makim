@@ -181,7 +181,7 @@
 			<td class="label">Contacto:</td>
 			<td class="col2">{{ isset($model->inventory->contact_name) ? $model->inventory->contact_name : '' }}</td>
 			<td class="label">Cia Seguro:</td>
-			<td class="">{{ isset($model->inventory->seguro) ? $model->inventory->seguro : '' }}</td>
+			<td class="">{{ optional($model->insurance_company)->brand_name }}</td>
 		</tr>
 		<tr>
 			<td class="label">Placa:</td>

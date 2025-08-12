@@ -23,6 +23,7 @@ class CreateOrdersTable extends Migration
             $table->string('order_type'); // typo de documento {1=>'order', 2=>'quote'}
             $table->string('type_op'); // segun ello afecta el valor promedio
             $table->bigInteger('document_type_id')->unsigned();
+            $table->bigInteger('insurance_company_id')->unsigned();
             $table->bigInteger('company_id')->unsigned();
             $table->bigInteger('car_id')->unsigned();
             $table->string('placa');

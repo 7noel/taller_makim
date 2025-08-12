@@ -180,7 +180,7 @@
 			<td class="label">Contacto:</td>
 			<td class="col2">{{ isset($model->inventory->contact_name) ? $model->inventory->contact_name : '' }}</td>
 			<td class="label">Cia Seguro:</td>
-			<td class="">{{ isset($model->inventory->seguro) ? $model->inventory->seguro : '' }}</td>
+			<td class="">{{ optional($model->insurance_company)->brand_name }}</td>
 		</tr>
 		<tr>
 			<td class="label">Placa:</td>
@@ -273,15 +273,15 @@
         {{-- Grupo de REPUESTOS (value > 0) --}}
         @if($repuestos_pagados->isNotEmpty())
             <tr>
-                <td class="border title" colspan="3"><strong>REPUESTOS</strong></td>
-                <td class="border center"><strong>{{ $total_repuestos_pagados }}</strong></td>
+                <td class="border title" colspan="4"><strong>REPUESTOS</strong></td>
+                {{--<td class="border center"><strong>{{ $total_repuestos_pagados }}</strong></td>--}}
             </tr>
             @foreach($repuestos_pagados as $key => $detail)
                 <tr>
                     <td class="border center">{{ $loop->iteration + count($detalles_normales) }}</td>
                     <td class="border">{{ $detail->product->name }}</td>
                     <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
-                    <td class="border center"></td>
+                    <td class="border center">{{ $detail->total }}</td>
                 </tr>
             @endforeach
         @endif

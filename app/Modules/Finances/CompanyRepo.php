@@ -153,4 +153,9 @@ class CompanyRepo extends BaseRepo{
 	    return $agrupado;
 	}
 
+	public function getListInsuranceCompanies()
+	{
+		return Company::where('entity_type', 'clients')->whereJsonContains('config->seguro', 'on')->pluck('brand_name', 'id')->toArray();
+	}
+
 }

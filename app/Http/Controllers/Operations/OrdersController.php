@@ -87,6 +87,7 @@ class OrdersController extends Controller {
 	{
 		$action = "create";
 		$my_companies = $this->companyRepo->getListMyCompany();
+		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
 		$repairmens = $this->companyRepo->getListRepairmens();
@@ -94,7 +95,7 @@ class OrdersController extends Controller {
 		$bs_shipper = ['' => 'Seleccionar'];
 		$checklist_details = $this->checklistDetailRepo->all2();
 		// return view('operations.inventory.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
-		return view('partials.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details'));
+		return view('partials.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies'));
 	}
 
 	public function store()
@@ -119,6 +120,7 @@ class OrdersController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		$quote = $model->quote;
 		$my_companies = $this->companyRepo->getListMyCompany();
+		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
 		$repairmens = $this->companyRepo->getListRepairmens();
@@ -127,7 +129,7 @@ class OrdersController extends Controller {
 		$checklist_details = $this->checklistDetailRepo->all2();
 		$car = $this->carRepo->findOrFail($car_id);
 		$client = $car->company;
-		return view('partials.show', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details'));
+		return view('partials.show', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details', 'insurance_companies'));
 	}
 
 	public function edit($id)
@@ -138,6 +140,7 @@ class OrdersController extends Controller {
 		$quote = $model->quote;
 		$inventory = $model->quote;
 		$my_companies = $this->companyRepo->getListMyCompany();
+		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
 		$repairmens = $this->companyRepo->getListRepairmens();
@@ -155,7 +158,7 @@ class OrdersController extends Controller {
 		$units_product = $this->tableRepo->getListUnitPro();
 		// $checklist_details = $this->checklistDetailRepo->all2();
 		// dd($checklist_details);
-		return view('partials.edit', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'inventory', 'action', 'checklist_details', 'categories_service', 'categories_product', 'units_service', 'units_product'));
+		return view('partials.edit', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'inventory', 'action', 'checklist_details', 'categories_service', 'categories_product', 'units_service', 'units_product', 'insurance_companies'));
 	}
 
 	public function update($id)
@@ -445,12 +448,13 @@ class OrdersController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		$inventory = $model;
 		$my_companies = $this->companyRepo->getListMyCompany();
+		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
 		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
-		return view('operations.output_quotes.create_by_inventory', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'inventory', 'action'));
+		return view('operations.output_quotes.create_by_inventory', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'inventory', 'action', 'insurance_companies'));
 	}
 	public function diagnostico_edit($id)
 	{
