@@ -1021,6 +1021,7 @@ function existCodeInList(code) {
 
 function addRowProduct2() {
     //obteniendo los valores de los inputs
+    description = $('#txtDescription').val()
     desc = $('#txtProducto').val()
     codigo = $('#txtCodigo').text()
     product_id = $('#txtProId').text()
@@ -1072,6 +1073,7 @@ function addRowProduct2() {
             <input class="is_downloadable" name="details[${items}][is_downloadable]" type="hidden" value="${is_downloadable}">
             <input class="productId" name="details[${items}][comment]" type="hidden" value="${text_cat}">
             <input class="unitId" name="details[${items}][unit_id]" type="hidden" value="${u}">
+            <input class="description" name="details[${items}][description]" type="hidden" value="${description}">
             <td><span class='spanCodigo text-right'>${codigo}</span><input class="productId" name="details[${items}][product_id]" type="hidden" value="${product_id}"></td>
             <td><span class='spanCategory'>${text_cat}</span></td>
             <td><span class='spanProduct'>${desc}</span><input class="txtProduct" name="details[${items}][DFDESCRI]" type="hidden" value=""></td>

@@ -71,12 +71,24 @@
 	</div>
 </div>
 @if(isset($model) and $model->order_type == 'output_quotes')
+	@php
+		if(isset($model->diagnostico->p_hora)) {
+			$p_hora = $model->diagnostico->p_hora;
+			$p_paño = $model->diagnostico->p_paño;
+		} elseif (!is_null($model->insurance_company)) {
+			$p_hora = $model->insurance_company->config['p_hora'];
+			$p_paño = $model->insurance_company->config['p_paño'];
+		} else {
+			$p_hora = 0;
+			$p_paño = 0;		
+		}
+	@endphp
 <div class="form-row">
 	<div class="col-sm-2">
-		{!! Field::number('diagnostico[p_hora]', null, ['label' => 'Precio x Hora', 'class'=>'form-control-sm text-uppercase', 'step'=>"0.01", 'min'=>"0.00"]) !!}
+		{!! Field::number('diagnostico[p_hora]', $p_hora, ['label' => 'Precio x Hora', 'class'=>'form-control-sm text-uppercase', 'step'=>"0.01", 'min'=>"0.00"]) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::number('diagnostico[p_paño]', null, ['label' => 'Precio x Paño', 'class'=>'form-control-sm text-uppercase', 'step'=>"0.01", 'min'=>"0.00"]) !!}
+		{!! Field::number('diagnostico[p_paño]', $p_paño, ['label' => 'Precio x Paño', 'class'=>'form-control-sm text-uppercase', 'step'=>"0.01", 'min'=>"0.00"]) !!}
 	</div>
 </div>
 

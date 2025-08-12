@@ -110,6 +110,9 @@
 					<input type="hidden" id="is_downloadable">
 					<!-- <input type="hidden" id="unitId"> -->
 				</div>
+				<div class="form-group col-sm-12 d-none">
+					<textarea id="txtDescription" rows="5" class="form-control"></textarea>
+				</div>
 				<div class="form-group col-3 text-center">
 					<label for="txtCantidad">Cantidad <span id="label-cantidad"></span> </label>
 					<input type="number" class="form-control form-control-sm text-center" id="txtCantidad">
