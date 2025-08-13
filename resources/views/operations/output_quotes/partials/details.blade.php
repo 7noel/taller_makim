@@ -111,7 +111,7 @@
 					<input type="hidden" id="is_downloadable">
 					<!-- <input type="hidden" id="unitId"> -->
 				</div>
-				<div class="form-group col-sm-12">
+				<div class="form-group col-sm-12 d-none">
 					<textarea id="txtDescription" rows="3" class="form-control"></textarea>
 				</div>
 				<div class="form-group col-3 text-center">
@@ -206,6 +206,12 @@ $(document).ready(function () {
     	}
     	if ($('#unitId option:selected').text()=='hr' && $('#diagnostico_p_hora').val()!='') {
     		$('#txtValue').val($('#diagnostico_p_hora').val())
+    	}
+    	my_cat_text = $("#category option:selected").text()
+    	if (my_cat_text == 'MECANICA') {
+    		$('#txtDescription').parent().removeClass('d-none')
+    	} else {
+    		$('#txtDescription').parent().addClass('d-none')
     	}
     })
 })

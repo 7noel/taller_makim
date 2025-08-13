@@ -267,8 +267,13 @@
 			<tr>
 			    <td class="border center align-top">{{ $item++ }}</td>
 			    <td class="border align-top">
-			        {!! $detail->product->name . ($detail->description ? '<br>' . nl2br(e($detail->description)) : '') !!}
-			    </td>
+				    @if (!empty($detail->description))
+				        <strong>{{ $detail->product->name }}</strong><br>
+				        {!! nl2br(e($detail->description)) !!}
+				    @else
+				        {{ $detail->product->name }}
+				    @endif
+				</td>
 			    <td class="border center align-top">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
 			    <td class="border center align-top">{{ $detail->value }}</td>
 			    <td class="border center align-top">{{ $detail->total }}</td>

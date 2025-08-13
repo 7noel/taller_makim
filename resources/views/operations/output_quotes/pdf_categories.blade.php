@@ -116,6 +116,10 @@
         	font-weight: bold;
         	text-transform: uppercase;
         }
+		td.align-top {
+			vertical-align: top;
+		}
+		
     </style>
 </head>
 <body>
@@ -262,10 +266,17 @@
 		    </tr>
 		    @foreach($detalles as $detalle)
 		    <tr>
-		        <td class="border center">{{ $item++ }}</td>
-		        <td class="border">{{ $detalle->product->name }}</td>
-		        <td class="border center">{{ $detalle->quantity.' '.$detalle->unit->symbol }}</td>
-		        <td class="border center"></td>
+			    <td class="border center align-top">{{ $item++ }}</td>
+			    <td class="border align-top">
+				    @if (!empty($detalle->description))
+				        <strong>{{ $detalle->product->name }}</strong><br>
+				        {!! nl2br(e($detalle->description)) !!}
+				    @else
+				        {{ $detalle->product->name }}
+				    @endif
+				</td>
+			    <td class="border center align-top">{{ $detalle->quantity.' '.$detalle->unit->symbol }}</td>
+			    <td class="border center align-top"></td>
 		    </tr>
 		    @endforeach
 		@endforeach

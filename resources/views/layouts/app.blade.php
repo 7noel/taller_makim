@@ -1113,10 +1113,10 @@ function addRowProduct2() {
         // window.el.find('.spanCodigo').text($('#txtCodigo').val())
         // window.el.find('.unitId').val($('#unitId').val())
         window.el.find('.description').val(description)
-        window.el.find('.txtCantidad').val(q)
-        window.el.find('.spanCantidad').text(q + ' ' + unidad)
-        window.el.find('.txtValue').val(v)
-        window.el.find('.spanValue').text(v)
+        window.el.find('.txtCantidad').val(q.toFixed(2))
+        window.el.find('.spanCantidad').text(q.toFixed(2) + ' ' + unidad)
+        window.el.find('.txtValue').val(v.toFixed(2))
+        window.el.find('.spanValue').text(v.toFixed(2))
         window.el.find('.txtDscto2').val(d2)
         window.el.find('.spanDscto2').text(d2)
 
@@ -1256,6 +1256,8 @@ function clearModalProduct() {
     $('#txtValue').val("0")
     $('#txtDscto2').val(window.descuento2)
     $('#txtTotal').val("0.00")
+    $('#spanValueItem').text('0.00')
+    $('#spanPriceItem').text('0.00')
     $('#label-cantidad').text('')
 
     $('#alert-stock').addClass("badge-info")
@@ -1276,6 +1278,7 @@ function clearModalProduct() {
 
     $('#btn-create-item').addClass('d-none')
     $('#btn-add-product').removeClass('d-none')
+    $('#txtDescription').parent().addClass('d-none')
 }
 
 function editModalProduct() {
@@ -1306,10 +1309,18 @@ function editModalProduct() {
     $('#txtDscto2').val(window.el.find('.txtDscto2').val())
     $('#txtTotal').val(window.el.find('.txtTotal').text())
     $('#txtPriceItem').val(window.el.find('.txtPriceItem').text())
+    $('#spanValueItem').text(window.el.find('.txtTotal').text())
     $('#spanPriceItem').text(window.el.find('.txtPriceItem').text())
     $('#label-cantidad').text(window.el.find('.unitId').val())
 
     $('#exampleModalx').modal('show')
+
+    my_cat_text = $("#category option:selected").text()
+    if (my_cat_text == 'MECANICA') {
+        $('#txtDescription').parent().removeClass('d-none')
+    } else {
+        $('#txtDescription').parent().addClass('d-none')
+    }
 }
 
 function clearModalMarcaYModelo() {
