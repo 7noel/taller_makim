@@ -426,11 +426,13 @@ $(document).ready(function () {
         $('#btnAddService').focus(); // Cambia esto a otro botón fuera del modal
     });
     $(".form-loading").on("keydown", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); // Evita que el formulario se envíe
+        // Solo bloquea el Enter si NO estás en un textarea
+        if (event.key === "Enter" && !$(event.target).is("textarea")) {
+            event.preventDefault();
             return false;
         }
-    })
+    });
+
 
     n = $("#d1").val()
     n = Math.round(parseFloat(n)*1000000)/1000000
@@ -1110,6 +1112,7 @@ function addRowProduct2() {
         // window.el.find('.txtCodigo').val($('#txtCodigo').val())
         // window.el.find('.spanCodigo').text($('#txtCodigo').val())
         // window.el.find('.unitId').val($('#unitId').val())
+        window.el.find('.description').val(description)
         window.el.find('.txtCantidad').val(q)
         window.el.find('.spanCantidad').text(q + ' ' + unidad)
         window.el.find('.txtValue').val(v)
@@ -1246,6 +1249,7 @@ function clearModalProduct() {
     $('#txtProducto').focus()
     $('#txtProducto').val("")
     $('#txtProduct').val("")
+    $('#txtDescription').val("")
     $('#txtCodigo').text("")
     // $('#unitId').val("")
     $('#txtCantidad').val("0")
@@ -1293,10 +1297,10 @@ function editModalProduct() {
 
     $('#category').val(window.el.find('.categoryId').val())
     $('#unitId').val(window.el.find('.unitId').val())
+    $('#txtDescription').val(window.el.find('.description').val())
     $('#txtProducto').val(window.el.find('.spanProduct').text())
     $('#txtProduct').val(window.el.find('.spanProduct').text())
     $('#txtCodigo').text(window.el.find('.spanCodigo').text())
-    $('#unitId').val(window.el.find('.unitId').val())
     $('#txtCantidad').val(window.el.find('.txtCantidad').val())
     $('#txtValue').val(window.el.find('.txtValue').val())
     $('#txtDscto2').val(window.el.find('.txtDscto2').val())

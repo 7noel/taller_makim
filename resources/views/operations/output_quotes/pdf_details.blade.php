@@ -117,6 +117,10 @@
         	font-weight: bold;
         	text-transform: uppercase;
         }
+		td.align-top {
+			vertical-align: top;
+		}
+		
     </style>
 </head>
 <body>
@@ -260,13 +264,15 @@
 		        <td class="border title" colspan="5"><strong>{{ $comment }}</strong></td>
 		    </tr>
 		    @foreach($detalles as $detail)
-		    <tr>
-		        <td class="border center">{{ $item++ }}</td>
-		        <td class="border">{{ $detail->product->name }}</td>
-		        <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
-		        <td class="border center">{{ $detail->value }}</td>
-		        <td class="border center">{{ $detail->total }}</td>
-		    </tr>
+			<tr>
+			    <td class="border center align-top">{{ $item++ }}</td>
+			    <td class="border align-top">
+			        {!! $detail->product->name . ($detail->description ? '<br>' . nl2br(e($detail->description)) : '') !!}
+			    </td>
+			    <td class="border center align-top">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
+			    <td class="border center align-top">{{ $detail->value }}</td>
+			    <td class="border center align-top">{{ $detail->total }}</td>
+			</tr>
 		    @endforeach
 		@endforeach
 

@@ -30,6 +30,7 @@
 			{!! Form::hidden("details[$i][category_id]", $detail->category_id, ['class'=>'categoryId','data-categoryid'=>'']) !!}
 			{!! Form::hidden("details[$i][sub_category_id]", $detail->sub_category_id, ['class'=>'subCategoryId','data-subcategoryid'=>'']) !!}
 			{!! Form::hidden("details[$i][is_downloadable]", $detail->is_downloadable, ['class'=>'is_downloadable','data-is_downloadable'=>'']) !!}
+			{!! Form::hidden("details[$i][description]", $detail->description, ['class'=>'description','data-description'=>'']) !!}
 			<td><span class='spanCodigo text-right'>{{ $detail->product->intern_code }}</span></td>
 			<td><span class='spanCategory'>{{ $detail->comment }}</span></td>
 			<td><span class='spanProduct'>{{ $detail->product->name }}</span></td>
@@ -110,8 +111,8 @@
 					<input type="hidden" id="is_downloadable">
 					<!-- <input type="hidden" id="unitId"> -->
 				</div>
-				<div class="form-group col-sm-12 d-none">
-					<textarea id="txtDescription" rows="5" class="form-control"></textarea>
+				<div class="form-group col-sm-12">
+					<textarea id="txtDescription" rows="3" class="form-control"></textarea>
 				</div>
 				<div class="form-group col-3 text-center">
 					<label for="txtCantidad">Cantidad <span id="label-cantidad"></span> </label>

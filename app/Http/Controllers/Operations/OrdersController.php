@@ -332,13 +332,14 @@ class OrdersController extends Controller {
 	{
 		$action = "create";
 		$my_companies = $this->companyRepo->getListMyCompany();
+		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
 		$payment_conditions = $this->paymentConditionRepo->getList();
 		$sellers = $this->companyRepo->getListSellers();
 		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = ['' => 'Seleccionar'];
 		$bs_shipper = ['' => 'Seleccionar'];
 		$car = $this->carRepo->findOrFail($car_id);
-		return view('partials.create', compact('car', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
+		return view('partials.create', compact('car', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'insurance_companies'));
 	}
 
 	public function recepcion_crear()
