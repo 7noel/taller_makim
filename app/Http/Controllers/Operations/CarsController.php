@@ -164,7 +164,7 @@ class CarsController extends Controller {
 	{
 		$model = $this->repo->destroy($id);
 		if (request()->ajax()) {	return $model; }
-		return redirect()->route('operations.cars.index');
+		return redirect()->route('cars.index');
 	}
 
 	public function modelosByWarehouse($warehouse_id)
@@ -186,7 +186,7 @@ class CarsController extends Controller {
 		$models = $this->repo->filter($filter);
 		//dd($models);
 
-		return view('operations.cars.filter',compact('models', 'filter'));
+		return view('cars.filter',compact('models', 'filter'));
 	}
 	public function generateSlug()
 	{
