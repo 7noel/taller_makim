@@ -373,6 +373,7 @@ class OrdersController extends Controller {
 	{
 		// dd(explode('.', \Request::route()->getName())[0]);
 		$action = "create";
+		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
 		$checklist_details = $this->checklistDetailRepo->all2();
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$payment_conditions = $this->paymentConditionRepo->getList();
@@ -383,7 +384,7 @@ class OrdersController extends Controller {
 		$car = $this->carRepo->findOrFail($car_id);
 		$client = $car->company;
 
-		return view('operations.inventory.create', compact('car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details'));
+		return view('operations.inventory.create', compact('car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies'));
 	}
 	public function changeStatusOrder($id)
 	{

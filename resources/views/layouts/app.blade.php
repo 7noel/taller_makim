@@ -1279,6 +1279,13 @@ function clearModalProduct() {
     $('#btn-create-item').addClass('d-none')
     $('#btn-add-product').removeClass('d-none')
     $('#txtDescription').parent().addClass('d-none')
+    
+    if ($('#unitId option:selected').text()=='pño' && $('#diagnostico_p_paño').val()!='') {
+        $('#txtValue').val($('#diagnostico_p_paño').val())
+    }
+    if ($('#unitId option:selected').text()=='hr' && $('#diagnostico_p_hora').val()!='') {
+        $('#txtValue').val($('#diagnostico_p_hora').val())
+    }
 }
 
 function editModalProduct() {
