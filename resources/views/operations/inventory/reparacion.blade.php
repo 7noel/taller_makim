@@ -97,9 +97,24 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                 <td>{{ $detail->product->name }}</td>
                 <td class="cantidad">{{ $detail->quantity }}</td>
                 <td>{{ $detail->total }}</td>
-                <td>{!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item']) !!}</td>
-                <td>{!! Form::select("details[$detail->id][technician_id]", [$detail->technician_id => $detail->technician_id], $detail->technician_id, ['class'=>'form-control form-control-sm asignado-individual']) !!}</td>
                 <td>
+                    @if($detail->voucher_id>0)
+                    {{ $detail->cost }}
+                    @else
+                    {!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item', 'step'=>'0.01']) !!}
+                    @endif
+                </td>
+                <td>
+                    @if($detail->voucher_id>0)
+                    {{ $detail->technician->company_name }}
+                    @else
+                    {!! Form::select("details[$detail->id][technician_id]", [$detail->technician_id => $detail->technician_id], $detail->technician_id, ['class'=>'form-control form-control-sm asignado-individual']) !!}
+                    @endif
+                </td>
+                <td>
+                    @if($detail->voucher_id>0)
+                    {{ $detail->voucher->sn }}
+                    @else
                     <div class="custom-control custom-switch">
                         {!! Form::checkbox("details[$detail->id][voucher]", 'on', false, [
                             'class' => 'custom-control-input voucher-individual',
@@ -108,6 +123,7 @@ $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
                         ]) !!}
                         <label class="custom-control-label" for="customSwitch{{$detail->id}}">Voucher</label>
                     </div>
+                    @endif
                 </td>
             </tr>
         @endforeach

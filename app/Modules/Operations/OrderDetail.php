@@ -41,4 +41,12 @@ class OrderDetail extends Model implements Auditable
 	{
 		return $this->morphMany('App\Modules\Storage\Move', 'move');
 	}
+	public function voucher()
+	{
+		return $this->hasOne('App\Modules\Finances\Proof','id','voucher_id');
+	}
+	public function technician()
+	{
+		return $this->hasOne('App\Modules\Finances\Company','id','technician_id');
+	}
 }

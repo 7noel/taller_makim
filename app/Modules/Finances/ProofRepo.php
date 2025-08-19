@@ -4,6 +4,7 @@ use App\Modules\Base\BaseRepo;
 use App\Modules\Base\Table;
 use App\Modules\Finances\Proof;
 use App\Modules\Operations\Order;
+use App\Modules\Operations\OrderDetail;
 use App\Modules\Finances\ProofDetailRepo;
 use App\Modules\Finances\PaymentCondition;
 use App\Modules\Base\ExpenseRepo;
@@ -550,7 +551,7 @@ class ProofRepo extends BaseRepo{
 			}
 			//dd($next);
 
-			Proof::create([
+			$new_voucher = Proof::create([
 				'issued_at' => date('Y-m-d'),
 				'proof_type' => 'vales',
 				'series' => $next['series'],
@@ -561,6 +562,19 @@ class ProofRepo extends BaseRepo{
 				'total' => $voucher['total'],
 
 			]);
+
+	        // Guardar en el resultado los detalle_id asociados a este comprobante
+	        $detail_ids = [];
+
+	        foreach ($voucher['items'] as $item) {
+	            $detail_ids[] = $item['detail_id'];
+
+	            // Aquí puedes además crear un registro intermedio si tienes una tabla pivot entre proof y detalles
+	            // Por ejemplo: ProofDetail::create([...]);
+	        }
+
+	        OrderDetail::whereIn('id', $detail_ids)->update(['voucher_id'=>$new_voucher->id]);
+
 		}
 		return true;
 	}

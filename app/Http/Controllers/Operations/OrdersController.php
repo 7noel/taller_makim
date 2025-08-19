@@ -494,6 +494,7 @@ class OrdersController extends Controller {
 	public function repair_update($id)
 	{
 		$data = request()->all();
+		// dd($data);
 		if ($data['details']) {
 			$this->orderDetailRepo->repair_update($data['details']);
 		}
@@ -517,7 +518,7 @@ class OrdersController extends Controller {
 
 	            // Agregar ítem
 	            $vouchers[$tecnicoId]['items'][] = [
-	                'detalle_id' => $detailId,
+	                'detail_id' => $detailId,
 	                'monto' => $monto,
 	            ];
 	        }
