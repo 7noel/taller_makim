@@ -84,5 +84,9 @@ class Proof extends Model implements Auditable {
 	{
 		return $this->belongsto('App\Modules\Finances\Swap');
 	}
+	public function order_details()
+	{
+		return $this->hasMany('App\Modules\Operations\OrderDetail', 'voucher_id', 'id')->orderBy('category_id', 'desc')->orderBy('sub_category_id', 'desc');
+	}
 
 }

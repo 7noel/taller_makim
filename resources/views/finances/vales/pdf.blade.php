@@ -4,168 +4,327 @@
 	<meta charset="UTF-8">
 	<link rel="icon" type="image/jpeg" href="./img/logo_makim_01.jpg" />
 
-	<title>Comprobante: {{ $model->sn }}</title>
-	<link rel="stylesheet" href="./css/voucher_pdf.css">
+	<title>VALE: {{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+		@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&family=Roboto:wght@100&display=swap');
+		@page { margin-top: 30px; }
+		body{
+			padding-top: 0px;
+			/*font-family: 'Montserrat', sans-serif;*/
+			font-family: 'Roboto Condensed', sans-serif;
+/*            font-family: Arial, sans-serif;*/
+			/*font-family: 'Roboto', sans-serif;*/
+			font-size: 12px;
+			background: white;
+			/*border: solid 1px black;*/
+		}
+
+        .header{
+			font-family: 'Arial', sans-serif;
+        }
+
+		footer{
+			/*border: 1px solid red;*/
+			/*position: fixed;*/
+			/*bottom: 60px;*/
+			position: fixed;
+			bottom: 0cm;
+			left: 0cm;
+			right: 0cm;
+			height: 2cm;
+			/*background-color: #2a0927;*/
+			/*color: white;*/
+			/*text-align: center;*/
+			/*line-height: 35px;*/
+		}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            white-space: nowrap;
+        }
+        td {
+            /*padding: 4px;*/
+            vertical-align: middle;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        .data{
+        	font-family: 'Arial', sans-serif;
+        	font-size: 10px;
+        }
+        .col2{
+        	width: 50%;
+        }
+        .label{
+        	font-weight: bold;
+        	width: 15%;
+        	text-transform: uppercase;
+        }
+        .table-items{
+            border: 1px solid #000;
+        }
+        .border{
+            border: 1px solid #000;
+        }
+        .table-items .th1{
+        	width: 6%;
+        	text-align: center;
+        }
+        .table-items .th2{
+/*        	width: 5%;*/
+        }
+        .table-items .th3{
+        	width: 10%;
+        	text-align: center;
+        }
+        .table-items .th4{
+        	width: 10%;
+        	text-align: center;
+        }
+        .table-items .th5{
+        	width: 10%;
+        	text-align: center;
+        }
+        .table-items .th6{
+        	width: 10%;
+        	text-align: center;
+        }
+
+        .table-items .title{
+        	padding-left: 45px;
+        }
+
+        .center{
+        	text-align: center;
+        }
+        .border{
+            border: 1px solid #000;
+        }
+
+		.mt-5{
+			margin-top: 5px;
+		}
+        .header-section {
+        	background-color: lightgray;
+        	text-align: center;
+        	font-weight: bold;
+        	text-transform: uppercase;
+        }
+		td.align-top {
+			vertical-align: top;
+		}
+		
+    </style>
 </head>
 <body>
 	<script type="text/php">
 	if ( isset($pdf) ) {
 		$pdf->page_script('
 			$font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-			$pdf->text(520, 810, "Página $PAGE_NUM de $PAGE_COUNT", $font, 8);
-		');
-		$pdf->page_script('
-			$font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-			$pdf->text(35, 810, "Representación impresa del COMPROBANTE ELECTRÓNICO, visita https://makim.facturandola.app/buscar", $font, 8);
+			$pdf->text(270, 810, "Página $PAGE_NUM de $PAGE_COUNT", $font, 8);
 		');
 	}
 	</script>
-	<table>
-		<tr class="header">
-			<td class="col_1">
-				<div>
-					<img src="./img/logo_makim_doc.jpg" alt="" class="img">
-				</div>
-				<div>
+	<div class="header">
+		<table>
+			<tr>
+				<td width="20%" align="center" style="border: none;">
+					<img src="./{{ \Storage::url( session('my_company')->config['logo']) }}" alt="" width="100px">
+				</td>
+				<td width="38%" style="border: none; font-size: 10px;">
 					<div class="company_name">{{ $model->mycompany->company_name }}</div>
-				</div>
-			</td>
-			<td class="col_2 center">
-					RUC: {{ $model->mycompany->doc }}<br>
-					{{ $model->document_type->description }} {{ ($model->document_type_id == 7) ? '' : 'ELECTRÓNICA'}}<br>
-					{{ $model->series.' - '.str_pad($model->number, 6, '0', STR_PAD_LEFT) }}
-			</td>
+					<div width="100%">{{ $model->mycompany->address}}</div>
+					<div>{{ $model->mycompany->ubigeo->departamento.' - '.$model->mycompany->ubigeo->provincia.' - '.$model->mycompany->ubigeo->distrito }}</div>
+					<div>Central Telefónica: {{ $model->mycompany->phone }}</div>
+					<div>Cel: {{ $model->mycompany->mobile }}</div>
+					<div>Correo: {{ $model->mycompany->email }}</div>
+				</td>
+				<td class="border" width="39" align="center" style="font-size: 18px; font-weight: bold;">
+					<div>RUC: {{ $model->mycompany->doc }}</div>
+					<div>{{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</div>
+					
+				</td>
+			</tr>
+		</table>
+	</div>
+	<br>
+	<table class="data">
+		<tr>
+			<td class="label">Tipo de Servicio:</td>
+			<td class="col2">{{ $model->type_service }}</td>
+			<td class="label">F. Emisión:</td>
+			<td class="">{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
 		</tr>
-	</table>
-	<div class="datos_emisor">
-		<div>{{ $model->mycompany->address}}</div>
-		<div>{{ $model->mycompany->ubigeo->departamento.' - '.$model->mycompany->ubigeo->provincia.' - '.$model->mycompany->ubigeo->distrito }}</div>
-	</div>
-	<div class="data_doc border">
-		<table class="">
-			<tr>
-				<td width="102px">Cliente:</td>
-				<td width="350px">{{ $model->company->company_name }}</td>
-				<td class="border" width="130px">Fecha de emisión:</td>
-				<td class="border center" width="102px">{{ date('d/m/Y', strtotime($model->issued_at)) }}</td>
-			</tr>
-			<tr>
-				<td>{{ config('options.client_doc.'.$model->company->id_type) }}:</td>
-				<td>{{ $model->company->doc }}</td>
-				<td class="border">Fecha de vencimiento:</td>
-				<td class="border center">{{ date('d/m/Y', strtotime($model->expired_at)) }}</td>
-			</tr>
-			<tr>
-				<td>Dirección:</td>
-				<td colspan="3">{{ $model->company->address . ', ' . $model->company->ubigeo->departamento . '-' . $model->company->ubigeo->provincia . '-' . $model->company->ubigeo->distrito }}</td>
-			</tr>
-			<tr>
-				<td>Condición de Pago:</td>
-				<td>{{ config('options.payment_conditions.'.$model->payment_condition_id) }}</td>
-				<td>Asesor:</td>
-				<td>{{ $model->seller->company_name }}</td>
-			</tr>
-			<tr>
-				<td>Placa:</td>
-				<td>{{ $model->car->placa }}</td>
-				<td>Marca/Modelo:</td>
-				<td>{{ $model->car->modelo->brand->name.' '.$model->car->modelo->name }}</td>
-			</tr>
-		</table>
-	</div>
-	<div class="container-items">
-		<table class="table-items">
-			<thead>
-				<tr>
-					<th class="th1 border center" width="60px">ITEM</th>
-					<th class="th2 border center">DESCRIPCION</th>
-					<th class="th3 border center" width="100px">CANT.</th>
-					<th class="th4 border center" width="70px">P. UNIT.</th>
-					<th class="th5 border center" width="70px">TOTAL</th>
-				</tr>
-			</thead>
-			<tbody>
-				@php $cat=0 @endphp
-				@foreach($model->details as $key => $detail)
-				@if($detail->category_id != $cat)
-					<tr><td class="border padding" colspan="5">{{ $detail->category->name }}</td></tr>
-					@php $cat = $detail->category_id @endphp
+		<tr>
+			<td class="label">Asesor:</td>
+			<td class="col2">{{ isset($model->seller->company_name) ? $model->seller->company_name : '' }}</td>
+			<td class="label">Días de trabajo:</td>
+			@if(isset($model->diagnostico->tiempo))
+				@if($model->diagnostico->tiempo > 0)
+				<td class="">{{ $model->diagnostico->tiempo }} hábiles</td>
+				@else
+				<td class=""></td>
 				@endif
-				<tr>
-					<td class="border center">{{ $key + 1 }}</td>
-					<td class="border">{{ $detail->product->name }}</td>
-					<td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
-					<td class="border center">{{ $detail->price }}</td>
-					<td class="border center">{{ $detail->price_item }}</td>
-				</tr>
-				@endforeach
-			</tbody> 
-		</table>
+			@endif
+		</tr>
+		<tr>
+			<td class="label">Propietario(a):</td>
+			<td class="col2">{{ $model->company->company_name }}</td>
+			<td class="label">{{ config('options.client_doc.'.$model->company->id_type) }}:</td>
+			<td class="">{{ $model->company->doc }}</td>
+		</tr>
+		<tr>
+			<td class="label">Contacto:</td>
+			<td class="col2">{{ isset($model->inventory->contact_name) ? $model->inventory->contact_name : '' }}</td>
+			<td class="label">Cia Seguro:</td>
+			<td class="">{{ optional($model->insurance_company)->brand_name }}</td>
+		</tr>
+		<tr>
+			<td class="label">Placa:</td>
+			<td class="col2">{{ $model->car->placa }}</td>
+			<td class="label">Marca:</td>
+			<td class="">{{ $model->car->modelo->brand->name }}</td>
+		</tr>
+		<tr>
+			<td class="label">Modelo:</td>
+			<td class="col2">{{ $model->car->modelo->name }}</td>
+			<td class="label">Año:</td>
+			<td class="">{{ $model->car->year }}</td>
+		</tr>
+		<tr>
+			<td class="label">VIN:</td>
+			<td class="col2">{{ $model->car->vin }}</td>
+			<td class="label">Color:</td>
+			<td class="">{{ $model->car->color }}</td>
+		</tr>
 		@if(trim($model->comment)!="")
-		<div>
-			<strong class="label">Comentario:</strong><span class="data-header">{{$model->comment}}</span>
-		</div>
+		<tr>
+			<td class="label">Comentario:</td>
+			<td colspan="3">{{$model->comment}}</td>
+		</tr>
 		@endif
+	</table>
+	</div>
+	<br>
+	<div class="container-items">
+@php
+    // Separar los detalles en dos grupos
+    $detalles_normales = $model->order_details->where('is_downloadable', 0)->sortBy('id');
+
+	// Agrupar dinámicamente por comment según orden de ingreso
+	$grupos = [];
+	$comentariosVistos = [];
+
+	foreach ($detalles_normales as $detalle) {
+	    $comment = $detalle->comment;
+	    if (!in_array($comment, $comentariosVistos)) {
+	        $comentariosVistos[] = $comment;
+	        $grupos[$comment] = [];
+	    }
+	    $grupos[$comment][] = $detalle;
+	}
+	
+	$detalles_repuestos = $model->order_details->where('is_downloadable', 1);
+
+    $comentario_actual = null; // Para el control de cambios en comment
+
+    // Filtrar repuestos en dos subgrupos
+    $repuestos_pagados = $detalles_repuestos->where('value', '>', 0);
+    $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
+
+    // Calcular los totales con dos decimales
+    $total_normales = number_format($detalles_normales->sum('total'), 2, '.', ',');
+    $total_repuestos_pagados = number_format($repuestos_pagados->sum('total'), 2, '.', ',');
+    $total_repuestos_compania = number_format($repuestos_compania->sum('total'), 2, '.', ',');
+@endphp
+
+<table class="table-items">
+    <thead>
+        <tr>
+            <th class="th1 border center">ITEM</th>
+            <th class="th2 border center">DESCRIPCIÓN</th>
+            <th class="th3 border center">CANT.</th>
+            <th class="th4 border center">TOTAL</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{-- Grupo de is_downloadable = 0 --}}
+        @php $item = 1; @endphp
+		@foreach($grupos as $comment => $detalles)
+		    <tr>
+		        <td class="border title" colspan="3"><strong>{{ $comment }}</strong></td>
+		        <td class="border center">
+		            <strong>{{ number_format(collect($detalles)->sum('total'), 2, '.', ',') }}</strong>
+		        </td>
+		    </tr>
+		    @foreach($detalles as $detalle)
+		    <tr>
+			    <td class="border center align-top">{{ $item++ }}</td>
+			    <td class="border align-top">
+				    @if (!empty($detalle->description))
+				        <strong>{{ $detalle->product->name }}</strong><br>
+				        {!! nl2br(e($detalle->description)) !!}
+				    @else
+				        {{ $detalle->product->name }}
+				    @endif
+				</td>
+			    <td class="border center align-top">{{ $detalle->quantity.' '.$detalle->unit->symbol }}</td>
+			    <td class="border center align-top"></td>
+		    </tr>
+		    @endforeach
+		@endforeach
+
+        {{-- Grupo de REPUESTOS (value > 0) --}}
+        @if($repuestos_pagados->isNotEmpty())
+            <tr>
+                <td class="border title" colspan="4"><strong>REPUESTOS</strong></td>
+                {{--<td class="border center"><strong>{{ $total_repuestos_pagados }}</strong></td>--}}
+            </tr>
+            @foreach($repuestos_pagados as $key => $detail)
+                <tr>
+                    <td class="border center">{{ $loop->iteration + count($detalles_normales) }}</td>
+                    <td class="border">{{ $detail->product->name }}</td>
+                    <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
+                    <td class="border center">{{ $detail->total }}</td>
+                </tr>
+            @endforeach
+        @endif
+
+        {{-- Grupo de REPUESTOS POR COMPAÑÍA (value = 0) --}}
+        @if($repuestos_compania->isNotEmpty())
+            <tr>
+                <td class="border title" colspan="4"><strong>REPUESTOS POR COMPAÑÍA</strong></td>
+            </tr>
+            @foreach($repuestos_compania as $key => $detail)
+                <tr>
+                    <td class="border center">{{ $loop->iteration + count($detalles_normales) + count($repuestos_pagados) }}</td>
+                    <td class="border">{{ $detail->product->name }}</td>
+                    <td class="border center">{{ $detail->quantity.' '.$detail->unit->symbol }}</td>
+                    <td class="border center"></td>
+                </tr>
+            @endforeach
+        @endif
+    </tbody>
+</table>
+
+
 
 		<br>
 		<table class="table-total">
+			<tbody>
+					<td class="left">SUB TOTAL {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->subtotal }}</td>
+					<td class="left">IGV (18%) {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->tax }}</td>
+					<td class="left">TOTAL {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total }}</td>
+				</tr>
+			</tbody>
 		</table>
+
 	</div>
-
-	<div class="data_extra">
-		<table>
-			<tr>
-				<td width="452px" class="">
-					<div>Son: <strong>{{ numero_letras($model->total, 2, $model->currency_id) }}</strong></div>
-					@if($model->document_type_id != 7)
-					<div><img src="data:image/png;base64, {{ $r->data->qr }}" alt=""></div>
-					<div>Código Hash: {{ $r->data->hash }} </div>
-					@endif
-				</td>
-				<td width="247px" class="">
-					<table class="totales">
-						<tr>
-							<td width="145px" class="">
-								<div>OP. GRAVADAS :</div>
-							</td>
-							<td width="102px" class="">
-								<div>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->subtotal }}</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="">
-								<div>IGV 18% :</div>
-							</td>
-							<td class="">
-								<div>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->tax }}</div>
-							</td>
-						</tr>
-						<tr class="">
-							<td class="">
-								<div>TOTAL A PAGAR :</div>
-							</td>
-							<td class="">
-								<div>{{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total }}</div>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</div>
-
-
-
-	<footer>
-		<div><strong>Cuentas: </strong></div>
-		@foreach($cuentas as $cta)
-			<div>
-				<strong>{{ config('options.tipo_banco.'.$cta->type) }}</strong>
-				{{ $cta->name }} - N° {{ $cta->number }} - 
-				<strong>CCI N°</strong>
-				{{ $cta->cci }} - {{ config('options.table_sunat.moneda.'.$cta->currency_id) }}
-			</div>
-		@endforeach
-	</footer>
 </body>
 </html>
