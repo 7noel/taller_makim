@@ -253,4 +253,17 @@ class ProofsController extends Controller {
 		$model = $this->repo->findOrFail($id);
 		return response()->json($model);
 	}
+
+	/**
+	 * CREA UN PDF EN EL NAVEGADOR
+	 * @param  [integer] $id [Es el id de la cotizacion]
+	 * @return [pdf]     [Retorna un pdf]
+	 */
+	public function vales_print($id)
+	{
+		$model = $this->repo->findOrFail($id);
+		$nombre = $model->sn;
+		$pdf = \PDF::loadView('finances.vales.pdf', compact('model'));
+		return $pdf->stream($nombre.".pdf");
+	}
 }

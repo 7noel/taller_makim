@@ -526,6 +526,7 @@ class OrdersController extends Controller {
 
 	    $this->proofRepo->generarVouchers($vouchers);
 	    
+	    return redirect()->route('vales.index');
 		dd($vouchers);
 
 
