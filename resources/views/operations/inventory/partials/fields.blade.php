@@ -224,6 +224,21 @@
         </div>
 
         <div class="form-row">
+            <div class="col-md-2 col-sm-4">
+                {!! Field::email('inventory[operador_company]', (isset($model->inventory->operador_company
+                ) ? $model->inventory->operador_company : ''), ['label' => 'Operador Empresa', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+            <div class="col-md-2 col-sm-4">
+                {!! Field::text('inventory[operador_contact]', (isset($model->inventory->operador_contact
+                ) ? $model->inventory->operador_contact : ''), ['label' => 'Operador Contacto', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+            <div class="col-md-2 col-sm-4">
+                {!! Field::text('inventory[operador_mobile]', (isset($model->inventory->operador_mobile
+                ) ? $model->inventory->operador_mobile : ''), ['label' => 'Operador Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+            </div>
+        </div>
+
+        <div class="form-row">
             {{--<div class="col-sm-2">
                 <div id="field_inventory_combustible" class="form-group">
                     <label for="inventory_combustible">
