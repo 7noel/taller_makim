@@ -335,6 +335,22 @@ class OrdersController extends Controller {
 	}
 
 	/**
+	 * CREA UN PDF EN EL NAVEGADOR
+	 * @param  [integer] $id [Es el id de la cotizacion]
+	 * @return [pdf]     [Retorna un pdf]
+	 */
+	public function print_quotes_taller($id)
+	{
+		$cuentas = $this->bankRepo->mostrar();
+		$model = $this->repo->findOrFail($id);
+		//dd($model->mycompany->company_name);
+		// \PDF::setOptions(['isPhpEnabled' => true]);
+		// $pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
+		$pdf = \PDF::loadView('operations.output_quotes.pdf_taller', compact('model', 'cuentas'));
+		return $pdf->stream();
+	}
+
+	/**
 	 * Envía Correo al generar cotización
 	 * @param  Obj $model Modelo de la cotización
 	 * @return boolean        Retorna true indicando que se envió con exito
