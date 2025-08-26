@@ -57,7 +57,7 @@
 </div>
 
 <table class="table table-condensed table-sm">
-	<thead>
+	<thead class="thead-light">
 		<tr>
 			<th class="text-center">V.Bruto</th>
 			<th class="text-center">Dscto Total</th>
@@ -102,7 +102,7 @@
         </td>
         <td class="text-center">
           <button type="button" class="btn btn-outline-danger btn-sm js-oc-del">
-            <i class="fa fa-trash"></i>
+            <i class="far fa-trash-alt"></i>
           </button>
         </td>
       </tr>
@@ -112,7 +112,7 @@
         <td><input type="text" name="diagnostico[oc][0][descripcion]" class="form-control form-control-sm"></td>
         <td><input type="number" step="0.01" min="0" name="diagnostico[oc][0][monto]" class="form-control form-control-sm js-oc-monto" value="0"></td>
         <td class="text-center">
-          <button type="button" class="btn btn-outline-danger btn-sm js-oc-del"><i class="fa fa-trash"></i></button>
+          <button type="button" class="btn btn-outline-danger btn-sm js-oc-del"><i class="far fa-trash-alt"></i></button>
         </td>
       </tr>
     @endforelse
@@ -371,7 +371,7 @@ function addOCRow(){
       '<td><input type="text" name="diagnostico[oc]['+idx+'][descripcion]" class="form-control form-control-sm text-uppercase"></td>' +
       '<td><input type="number" step="0.01" min="0" name="diagnostico[oc]['+idx+'][monto]" class="form-control form-control-sm js-oc-monto" value="0"></td>' +
       '<td class="text-center">' +
-        '<button type="button" class="btn btn-outline-danger btn-sm js-oc-del"><i class="fa fa-trash"></i></button>' +
+        '<button type="button" class="btn btn-outline-danger btn-sm js-oc-del"><i class="far fa-trash-alt"></i></button>' +
       '</td>' +
     '</tr>';
   $tbody.append(tpl);
