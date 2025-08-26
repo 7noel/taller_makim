@@ -152,7 +152,7 @@ class OrdersController extends Controller {
 		$bs = $model->company->branches->pluck('name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
 		$checklist_details = $this->checklistDetailRepo->all2();
-		$car = $model->car_id;
+		$car = $model->car;
 		// $car = $this->carRepo->findOrFail($car_id);
 		$client = $car->company;
 
