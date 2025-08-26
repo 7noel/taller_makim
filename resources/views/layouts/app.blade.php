@@ -765,7 +765,7 @@ $(document).ready(function () {
                 $('#branch_id').append(`<option value='${b.id}'>${b.company_name}</option>`)
             })
             // $('#branch_id').focus()
-            $('#brannd_id').focus()
+            $('#brand_id').focus()
         }
     })
     $('#txtProvider').autocomplete({
