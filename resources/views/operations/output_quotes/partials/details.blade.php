@@ -61,7 +61,7 @@
 		<tr>
 			<th class="text-center">V.Bruto</th>
 			<th class="text-center">Dscto Total</th>
-			<th class="text-center">SubTotal</th>
+			<th class="text-center" id="presupuesto_total">SubTotal</th>
 			<th class="text-center">Total</th>
 		</tr>
 	</thead>
@@ -74,6 +74,90 @@
 		</tr>
 	</tbody>
 </table>
+
+<hr class="my-2">
+
+<h5 class="mb-2">Órdenes de compra de terceros</h5>
+
+<table class="table table-sm table-bordered" id="tabla-oc">
+  <thead class="thead-light">
+    <tr>
+      <th style="width: 60%">Descripción</th>
+      <th style="width: 25%">Monto del servicio</th>
+      <th style="width: 15%">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @php $ocs = old('oc', $model->diagnostico->oc ?? []); @endphp
+    @forelse($ocs as $i => $oc)
+      <tr>
+        <td>
+          <input type="text" name="diagnostico[oc][{{ $i }}][descripcion]" class="form-control form-control-sm text-uppercase" 
+                 value="{{ $oc->descripcion ?? '' }}">
+        </td>
+        <td>
+          <input type="number" step="0.01" min="0" name="diagnostico[oc][{{ $i }}][monto]" 
+                 class="form-control form-control-sm js-oc-monto" 
+                 value="{{ $oc->monto ?? 0 }}">
+        </td>
+        <td class="text-center">
+          <button type="button" class="btn btn-outline-danger btn-sm js-oc-del">
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    @empty
+      {{-- fila inicial vacía --}}
+      <tr>
+        <td><input type="text" name="diagnostico[oc][0][descripcion]" class="form-control form-control-sm"></td>
+        <td><input type="number" step="0.01" min="0" name="diagnostico[oc][0][monto]" class="form-control form-control-sm js-oc-monto" value="0"></td>
+        <td class="text-center">
+          <button type="button" class="btn btn-outline-danger btn-sm js-oc-del"><i class="fa fa-trash"></i></button>
+        </td>
+      </tr>
+    @endforelse
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3" class="text-right">
+        <button type="button" class="btn btn-outline-primary btn-sm" id="btn-oc-add">
+          <i class="fa fa-plus"></i> Agregar orden de compra
+        </button>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+<hr class="my-2">
+
+<div class="form-row">
+  <div class="form-group col-md-4">
+    <label>Monto mínimo de franquicia</label>
+    <input type="number" step="0.01" min="0" class="form-control form-control-sm" 
+           id="franquicia_min" name="diagnostico[franquicia_min]" value="{{ old('franquicia_min', optional($model->diagnostico)->franquicia_min ?? 0) }}">
+  </div>
+  <div class="form-group col-md-4">
+    <label>% de franquicia</label>
+    <div class="input-group input-group-sm">
+      <input type="number" step="0.01" min="0" max="100" class="form-control" 
+             id="franquicia_pct" name="diagnostico[franquicia_pct]" value="{{ old('franquicia_pct', optional($model->diagnostico)->franquicia_pct ?? 10) }}">
+      <div class="input-group-append"><span class="input-group-text">%</span></div>
+    </div>
+  </div>
+  <div class="form-group col-md-4">
+    <label>Franquicia a pagar (calculada)</label>
+    <input type="text" readonly class="form-control form-control-sm font-weight-bold" 
+           id="franquicia_total_display" value="0.00">
+    <input type="hidden" name="diagnostico[franquicia_total]" id="franquicia_total" value="0">
+  </div>
+</div>
+
+<div class="small text-muted">
+  <div>Suma OCs: <span id="sum_oc_display">0.00</span></div>
+  <div>Base (Presupuesto + OCs): <span id="base_display">0.00</span></div>
+  <div>% aplicado: <span id="pct_aplicado_display">0.00</span></div>
+  <div>Mínimo: <span id="minimo_display">0.00</span></div>
+</div>
 
 
 {!! Form::hidden('items', $i, ['id'=>'items']) !!}
@@ -112,7 +196,7 @@
 					<!-- <input type="hidden" id="unitId"> -->
 				</div>
 				<div class="form-group col-sm-12 d-none">
-					<textarea id="txtDescription" rows="3" class="form-control"></textarea>
+					<textarea id="txtDescription" rows="3" class="form-control text-uppercase"></textarea>
 				</div>
 				<div class="form-group col-3 text-center">
 					<label for="txtCantidad">Cantidad <span id="label-cantidad"></span> </label>
@@ -145,6 +229,31 @@
 
 <script>
 $(document).ready(function () {
+
+	// Delegación: eliminar fila
+	$(document).on('click', '.js-oc-del', function(){
+		var $tr = $(this).closest('tr');
+		var $tbody = $tr.closest('tbody');
+		$tr.remove();
+		if ($tbody.children('tr').length === 0){
+			addOCRow();
+		}
+		recalcFranquicia();
+	});
+
+	// Agregar fila
+	$('#btn-oc-add').on('click', function(){
+		addOCRow();
+	});
+
+	// Recalcular en cambios
+	$(document).on('input change', '#presupuesto_total, #franquicia_min, #franquicia_pct, .js-oc-monto', recalcFranquicia);
+
+	// Primer cálculo
+	recalcFranquicia();
+
+
+
 	@if(isset($model))
 		var categories_service = @json($categories_service);
 		window.opts_cat_ser = `<option value="">Seleccionar</option>`
@@ -216,5 +325,56 @@ $(document).ready(function () {
     })
 })
 
+// ---- Utilidades numéricas (globales) ----
+function toNumber(v){
+  if (typeof v === 'number') return v;
+  if (!v) return 0;
+  v = (''+v).replace(/\./g, '').replace(',', '.'); // opcional: quita miles con punto
+  var n = parseFloat(v);
+  return isNaN(n) ? 0 : n;
+}
+function fmt(n){ return (Math.round(n * 100) / 100).toFixed(2); }
+
+// ---- Recalcular franquicia ----
+function recalcFranquicia(){
+  var presupuesto = parseFloat($('#mSubTotal').text());
+  var sumOC = 0;
+  $('.js-oc-monto').each(function(){ sumOC += parseFloat($(this).val()); });
+
+  var base = presupuesto + sumOC;
+  console.log(`subtotal: ${$('#mSubTotal').text()}, presupuesto: ${presupuesto} | sumaOC: ${sumOC} | base: ${base}`)
+  var pct = parseFloat($('#franquicia_pct').val());
+  if (pct < 0) pct = 0;
+  if (pct > 100) pct = 100;
+
+  var minimo = parseFloat($('#franquicia_min').val());
+  if (minimo < 0) minimo = 0;
+
+  var porPct = base * (pct/100.0);
+  var result = Math.max(porPct, minimo);
+
+  // pintar
+  $('#sum_oc_display').text(fmt(sumOC));
+  $('#base_display').text(fmt(base));
+  $('#pct_aplicado_display').text(fmt(porPct));
+  $('#minimo_display').text(fmt(minimo));
+  $('#franquicia_total_display').val(fmt(result));
+  $('#franquicia_total').val(fmt(result));
+}
+
+// ---- Agregar fila de OC ----
+function addOCRow(){
+  var $tbody = $('#tabla-oc tbody');
+  var idx = $tbody.children('tr').length;
+  var tpl =
+    '<tr>' +
+      '<td><input type="text" name="diagnostico[oc]['+idx+'][descripcion]" class="form-control form-control-sm text-uppercase"></td>' +
+      '<td><input type="number" step="0.01" min="0" name="diagnostico[oc]['+idx+'][monto]" class="form-control form-control-sm js-oc-monto" value="0"></td>' +
+      '<td class="text-center">' +
+        '<button type="button" class="btn btn-outline-danger btn-sm js-oc-del"><i class="fa fa-trash"></i></button>' +
+      '</td>' +
+    '</tr>';
+  $tbody.append(tpl);
+}
 
 </script>

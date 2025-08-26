@@ -11,6 +11,8 @@ use App\Modules\Operations\Car;
 use App\Modules\Finances\CompanyRepo;
 use App\Modules\Base\UbigeoRepo;
 
+use App\Http\Requests\Operations\FormCarRequest;
+
 class CarsController extends Controller {
 
 	protected $repo;
@@ -112,10 +114,46 @@ class CarsController extends Controller {
 		return view('partials.create', compact('brands', 'modelos', 'client', 'modelos', 'bodies', 'ubigeo'));
 	}
 
-	public function store()
+	public function store(FormCarRequest $request)
 	{
 		$data = request()->all();
-		$model = $this->repo->save($data);
+        try {
+            \DB::beginTransaction();
+
+            // Guarda con tu repositorio
+            $model = $this->repo->save($data);
+
+            \DB::commit();
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            \Log::error('companies.store failed', ['e' => $e]);
+
+            // AJAX: 500 JSON | No-AJAX: back() con error+old input
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'No se pudo crear el vehículo. Inténtalo nuevamente.',
+                ], 500);
+            }
+
+            return back()
+                ->withInput()
+                ->with('error', 'No se pudo crear el vehículo. Inténtalo nuevamente.');
+        }
+		
+		// AJAX: JSON estándar con 201 Created
+        if ($request->expectsJson() || $request->ajax()) {
+        	$model->load('company', 'modelo.brand');
+            return response()->json([
+                'status'   => 'ok',
+                'message'  => 'Vehículo creado correctamente',
+                'data'     => [
+                    // Expón solo lo necesario (evita filtrar datos sensibles)
+                    'model'        => $model,
+                ],
+            ], 201);
+        }
+
 		if(isset($data['crear_ingreso'])) {
 			return redirect()->route('inventory.recepcion_by_car', ['car_id' => $model->id]);
 			// return redirect()->route('output_orders.by_car', ['car_id' => $model->id]);
@@ -146,7 +184,7 @@ class CarsController extends Controller {
 		return view('partials.edit', compact('model', 'brands', 'modelos', 'bodies', 'ubigeo'));
 	}
 
-	public function update($id)
+	public function update($id, FormCarRequest $request)
 	{
 		// dd(request()->all());
 		$data = request()->all();

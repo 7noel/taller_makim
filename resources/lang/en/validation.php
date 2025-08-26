@@ -146,6 +146,13 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'company_id' => 'Cliente',
+        'brand_id'   => 'Marca',
+        'modelo_id'  => 'Modelo',
+        'year'       => 'Año',
+        'placa'      => 'Placa',
+        'vin'        => 'VIN',
+    ],
 
 ];

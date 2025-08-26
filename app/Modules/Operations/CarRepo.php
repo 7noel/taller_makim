@@ -38,4 +38,40 @@ class CarRepo extends BaseRepo{
 	{
 		return Car::where('slug', '')->withTrashed()->get();
 	}
+	public function update_contact($data)
+	{
+		$dataupdate = [];
+		if (isset($data['contact_name'])) {
+			$dataupdate['contact_name'] = $data['contact_name'];
+		}
+		if (isset($data['contact_mobile'])) {
+			$dataupdate['contact_mobile'] = $data['contact_mobile'];
+		}
+		if (isset($data['contact_email'])) {
+			$dataupdate['contact_email'] = $data['contact_email'];
+		}
+		if (isset($data['driver_name'])) {
+			$dataupdate['driver_name'] = $data['driver_name'];
+		}
+		if (isset($data['driver_mobile'])) {
+			$dataupdate['driver_mobile'] = $data['driver_mobile'];
+		}
+		if (isset($data['driver_email'])) {
+			$dataupdate['driver_email'] = $data['driver_email'];
+		}
+		if (isset($data['operator_company'])) {
+			$dataupdate['operator_company'] = $data['operator_company'];
+		}
+		if (isset($data['operator_name'])) {
+			$dataupdate['operator_name'] = $data['operator_name'];
+		}
+		if (isset($data['operator_mobile'])) {
+			$dataupdate['operator_mobile'] = $data['operator_mobile'];
+		}
+
+		if ($dataupdate === []) {
+			return false;
+		}
+		return Car::where('placa', $data['placa'])->update($dataupdate);
+	}
 }

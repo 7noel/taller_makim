@@ -63,7 +63,12 @@ class CompanyController extends Controller {
 	public function ajaxList(Request $request)
 	{
 	    $type = explode('.', \Request::route()->getName())[0];
-	    //dd(\Request::route()->getName());
+	    if (!is_null($request->input('doc'))) {
+	    	$entity = $request->input('entity_type');
+	    	$id_type = $request->input('id_type');
+	    	$doc = $request->input('doc');
+	    	return Company::where('entity_type', $entity)->where('id_type', $id_type)->where('doc', $doc)->first();
+	    }
 
 	    $query = Company::where('entity_type', $type);
 
@@ -135,18 +140,56 @@ class CompanyController extends Controller {
 		return view('partials.create', compact('ubigeo', 'jobs', 'locales'));
 	}
 
-	public function store(FormCompanyRequest $request)
-	{
-		$data = request()->all();
-		$model = $this->repo->save($data);
-		if (isset($data['crear_vehiculo'])) {
-			return redirect()->route('cars.create_by_client', ['client_id' => $model->id]);
-		}
-		if (isset($data['last_page']) && $data['last_page'] != '') {
-			return redirect()->to($data['last_page']);
-		}
-		return redirect()->route($this->getType().'.index');
-	}
+    public function store(FormCompanyRequest $request)
+    {
+        $data = request()->all();
+// dd($data);
+        try {
+            \DB::beginTransaction();
+
+            // Guarda con tu repositorio
+            $model = $this->repo->save($data);
+
+            \DB::commit();
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            \Log::error('companies.store failed', ['e' => $e]);
+
+            // AJAX: 500 JSON | No-AJAX: back() con error+old input
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'No se pudo crear el cliente. Inténtalo nuevamente.',
+                ], 500);
+            }
+
+            return back()
+                ->withInput()
+                ->with('error', 'No se pudo crear el cliente. Inténtalo nuevamente.');
+        }
+
+        // Calcula destino de navegación (lo usaremos en ambos flujos)
+        $redirect = $this->resolveRedirectAfterStore($data, $model->id);
+
+        // AJAX: JSON estándar con 201 Created
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'status'   => 'ok',
+                'message'  => 'Cliente creado correctamente',
+                'data'     => [
+                    // Expón solo lo necesario (evita filtrar datos sensibles)
+                    'id'           => $model->id,
+                    'company_name' => $model->company_name,
+                    'email'        => $model->email,
+                ],
+                // si tu frontend quiere redirigir después:
+                'redirect' => $redirect,
+            ], 201);
+        }
+
+        // No-AJAX: redirect clásico con flash
+        return redirect()->to($redirect)->with('success', 'Cliente creado correctamente');
+    }
 
 	public function show($id)
 	{
@@ -184,6 +227,23 @@ class CompanyController extends Controller {
 		if (request()->ajax()) {	return $model; }
 		return redirect()->route($this->getType().'.index');
 	}
+
+    /**
+     * Decide a dónde ir tras crear.
+     */
+    private function resolveRedirectAfterStore(array $data, int $clientId): string
+    {
+        if (!empty($data['crear_vehiculo'])) {
+            return route('cars.create_by_client', ['client_id' => $clientId]);
+        }
+
+        if (!empty($data['last_page'])) {
+            return $data['last_page'];
+        }
+
+        return route($this->getType() . '.index');
+    }
+
 	public function ajaxAutocomplete($type = '', $my_company = '')
 	{
 		$term = request()->get('term');

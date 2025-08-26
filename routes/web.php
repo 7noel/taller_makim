@@ -56,8 +56,11 @@ Route::get('listarModelos/{brand_id}', ['as' => 'ajaxmodelos', 'uses' => 'Operat
 Route::get('crear-marca', ['as' => 'ajax_crear_marca', 'uses' => 'Operations\BrandsController@ajaxCrearMarca']);
 Route::get('crear-item', ['as' => 'ajax_crear_item', 'uses' => 'Storage\ProductsController@store']);
 
-	Route::post('upload-photo', ['as'=>'upload_photo', 'uses'=>'HomeController@uploadPhoto']);
+Route::post('upload-photo', ['as'=>'upload_photo', 'uses'=>'HomeController@uploadPhoto']);
+
 Route::group(['middleware'=>['auth']], function(){
+	Route::get('crear-car', ['as' => 'cars.ajax_crear', 'uses' => 'Operations\CarsController@store']);
+	Route::get('crear-cliente', ['as' => 'clients.ajax_crear', 'uses' => 'Finances\CompanyController@store']);
 
 	Route::get('change_local', ['as' => 'change_local', 'uses' => 'Security\UsersController@changeLocal']);
 	Route::post('update_local', ['as' => 'update_local', 'uses'=>'Security\UsersController@updateLocal']);

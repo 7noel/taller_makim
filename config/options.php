@@ -99,6 +99,7 @@ return array(
 	'product_status' => [''=>'Status', '1'=>'Activo', '3'=>'A pedido', '2'=>'Inactivo'],
 	'proof_types' => ['Ninguno', 'issuance_vouchers', 'reception_vouchers', 'issuance_letters', 'reception_letters'],
 	'mov' => ['Salida', 'Entrada'],
+	'vale_status' => ['PEND' => 'PEND', 'PAGADO' => 'PAGADO', 'ANUL' => 'ANUL'],
 	'proof_status' => ['PEND' => 'PEND', 'ERROR' => 'ERROR', 'SUNAT' => 'SUNAT', 'PANUL' => 'PANUL', 'ANUL' => 'ANUL'],
 	'quote_status' => ['PEND' => 'PEND', 'APROB' => 'APROB', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
 	'order_status' => ['ENPRG' => 'ENPRG', 'COMP' => 'COMP', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],

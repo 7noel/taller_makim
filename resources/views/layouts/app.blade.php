@@ -132,6 +132,12 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed&family=Roboto&family=Roboto+Condensed&display=swap" rel="stylesheet">
     <style>
+        .btn-label{
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
 
         .thumbnail {
     position: relative;
@@ -349,7 +355,10 @@
                 </div>
             </div>
         </nav>
-
+<script> // variables globales
+    let $wrap = $('#clientModal');
+    let $btn = $('#btn-crear-cliente');
+</script>
         <main class="py-4">
             @yield('content')
         </main>
@@ -589,39 +598,28 @@ $(document).ready(function () {
         }, 500)
     })
 
-    $('#link-crear-marca').click(function (e) {
-        clearModalMarcaYModelo();
-        setTimeout(function() {
-            $('#marca').focus();
-        }, 500)
-    })
-    $('#link-crear-modelo').click(function (e) {
-        clearModalMarcaYModelo()
-        $('#marca_id').val($('#brand_id').val())
-        $('#marca').val($('#brand_id option:selected').text())
-        $('#marca').prop('readonly', true);
-        setTimeout(function() {
-            $('#modelo_name').focus();
-        }, 500)
-    })
-    $("#btn-crear-marca").click(function(e){
-        crearMarcaYModelo()
-    })
+    // $('#link-crear-marca').click(function (e) {
+    //     clearModalMarcaYModelo();
+    //     setTimeout(function() {
+    //         $('#marca').focus();
+    //     }, 500)
+    // })
+    // $('#link-crear-modelo').click(function (e) {
+    //     clearModalMarcaYModelo()
+    //     $('#marca_id').val($('#brand_id').val())
+    //     $('#marca').val($('#brand_id option:selected').text())
+    //     $('#marca').prop('readonly', true);
+    //     setTimeout(function() {
+    //         $('#modelo_name').focus();
+    //     }, 500)
+    // })
+    // $("#btn-crear-marca").click(function(e){
+    //     crearMarcaYModelo()
+    // })
     $("#btn-crear-modelo").click(function(e){
         crearModelo()
     })
 
-    //carga modelos
-    $('#brand_id').change(function(){
-        if ($('#brand_id').val()=='') {
-            $('#link-crear-marca').removeClass('d-none')
-            $('#link-crear-modelo').addClass('d-none')
-        } else {
-            $('#link-crear-marca').addClass('d-none')
-            $('#link-crear-modelo').removeClass('d-none')
-        }
-        cargaModelos()
-    })
 
     // if ($('#is_downloadable').length) {
     //     $('.is_downloadable').val($('#is_downloadable').val())
@@ -758,7 +756,7 @@ $(document).ready(function () {
             if ($('#contact_name').val() !== undefined) {
                 if ($('#contact_name').val().trim() == '') {$('#contact_name').val(ui.item.company_name)}
                 if ($('#contact_email').val().trim() == '') {$('#contact_email').val(ui.item.email)}
-                if ($('#contact_phone').val().trim() == '') {$('#contact_phone').val(ui.item.phone)}
+                // if ($('#contact_phone').val().trim() == '') {$('#contact_phone').val(ui.item.phone)}
                 if ($('#contact_mobile').val().trim() == '') {$('#contact_mobile').val(ui.item.mobile)}
             }
             $('#branch_id').empty()
@@ -867,15 +865,15 @@ $(document).ready(function () {
         year = arr_years[vin.substring(9, 10)]
         $('#year').val(year)
     })
-    $('#add_contact').change(function (e) {
-        if ($('#add_contact').is(':checked')) {
-            $('.contact').removeClass("d-none")
-            $('#contact_name').attr("required", "required")
-        } else {
-            $('.contact').addClass( "d-none")
-            $('#contact_name').removeAttr("required", "required")
-        }
-    })
+    // $('#add_contact').change(function (e) {
+    //     if ($('#add_contact').is(':checked')) {
+    //         $('.contact').removeClass("d-none")
+    //         $('#contact_name').attr("required", "required")
+    //     } else {
+    //         $('.contact').addClass( "d-none")
+    //         $('#contact_name').removeAttr("required", "required")
+    //     }
+    // })
     if ($('#add_contact').is(':checked')) {
         $('.contact').removeClass("d-none");
         $('#contact_name').attr("required", "required");
@@ -1330,93 +1328,56 @@ function editModalProduct() {
     }
 }
 
-function clearModalMarcaYModelo() {
-    $('#marca_id').val('')
-    $('#marca').removeClass('is-invalid')
-    $('#marca').val('')
-    $('#marca').prop('readonly', false)
-    $('#modelo_name').removeClass('is-invalid')
-    $('#modelo_name').val('')
-}
-function crearMarcaYModelo() {
-    var $marca_id = $('#marca_id').val().trim()
-    var $marca = $('#marca').val().trim()
-    var $modelo = $('#modelo_name').val().trim()
-    if ($marca=='') {
-        $('#marca').addClass('is-invalid')
-        $('#marcaFeedback').text('La Marca es obligatoria')
-        return false
-    } else {
-        $('#marca').removeClass('is-invalid')
-    }
-    if ($modelo=='') {
-        $('#modelo_name').addClass('is-invalid')
-        $('#modeloNameFeedback').text('El Modelo es obligatorio')
-        return false
-    } else {
-        $('#modelo_name').removeClass('is-invalid')
-    }
-    page = '/crear-marca'
-    $.get(page, {brand_id: $marca_id, marca: $marca, modelo: $modelo}, function(data){
-        if (data.error!=undefined) {
-            if(data.error.marca!=undefined) {
-                $('#marca').addClass('is-invalid')
-                $('#marcaFeedback').text(data.error.marca)
-                $('#modelo_name').removeClass('is-invalid')
-            }
-            if(data.error.modelo!=undefined) {
-                $('#modelo_name').removeClass('is-invalid')
-                $('#marcaFeedback').text(data.error.modelo)
-                $('#modelo_name').addClass('is-invalid')
-            }
-        } else {
-            $('#marca').removeClass('is-invalid')
-            $('#modelo_name').removeClass('is-invalid')
-            cargaMarcas(data.marca.id, data.modelo.id)
-            //$('#brand_id').val(data.marca.id)
-            //cargaModelos(data.modelo.id)
-            //$('#modelo_id').val(data.modelo.id)
-            $('#marcaModal').modal('hide')
-        }
-    })
-}
-
-/*cargar marcas*/
-function cargaMarcas(id='', modelo_id=''){
-    var $marcas = $('#brand_id')
-    var $modelos=$('#modelo_id')
-    var page = "/listarMarcas"
-    $.get(page, function(data){
-        $marcas.empty()
-        $modelos.empty()
-        $marcas.append("<option value=''>Seleccionar</option>");
-        $.each(data, function (index, ModeloObj) {
-            $marcas.append("<option value='"+ModeloObj.id+"'>"+ModeloObj.name+"</option>")
-        })
-        $('#brand_id').val(id)
-        cargaModelos(modelo_id)
-    })
-}
-
-/*cargar modelos*/
-function cargaModelos(id=''){
-    var $marca = $('#brand_id')
-    var $modelos=$('#modelo_id')
-    var page = "/listarModelos/" + $marca.val()
-    if ($marca.val() == '') {
-        $modelos.empty("")
-    } else {
-        $.get(page, function(data){
-            $modelos.empty()
-            $modelos.append("<option value=''>Seleccionar</option>");
-            $.each(data, function (index, ModeloObj) {
-                $modelos.append("<option value='"+ModeloObj.id+"'>"+ModeloObj.name+"</option>")
-            })
-            $('#modelo_id').val(id)
-        })
-
-    }
-}
+// function clearModalMarcaYModelo() {
+//     $('#marca_id').val('')
+//     $('#marca').removeClass('is-invalid')
+//     $('#marca').val('')
+//     $('#marca').prop('readonly', false)
+//     $('#modelo_name').removeClass('is-invalid')
+//     $('#modelo_name').val('')
+// }
+// function crearMarcaYModelo() {
+//     var $marca_id = $('#marca_id').val().trim()
+//     var $marca = $('#marca').val().trim()
+//     var $modelo = $('#modelo_name').val().trim()
+//     if ($marca=='') {
+//         $('#marca').addClass('is-invalid')
+//         $('#marcaFeedback').text('La Marca es obligatoria')
+//         return false
+//     } else {
+//         $('#marca').removeClass('is-invalid')
+//     }
+//     if ($modelo=='') {
+//         $('#modelo_name').addClass('is-invalid')
+//         $('#modeloNameFeedback').text('El Modelo es obligatorio')
+//         return false
+//     } else {
+//         $('#modelo_name').removeClass('is-invalid')
+//     }
+//     page = '/crear-marca'
+//     $.get(page, {brand_id: $marca_id, marca: $marca, modelo: $modelo}, function(data){
+//         if (data.error!=undefined) {
+//             if(data.error.marca!=undefined) {
+//                 $('#marca').addClass('is-invalid')
+//                 $('#marcaFeedback').text(data.error.marca)
+//                 $('#modelo_name').removeClass('is-invalid')
+//             }
+//             if(data.error.modelo!=undefined) {
+//                 $('#modelo_name').removeClass('is-invalid')
+//                 $('#marcaFeedback').text(data.error.modelo)
+//                 $('#modelo_name').addClass('is-invalid')
+//             }
+//         } else {
+//             $('#marca').removeClass('is-invalid')
+//             $('#modelo_name').removeClass('is-invalid')
+//             cargaMarcas(data.marca.id, data.modelo.id)
+//             //$('#brand_id').val(data.marca.id)
+//             //cargaModelos(data.modelo.id)
+//             //$('#modelo_id').val(data.modelo.id)
+//             $('#marcaModal').modal('hide')
+//         }
+//     })
+// }
 
 // function calcTotal () {
 //     var with_tax = false
@@ -1838,26 +1799,38 @@ function getCar() {
     if (placa!='') {
         $.get(url, function(data){
             if (data.id) {
-                console.log(data.company.company_name)
+                // console.log(data.company.company_name)
                 $('#car_id').val(data.id)
-                $('#company_id').val(data.company_id)
+                $('#client_id').val(data.company_id)
                 // $('#my_company').val(data.my_company)
-                $('#brand').val(data.modelo.brand.name)
-                $('#modelo').val(data.modelo.name)
-                $('#year').val(data.year)
-                $('#color').val(data.color)
-                $('#vin').val(data.vin)
-                $('#company_name').val(data.company.company_name)
-                $('#doc').val(data.company.doc)
-                $('#phone').val(data.company.phone)
-                $('#mobile').val(data.company.mobile)
-                $('#email').val(data.company.email)
+                $('#txtbrand').val(data.modelo.brand.name)
+                $('#txtmodelo').val(data.modelo.name)
+                $('#txtyear').val(data.year)
+                $('#txtcolor').val(data.color)
+                $('#txtvin').val(data.vin)
+                $('#txtcompany_name').val(data.company.company_name)
+                $('#txtdoc').val(data.company.doc)
+                $('#txtphone').val(data.company.phone)
+                $('#txtmobile').val(data.company.mobile)
+                $('#txtemail').val(data.company.email)
+                $('#inventory_contact_name').val(data.contact_name)
+                $('#inventory_contact_mobile').val(data.contact_mobile)
+                $('#inventory_contact_email').val(data.contact_email)
+                $('#inventory_driver_name').val(data.driver_name)
+                $('#inventory_driver_mobile').val(data.driver_mobile)
+                $('#inventory_driver_email').val(data.driver_email)
+                $('#inventory_operator_company').val(data.operator_company)
+                $('#inventory_operator_name').val(data.operator_name)
+                $('#inventory_operator_mobile').val(data.operator_mobile)
             } else {
                 // Si no existe el input company_name (diferente a una cita), se blanquea los campos para agregar una placa que si existe en la BD.
                 if ($('#company_name').val().length == 0) {
-                    alert("Placa no registrada en el sistema")
+                    // alert("Placa no registrada en el sistema")
+                    $('#txtplaca').val($('#placa').val())
+                    $('#spanPlaca').text($('#placa').val())
                     $('#placa').val('')
                     $('#placa').focus()
+                    $('#confirmCrearCar').modal('show');
                 }
             }
         });

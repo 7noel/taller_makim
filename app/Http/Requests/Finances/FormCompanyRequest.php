@@ -22,7 +22,8 @@ class FormCompanyRequest extends Request {
 	 */
 	public function rules()
 	{
-		$entity_type = explode('.', \Request::route()->getName())[0];
+		$entity_type = \Str::before(request()->route()->getName(), '.');
+		// $entity_type = explode('.', \Request::route()->getName())[0];
 		$id_type = \Request::only('id_type')['id_type'];
 		$data = array_values(\Request::route()->parameters());
 		$id = array_shift($data) ?? null;

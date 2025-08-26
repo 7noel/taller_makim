@@ -32,10 +32,15 @@ class CreateCarsTable extends Migration
             $table->date('f_recordatorio');
             $table->date('f_next_pr');
             $table->boolean('add_contact');
-            $table->string('contact_name', 50);
-            $table->string('contact_email', 50);
-            $table->string('contact_phone', 50);
+            $table->string('contact_name');
             $table->string('contact_mobile', 50);
+            $table->string('contact_email', 50);
+            $table->string('driver_name');
+            $table->string('driver_email', 50);
+            $table->string('driver_mobile', 50);
+            $table->string('operator_company');
+            $table->string('operator_name');
+            $table->string('operator_mobile', 50);
             $table->string('slug');
 
             $table->foreign('my_company')->references('id')->on('companies');

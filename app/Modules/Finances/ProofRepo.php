@@ -558,8 +558,14 @@ class ProofRepo extends BaseRepo{
 				'number' => $next['number'],
 				'sn' => $next['series'] . '-' . $next['number'],
 				'my_company' => 1,
+				'currency_id' => 1,
 				'company_id' => $key,
-				'total' => $voucher['total'],
+				'subtotal' => $voucher['total'],
+				'total' => round($voucher['total']*1.18, 2),
+				'tax' => round($voucher['total']*1.18, 2) - $voucher['total'],
+				'car_id' => '',
+				'placa' => '',
+				'status_sunat' => 'PEND',
 
 			]);
 

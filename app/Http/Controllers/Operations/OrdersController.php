@@ -16,6 +16,9 @@ use App\Modules\Base\CurrencyRepo;
 use App\Modules\Finances\BankRepo;
 use App\Modules\Operations\CarRepo;
 use App\Modules\Base\TableRepo;
+use App\Modules\Operations\BrandRepo;
+use App\Modules\Operations\ModeloRepo;
+use App\Modules\Base\UbigeoRepo;
 use App\Exports\OrdersExport;
 
 class OrdersController extends Controller {
@@ -28,8 +31,11 @@ class OrdersController extends Controller {
 	protected $carRepo;
 	protected $tableRepo;
 	protected $proofRepo;
+	protected $brandRepo;
+	protected $modeloRepo;
+	protected $ubigeoRepo;
 
-	public function __construct(OrderRepo $repo, OrderDetailRepo $orderDetailRepo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo, TableRepo $tableRepo, ProofRepo $proofRepo) {
+	public function __construct(OrderRepo $repo, OrderDetailRepo $orderDetailRepo, PaymentConditionRepo $paymentConditionRepo, CompanyRepo $companyRepo, BankRepo $bankRepo, ChecklistDetailRepo $checklistDetailRepo, OrderChecklistDetailRepo $orderChecklistDetailRepo, CarRepo $carRepo, TableRepo $tableRepo, ProofRepo $proofRepo, BrandRepo $brandRepo, ModeloRepo $modeloRepo, UbigeoRepo $ubigeoRepo) {
 		$this->repo = $repo;
 		$this->orderDetailRepo = $orderDetailRepo;
 		$this->paymentConditionRepo = $paymentConditionRepo;
@@ -40,6 +46,9 @@ class OrdersController extends Controller {
 		$this->carRepo = $carRepo;
 		$this->tableRepo = $tableRepo;
 		$this->proofRepo = $proofRepo;
+		$this->brandRepo = $brandRepo;
+		$this->modeloRepo = $modeloRepo;
+		$this->ubigeoRepo = $ubigeoRepo;
 	}
 	public function index()
 	{
@@ -85,6 +94,11 @@ class OrdersController extends Controller {
 
 	public function create()
 	{
+		$brands = $this->brandRepo->getList2();
+		$modelos = [];
+		$bodies = config('options.bodies');
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
+
 		$action = "create";
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
@@ -95,13 +109,19 @@ class OrdersController extends Controller {
 		$bs_shipper = ['' => 'Seleccionar'];
 		$checklist_details = $this->checklistDetailRepo->all2();
 		// return view('operations.inventory.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
-		return view('partials.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies'));
+		// dd(\Str::before(request()->route()->getName(), '.'));
+		$view = 'partials.create';
+		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
+			$view = 'operations.inventory.form';
+		}
+		return view($view, compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies', 'brands', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function store()
 	{
 		$data = request()->all();
 		$model = $this->repo->save($data);
+		$this->carRepo->update_contact($data);
 		if (explode('.', \Request::route()->getName())[0] == 'output_quotes') {
 			return redirect()->route('output_quotes.edit', $model->id);
 		}
@@ -116,6 +136,11 @@ class OrdersController extends Controller {
 
 	public function show($id)
 	{
+		$brands = $this->brandRepo->getList2();
+		$modelos = [];
+		$bodies = config('options.bodies');
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
+
 		$action = "show";
 		$model = $this->repo->findOrFail($id);
 		$quote = $model->quote;
@@ -129,11 +154,21 @@ class OrdersController extends Controller {
 		$checklist_details = $this->checklistDetailRepo->all2();
 		$car = $this->carRepo->findOrFail($car_id);
 		$client = $car->company;
-		return view('partials.show', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details', 'insurance_companies'));
+
+		$view = 'partials.show';
+		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
+			$view = 'operations.inventory.form';
+		}
+		return view($view, compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action', 'checklist_details', 'insurance_companies', 'brands', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function edit($id)
 	{
+		$brands = $this->brandRepo->getList2();
+		$modelos = [];
+		$bodies = config('options.bodies');
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
+
 		$action = "edit";
 		$model = $this->repo->findOrFail($id);
 		// dd($model->inventory);
@@ -158,7 +193,12 @@ class OrdersController extends Controller {
 		$units_product = $this->tableRepo->getListUnitPro();
 		// $checklist_details = $this->checklistDetailRepo->all2();
 		// dd($checklist_details);
-		return view('partials.edit', compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'inventory', 'action', 'checklist_details', 'categories_service', 'categories_product', 'units_service', 'units_product', 'insurance_companies'));
+
+		$view = 'partials.edit';
+		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
+			$view = 'operations.inventory.form';
+		}
+		return view($view, compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'inventory', 'action', 'checklist_details', 'categories_service', 'categories_product', 'units_service', 'units_product', 'insurance_companies', 'brands', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function update($id)
@@ -167,6 +207,7 @@ class OrdersController extends Controller {
         // return response()->json(['id' => $id, 'message' => 'holaaaaaaa']);
 		// dd($data);
 		$model = $this->repo->save($data, $id);
+		$this->carRepo->update_contact($data);
 
         // Si la peticion es ajax
         if (request()->ajax()) {
@@ -330,6 +371,11 @@ class OrdersController extends Controller {
 
 	public function createByCar($car_id)
 	{
+		$brands = $this->brandRepo->getList2();
+		$modelos = [];
+		$bodies = config('options.bodies');
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
+
 		$action = "create";
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
@@ -339,7 +385,12 @@ class OrdersController extends Controller {
 		$bs = ['' => 'Seleccionar'];
 		$bs_shipper = ['' => 'Seleccionar'];
 		$car = $this->carRepo->findOrFail($car_id);
-		return view('partials.create', compact('car', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'insurance_companies'));
+
+		$view = 'partials.create';
+		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
+			$view = 'operations.inventory.form';
+		}
+		return view($view, compact('car', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'insurance_companies', 'brands', 'modelos', 'bodies', 'ubigeo'));
 	}
 
 	public function recepcion_crear()
@@ -371,7 +422,12 @@ class OrdersController extends Controller {
 	}
 	public function recepcionByCar($car_id)
 	{
-		// dd(explode('.', \Request::route()->getName())[0]);
+		$brands = $this->brandRepo->getList2();
+		$modelos = [];
+		$bodies = config('options.bodies');
+		$modelos = $this->modeloRepo->getListGroup('brand');
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
+		
 		$action = "create";
 		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
 		$checklist_details = $this->checklistDetailRepo->all2();
@@ -384,7 +440,11 @@ class OrdersController extends Controller {
 		$car = $this->carRepo->findOrFail($car_id);
 		$client = $car->company;
 
-		return view('operations.inventory.create', compact('car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies'));
+		$view = 'partials.create';
+		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
+			$view = 'operations.inventory.form';
+		}
+		return view($view, compact('car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies', 'brands', 'modelos', 'modelos', 'bodies', 'ubigeo'));
 	}
 	public function changeStatusOrder($id)
 	{

@@ -70,18 +70,12 @@
     }
 </style>
 
-{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('my_company', \Auth::user()->my_company, ['id'=>'my_company_id']) !!}
 {!! Form::hidden('is_downloadable', 1, ['id'=>'is_downloadable']) !!}
 {!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
-{!! Form::hidden('company_id', (isset($car)) ? $car->company_id : null, ['id'=>'company_id']) !!}
+{!! Form::hidden('company_id', (isset($car)) ? $car->company_id : null, ['id'=>'client_id']) !!}
 {!! Form::hidden('car_id', (isset($car)) ? $car->id : null, ['id'=>'car_id']) !!}
 {!! Form::hidden('action', $action, ['id'=>'action']) !!}
-
-        <div class="mb-2">
-            <a href="{{ route('cars.create') }}" class="btn btn-sm btn-link">[[ Crear Vehiculo ]]</a>
-            <a href="{{ route('clients.create') }}" class="btn btn-sm btn-link">[[ Crear Cliente ]]</a>
-            
-        </div>
 
         <div class="form-row">
             <div class="col-sm-2">
@@ -118,31 +112,31 @@
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="brand">Marca</label>
-                    {!! Form::text('brand', (isset($car->modelo->brand)) ? $car->modelo->brand->name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'brand', 'readonly']) !!}
+                    {!! Form::text('txtbrand', (isset($car->modelo->brand)) ? $car->modelo->brand->name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtbrand', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="modelo">Modelo</label>
-                    {!! Form::text('modelo', (isset($car->modelo)) ? $car->modelo->name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'modelo', 'readonly']) !!}
+                    {!! Form::text('txtmodelo', (isset($car->modelo)) ? $car->modelo->name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtmodelo', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="year">Año</label>
-                    {!! Form::text('year', (isset($car)) ? $car->year : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'year', 'readonly']) !!}
+                    {!! Form::text('txtyear', (isset($car)) ? $car->year : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtyear', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="color">Color</label>
-                    {!! Form::text('color', (isset($car)) ? $car->color : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'color', 'readonly']) !!}
+                    {!! Form::text('txtcolor', (isset($car)) ? $car->color : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtcolor', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="vin">VIN</label>
-                    {!! Form::text('vin', (isset($car)) ? $car->vin : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'vin', 'readonly']) !!}
+                    {!! Form::text('txtvin', (isset($car)) ? $car->vin : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtvin', 'readonly']) !!}
                 </div>
             </div>
         </div>
@@ -151,31 +145,31 @@
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="company_name">Propietario</label>
-                    {!! Form::text('company_name', (isset($client)) ? $client->company_name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'company_name', 'readonly']) !!}
+                    {!! Form::text('txtcompany_name', (isset($client)) ? $client->company_name : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtcompany_name', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="doc">DOC</label>
-                    {!! Form::text('doc', (isset($client)) ? $client->doc : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'doc', 'readonly']) !!}
+                    {!! Form::text('txtdoc', (isset($client)) ? $client->doc : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtdoc', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="phone">Tel. Fijo</label>
-                    {!! Form::text('phone', (isset($client)) ? $client->phone : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'phone', 'readonly']) !!}
+                    {!! Form::text('txtphone', (isset($client)) ? $client->phone : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtphone', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="mobile">Celular</label>
-                    {!! Form::text('mobile', (isset($client)) ? $client->mobile : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'mobile', 'readonly']) !!}
+                    {!! Form::text('txtmobile', (isset($client)) ? $client->mobile : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtmobile', 'readonly']) !!}
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    {!! Form::text('email', (isset($client)) ? $client->email : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'email', 'readonly']) !!}
+                    {!! Form::text('txtemail', (isset($client)) ? $client->email : '',['class'=>'form-control-sm form-control-plaintext', 'id'=>'txtemail', 'readonly']) !!}
                 </div>
             </div>
         </div>
@@ -191,15 +185,15 @@
             </div>--}}
             <div class="col-md-2 col-sm-4">
                 {!! Field::text('inventory[contact_name]', (isset($model->inventory->contact_name
-                ) ? $model->inventory->contact_name : ''), ['label' => 'Contacto Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
+                ) ? $model->inventory->contact_name : (isset($car) ? $car->contact_name : '')), ['label' => 'Contacto Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
                 {!! Field::text('inventory[contact_mobile]', (isset($model->inventory->contact_mobile
-                ) ? $model->inventory->contact_mobile : ''), ['label' => 'Contacto Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+                ) ? $model->inventory->contact_mobile : (isset($car) ? $car->contact_mobile : '')), ['label' => 'Contacto Celular', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
                 {!! Field::email('inventory[contact_email]', (isset($model->inventory->contact_email
-                ) ? $model->inventory->contact_email : ''), ['label' => 'Contacto Email', 'class'=>'form-control-sm text-uppercase']) !!}
+                ) ? $model->inventory->contact_email : (isset($car) ? $car->contact_email : '')), ['label' => 'Contacto Email', 'class'=>'form-control-sm']) !!}
             </div>
             {{--<div class="col-md-2 col-sm-4">
                 <div class="form-group">
@@ -211,30 +205,30 @@
             </div>--}}
             <div class="col-md-2 col-sm-4">
                 {!! Field::text('inventory[driver_name]', (isset($model->inventory->driver_name
-                ) ? $model->inventory->driver_name : ''), ['label' => 'Conductor Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
+                ) ? $model->inventory->driver_name : (isset($car) ? $car->driver_name : '')), ['label' => 'Conductor Nombre', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
                 {!! Field::text('inventory[driver_mobile]', (isset($model->inventory->driver_mobile
-                ) ? $model->inventory->driver_mobile : ''), ['label' => 'Conductor Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+                ) ? $model->inventory->driver_mobile : (isset($car) ? $car->driver_mobile : '')), ['label' => 'Conductor Celular', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
                 {!! Field::email('inventory[driver_email]', (isset($model->inventory->driver_email
-                ) ? $model->inventory->driver_email : ''), ['label' => 'Conductor Email', 'class'=>'form-control-sm text-uppercase']) !!}
+                ) ? $model->inventory->driver_email : (isset($car) ? $car->driver_email : '')), ['label' => 'Conductor Email', 'class'=>'form-control-sm']) !!}
             </div>
         </div>
 
         <div class="form-row">
             <div class="col-md-2 col-sm-4">
-                {!! Field::email('inventory[operador_company]', (isset($model->inventory->operador_company
-                ) ? $model->inventory->operador_company : ''), ['label' => 'Operador Empresa', 'class'=>'form-control-sm text-uppercase']) !!}
+                {!! Field::email('inventory[operator_company]', (isset($model->inventory->operator_company
+                ) ? $model->inventory->operator_company : (isset($car) ? $car->operator_company : '')), ['label' => 'Operador Empresa', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
-                {!! Field::text('inventory[operador_contact]', (isset($model->inventory->operador_contact
-                ) ? $model->inventory->operador_contact : ''), ['label' => 'Operador Contacto', 'class'=>'form-control-sm text-uppercase']) !!}
+                {!! Field::text('inventory[operator_name]', (isset($model->inventory->operator_name
+                ) ? $model->inventory->operator_name : (isset($car) ? $car->contact_name : '')), ['label' => 'Operador Contacto', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
             <div class="col-md-2 col-sm-4">
-                {!! Field::text('inventory[operador_mobile]', (isset($model->inventory->operador_mobile
-                ) ? $model->inventory->operador_mobile : ''), ['label' => 'Operador Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+                {!! Field::text('inventory[operator_mobile]', (isset($model->inventory->operator_mobile
+                ) ? $model->inventory->operator_mobile : (isset($car) ? $car->operator_mobile : '')), ['label' => 'Operador Celular', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
         </div>
 
@@ -501,6 +495,40 @@
         }
 
 $(document).ready(function () {
+    $('#btnConfirmCrearCar').on('click', function () {
+        $('#confirmCrearCar').modal('hide');
+        $('#link-crear-car').trigger('click'); // simula el click
+        $('#txtplaca').focus()
+    });
+    // Button trigger modal
+    var boton_car = `<button type="button" class="btn btn-sm btn-link btn-label" data-toggle="modal" data-target="#carModal" id="link-crear-car">[[ Nuevo ]]</button>`;
+    // Insertamos el botón justo después del <span> dentro del label
+    $('label[for="placa"] span').after(boton_car)
+    $('.crear_inventario').addClass('d-none')
+
+  setTimeout(function() {
+      removeRequiredCliente('#carModal');
+  }, 200)
+
+  // Cuando se abre el modal: restaurar required
+  $('#carModal').on('show.bs.modal', function () {
+    restoreRequiredCliente('#carModal');
+  });
+
+  // Cuando se cierra el modal: quitar required otra vez
+  $('#carModal').on('hidden.bs.modal', function () {
+    removeRequiredCliente('#carModal');
+  });
+
+    $("#link-crear-car").click(function(e){
+        resetFields('#carModal', ['my_company', 'txtplaca']);
+        $('#txtCompany').focus()
+    })
+    $("#btn-crear-car").click(function(e){
+        crearCar()
+    })
+
+
     // mediumZoom('#selectedImage', {
     //   margin: 24,
     //   background: '#000'
@@ -658,6 +686,74 @@ $(document).ready(function () {
         }
     });
 });
+  function crearCar() {
+    $wrap = $('#carModal');
+    $btn = $('#btn-crear-car');
+
+    if (!validateContainer()) return;
+
+    const payload = collectData();
+
+    console.log(payload)
+    $.ajax({
+      url: "{{ route('cars.ajax_crear') }}", // <- tu endpoint
+      method: 'GET',
+      data: payload,
+      dataType: 'json',
+      beforeSend: function () {
+        $btn.prop('disabled', true);
+      },
+      success: function (res) {
+        alert(res.message || 'Guardado con éxito');
+        console.log(res)
+        data = res.data.model
+        $('#carModal').modal('hide')
+        // console.log(data.company.company_name)
+        $('#placa').val(data.placa)
+        $('#car_id').val(data.id)
+        $('#client_id').val(data.company_id)
+        // $('#my_company').val(data.my_company)
+        $('#txtbrand').val(data.modelo.brand.name)
+        $('#txtmodelo').val(data.modelo.name)
+        $('#txtyear').val(data.year)
+        $('#txtcolor').val(data.color)
+        $('#txtvin').val(data.vin)
+        $('#txtcompany_name').val(data.company.company_name)
+        $('#txtdoc').val(data.company.doc)
+        $('#txtphone').val(data.company.phone)
+        $('#txtmobile').val(data.company.mobile)
+        $('#txtemail').val(data.company.email)
+        $('#inventory_contact_name').val(data.contact_name)
+        $('#inventory_contact_mobile').val(data.contact_mobile)
+        $('#inventory_contact_email').val(data.contact_email)
+        $('#inventory_driver_name').val(data.driver_name)
+        $('#inventory_driver_mobile').val(data.driver_mobile)
+        $('#inventory_driver_email').val(data.driver_email)
+        $('#inventory_operator_company').val(data.operator_company)
+        $('#inventory_operator_name').val(data.operator_name)
+        $('#inventory_operator_mobile').val(data.operator_mobile)
+        // aquí puedes limpiar, cerrar modal, recargar tabla, etc.
+        // Object.keys(payload).forEach(n => $wrap.find(`[name="${n}"]`).val(''));
+      },
+      error: function (xhr) {
+        if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+          // pintar errores de Laravel por campo
+          const errors = xhr.responseJSON.errors;
+          Object.keys(errors).forEach(function (name) {
+            const $field = $wrap.find('[name="'+name+'"]');
+            if ($field.length) setFieldValidity($field, errors[name][0]);
+          });
+          const $firstInvalid = $wrap.find('.is-invalid').first();
+          $firstInvalid.length && $firstInvalid.focus();
+        } else {
+          alert('Error del servidor. Intenta nuevamente.');
+        }
+      },
+      complete: function () {
+        $btn.prop('disabled', false);
+      }
+    });
+  }
 
 function dataURLtoBlob(dataurl) {
     const arr = dataurl.split(',');

@@ -46,7 +46,7 @@
 	</div>
 </div>
 
-<div class="form-row">
+<div class="form-row aseguradora">
 	<div class="col-sm-2 mb-3">
     	{!! Field::select('config[seguro]', ['on'=>'SI'], ['empty'=>'No', 'label'=>'Es Aseguradora', 'class'=>'form-control-sm']) !!}
 	</div>
@@ -65,7 +65,7 @@
 </div>
 
 @if(!isset($model))
-<div class="form-row">
+<div class="form-row crear_vehiculo">
 	<div class="col-sm-2 mb-3">
 		<div class="custom-control custom-switch">
 			{!! Form::checkbox('crear_vehiculo', 'on', true, ['class'=>'custom-control-input', 'id'=>'crear_vehiculo']) !!}
@@ -75,7 +75,7 @@
 </div>
 @endif
 
-@isset($model)
+@if(isset($model) and method_exists($model, 'cars'))
 <table class="table table-sm table-responsive-xl">
 	<thead>
 		<tr>
@@ -104,7 +104,7 @@
 	</tbody>
 </table>
 <a href="{!! route('cars.create_by_client', $model->id) !!}" id="btnAddCar" class="btn btn-outline-primary btn-sm" title="Agregar Vehículo">{!! $icons['add'] !!} Agregar Vehículo</a>
-@endisset
+@endif
 <br><br>
 
 <script>
