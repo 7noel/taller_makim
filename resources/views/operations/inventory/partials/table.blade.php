@@ -40,7 +40,7 @@
 				<a href="{{ route('output_vouchers.by_order', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Generar Venta">{!! $icons['invoice'] !!}</a>
 			@endif
 			@if(in_array($model->status,['CERR', 'ANUL']))
-				<a href="{{ route('output_orders.show', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Ver OT">{!! $icons['view'] !!}</a>
+				<a href="{{ route('inventory.show', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Ver OT">{!! $icons['view'] !!}</a>
 			@else
 				<a href="{{ route( 'inventory.edit' , $model) }}" class="btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!}</a>
 				<a href="#" class="btn-anular btn btn-outline-danger btn-sm" title="Eliminar">{!! $icons['remove'] !!}</a>
