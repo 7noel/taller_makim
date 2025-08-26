@@ -121,11 +121,11 @@
 	<div class="col-sm-2">
 		{!! Field::text('year', ['label' => 'Año', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
-	<div class="col-sm-2">
-		{!! Field::date('f_next-pr', ['label' => 'Pro_Rev_T', 'class'=>'form-control-sm text-uppercase']) !!}
+	<div class="col-sm-2 d-none">
+		{!! Field::date('f_next-pr', ['label' => 'Prox_Preventivo', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
-	<div class="col-sm-2">
-		{!! Field::date('f_revision', ['label' => 'Pro_Rev_T', 'class'=>'form-control-sm text-uppercase']) !!}
+	<div class="col-sm-2 d-none">
+		{!! Field::date('f_revision', ['label' => 'Prox_Rev_Tec', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
 	{{--
 	<div class="col-sm-2">
@@ -586,9 +586,16 @@ function restoreRequiredCliente(scope = '#clientModal') {
       success: function (res) {
         alert(res.message || 'Guardado con éxito');
         console.log(res)
+        $('#txtCompany').removeClass('is-invalid')
+        $('#txtCompany').prev().removeClass('text-danger')
         $('#clientModal').modal('hide')
+
         $('#txtCompany').val(res.data.company_name)
         $('#company_id').val(res.data.id)
+		$('#contact_name').val(res.data.company_name)
+		$('#contact_email').val(res.data.email)
+		$('#contact_mobile').val(res.data.mobile)
+		$('#brand_id').focus()
         // aquí puedes limpiar, cerrar modal, recargar tabla, etc.
         // Object.keys(payload).forEach(n => $wrap.find(`[name="${n}"]`).val(''));
       },

@@ -181,6 +181,7 @@ class CompanyController extends Controller {
                     'id'           => $model->id,
                     'company_name' => $model->company_name,
                     'email'        => $model->email,
+                    'mobile'        => $model->mobile,
                 ],
                 // si tu frontend quiere redirigir después:
                 'redirect' => $redirect,

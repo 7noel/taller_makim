@@ -498,7 +498,7 @@ $(document).ready(function () {
     $('#btnConfirmCrearCar').on('click', function () {
         $('#confirmCrearCar').modal('hide');
         $('#link-crear-car').trigger('click'); // simula el click
-        $('#txtplaca').focus()
+        // $('#txtplaca').focus()
     });
     // Button trigger modal
     var boton_car = `<button type="button" class="btn btn-sm btn-link btn-label" data-toggle="modal" data-target="#carModal" id="link-crear-car">[[ Nuevo ]]</button>`;
@@ -522,7 +522,14 @@ $(document).ready(function () {
 
     $("#link-crear-car").click(function(e){
         resetFields('#carModal', ['my_company', 'txtplaca']);
-        $('#txtCompany').focus()
+        setTimeout(function() {
+            if ($('#txtplaca').val()=='') {
+                $('#txtplaca').focus()
+            } else {
+                $('#txtCompany').focus()
+            }
+        }, 500)
+
     })
     $("#btn-crear-car").click(function(e){
         crearCar()
@@ -732,6 +739,7 @@ $(document).ready(function () {
         $('#inventory_operator_company').val(data.operator_company)
         $('#inventory_operator_name').val(data.operator_name)
         $('#inventory_operator_mobile').val(data.operator_mobile)
+        $('#inventory_combustible').focus()
         // aquí puedes limpiar, cerrar modal, recargar tabla, etc.
         // Object.keys(payload).forEach(n => $wrap.find(`[name="${n}"]`).val(''));
       },
