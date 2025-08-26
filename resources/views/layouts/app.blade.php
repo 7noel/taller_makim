@@ -764,7 +764,8 @@ $(document).ready(function () {
             ui.item.branches.forEach(function (b) {
                 $('#branch_id').append(`<option value='${b.id}'>${b.company_name}</option>`)
             })
-            $('#branch_id').focus()
+            // $('#branch_id').focus()
+            $('#brannd_id').focus()
         }
     })
     $('#txtProvider').autocomplete({
