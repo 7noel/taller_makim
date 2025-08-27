@@ -2,15 +2,18 @@
 
 @section('content')
 <style>
-/* Un solo scroll (el del body) */
-#safe-scroll{ height: auto; overflow: visible; }
+/* El body NO scrollea; solo el contenedor */
+html, body { height: 100%; overflow: hidden; margin: 0; }
 
-/* Bloquea pull-to-refresh del viewport en Chrome Android */
-html, body { height: 100%; margin: 0; }
-body{
-  overscroll-behavior-y: none;   /* clave para P2R */
+/* El contenedor que sí scrollea */
+#safe-scroll{
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain; /* evita pull-to-refresh dentro */
 }
+
+/* Opcional: si quieres mantener un padding inferior dentro del scroll */
+#safe-scroll { padding-bottom: 1.5rem; } /* similar a .py-4 en Bootstrap */
 
 </style>
 
@@ -189,6 +192,36 @@ body{
 </div>
 
 <script>
+(function () {
+  function setSafeHeight() {
+    const el = document.getElementById('safe-scroll');
+    if (!el) return;
+
+    // top relativo al viewport (incluye navbar + padding del <main>)
+    const top = Math.round(el.getBoundingClientRect().top);
+
+    // Si tienes un footer fijo con .fixed-bottom, descuéntalo:
+    const footer = document.querySelector('.fixed-bottom');
+    const footH = footer ? Math.round(footer.getBoundingClientRect().height) : 0;
+
+    // Altura disponible
+    const h = Math.max(0, window.innerHeight - top - footH);
+    el.style.height = h + 'px';
+  }
+
+  // Inicial + cuando cambie el layout/viewport
+  document.addEventListener('DOMContentLoaded', setSafeHeight);
+  window.addEventListener('load', setSafeHeight);
+  window.addEventListener('resize', setSafeHeight);
+  window.addEventListener('orientationchange', setSafeHeight);
+
+  // Si tu navbar colapsa (navbar-expand-md), vuelve a medir al abrir/cerrar
+  document.addEventListener('shown.bs.collapse', setSafeHeight);
+  document.addEventListener('hidden.bs.collapse', setSafeHeight);
+})();
+
+
+
 // Marca "no_aplica" en todos los grupos de radios dentro del scope dado
 function selectAllNoAplica(scope = '#clienteFields', value = 'no_aplica') {
   const $scope = scope ? $(scope) : $(document);
