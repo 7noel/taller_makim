@@ -1285,6 +1285,13 @@ function clearModalProduct() {
     if ($('#unitId option:selected').text()=='hr' && $('#diagnostico_p_hora').val()!='') {
         $('#txtValue').val($('#diagnostico_p_hora').val())
     }
+    
+    my_cat_text = $("#category option:selected").text()
+    if (my_cat_text == 'MECANICA') {
+        $('#txtDescription').parent().removeClass('d-none')
+    } else {
+        $('#txtDescription').parent().addClass('d-none')
+    }
 }
 
 function editModalProduct() {

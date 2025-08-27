@@ -1,6 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+/* Contenedor con scroll propio, evita pull-to-refresh en Android/Chrome/Firefox */
+#safe-scroll{
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* suaviza en iOS */
+  overscroll-behavior-y: contain;    /* clave: bloquea refresh por overscroll */
+}
+</style>
+
+<div id="safe-scroll">
+	<div id="clienteFields">
+
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -169,4 +182,42 @@
 	</div>
 </div>
 
+	</div>
+</div>
+
+<script>
+// Marca "sucio" cuando cambia algo dentro de #clienteFields
+let formDirty = false;
+
+$(document).on('input change', '#clienteFields :input', function () {
+  formDirty = true;
+});
+
+// Handler de beforeunload (pide confirmación si hay cambios)
+function confirmBeforeUnload(e) {
+  if (!formDirty) return;
+  e.preventDefault();
+  e.returnValue = ''; // requerido por algunos navegadores
+}
+
+window.addEventListener('beforeunload', confirmBeforeUnload);
+
+// Cuando guardes por AJAX o submit correcto, marca limpio para no bloquear la salida
+function markFormClean() {
+  formDirty = false;
+}
+
+// Ejemplos de “marcar limpio”:
+// 1) En submit normal de un <form id="formPrincipal">
+$(document).on('submit', '#formPrincipal', function () {
+  markFormClean();
+});
+
+// 2) Tras guardar por AJAX:
+function onSaveSuccess() {
+  markFormClean();
+  // ... tu lógica post-guardado (redirigir, cerrar modal, etc.)
+}
+
+</script>
 @endsection
