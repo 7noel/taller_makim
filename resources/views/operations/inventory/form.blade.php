@@ -2,13 +2,16 @@
 
 @section('content')
 <style>
-/* Contenedor con scroll propio, evita pull-to-refresh en Android/Chrome/Firefox */
-#safe-scroll{
-  height: 100vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* suaviza en iOS */
-  overscroll-behavior-y: contain;    /* clave: bloquea refresh por overscroll */
+/* Un solo scroll (el del body) */
+#safe-scroll{ height: auto; overflow: visible; }
+
+/* Bloquea pull-to-refresh del viewport en Chrome Android */
+html, body { height: 100%; margin: 0; }
+body{
+  overscroll-behavior-y: none;   /* clave para P2R */
+  -webkit-overflow-scrolling: touch;
 }
+
 </style>
 
 <div id="safe-scroll">
@@ -37,7 +40,7 @@
 						@include('operations.inventory.partials.fields')
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-10">
-								<button type="submit" class="btn btn-outline-success" id="submit">{!! $icons['save'] !!} Crear Inventario</button>
+								<button type="submit" class="btn btn-outline-success force-leave" id="submit">{!! $icons['save'] !!} Crear Inventario</button>
 							</div>
 						</div>
 					{!! Form::close() !!}
@@ -186,6 +189,40 @@
 </div>
 
 <script>
+// Marca "no_aplica" en todos los grupos de radios dentro del scope dado
+function selectAllNoAplica(scope = '#clienteFields', value = 'no_aplica') {
+  const $scope = scope ? $(scope) : $(document);
+  const target = String(value).toLowerCase();
+  const seen = new Set(); // para no repetir grupos (name)
+
+  $scope.find('input[type="radio"]')
+    .filter(function () { return String(this.value).toLowerCase() === target; })
+    .filter(':enabled') // opcional: .filter(':enabled:visible')
+    .each(function () {
+      const name = this.name || '';
+      if (!name || seen.has(name)) return;
+      this.checked = true;                 // más rápido que .prop('checked', true)
+      $(this).trigger('change');           // notifica tu lógica (si la hay)
+      seen.add(name);
+    });
+}
+
+// Atajo: Alt + 0  (Option+0 en Mac)
+document.addEventListener('keydown', function (e) {
+  if (e.repeat) return;
+  const keyIsZero = e.key === '0' || e.code === 'Digit0' || e.code === 'Numpad0';
+  if (e.altKey && keyIsZero) {
+    e.preventDefault();
+    selectAllNoAplica('#clienteFields', 'no_aplica'); // ajusta el scope si quieres
+  }
+});
+
+// Si tienes enlaces/botones que sí deben salir sin preguntar
+$(document).on('click', '.force-leave', function(){
+  markFormClean();
+});
+
+
 // Marca "sucio" cuando cambia algo dentro de #clienteFields
 let formDirty = false;
 

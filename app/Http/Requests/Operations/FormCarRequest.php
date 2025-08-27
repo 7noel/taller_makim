@@ -37,7 +37,7 @@ class FormCarRequest extends FormRequest
 
         return [
             'placa'       => ['required', 'string', 'max:20', $uniquePlaca],
-            'vin'         => ['required', 'string', 'max:20', $uniqueVin],
+            // 'vin'         => ['required', 'string', 'max:20', $uniqueVin],
             'company_id'  => ['required', 'integer'],
             'brand_id'    => ['required', 'integer'],
             'modelo_id'   => ['required', 'integer'],

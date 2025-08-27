@@ -246,7 +246,7 @@
                 ) ? $model->inventory->combustible : ''), ['empty'=>'SELECCIONAR', 'label'=>'Combustible', 'class'=>'form-control-sm', 'required']) !!}
             </div>
             <div class="col-sm-2">
-                {!! Field::number('kilometraje', null, ['label' => 'Kilom.', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
+                {!! Field::number('kilometraje', null, ['label' => 'Kilometraje', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
             </div>
             <div class="col-sm-2">
                 {!! Field::select('inventory[tarjeta_propiedad]', config('options.tarjeta_propiedad'), (isset($model->inventory->tarjeta_propiedad

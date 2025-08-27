@@ -107,19 +107,19 @@
 		{!! Field::select('body', $bodies, ['empty'=>'Seleccionar', 'label'=>'Tipo', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::text('color', ['label' => 'Color', 'class'=>'form-control-sm text-uppercase']) !!}
-	</div>
-	<div class="col-sm-4">
-		{!! Field::text('vin', ['label' => 'VIN', 'class'=>'form-control-sm text-uppercase', 'max'=>'17', 'required']) !!}
-	</div>
-	<div class="col-sm-4">
-		{!! Field::text('motor', ['label' => 'Nro Motor', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::text('color', ['label' => 'Color', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
+		{!! Field::text('vin', ['label' => 'VIN', 'class'=>'form-control-sm text-uppercase', 'max'=>'17']) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::text('motor', ['label' => 'Nro Motor', 'class'=>'form-control-sm text-uppercase']) !!}
+	</div>
+	<div class="col-sm-2 d-none">
 		{!! Field::text('codigo', ['label' => 'Codigo', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::text('year', ['label' => 'Año', 'class'=>'form-control-sm text-uppercase']) !!}
+		{!! Field::text('year', ['label' => 'Año', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
 	<div class="col-sm-2 d-none">
 		{!! Field::date('f_next-pr', ['label' => 'Prox_Preventivo', 'class'=>'form-control-sm text-uppercase']) !!}

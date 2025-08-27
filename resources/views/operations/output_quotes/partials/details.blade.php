@@ -77,7 +77,9 @@
 
 <hr class="my-2">
 
-<h5 class="mb-2">Órdenes de compra de terceros</h5>
+<h5 class="mb-2">Órdenes de compra de terceros <button type="button" class="btn btn-outline-primary btn-sm" id="btn-oc-add">
+          <i class="fa fa-plus"></i> Agregar OC
+        </button></h5>
 
 <table class="table table-sm table-bordered" id="tabla-oc">
   <thead class="thead-light">
@@ -97,7 +99,7 @@
         </td>
         <td>
           <input type="number" step="0.01" min="0" name="diagnostico[oc][{{ $i }}][monto]" 
-                 class="form-control form-control-sm js-oc-monto" 
+                 class="form-control form-control-sm js-oc-monto text-right" 
                  value="{{ $oc->monto ?? 0 }}">
         </td>
         <td class="text-center">
@@ -117,7 +119,7 @@
       </tr>
     @endforelse
   </tbody>
-  <tfoot>
+  {{--<tfoot>
     <tr>
       <td colspan="3" class="text-right">
         <button type="button" class="btn btn-outline-primary btn-sm" id="btn-oc-add">
@@ -125,7 +127,7 @@
         </button>
       </td>
     </tr>
-  </tfoot>
+  </tfoot>--}}
 </table>
 
 <hr class="my-2">
@@ -152,7 +154,7 @@
   </div>
 </div>
 
-<div class="small text-muted">
+<div class="small text-muted mb-2">
   <div>Suma OCs: <span id="sum_oc_display">0.00</span></div>
   <div>Base (Presupuesto + OCs): <span id="base_display">0.00</span></div>
   <div>% aplicado: <span id="pct_aplicado_display">0.00</span></div>
@@ -369,7 +371,7 @@ function addOCRow(){
   var tpl =
     '<tr>' +
       '<td><input type="text" name="diagnostico[oc]['+idx+'][descripcion]" class="form-control form-control-sm text-uppercase"></td>' +
-      '<td><input type="number" step="0.01" min="0" name="diagnostico[oc]['+idx+'][monto]" class="form-control form-control-sm js-oc-monto" value="0"></td>' +
+      '<td><input type="number" step="0.01" min="0" name="diagnostico[oc]['+idx+'][monto]" class="form-control form-control-sm js-oc-monto text-right" value="0"></td>' +
       '<td class="text-center">' +
         '<button type="button" class="btn btn-outline-danger btn-sm js-oc-del"><i class="far fa-trash-alt"></i></button>' +
       '</td>' +
