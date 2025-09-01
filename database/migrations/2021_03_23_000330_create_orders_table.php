@@ -64,6 +64,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('exchange', 12,2);
             $table->decimal('exchange_sunat', 12,2);
             $table->bigInteger('order_id')->unsigned(); // id del pedido relacionado (solo para cotizacion)
+            $table->bigInteger('parent_quote_id')->unsigned(); // id del mainSiniestro
             $table->bigInteger('proof_id')->unsigned(); // id del comprobante (solo para pedido)
             $table->bigInteger('user_id')->unsigned();
             $table->text('comment');

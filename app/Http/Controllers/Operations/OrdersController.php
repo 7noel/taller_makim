@@ -94,6 +94,15 @@ class OrdersController extends Controller {
 
 	public function create()
 	{
+		$service_types = config('options.types_service');
+		unset($service_types['AMPLIACION']);
+		if ( !is_null( request()->input('type_service') ) ) {
+			if (request()->input('type_service') == 'AMPLIACION') {
+				$service_types = ['AMPLIACION' => 'AMPLIACION'];
+			} elseif (request()->input('type_service') == 'PARTICULAR') {
+				unset($service_types['SINIESTRO']);
+			}
+		}
 		$brands = $this->brandRepo->getList2();
 		$modelos = [];
 		$bodies = config('options.bodies');
@@ -114,7 +123,7 @@ class OrdersController extends Controller {
 		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
 			$view = 'operations.inventory.form';
 		}
-		return view($view, compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies', 'brands', 'modelos', 'bodies', 'ubigeo'));
+		return view($view, compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies', 'brands', 'modelos', 'bodies', 'ubigeo', 'service_types'));
 	}
 
 	public function store()
@@ -137,6 +146,7 @@ class OrdersController extends Controller {
 	public function show($id)
 	{
 		$brands = $this->brandRepo->getList2();
+		$service_types = config('options.types_service');
 		$modelos = [];
 		$bodies = config('options.bodies');
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
@@ -172,9 +182,26 @@ class OrdersController extends Controller {
 
 		$action = "edit";
 		$model = $this->repo->findOrFail($id);
-		// dd($model->inventory);
-		$quote = $model->quote;
-		$inventory = $model->quote;
+		$service_types = config('options.types_service');
+		unset($service_types['AMPLIACION']);
+		if ($model->order_type == 'output_quotes') {
+			if ($model->type_service == 'AMPLIACION') {
+				$service_types = [$model->type_service => $model->type_service];
+			} elseif ($model->type_service == 'SINIESTRO') {
+				$service_types = [$model->type_service => $model->type_service];
+			} else {
+				unset($service_types['SINIESTRO']);
+			}
+		}
+
+		$inventory = null; 
+		if (isset($model)) {
+			if ($model->order_type == 'inventory') {
+				$inventory = $model;
+			} else {
+				$inventory = $model->inventario;
+			}
+		}
 		$my_companies = $this->companyRepo->getListMyCompany();
 		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
 		$payment_conditions = $this->paymentConditionRepo->getList();
@@ -199,7 +226,7 @@ class OrdersController extends Controller {
 		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
 			$view = 'operations.inventory.form';
 		}
-		return view($view, compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'inventory', 'action', 'checklist_details', 'categories_service', 'categories_product', 'units_service', 'units_product', 'insurance_companies', 'brands', 'modelos', 'bodies', 'ubigeo'));
+		return view($view, compact('model', 'car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'inventory', 'action', 'checklist_details', 'categories_service', 'categories_product', 'units_service', 'units_product', 'insurance_companies', 'brands', 'modelos', 'bodies', 'ubigeo', 'service_types'));
 	}
 
 	public function update($id)
@@ -523,6 +550,16 @@ class OrdersController extends Controller {
 	}
 	public function by_inventory($id)
 	{
+		// dd( request()->input('type_service') );
+		$service_types = config('options.types_service');
+		unset($service_types['AMPLIACION']);
+		if ( !is_null( request()->input('type_service') ) ) {
+			if (request()->input('type_service') == 'AMPLIACION') {
+				$service_types = ['AMPLIACION' => 'AMPLIACION'];
+			} elseif (request()->input('type_service') == 'PARTICULAR') {
+				unset($service_types['SINIESTRO']);
+			}
+		}
 		$action = "create";
 		$model = $this->repo->findOrFail($id);
 		$inventory = $model;
@@ -533,7 +570,7 @@ class OrdersController extends Controller {
 		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = $model->company->branches->pluck('company_name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
-		return view('operations.output_quotes.create_by_inventory', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'inventory', 'action', 'insurance_companies'));
+		return view('operations.output_quotes.create_by_inventory', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'inventory', 'action', 'insurance_companies', 'service_types'));
 	}
 	public function diagnostico_edit($id)
 	{

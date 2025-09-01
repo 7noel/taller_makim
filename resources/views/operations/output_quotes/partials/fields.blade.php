@@ -6,11 +6,36 @@
 <!-- {!! Form::hidden('sn', null, ['id'=>'sn']) !!} -->
 
 @if(isset($model))
+	@if(request()->input('type_service') == 'AMPLIACION')
+		{!! Form::hidden('parent_quote_id', optional($inventory->mainSiniestro)->id, ['id'=>'parent_quote_id']) !!}
+	@endif
 <div class="form-row">
 	<a href="{{ route( 'panel', 'DIAG' ) }}" class="btn btn-outline-info btn-sm" title="Tablero"><i class="fa-solid fa-arrow-left"></i> TABLERO</a>
-	<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Items</a>
-	<a href="{{ route( 'output_quotes.print_categories' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Categorías</a>
-	<a href="{{ route( 'output_quotes.print_taller' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF por Taller</a>
+	@if($model->order_type == 'output_quotes')
+		<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Items</a>
+		<a href="{{ route( 'output_quotes.print_categories' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Categorías</a>
+		<a href="{{ route( 'output_quotes.print_taller' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Taller</a>
+		<div class="btn-group">
+			<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				Otros Presupuestos
+			</button>
+			<div class="dropdown-menu">
+			@if($model->parent_quote_id > 0)
+				<a class="dropdown-item btn-sm" href="{{ route( 'output_quotes.edit' , $inventory->mainSiniestro ) }}" title="Presupuesto Principal">Siniestro {{ $inventory->mainSiniestro->sn }}</a>
+			@else
+				<a class="dropdown-item btn-sm" href="{{ route('output_quotes.by_inventory', [$inventory->id, 'type_service'=>'AMPLIACION']) }}">Nuevo Ampliación</a>
+				@foreach($inventory->ampliaciones as $quote)
+					<a class="dropdown-item btn-sm" href="{{ route('output_quotes.edit', $quote->id) }}">{{ $quote->sn }}</a>
+				@endforeach
+			@endif
+				<!-- <div class="dropdown-divider"></div> -->
+				<a class="dropdown-item btn-sm" href="{{ route('output_quotes.by_inventory', [$inventory->id, 'type_service'=>'PARTICULAR']) }}">Nuevo Particular</a>
+				@foreach($inventory->particulares as $quote)
+					<a class="dropdown-item btn-sm" href="{{ route('output_quotes.edit', $quote->id) }}">{{ $quote->sn }}</a>
+				@endforeach
+			</div>
+		</div>
+	@endif
 	<br>
 </div>
 @endif
@@ -31,7 +56,7 @@
 		{!! Form::text('inventory_sn', $inventory->sn, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
 	</div>
 	@endif
-	<div class="col-md-1 col-sm-2">
+	<div class="col-md-2 col-sm-4">
 		{!! Field::text('placa', null, ['label' => 'Placa', 'class'=>'form-control-sm text-uppercase', 'required']) !!}
 	</div>
 	<div class="col-md-1 col-sm-2">
@@ -41,7 +66,7 @@
 		{!! Field::select('currency_id', config('options.table_sunat.moneda'), (isset($model) ? null : 1), ['empty'=>'Seleccionar', 'label'=>'Moneda', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::select('type_service', config('options.types_service'), ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
+		{!! Field::select('type_service', $service_types, ['empty'=>'Seleccionar', 'label'=>'Servicio', 'class'=>'form-control-sm', 'required']) !!}
 	</div>
 	<div class="col-sm-2">
 		{!! Field::select('insurance_company_id', $insurance_companies, ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm', 'id'=>'seguro']) !!}

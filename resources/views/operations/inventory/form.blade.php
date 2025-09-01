@@ -27,12 +27,14 @@ html, body { height: 100%; overflow: hidden; margin: 0; }
 				<h5 class="{{ config('options.styles.card_header') }}"> 
 				@if($action == "edit")
 				Editar Inventario
+				@elseif($action == "show")
+				Ver Inventario
 				@else
 				Nuevo Inventario
 				@endif
 				</h5>
 				<div class="card-body padding-0">
-				@if($action == "edit")
+				@if($action == "edit" or $action == "show")
 					{!! Form::model($model, ['route'=> ['inventory.update', $model] , 'method'=>'PUT', 'class'=>'form-loading', 'enctype'=>"multipart/form-data"]) !!}
 				@else
 					{!! Form::open(['route'=> 'inventory.store' , 'method'=>'POST', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
@@ -41,11 +43,14 @@ html, body { height: 100%; overflow: hidden; margin: 0; }
 						<input type="hidden" name="last_page" value="{{ URL::previous() }}">
 						@endif
 						@include('operations.inventory.partials.fields')
+						
+						@if($action != "show")
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-10">
-								<button type="submit" class="btn btn-outline-success force-leave" id="submit">{!! $icons['save'] !!} Crear Inventario</button>
+								<button type="submit" class="btn btn-outline-success force-leave" id="submit">{!! $icons['save'] !!} {{ $action=='edit' ? 'Actualizar' : 'Crear' }} Inventario</button>
 							</div>
 						</div>
+						@endif
 					{!! Form::close() !!}
 				</div>
 			</div>

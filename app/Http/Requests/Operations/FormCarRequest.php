@@ -42,6 +42,7 @@ class FormCarRequest extends FormRequest
             'brand_id'    => ['required', 'integer'],
             'modelo_id'   => ['required', 'integer'],
             'year'        => ['required', 'integer'],
+            'color'        => ['required'],
         ];
     }
 }

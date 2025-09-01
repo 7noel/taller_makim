@@ -11,7 +11,7 @@ class Order extends Model implements Auditable
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['mov', 'is_downloadable', 'sn', 'series', 'number', 'order_type', 'type_op', 'document_type_id', 'company_id', 'car_id', 'placa', 'kilometraje', 'type_service', 'preventivo', 'branch_id', 'shipper_id', 'shipper_branch_id', 'payment_condition_id', 'currency_id', 'attention', 'matter', 'delivery_period', 'installation_period', 'delivery_place', 'offer_period', 'seller_id', 'repairman_id', 'diag_at', 'repu_at', 'pre_approved_at', 'approved_at', 'repar_at', 'checked_at', 'invoiced_at', 'sent_at', 'canceled_at', 'status', 'with_tax', 'gross_value', 'discount', 'discount_items', 'subtotal', 'tax', 'total', 'amortization', 'exchange', 'exchange_sunat', 'order_id', 'proof_id', 'user_id', 'comment', 'inventory', 'diagnostico', 'pre_aprobacion', 'aprobacion', 'reparacion', 'control_calidad', 'status_lug', 'slug', 'my_company', 'insurance_company_id'];
+	protected $fillable = ['mov', 'is_downloadable', 'sn', 'series', 'number', 'order_type', 'type_op', 'document_type_id', 'company_id', 'car_id', 'placa', 'kilometraje', 'type_service', 'preventivo', 'branch_id', 'shipper_id', 'shipper_branch_id', 'payment_condition_id', 'currency_id', 'attention', 'matter', 'delivery_period', 'installation_period', 'delivery_place', 'offer_period', 'seller_id', 'repairman_id', 'diag_at', 'repu_at', 'pre_approved_at', 'approved_at', 'repar_at', 'checked_at', 'invoiced_at', 'sent_at', 'canceled_at', 'status', 'with_tax', 'gross_value', 'discount', 'discount_items', 'subtotal', 'tax', 'total', 'amortization', 'exchange', 'exchange_sunat', 'order_id', 'proof_id', 'user_id', 'comment', 'inventory', 'diagnostico', 'pre_aprobacion', 'aprobacion', 'reparacion', 'control_calidad', 'status_lug', 'slug', 'my_company', 'insurance_company_id', 'parent_quote_id'];
 	// protected $casts = [
 	// 	'inventory' => 'array',
 	// ];
@@ -52,13 +52,36 @@ class Order extends Model implements Auditable
 	{
 		return $this->belongsTo('App\Modules\Finances\Proof');
 	}
-	public function orders()
+	public function quotes()
 	{
 		return $this->hasMany('App\Modules\Operations\Order', 'order_id');
 	}
-	public function quote()
+	// Azúcar sintáctico: Lo que Inventario debe tener
+    public function mainSiniestro() {
+        return $this->hasOne('App\Modules\Operations\Order', 'order_id')
+            ->where('type_service','SINIESTRO')
+            ->where('parent_quote_id', 0);
+    }
+    public function ampliaciones() {
+        return $this->hasMany('App\Modules\Operations\Order', 'order_id')->where('type_service','AMPLIACION');
+    }
+    public function particulares() {
+        return $this->hasMany('App\Modules\Operations\Order', 'order_id')->where('type_service', '!=','SINIESTRO')->where('type_service', '!=','AMPLIACION');
+    }
+
+    // Lo que Presupuesto debe tener
+    public function parent()
+    {
+    	return $this->belongsTo('App\Modules\Operations\Order', 'parent_quote_id');
+	}
+    public function children()
+    {
+    	return $this->hasMany('App\Modules\Operations\Order', 'parent_quote_id');
+    }
+
+	public function inventario()
 	{
-		return $this->belongsTo('App\Modules\Operations\Order', 'order_id');
+		return $this->belongsTo('App\Modules\Operations\Order', 'order_id')->where('order_type', 'inventory');
 	}
 	public function mycompany()
 	{

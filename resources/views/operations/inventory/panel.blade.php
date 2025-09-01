@@ -115,8 +115,8 @@ $models_7 = $models->where('status', 'ENTR');
 							<div class="card">
 								<div class="card-body">
 									<h5>
-										@if(isset($model->orders[0]))
-										<a href="{{ route( 'output_quotes.edit', $model->orders[0]) }}" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										@if(isset($model->quotes[0]))
+										<a href="{{ route( 'output_quotes.edit', $model->quotes[0]) }}" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										@else
 										<a href="{{ route( 'output_quotes.by_inventory', $model) }}" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										@endif
@@ -161,8 +161,8 @@ $models_7 = $models->where('status', 'ENTR');
 							<div class="card">
 								<div class="card-body">
 									<h5>
-										@if(isset($model->orders[0]))
-										<a href="{{ route( 'output_quotes.edit', $model->orders[0]) }}" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
+										@if(isset($model->quotes[0]))
+										<a href="{{ route( 'output_quotes.edit', $model->quotes[0]) }}" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										@else
 										<a href="{{ route( 'output_quotes.by_inventory', $model) }}" class="btn btn-outline-primary btn-sm btn-circle">{!! $icons['edit'] !!}</a>
 										@endif

@@ -35,7 +35,7 @@
 			<td>{{ $model->total}} </td>
 			<td>
 				@if($model->order_id>0)
-				<a href="{{ '/operations/output_orders/?sn='.$model->order_id }}" class="btn btn-link btn-sm" title="Ver OT">{{ $model->order_id }}</a>
+				<a href="{{ route('inventory.show', $model->order_id) }}" class="btn btn-link btn-sm" title="Ver OT">{{ $model->order->sn }}</a>
 				@else
 				SIN OT
 				@endif
