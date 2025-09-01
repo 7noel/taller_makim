@@ -328,8 +328,50 @@
 				</tr>
 			</tbody>
 		</table>
+		<br>
+		@if($model->type_service=='SINIESTRO' and 1==0)
+			<?php 
+			$total_oc = 0;
+			foreach ($model->diagnostico->oc as $key => $oc) {
+				$total_oc += $oc->monto;
+			}
+			 ?>
+
+		
+		<table>
+			<tbody>
+				<tr>
+					<td style="width: 20%;">MANO DE OBRA</td>
+					<td>{{ $model->subtotal }}</td>
+				</tr>
+				<tr>
+					<td>ORDENES DE COMPRA</td>
+					<td>{{ number_format($total_oc, 2) }}</td>
+				</tr>
+				<tr>
+					<td>BASE</td>
+					<td>{{ number_format($model->subtotal + $total_oc, 2) }}</td>
+				</tr>
+				<tr>
+					<td>MONTO MÍNIMO</td>
+					<td>{{ number_format($model->franquicia_min, 2) }}</td>
+				</tr>
+				<tr>
+					<td>% FRANQUICIA</td>
+					<td>{{ number_format($model->diagnostico->franquicia_pct, 2) }}</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>FRANQUICIA</td>
+					<td>{{ number_format($model->diagnostico->franquicia_total, 2) }}</td>
+				</tr>
+			</tfoot>
+		</table>
+		@endif
 
 	</div>
+	@if($cuentas->count())
 	<footer>
 		<div><strong>Cuentas: </strong></div>
 		@foreach($cuentas as $cta)
@@ -341,5 +383,6 @@
 			</div>
 		@endforeach
 	</footer>
+	@endif
 </body>
 </html>

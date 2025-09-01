@@ -73,7 +73,7 @@ class OrderRepo extends BaseRepo{
 		// }
 		$model = parent::save($data, $id);
 
-		if (isset($data['items']) and $data['items']>0) {
+		if (isset($data['details']) and $data['details']>0) {
 			// Guarda los detalles
 			$detailRepo = new OrderDetailRepo;
 			$toDelete = $detailRepo->syncMany2($data['details'], ['key' => 'order_id', 'value' => $model->id], 'product_id');

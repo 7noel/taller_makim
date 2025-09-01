@@ -77,9 +77,9 @@
 
 <hr class="my-2">
 
-<h5 class="mb-2">Órdenes de compra de terceros <button type="button" class="btn btn-outline-primary btn-sm" id="btn-oc-add">
+<h5 class="mb-2">Órdenes de compra de terceros {{--<button type="button" class="btn btn-outline-primary btn-sm" id="btn-oc-add">
           <i class="fa fa-plus"></i> Agregar OC
-        </button></h5>
+        </button>--}}</h5>
 
 <table class="table table-sm table-bordered" id="tabla-oc">
   <thead class="thead-light">
@@ -112,14 +112,14 @@
       {{-- fila inicial vacía --}}
       <tr>
         <td><input type="text" name="diagnostico[oc][0][descripcion]" class="form-control form-control-sm"></td>
-        <td><input type="number" step="0.01" min="0" name="diagnostico[oc][0][monto]" class="form-control form-control-sm js-oc-monto" value="0"></td>
+        <td><input type="number" step="0.01" min="0" name="diagnostico[oc][0][monto]" class="form-control form-control-sm js-oc-monto text-right" value="0"></td>
         <td class="text-center">
           <button type="button" class="btn btn-outline-danger btn-sm js-oc-del"><i class="far fa-trash-alt"></i></button>
         </td>
       </tr>
     @endforelse
   </tbody>
-  {{--<tfoot>
+  <tfoot>
     <tr>
       <td colspan="3" class="text-right">
         <button type="button" class="btn btn-outline-primary btn-sm" id="btn-oc-add">
@@ -127,7 +127,7 @@
         </button>
       </td>
     </tr>
-  </tfoot>--}}
+  </tfoot>
 </table>
 
 <hr class="my-2">
@@ -365,7 +365,7 @@ function recalcFranquicia(){
 }
 
 // ---- Agregar fila de OC ----
-function addOCRow(){
+function addOCRow(focusTarget = 'descripcion'){
   var $tbody = $('#tabla-oc tbody');
   var idx = $tbody.children('tr').length;
   var tpl =
@@ -376,7 +376,24 @@ function addOCRow(){
         '<button type="button" class="btn btn-outline-danger btn-sm js-oc-del"><i class="far fa-trash-alt"></i></button>' +
       '</td>' +
     '</tr>';
-  $tbody.append(tpl);
+  // $tbody.append(tpl);
+
+  // Agrega y captura la nueva fila
+  var $row = $(tpl).appendTo($tbody);
+
+  // Opcional: lleva la fila a la vista si el contenedor tiene scroll
+  $row[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Enfoca el campo deseado
+  // (setTimeout(0) ayuda dentro de modales Bootstrap/iOS)
+  setTimeout(function () {
+    if (focusTarget === 'monto') {
+      $row.find('input[name$="[monto]"]').trigger('focus').select();
+    } else {
+      // por defecto, descripcion
+      $row.find('input[name$="[descripcion]"]').trigger('focus').select();
+    }
+  }, 0);
 }
 
 </script>
