@@ -120,7 +120,9 @@
 		td.align-top {
 			vertical-align: top;
 		}
-		
+		.table-franquicia td{
+			padding-left: 10px;
+		}
     </style>
 </head>
 <body>
@@ -329,7 +331,7 @@
 			</tbody>
 		</table>
 		<br>
-		@if($model->type_service=='SINIESTRO' and 1==0)
+		@if($model->type_service=='SINIESTRO')
 			<?php 
 			$total_oc = 0;
 			foreach ($model->diagnostico->oc as $key => $oc) {
@@ -338,35 +340,30 @@
 			 ?>
 
 		
-		<table>
+		<table class="table-franquicia">
 			<tbody>
 				<tr>
-					<td style="width: 20%;">MANO DE OBRA</td>
-					<td>{{ $model->subtotal }}</td>
+					<td class="border" width="20%">Mano de Obra</td>
+					<td align="center" width="10%" class="border">{{ $model->subtotal }}</td>
+					<td class="border" width="20%">Monto Mínimo</td>
+					<td align="center" width="10%" class="border">{{ number_format($model->diagnostico->franquicia_min, 2) }}</td>
+					<td width="50%"></td>
 				</tr>
 				<tr>
-					<td>ORDENES DE COMPRA</td>
-					<td>{{ number_format($total_oc, 2) }}</td>
+					<td class="border">Ordenes de Compra</td>
+					<td align="center" width="10%" class="border">{{ number_format($total_oc, 2) }}</td>
+					<td class="border">% Franquicia</td>
+					<td align="center" width="10%" class="border">{{ number_format($model->diagnostico->franquicia_pct, 2) }}</td>
+					<td></td>
 				</tr>
 				<tr>
-					<td>BASE</td>
-					<td>{{ number_format($model->subtotal + $total_oc, 2) }}</td>
-				</tr>
-				<tr>
-					<td>MONTO MÍNIMO</td>
-					<td>{{ number_format($model->franquicia_min, 2) }}</td>
-				</tr>
-				<tr>
-					<td>% FRANQUICIA</td>
-					<td>{{ number_format($model->diagnostico->franquicia_pct, 2) }}</td>
+					<td class="border">Base</td>
+					<td align="center" width="10%" class="border">{{ number_format($model->subtotal + $total_oc, 2) }}</td>
+					<td class="border">FRANQUICIA</td>
+					<td align="center" width="10%" class="border">{{ number_format($model->diagnostico->franquicia_total, 2) }}</td>
+					<td></td>
 				</tr>
 			</tbody>
-			<tfoot>
-				<tr>
-					<td>FRANQUICIA</td>
-					<td>{{ number_format($model->diagnostico->franquicia_total, 2) }}</td>
-				</tr>
-			</tfoot>
 		</table>
 		@endif
 
