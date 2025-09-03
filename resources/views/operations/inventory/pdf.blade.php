@@ -253,7 +253,7 @@
 				</tr>
 				<tr>
 					<td class="label2">Kilometraje:</td>
-					<td colspan="3">{{ number_format($model->kilometraje) }} km</td>
+					<td colspan="3">{{ number_format($model->kilometraje, 0, '.', ',') }} km</td>
 				</tr>
 				<tr>
 					<td class="label2">Tj propiedad:</td>

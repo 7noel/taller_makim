@@ -126,6 +126,9 @@
 		td.align-top {
 			vertical-align: top;
 		}
+		.table-franquicia td{
+			padding-left: 10px;
+		}
 		
     </style>
 </head>
@@ -206,8 +209,8 @@
 			<td class="">{{ $model->car->year }}</td>
 		</tr>
 		<tr>
-			<td class="label">VIN:</td>
-			<td class="col2">{{ $model->car->vin }}</td>
+			<td class="label">Kilometraje:</td>
+			<td class="col2">{{ number_format($model->kilometraje, 0, '.', ',') }} km</td>
 			<td class="label">Color:</td>
 			<td class="">{{ $model->car->color }}</td>
 		</tr>
@@ -332,8 +335,45 @@
 				</tr>
 			</tbody>
 		</table>
+		<br>
+		@if($model->type_service=='SINIESTRO')
+			<?php 
+			$total_oc = 0;
+			foreach ($model->diagnostico->oc as $key => $oc) {
+				$total_oc += $oc->monto;
+			}
+			 ?>
+
+		
+		<table class="table-franquicia">
+			<tbody>
+				<tr>
+					<td class="border" width="20%">Mano de Obra</td>
+					<td align="center" width="10%" class="border">{{ $model->subtotal }}</td>
+					<td class="border" width="20%">Monto Mínimo</td>
+					<td align="center" width="10%" class="border">{{ number_format($model->diagnostico->franquicia_min, 2) }}</td>
+					<td width="50%"></td>
+				</tr>
+				<tr>
+					<td class="border">Ordenes de Compra</td>
+					<td align="center" width="10%" class="border">{{ number_format($total_oc, 2) }}</td>
+					<td class="border">% Franquicia</td>
+					<td align="center" width="10%" class="border">{{ number_format($model->diagnostico->franquicia_pct, 2) }}</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="border">Base</td>
+					<td align="center" width="10%" class="border">{{ number_format($model->subtotal + $total_oc, 2) }}</td>
+					<td class="border">FRANQUICIA</td>
+					<td align="center" width="10%" class="border">{{ number_format($model->diagnostico->franquicia_total, 2) }}</td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+		@endif
 
 	</div>
+	@if($cuentas->count())
 	<footer>
 		<div><strong>Cuentas: </strong></div>
 		@foreach($cuentas as $cta)
@@ -345,5 +385,6 @@
 			</div>
 		@endforeach
 	</footer>
+	@endif
 </body>
 </html>

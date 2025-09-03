@@ -209,8 +209,8 @@
 			<td class="">{{ $model->car->year }}</td>
 		</tr>
 		<tr>
-			<td class="label">VIN:</td>
-			<td class="col2">{{ $model->car->vin }}</td>
+			<td class="label">Kilometraje:</td>
+			<td class="col2">{{ number_format($model->kilometraje, 0, '.', ',') }} km</td>
 			<td class="label">Color:</td>
 			<td class="">{{ $model->car->color }}</td>
 		</tr>
