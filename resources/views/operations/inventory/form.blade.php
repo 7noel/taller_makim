@@ -37,7 +37,7 @@ html, body { height: 100%; overflow: hidden; margin: 0; }
 				@if($action == "edit" or $action == "show")
 					{!! Form::model($model, ['route'=> ['inventory.update', $model] , 'method'=>'PUT', 'class'=>'form-loading', 'enctype'=>"multipart/form-data"]) !!}
 				@else
-					{!! Form::open(['route'=> 'inventory.store' , 'method'=>'POST', 'class'=>'', 'enctype'=>"multipart/form-data"]) !!}
+					{!! Form::open(['route'=> 'inventory.store' , 'method'=>'POST', 'class'=>'form-loading', 'enctype'=>"multipart/form-data"]) !!}
 				@endif
 						@if(Request::url() != URL::previous())
 						<input type="hidden" name="last_page" value="{{ URL::previous() }}">

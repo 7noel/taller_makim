@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="icon" type="image/jpeg" href="./img/logo_makim_01.jpg" />
+    <?php
+		$logoRel = data_get($model->mycompany, 'config.logo'); // p.ej. 'logos/mi_logo.png'
+		$logoAbs = $logoRel ? public_path('storage/'.$logoRel) : null;
 
+		// Si no hay logo o no existe el archivo, usa el favicon
+		if (!$logoAbs || !is_file($logoAbs)) {
+		    $logoAbs = public_path('img/favicon.png');
+		}
+     ?>
 	<title>Presupuesto: {{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,7 +142,7 @@
 		<table>
 			<tr>
 				<td width="20%" align="center" style="border: none;">
-					<img src="./{{ \Storage::url( session('my_company')->config['logo']) }}" alt="" width="100px">
+					<img src="{{ $logoAbs }}" alt="Logo" width="100px">
 				</td>
 				<td width="38%" style="border: none; font-size: 10px;">
 					<div class="company_name">{{ $model->mycompany->company_name }}</div>

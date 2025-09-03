@@ -3,16 +3,49 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @php
-        $favicon = data_get(session('my_company'), 'config.favicon');
-        $logo = data_get(session('my_company'), 'config.logo');
-    @endphp
+<?php
+// Carpetas dentro de storage/app/public
+$folderLogos    = '';
+$folderFavicons = '';
 
-    @if($favicon && \Storage::disk('public')->exists($favicon))
-        <link rel="icon" type="image/jpeg" href="{{ \Storage::url($favicon) }}" />
-    @else
-        <link rel="icon" type="image/jpeg" href="/img/favicon.png" />
-    @endif  
+// 1) Lee nombres desde la empresa del usuario, si existe; si no, serán null
+$logoRelName    = (string) data_get(auth()->user(), 'mycompany.config.logo');     // ej: "mi_logo.png" o null
+$faviconRelName = (string) data_get(auth()->user(), 'mycompany.config.favicon');  // ej: "mi_favicon.png" o null
+
+// 2) Sanitiza (evita paths raros)
+$logoRelName    = $logoRelName ? basename($logoRelName) : '';
+$faviconRelName = $faviconRelName ? basename($faviconRelName) : '';
+
+// 3) Arma paths relativos dentro del disk 'public'
+$logoPathRel    = $logoRelName    ? $folderLogos    . '/' . $logoRelName    : null;
+$faviconPathRel = $faviconRelName ? $folderFavicons . '/' . $faviconRelName : null;
+
+// 4) URL del LOGO (no depende de .env, usa asset() relativo al host actual)
+if ($logoPathRel && Storage::disk('public')->exists($logoPathRel)) {
+    $logoUrl = asset('storage/' . $logoPathRel);
+} else {
+    $logoUrl = asset('img/favicon.png'); // fallback en /public/img
+}
+
+// 5) URL del FAVICON (intenta favicons/, luego reutiliza el logo, si existe)
+if ($faviconPathRel && Storage::disk('public')->exists($faviconPathRel)) {
+    $faviconUrl  = asset('storage/' . $faviconPathRel);
+    $faviconPath = Storage::disk('public')->path($faviconPathRel);
+} elseif ($logoPathRel && Storage::disk('public')->exists($logoPathRel)) {
+    $faviconUrl  = asset('storage/' . $logoPathRel);
+    $faviconPath = Storage::disk('public')->path($logoPathRel);
+} else {
+    $faviconUrl  = asset('img/favicon.png');
+    $faviconPath = public_path('img/favicon.png');
+}
+
+// (opcional) tipo mime para <link rel="icon" type="...">
+$faviconType = @mime_content_type($faviconPath) ?: 'image/png';
+
+ ?>
+
+
+    <link rel="icon" type="image/jpeg" href="{{ $faviconUrl }}" />
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -281,11 +314,7 @@
         <nav class="{{ config('options.styles.navbar') }}">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    @if($logo && \Storage::disk('public')->exists($logo))
-                        <img src="{{ \Storage::url($logo) }}" alt="" height="50px">
-                    @else
-                        {{ config('app.name', 'Laravel') }}
-                    @endif
+                    <img src="{{ $logoUrl }}" alt="Logo" height="50px">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -364,6 +393,67 @@
         </main>
     </div>
     <script>
+$(function () {
+  // Bloquea reenvíos múltiples
+  $(document).on('submit', 'form.form-loading', function (e) {
+    var form  = this;
+    var $form = $(form);
+
+    // Si ya fue enviado, cancela
+    if ($form.data('submitted') === true) {
+      e.preventDefault();
+      return false;
+    }
+
+    // Respeta validación nativa HTML5
+    if (form.checkValidity && !form.checkValidity()) {
+      return true; // el navegador mostrará los errores
+    }
+
+    // Marca como enviado
+    $form.data('submitted', true);
+
+    // Deshabilita botones submit y muestra "Enviando…"
+    $form.find('button[type="submit"], input[type="submit"]').each(function () {
+      var $btn = $(this);
+
+      if ($btn.is('button')) {
+        $btn.data('orig-html', $btn.html());
+        $btn.html('<span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span> Enviando…');
+      } else {
+        $btn.data('orig-val', $btn.val());
+        $btn.val('Enviando…');
+      }
+      $btn.prop('disabled', true).addClass('disabled');
+    });
+
+    // Evita que se dispare otro submit por Enter mientras navega
+    $form.on('keydown.preventResubmit', function (ev) {
+      if (ev.key === 'Enter') ev.preventDefault();
+    });
+
+    return true; // deja continuar el submit normal (recarga de página)
+  });
+
+  // Si el usuario vuelve con Back/forward cache, restablece el estado
+  window.addEventListener('pageshow', function (evt) {
+    if (evt.persisted) {
+      $('form.form-loading').each(function () {
+        var $form = $(this).data('submitted', false).off('keydown.preventResubmit');
+        $form.find('button[type="submit"], input[type="submit"]').each(function () {
+          var $btn = $(this).prop('disabled', false).removeClass('disabled');
+          if ($btn.is('button')) {
+            var h = $btn.data('orig-html'); if (h != null) $btn.html(h);
+          } else {
+            var v = $btn.data('orig-val');  if (v != null) $btn.val(v);
+          }
+        });
+      });
+    }
+  });
+});
+
+
 $(document).ready(function () {
 
     $('#miTabla').DataTable({
@@ -1068,7 +1158,7 @@ function addRowProduct2() {
     if (typeof window.el === 'undefined') { // Si no existe la variable window.el (producto a editar) se agrega una fila
         items = $('#items').val()
         //preparando fila <tr>
-        tr = `<tr>
+        tr = `<tr class="js-det-row" data-category="${cat}">
             <input class="categoryId" name="details[${items}][category_id]" type="hidden" value="${cat}">
             <input class="subCategoryId" name="details[${items}][sub_category_id]" type="hidden" value="${sub_cat}">
             <input class="is_downloadable" name="details[${items}][is_downloadable]" type="hidden" value="${is_downloadable}">
@@ -1285,7 +1375,7 @@ function clearModalProduct() {
     if ($('#unitId option:selected').text()=='hr' && $('#diagnostico_p_hora').val()!='') {
         $('#txtValue').val($('#diagnostico_p_hora').val())
     }
-    
+
     my_cat_text = $("#category option:selected").text()
     if (my_cat_text == 'MECANICA') {
         $('#txtDescription').parent().removeClass('d-none')

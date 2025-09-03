@@ -20,18 +20,23 @@
 				Otros Presupuestos
 			</button>
 			<div class="dropdown-menu">
-			@if($model->parent_quote_id > 0)
-				<a class="dropdown-item btn-sm" href="{{ route( 'output_quotes.edit' , $inventory->mainSiniestro ) }}" title="Presupuesto Principal">Siniestro {{ $inventory->mainSiniestro->sn }}</a>
-			@else
+			@if($inventory->mainSiniestro)
 				<a class="dropdown-item btn-sm" href="{{ route('output_quotes.by_inventory', [$inventory->id, 'type_service'=>'AMPLIACION']) }}">Nuevo Ampliación</a>
+				@if($model->id != $inventory->mainSiniestro->id)
+					<a class="dropdown-item btn-sm" href="{{ route( 'output_quotes.edit' , $inventory->mainSiniestro ) }}" title="Presupuesto Principal">{{ $inventory->mainSiniestro->sn }} {{ $inventory->mainSiniestro->type_service }}</a>
+				@endif
 				@foreach($inventory->ampliaciones as $quote)
-					<a class="dropdown-item btn-sm" href="{{ route('output_quotes.edit', $quote->id) }}">{{ $quote->sn }}</a>
+					@if($model->id != $quote->id)
+						<a class="dropdown-item btn-sm" href="{{ route('output_quotes.edit', $quote->id) }}">{{ $quote->sn }} {{ $quote->type_service }}</a>
+					@endif
 				@endforeach
 			@endif
 				<!-- <div class="dropdown-divider"></div> -->
 				<a class="dropdown-item btn-sm" href="{{ route('output_quotes.by_inventory', [$inventory->id, 'type_service'=>'PARTICULAR']) }}">Nuevo Particular</a>
 				@foreach($inventory->particulares as $quote)
-					<a class="dropdown-item btn-sm" href="{{ route('output_quotes.edit', $quote->id) }}">{{ $quote->sn }}</a>
+					@if($model->id != $quote->id)
+						<a class="dropdown-item btn-sm" href="{{ route('output_quotes.edit', $quote->id) }}">{{ $quote->sn }}  {{ $quote->type_service }}</a>
+					@endif
 				@endforeach
 			</div>
 		</div>

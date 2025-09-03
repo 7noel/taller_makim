@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    @php
-        $logo = data_get(session('my_company'), 'config.logo');
-    @endphp
+    <?php
+		$logoRel = data_get($model->mycompany, 'config.logo'); // p.ej. 'logos/mi_logo.png'
+		$logoAbs = $logoRel ? public_path('storage/'.$logoRel) : null;
+
+		// Si no hay logo o no existe el archivo, usa el favicon
+		if (!$logoAbs || !is_file($logoAbs)) {
+		    $logoAbs = public_path('img/favicon.png');
+		}
+     ?>
 	<title>INVENTARIO: {{ $model->sn }}</title>
 	<!-- <title>INVENTARIO: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title> -->
     <style>
@@ -139,11 +145,7 @@
 		<table>
 			<tr>
 				<td width="20%" align="center" style="border: none;">
-                    @if($logo && \Storage::disk('public')->exists($logo))
-                        <img src="{{ public_path('storage/' . $logo) }}" alt="" width="100px">
-                    @else
-						<img src="./img/favicon.png" alt="" width="100px">
-                    @endif
+					<img src="{{ $logoAbs }}" alt="" width="100px">
 				</td>
 				<td width="38%" style="border: none; font-size: 10px;">
 					<div class="company_name">{{ $model->mycompany->company_name }}</div>

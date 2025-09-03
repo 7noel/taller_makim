@@ -34,8 +34,8 @@
 			<td>{{ config('options.table_sunat.moneda_sunat.'.$model->currency_id) }}</td>
 			<td>{{ $model->total}} </td>
 			<td>
-				@if($model->order_id>0)
-				<a href="{{ route('inventory.show', $model->order_id) }}" class="btn btn-link btn-sm" title="Ver OT">{{ $model->order->sn }}</a>
+				@if($model->inventario)
+				<a href="{{ route('inventory.show', $model->order_id) }}" class="btn btn-link btn-sm" title="Ver OT">{{ $model->inventario->sn }}</a>
 				@else
 				SIN OT
 				@endif

@@ -161,7 +161,10 @@ class OrdersController extends Controller {
 		$repairmens = $this->companyRepo->getListRepairmens();
 		$bs = $model->company->branches->pluck('name', 'id')->toArray();
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
-		$checklist_details = $this->checklistDetailRepo->all2();
+		$checklist_details = $this->orderChecklistDetailRepo->byOrder($model->id, '1');
+		if ($checklist_details->isEmpty()) {
+			$checklist_details = $this->checklistDetailRepo->all2();
+		}
 		$car = $model->car;
 		// $car = $this->carRepo->findOrFail($car_id);
 		$client = $car->company;
