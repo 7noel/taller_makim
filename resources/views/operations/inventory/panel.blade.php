@@ -17,6 +17,26 @@ $models_7 = $models->where('status', 'ENTR');
 @endphp
 	<div class="row">
 		<div class="col-md-12">
+<div class="row mb-2">
+  <div class="col-md-7">
+    <div class="input-group input-group-sm">
+      <input type="text" id="txt-busqueda" class="form-control"
+             placeholder="Escribe o pega una placa o cliente… (Ej: EGX098 o PODER JUDICIAL)"
+             autocomplete="off">
+    </div>
+    <small id="busqueda-estado" class="form-text text-muted d-none"></small>
+  </div>
+
+  <div class="col-md-5 text-right">
+    <div id="nav-resultados" class="btn-group btn-group-sm d-none" role="group">
+      <button type="button" class="btn btn-outline-secondary" id="btn-prev">Anterior</button>
+      <button type="button" class="btn btn-outline-secondary" id="btn-next">Siguiente</button>
+    </div>
+  </div>
+</div>
+
+
+
 			<ul class="nav nav-tabs" id="myTab" role="tablist">
 				<li class="nav-item" role="presentation">
 					<button class="nav-link active" id="pend-tab" data-toggle="tab" data-target="#recepcion" type="button" role="tab" aria-controls="recepcion" aria-selected="true">{!! $icons['car'] !!} <br> <span class="badge badge-light">{{ $models_1->count() }}</span> </button>
@@ -81,7 +101,7 @@ $models_7 = $models->where('status', 'ENTR');
 						}
 						$class = ($last_log->aprobacion) ? '': 'text-danger';
 						@endphp
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
 							<div class="card">
 								<div class="card-body">
 									<h5>
@@ -111,7 +131,7 @@ $models_7 = $models->where('status', 'ENTR');
 					<h3>DIAGNÓSTICO (PRESUPUESTO)</h3>
 					<div class="row">
 						@foreach ($models_2->sortByDesc('diag_at') as $model)
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
 							<div class="card">
 								<div class="card-body">
 									<h5>
@@ -157,7 +177,7 @@ $models_7 = $models->where('status', 'ENTR');
 					<h3>APROBACIÓN DEL SEGURO</h3>
 					<div class="row">
 						@foreach ($models_3_2->sortByDesc('pre_approved_at') as $model)
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
 							<div class="card">
 								<div class="card-body">
 									<h5>
@@ -186,7 +206,7 @@ $models_7 = $models->where('status', 'ENTR');
 						@php
 						$texto = "Hola, el diagnóstico de tu vehículo {optional($model->car->modelo->brand)->name} {optional($model->car->modelo)->name} placa: {optional($model->car)->placa} ya está listo, puedes ver los detalles y aprobar la reparación en el siguiente link {route( 'order_client' , $model->slug)}";
 						@endphp
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
 							<div class="card">
 								<div class="card-body">
 									<h5>
@@ -208,7 +228,7 @@ $models_7 = $models->where('status', 'ENTR');
 					<h3>REPARACION</h3>
 					<div class="row">
 						@foreach ($models_5->sortByDesc('repar_at') as $model)
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
 							<div class="card">
 								<div class="card-body">
 									<h5>
@@ -229,7 +249,7 @@ $models_7 = $models->where('status', 'ENTR');
 					<h3>CONTROL DE CALIDAD</h3>
 					<div class="row">
 						@foreach ($models_6->sortByDesc('checked_at') as $model)
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
 							<div class="card">
 								<div class="card-body">
 									<h5>
@@ -253,7 +273,7 @@ $models_7 = $models->where('status', 'ENTR');
 						@php
 						$texto = "Hola, desde ".env('APP_NAME').". queremos agradecerte por usar nuestros servicios, por favor calificanos aquí ".route( 'order_client' , $model->slug) . ", queremos mejorar para ti";
 						@endphp
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
 							<div class="card">
 								<div class="card-body">
 									<h5>
@@ -278,6 +298,329 @@ $models_7 = $models->where('status', 'ENTR');
 </div>
 
 <script>
+// (function($){
+//   // === Utils ===
+//   function norm(str){
+//     return (str || '')
+//       .toString()
+//       .normalize('NFD')
+//       .replace(/[\u0300-\u036f]/g, '')
+//       .toUpperCase()
+//       .trim();
+//   }
+
+//   function highlight($el){
+//     $el.addClass('busca-highlight');
+//     setTimeout(function(){ $el.removeClass('busca-highlight'); }, 1800);
+//   }
+
+//   function showTabByPaneId(paneId){
+//     // Busca <button .nav-link data-target="#paneId">
+//     var $btn = $('.nav-tabs .nav-link[data-target="#' + paneId + '"]');
+//     if($btn.length){
+//       $btn.trigger('click'); // Bootstrap 4 tabs
+//       return true;
+//     }
+//     return false;
+//   }
+
+//   function revealItem($item){
+//     var $pane = $item.closest('.tab-pane');
+//     if(!$pane.length) return;
+
+//     var paneId = $pane.attr('id');
+//     if(showTabByPaneId(paneId)){
+//       setTimeout(function(){
+//         $('html,body').animate({ scrollTop: $item.offset().top - 100 }, 300);
+//         highlight($item);
+//       }, 120);
+//     }
+//   }
+
+
+//   // Estado de coincidencias
+//   var matches = [];
+//   var idx = -1;
+
+//   function actualizarNavegacion(){
+//     if(matches.length > 1){
+//       $('#nav-resultados').removeClass('d-none');
+//     } else {
+//       $('#nav-resultados').addClass('d-none');
+//     }
+
+//     var estado = matches.length
+//       ? 'Coincidencias: ' + (idx + 1) + ' / ' + matches.length
+//       : ($('#txt-busqueda').val().trim() ? 'Sin resultados' : '');
+//     if(estado){
+//       $('#busqueda-estado').text(estado).removeClass('d-none');
+//     } else {
+//       $('#busqueda-estado').addClass('d-none').text('');
+//     }
+//   }
+
+//   function irA(i){
+//     if(matches.length === 0) return;
+//     idx = (i + matches.length) % matches.length;
+//     revealItem(matches[idx]);
+//     actualizarNavegacion();
+//   }
+
+//   $('#btn-prev').on('click', function(){ irA(idx - 1); });
+//   $('#btn-next').on('click', function(){ irA(idx + 1); });
+
+//   // === Búsqueda reactiva (sin form) ===
+//   var debounceTimer = null;
+//   function ejecutarBusqueda(q){
+//     matches = [];
+//     idx = -1;
+
+//     if(!q){
+//       actualizarNavegacion();
+//       return;
+//     }
+
+//     $('.item-buscable').each(function(){
+//       var $it = $(this);
+//       var placa = norm($it.data('placa'));
+//       var company = norm($it.data('company'));
+
+//       if(placa.indexOf(q) !== -1 || company.indexOf(q) !== -1){
+//         matches.push($it);
+//       }
+//     });
+
+//     if(matches.length){
+//       irA(0);
+//     } else {
+//       actualizarNavegacion();
+//     }
+//   }
+
+//   // Dispara búsqueda al escribir o pegar (con debounce)
+//   $('#txt-busqueda').on('input paste', function(){
+//     var q = norm($(this).val());
+
+//     clearTimeout(debounceTimer);
+//     debounceTimer = setTimeout(function(){
+//       ejecutarBusqueda(q);
+//     }, 120); // ajusta el delay si deseas
+//   });
+
+//   // Navegación rápida con teclado (opcional):
+//   // Enter -> siguiente; Shift+Enter -> anterior
+//   $('#txt-busqueda').on('keydown', function(e){
+//     if(e.key === 'Enter'){
+//       e.preventDefault();
+//       if(e.shiftKey) irA(idx - 1); else irA(idx + 1);
+//     }
+//   });
+
+//   // CSS highlight
+//   var css = `
+//     .busca-highlight {
+//       animation: buscaFlash 1.2s ease-in-out 1;
+//       outline: 2px solid rgba(255,193,7,.9);
+//       box-shadow: 0 0 0 4px rgba(255,193,7,.35);
+//       transition: outline .2s ease, box-shadow .2s ease;
+//     }
+//     @keyframes buscaFlash {
+//       0%   { background-color: rgba(255,193,7,.25); }
+//       100% { background-color: transparent; }
+//     }
+//   `;
+//   $('<style>').text(css).appendTo(document.head);
+// })(jQuery);
+
+(function($){
+  // === Utils (déjalas como las tienes si ya existen) ===
+  function norm(str){
+    return (str || '')
+      .toString()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toUpperCase()
+      .trim();
+  }
+
+  function highlight($el){
+    $el.addClass('busca-highlight');
+    setTimeout(function(){ $el.removeClass('busca-highlight'); }, 1800);
+  }
+
+  // >>> NUEVO: tus tabs son <button data-target="#pane"> <<<
+  function showTabByPaneId(paneId){
+    var $btn = $('.nav-tabs .nav-link[data-target="#' + paneId + '"]');
+    if($btn.length){
+      $btn.trigger('click'); // Bootstrap 4
+      return true;
+    }
+    return false;
+  }
+
+  function revealItem($item){
+    var $pane = $item.closest('.tab-pane');
+    if(!$pane.length) return;
+
+    var paneId = $pane.attr('id');
+    if(showTabByPaneId(paneId)){
+      setTimeout(function(){
+        $('html,body').animate({ scrollTop: $item.offset().top - 100 }, 300);
+        highlight($item);
+      }, 120);
+    }
+  }
+
+  // Estado de coincidencias (navegación entre matches)
+  var matches = [];
+  var idx = -1;
+
+  function actualizarNavegacion(){
+    if(matches.length > 1){
+      $('#nav-resultados').removeClass('d-none');
+    } else {
+      $('#nav-resultados').addClass('d-none');
+    }
+
+    var estado = matches.length
+      ? 'Coincidencias: ' + (idx + 1) + ' / ' + matches.length
+      : ($('#txt-busqueda').val().trim() ? 'Sin resultados' : '');
+    if(estado){
+      $('#busqueda-estado').text(estado).removeClass('d-none');
+    } else {
+      $('#busqueda-estado').addClass('d-none').text('');
+    }
+  }
+
+  function irA(i){
+    if(matches.length === 0) return;
+    idx = (i + matches.length) % matches.length;
+    revealItem(matches[idx]);
+    actualizarNavegacion();
+  }
+
+  $('#btn-prev').on('click', function(){ irA(idx - 1); });
+  $('#btn-next').on('click', function(){ irA(idx + 1); });
+
+  // >>> NUEVO: guardar contadores originales de badges una sola vez <<<
+  function cacheOriginalBadges(){
+    $('.nav-tabs .nav-link').each(function(){
+      var $b = $(this).find('.badge');
+      if($b.length && !$b.attr('data-original')){
+        var n = parseInt($b.text(), 10) || 0;
+        $b.attr('data-original', n);
+      }
+    });
+  }
+
+  // >>> NUEVO: restaurar vista sin filtro <<<
+  function restaurarSinFiltro(){
+    $('.item-buscable').removeClass('d-none');
+    $('.empty-msg').addClass('d-none');
+    // restaurar badges
+    $('.nav-tabs .nav-link .badge').each(function(){
+      var n = parseInt($(this).attr('data-original'), 10);
+      if(!isNaN(n)) $(this).text(n);
+    });
+    // reset UI de búsqueda
+    matches = [];
+    idx = -1;
+    $('#nav-resultados').addClass('d-none');
+    $('#busqueda-estado').addClass('d-none').text('');
+  }
+
+  // >>> NUEVO: aplicar filtro (oculta no-coincidentes + actualiza badges) <<<
+  function aplicarFiltro(q){
+    matches = [];
+    idx = -1;
+
+    if(!q){
+      restaurarSinFiltro();
+      return;
+    }
+
+    $('.tab-pane').each(function(){
+      var $pane = $(this);
+      var paneId = $pane.attr('id');
+      var visibles = 0;
+
+      $pane.find('.item-buscable').each(function(){
+        var $it = $(this);
+        var placa   = norm($it.data('placa'));
+        var company = norm($it.data('company'));
+        var ok = (placa.indexOf(q) !== -1) || (company.indexOf(q) !== -1);
+
+        $it.toggleClass('d-none', !ok);
+        if(ok){
+          matches.push($it);
+          visibles++;
+        }
+      });
+
+      // mensaje "vacío" dentro de la primera .row de la pestaña
+      var $row = $pane.find('.row').first();
+      var $empty = $row.find('.empty-msg');
+      if(!$empty.length){
+        $empty = $('<div class="col-12 empty-msg text-muted small py-3 d-none">Sin resultados para esta pestaña</div>');
+        $row.prepend($empty);
+      }
+      $empty.toggleClass('d-none', visibles !== 0);
+
+      // actualizar badge de esa pestaña
+      var $badge = $('.nav-tabs .nav-link[data-target="#'+paneId+'"]').find('.badge');
+      if($badge.length){
+        $badge.text(visibles);
+      }
+    });
+
+    if(matches.length){
+      irA(0); // muestra el primer match y actualiza estado
+    } else {
+      actualizarNavegacion(); // mostrará "Sin resultados"
+    }
+  }
+
+  // === Búsqueda reactiva (sin form) ===
+  var debounceTimer = null;
+  $('#txt-busqueda').on('input paste', function(){
+    var q = norm($(this).val());
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function(){
+      aplicarFiltro(q);
+    }, 120);
+  });
+
+  // Atajos con teclado: Enter = siguiente, Shift+Enter = anterior
+  $('#txt-busqueda').on('keydown', function(e){
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      if(e.shiftKey) irA(idx - 1); else irA(idx + 1);
+    }
+  });
+
+  // Init
+  $(function(){ cacheOriginalBadges(); });
+
+  // Estilos highlight (déjalo como ya lo tienes si existe)
+  var css = `
+    .busca-highlight {
+      animation: buscaFlash 1.2s ease-in-out 1;
+      outline: 2px solid rgba(255,193,7,.9);
+      box-shadow: 0 0 0 4px rgba(255,193,7,.35);
+      transition: outline .2s ease, box-shadow .2s ease;
+    }
+    @keyframes buscaFlash {
+      0%   { background-color: rgba(255,193,7,.25); }
+      100% { background-color: transparent; }
+    }
+  `;
+  if(!$('style:contains("buscaFlash")').length){ $('<style>').text(css).appendTo(document.head); }
+
+})(jQuery);
+
+
+
+
 $(document).ready(function () {
     $(".btn-modal-mobile").click(function (e) {
 		$('#mobile').val($(this).parent().find('.input_mobile').val())
