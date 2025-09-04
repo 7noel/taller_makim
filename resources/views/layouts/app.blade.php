@@ -684,7 +684,7 @@ $(document).ready(function () {
         clearModalCategoryUnit()
         clearModalProduct()
         setTimeout(function() {
-            $('#txtProducto').focus()
+            $('#category').focus()
         }, 500)
     })
 

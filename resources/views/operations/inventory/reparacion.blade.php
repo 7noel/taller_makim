@@ -45,15 +45,15 @@
                             </div>
                         </div>
 
-@if($model->orders[0])
-	@foreach($model->orders as $quote)
-@php
-$detalles_normales = $quote->details->where('is_downloadable', 0)->sortBy('comment');
-$detalles_repuestos = $quote->details->where('is_downloadable', 1)->sortBy('comment');
+@if($model->quotes[0])
+	@foreach($model->quotes as $quote)
+        @php
+        $detalles_normales = $quote->details->where('is_downloadable', 0)->sortBy('comment');
+        $detalles_repuestos = $quote->details->where('is_downloadable', 1)->sortBy('comment');
 
-$repuestos_pagados = $detalles_repuestos->where('value', '>', 0);
-$repuestos_compania = $detalles_repuestos->where('value', '=', 0);
-@endphp
+        $repuestos_pagados = $detalles_repuestos->where('value', '>', 0);
+        $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
+        @endphp
 
 <table class="{{ config('options.styles.table') }}">
     <thead class="{{ config('options.styles.thead') }}">
