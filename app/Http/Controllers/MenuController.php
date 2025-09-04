@@ -75,6 +75,7 @@ class MenuController extends Controller
                 ['name' => 'Condiciones de Pago', 'route' => 'payment_conditions.index'],
             ],
             'Taller'=>[
+                ['name' => 'Tablero', 'route' => 'panel'],
                 // ['name' => 'Citas', 'route' => 'appointments.index'],
                 ['name' => 'Presupuestos', 'route' => 'output_quotes.index'],
                 ['name' => 'Inventarios', 'route' => 'inventory.index'],
