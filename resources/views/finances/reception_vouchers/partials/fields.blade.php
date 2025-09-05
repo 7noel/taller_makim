@@ -68,7 +68,7 @@
 						</div>
 							{!! Form::label('my_company','Mi Empresa:', ['class'=>'col-sm-2 control-label']) !!}
 						<div class="col-sm-2">
-							{!! Form::select('my_company', $my_companies, (isset($model->my_company) ? $model->my_company : session('my_company')->id), ['class'=>'form-control']) !!}
+							{!! Form::select('my_company', $my_companies, (isset($model->my_company) ? $model->my_company : auth()->user()->my_company), ['class'=>'form-control']) !!}
 						</div>
 					</div>
 					<div class="expenses isImport">

@@ -1,4 +1,4 @@
-{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('my_company', auth()->user()->my_company, ['id'=>'my_company']) !!}
 
 <div class="form-row">
 	<div class="col-sm-2">

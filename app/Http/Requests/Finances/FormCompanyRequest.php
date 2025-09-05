@@ -42,11 +42,17 @@ class FormCompanyRequest extends Request {
 		}
 
 		$array = [
+			'companies' => [
+				'id_type'=>['required', Rule::in(array_keys(config('options.client_doc')))],
+				'company_name'=>'required',
+				'address'=>'required',
+				'ubigeo_code'=>'required_if:country,PE',
+				'email'=>'email',
+			],
 			'clients' => [
 				'id_type'=>['required', Rule::in(array_keys(config('options.client_doc')))],
 				'doc' => [$rules, 'required', Rule::unique('companies')->where(function ($query) use ($id_type, $entity_type){
-			            return $query->where('my_company', session('my_company')->id)
-			            ->where('id_type', $id_type)
+			            return $query->where('id_type', $id_type)
 			            ->where('entity_type', $entity_type);
 			        })->ignore($id)],
 				'company_name'=>'required_if:id_type,0,-,6',
@@ -59,8 +65,7 @@ class FormCompanyRequest extends Request {
 			'providers' => [
 				'id_type'=>['required', Rule::in(array_keys(config('options.client_doc')))],
 				'doc' => [$rules, 'required', Rule::unique('companies')->where(function ($query) use ($id_type, $entity_type){
-			            return $query->where('my_company', session('my_company')->id)
-			            ->where('id_type', $id_type)
+			            return $query->where('id_type', $id_type)
 			            ->where('entity_type', $entity_type);
 			        })->ignore($id)],
 				'company_name'=>'required_if:id_type,0,-,6',
@@ -73,8 +78,7 @@ class FormCompanyRequest extends Request {
 			'shippers' => [
 				'id_type'=>['required', Rule::in(array_keys(config('options.client_doc')))],
 				'doc' => [$rules, 'required', Rule::unique('companies')->where(function ($query) use ($id_type, $entity_type){
-			            return $query->where('my_company', session('my_company')->id)
-			            ->where('id_type', $id_type)
+			            return $query->where('id_type', $id_type)
 			            ->where('entity_type', $entity_type);
 			        })->ignore($id)],
 				'company_name'=>'required_if:id_type,0,-,6',
@@ -88,8 +92,7 @@ class FormCompanyRequest extends Request {
 				'job_id'=>"required|numeric",
 				'id_type'=>['required', Rule::in(array_keys(config('options.employee_doc')))],
 				'doc' => [$rules, 'required', Rule::unique('companies')->where(function ($query) use ($id_type, $entity_type){
-			            return $query->where('my_company', session('my_company')->id)
-			            ->where('id_type', $id_type)
+			            return $query->where('id_type', $id_type)
 			            ->where('entity_type', $entity_type);
 			        })->ignore($id)],
 				'company_name'=>'required_if:id_type,0,-,6',

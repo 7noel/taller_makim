@@ -59,7 +59,7 @@ class ProductRepo extends BaseRepo{
 	}
 	public function save($data, $id=0)
 	{
-		$data['my_company'] = session('my_company')->id;
+		$data['my_company'] = auth()->user()->my_company;
 		$data = $this->prepareData($data);
 		// dd($data);
 		$model = parent::save($data, $id);

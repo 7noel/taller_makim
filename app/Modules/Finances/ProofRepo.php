@@ -21,7 +21,7 @@ class ProofRepo extends BaseRepo{
 	{
 		$proof_type = explode('.', \Request::route()->getName())[0];
 		// dd($proof_type);
-		$q = Proof::with('company', 'orders', 'document_type')->where('my_company', session('my_company')->id)->where('proof_type', $proof_type);
+		$q = Proof::with('company', 'orders', 'document_type')->where('my_company', auth()->user()->my_company)->where('proof_type', $proof_type);
 		if (trim($filter->sn) != '') {
 			return $q->where('sn', $filter->sn)->orderBy('sn', 'desc')->get();
 		} elseif (trim($filter->placa) != '') {
@@ -121,7 +121,7 @@ class ProofRepo extends BaseRepo{
 	public function prepareData($data)
 	{
 		if ($data['my_company'] == '') {
-			$data['my_company'] = session('my_company')->id;
+			$data['my_company'] = auth()->user()->my_company;
 		}
 		if (isset($data['items']) and !isset($data['details'])) {
 			$data['details'] = [];
@@ -543,13 +543,11 @@ class ProofRepo extends BaseRepo{
 		foreach ($vouchers as $key => $voucher) {
 			
 			$last = Proof::where('series', 'VALE')->orderByRaw('CONVERT(number, SIGNED) desc')->first();
-			// dd(session('my_company'));
 			if ($last) {
 				$next = ['series' => 'VALE', 'number'=> ($last->number + 1)];
 			} else {
 				$next = ['series' => 'VALE', 'number'=> 1];
 			}
-			//dd($next);
 
 			$new_voucher = Proof::create([
 				'issued_at' => date('Y-m-d'),

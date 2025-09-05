@@ -1,4 +1,4 @@
-{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('my_company', auth()->user()->my_company, ['id'=>'my_company']) !!}
 @if(isset($order))
 	{!! Form::hidden('is_downloadable', 0, ['id'=>'is_downloadable']) !!}
 @else

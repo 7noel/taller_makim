@@ -19,7 +19,7 @@
 					<div class="form-group  form-group-sm">
 						{!! Form::label('company','Empresa', ['class'=>'col-sm-2 control-label']) !!}
 						<div class="col-sm-4">
-						{!! Form::select('company', $companies, session('my_company')->id, ['class'=>'form-control uppercase']) !!}
+						{!! Form::select('company', $companies, auth()->user()->my_company, ['class'=>'form-control uppercase']) !!}
 						</div>
 					</div>
 					<div class="form-group">

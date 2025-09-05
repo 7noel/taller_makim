@@ -1,6 +1,6 @@
 <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#exampleModal">[[ Crear Cliente ]]</button>
 
-{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('my_company', auth()->user()->my_company, ['id'=>'my_company']) !!}
 {!! Form::hidden('company_id', ((isset($client->id)) ? $client->id : null), ['id'=>'company_id']) !!}
 <div class="form-row">
 	<div class="col-sm-2">

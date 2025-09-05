@@ -17,23 +17,21 @@ $models_7 = $models->where('status', 'ENTR');
 @endphp
 	<div class="row">
 		<div class="col-md-12">
-<div class="row mb-2">
-  <div class="col-md-7">
-    <div class="input-group input-group-sm">
-      <input type="text" id="txt-busqueda" class="form-control"
-             placeholder="Escribe o pega una placa o cliente… (Ej: EGX098 o PODER JUDICIAL)"
-             autocomplete="off">
-    </div>
-    <small id="busqueda-estado" class="form-text text-muted d-none"></small>
-  </div>
+			<div class="row mb-2">
+				<div class="col-md-7">
+					<div class="input-group input-group-sm">
+						<input type="text" id="txt-busqueda" class="form-control" placeholder="Escribe o pega una placa o cliente… (Ej: EGX098 o PODER JUDICIAL)" autocomplete="off">
+					</div>
+					<small id="busqueda-estado" class="form-text text-muted d-none"></small>
+				</div>
 
-  <div class="col-md-5 text-right">
-    <div id="nav-resultados" class="btn-group btn-group-sm d-none" role="group">
-      <button type="button" class="btn btn-outline-secondary" id="btn-prev">Anterior</button>
-      <button type="button" class="btn btn-outline-secondary" id="btn-next">Siguiente</button>
-    </div>
-  </div>
-</div>
+				<div class="col-md-5 text-left">
+					<div id="nav-resultados" class="btn-group btn-group-sm d-none" role="group">
+						<button type="button" class="btn btn-outline-secondary" id="btn-prev">Anterior</button>
+						<button type="button" class="btn btn-outline-secondary" id="btn-next">Siguiente</button>
+					</div>
+				</div>
+			</div>
 
 
 

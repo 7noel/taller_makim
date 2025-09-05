@@ -1,5 +1,5 @@
-@if(isset(session('my_company')->id))
-	{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+@if(isset(auth()->user()->my_company))
+	{!! Form::hidden('my_company', auth()->user()->my_company, ['id'=>'my_company']) !!}
 	{!! Form::hidden('with_tax', 0, ['id'=>'with_tax']) !!}
 	{!! Form::hidden('tax', null, ['id'=>'tax']) !!}
 @endif

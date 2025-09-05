@@ -13,9 +13,9 @@ class WarehouseRepo extends BaseRepo{
 	public function index($filter = false, $search = false)
 	{
 		if ($filter and $search) {
-			return Warehouse::where('my_company',session('my_company')->id)->$filter($search)->with('ubigeo')->orderBy("$filter", 'ASC')->paginate();
+			return Warehouse::where('my_company', auth()->user()->my_company)->$filter($search)->with('ubigeo')->orderBy("$filter", 'ASC')->paginate();
 		} else {
-			return Warehouse::where('my_company',session('my_company')->id)->with('ubigeo')->orderBy('id', 'DESC')->paginate();
+			return Warehouse::where('my_company', auth()->user()->my_company)->with('ubigeo')->orderBy('id', 'DESC')->paginate();
 		}
 	}
 	public function ajaxList()

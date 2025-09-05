@@ -34,7 +34,7 @@ class CompanyController extends Controller {
 
 	public function my_company()
 	{
-		$id = session('my_company')->id;
+		$id = auth()->user()->my_company;
 		$model = $this->repo->findOrFail($id);
 		// dd($model);
 		$jobs = $this->tableRepo->getListType('jobs');
@@ -43,7 +43,6 @@ class CompanyController extends Controller {
 	}
 	public function save_my_company($id)
 	{
-		// $id = session('my_company')->id;
 		$data = request()->all();
 		//dd($data);
 		

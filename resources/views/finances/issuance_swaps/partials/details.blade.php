@@ -78,7 +78,7 @@
 								<tr data-id="{{ $letter->id }}">
 									{!! Form::hidden("letters[$i][id]", $letter->id, ['class'=>'letterId','data-letterId'=>'']) !!}
 									{!! Form::hidden("letters[$i][proof_type]", 3, ['class'=>'proof_type','data-proof_type'=>'']) !!}
-									{!! Form::hidden("letters[$i][my_company]", session('my_company')->id, ['class'=>'my_company','data-my_company'=>'']) !!}
+									{!! Form::hidden("letters[$i][my_company]", auth()->user()->my_company, ['class'=>'my_company','data-my_company'=>'']) !!}
 									<td>{!! Form::text("letters[$i][txtLetter]", $letter->sn, ['class'=>'form-control input-sm txtLetter', 'data-sn'=>'', 'required'=>'required', 'disabled']); !!}</td>
 									<td>{!! Form::date("letters[$i][issued_at]", $letter->issued_at, ['class'=>'form-control input-sm issued_at text-right', 'data-issued_at'=>'']) !!}</td>
 									<td>{!! Form::date("letters[$i][expired_at]", $letter->expired_at, ['class'=>'form-control input-sm expired_at text-right', 'data-expired_at'=>'']) !!}</td>
@@ -101,7 +101,7 @@
 						<template id="template-row-letter">
 							<tr>
 								{!! Form::hidden('data1', 3, ['class'=>'proof_type','data-proof_type'=>'']) !!}
-								{!! Form::hidden('data2', session('my_company')->id, ['class'=>'my_company','data-my_company'=>'']) !!}
+								{!! Form::hidden('data2', auth()->user()->my_company, ['class'=>'my_company','data-my_company'=>'']) !!}
 								<td>{!! Form::text('data3', null, ['class'=>'form-control input-sm txtLetter', 'data-letter'=>'', 'required']); !!}</td>
 								<td>{!! Form::date('data4', date('Y-m-d'), ['class'=>'form-control input-sm issued_at text-right', 'data-issued_at'=>'', 'required']) !!}</td>
 								<td>{!! Form::date('data5', date('Y-m-d'), ['class'=>'form-control input-sm expired_at text-right', 'data-expired_at'=>'', 'required']) !!}</td>

@@ -4,7 +4,7 @@
 					@elseif(isset($proof))
 						{!! Form::hidden('my_company', $proof->my_company, ['id'=>'my_company']) !!}
 					@else
-						{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+						{!! Form::hidden('my_company', auth()->user()->my_company, ['id'=>'my_company']) !!}
 					@endif
 
 

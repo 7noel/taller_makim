@@ -24,7 +24,7 @@ class StockRepo extends BaseRepo{
 			Stock::where('product_id', $product_id)->where('stock', 0)->whereIn('warehouse_id',$toDelete)->delete();
 		}
 		foreach ($data as $key => $value) {
-			$value['my_company'] = session('my_company')->id;
+			$value['my_company'] = auth()->user()->my_company;
 			if (in_array($value['warehouse_id'], $toSave)) {
 				$model= new Stock;
 				$model->fill($value);

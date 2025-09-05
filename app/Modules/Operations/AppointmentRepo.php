@@ -11,7 +11,7 @@ class AppointmentRepo extends BaseRepo{
 
 	public function filter($filter)
 	{
-		$q = Appointment::where('my_company', session('my_company')->id);
+		$q = Appointment::where('my_company', auth()->user()->my_company);
 		if (trim($filter->placa) != '') {
 			return $q->where('placa', $filter->placa)->orderBy('id', 'desc')->get();
 			//return Order::where('placa', $filter->placa)->orderBy('sn', 'desc')->get();

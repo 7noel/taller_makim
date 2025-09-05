@@ -70,7 +70,7 @@
     }
 </style>
 
-{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('my_company', auth()->user()->my_company, ['id'=>'my_company']) !!}
 {!! Form::hidden('is_downloadable', 1, ['id'=>'is_downloadable']) !!}
 {!! Form::hidden('with_tax', 1, ['id'=>'with_tax']) !!}
 {!! Form::hidden('company_id', (isset($car)) ? $car->company_id : null, ['id'=>'company_id']) !!}

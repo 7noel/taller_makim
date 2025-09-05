@@ -1,4 +1,4 @@
-{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('my_company', auth()->user()->my_company, ['id'=>'my_company']) !!}
 {!! Form::hidden('is_downloadable', 0, ['id'=>'is_downloadable']) !!}
 {!! Form::hidden('with_tax', 0, ['id'=>'with_tax']) !!}
 {!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
@@ -9,7 +9,6 @@
 	@if(request()->input('type_service') == 'AMPLIACION')
 		{!! Form::hidden('parent_quote_id', optional($inventory->mainSiniestro)->id, ['id'=>'parent_quote_id']) !!}
 	@endif
-<div class="form-row">
 	<a href="{{ route( 'panel', 'DIAG' ) }}" class="btn btn-outline-info btn-sm" title="Tablero"><i class="fa-solid fa-arrow-left"></i> TABLERO</a>
 	@if($model->order_type == 'output_quotes')
 		<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Items</a>
@@ -42,7 +41,6 @@
 		</div>
 	@endif
 	<br>
-</div>
 @endif
 <br>
 <div class="form-row">

@@ -29,13 +29,11 @@ class OrderRepo extends BaseRepo{
 	{
 		$data['order_type'] = explode('.', \Request::route()->getName())[0];
 		if ($id == 0) {
-			$sn = $this->getNextNumber($data['order_type'], session('my_company')->id);
+			$sn = $this->getNextNumber($data['order_type'], auth()->user()->my_company);
 
 			$data['series'] = $sn['series'];
 			$data['number'] = $sn['number'];
 			$data['sn'] = $sn['series'] . '-' . $sn['number'];
-
-			// $data['sn'] = $this->getNextNumber($data['order_type'], session('my_company')->id);
 			
 			// asignar usuario que crea el registro
 			$data['user_id'] = \Auth::user()->id;
@@ -105,10 +103,9 @@ class OrderRepo extends BaseRepo{
 
 	public function getNextNumber($order_type)
 	{
-		$my_company = session('my_company')->id;
+		$my_company = auth()->user()->my_company;
 		$doc = Table::where('my_company', $my_company)->where('value_1', $order_type)->first();
 		$last = Order::where('my_company', $my_company)->where('order_type', $order_type)->where('series', $doc->name)->orderByRaw('CONVERT(number, SIGNED) desc')->first();
-		// dd(session('my_company'));
 		if ($last) {
 			return ['id' => $doc->id, 'series' => $doc->name, 'number'=> ($last->number + 1)];
 		} else {
@@ -126,7 +123,7 @@ class OrderRepo extends BaseRepo{
 	public function prepareData($data)
 	{
 		if ($data['my_company'] == '') {
-			$data['my_company'] = session('my_company')->id;
+			$data['my_company'] = auth()->user()->my_company;
 		}
 		if (isset($data['inventory'])) {
 			//$data['inventory'] = json_encode($data['inventory']);

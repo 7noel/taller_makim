@@ -30,7 +30,6 @@ class TableRepo extends BaseRepo{
 
 	public function getListType($type, $campo='name', $id='id')
 	{
-		//dd(session('my_company'));
 		// return Table::where('my_company', session('my_company')->id)->where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
 		return Table::where('type', $type)->orderBy($campo,'ASC')->pluck($campo, $id)->toArray();
 	}
@@ -84,12 +83,12 @@ class TableRepo extends BaseRepo{
 	public function getListGroupType($type, $group, $config=1, $campo='name', $id='id')
 	{
 		if ($config) {
-			$list = Table::where('my_company', session('my_company')->id)->where('type', $type)->orderBy($campo,'ASC')->get();
+			$list = Table::where('my_company', auth()->user()->my_company)->where('type', $type)->orderBy($campo,'ASC')->get();
 			foreach ($list as $key => $u) {
 				$r[config('options.'.$group.'.'.$u->relation_id)][$u->$id] = $u->$campo;
 			}
 		} else {
-			$list = Table::where('my_company', session('my_company')->id)->where('type', $type)->with($group)->orderBy($campo,'ASC')->get();
+			$list = Table::where('my_company', auth()->user()->my_company)->where('type', $type)->with($group)->orderBy($campo,'ASC')->get();
 			foreach ($list as $key => $u) {
 				$r[$u->$group->name][$u->$id] = $u->$campo;
 			}
@@ -99,14 +98,14 @@ class TableRepo extends BaseRepo{
 	public function getListDoc($type, $campo='name', $id='id', $serie='')
 	{
 		if ($serie=='') {
-			return Table::where('my_company', session('my_company')->id)->where('type', $type)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
+			return Table::where('my_company', auth()->user()->my_company)->where('type', $type)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
 		}
-		return Table::where('my_company', session('my_company')->id)->where('type', $type)->where('name', $serie)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
+		return Table::where('my_company', auth()->user()->my_company)->where('type', $type)->where('name', $serie)->orderBy($campo,'DESC')->pluck($campo, $id)->toArray();
 	}
 
 	public function getFirstSerie($type_doc='output_quotes')
 	{
-		return Table::where('my_company', session('my_company')->id)->where('value_1', $type_doc)->first();
+		return Table::where('my_company', auth()->user()->my_company)->where('value_1', $type_doc)->first();
 	}
 
 	public function save($data, $id=0){

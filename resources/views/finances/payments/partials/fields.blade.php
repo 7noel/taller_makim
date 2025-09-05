@@ -1,4 +1,4 @@
-{!! Form::hidden('my_company', session('my_company')->id, ['id'=>'my_company']) !!}
+{!! Form::hidden('my_company', auth()->user()->my_company, ['id'=>'my_company']) !!}
 {!! Form::hidden('currency_id', 1, ['id'=>'proof_id']) !!}
 @if($proof)
 {!! Form::hidden('proof_id', $proof->id, ['id'=>'proof_id']) !!}

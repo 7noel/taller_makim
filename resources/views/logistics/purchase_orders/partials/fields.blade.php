@@ -1,6 +1,6 @@
 					{!! Form::hidden('order_type', 1) !!}
 					{!! Form::hidden('sn', null) !!}
-					{!! Form::hidden('my_company', session('my_company')->id) !!}
+					{!! Form::hidden('my_company', auth()->user()->my_company) !!}
 					<div class="form-group form-group-sm">
 						{!! Form::hidden('with_tax', 0, ['id'=>'with_tax']) !!}
 						{!! Form::label('txtCompany','Cliente:', ['class'=>'col-sm-1 control-label']) !!}
