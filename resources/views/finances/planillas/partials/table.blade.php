@@ -35,37 +35,10 @@
 			<td>{{ $model->subtotal }}</td>
 			<td>
 			<div class="btn-group">
-				<div class="dropdown">
-					<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{!! $icons['config'] !!}</button>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-						@if($model->total>$model->amortization)
-						<a href="{{ route('payments.by_voucher', $model->id) }}" class="dropdown-item btn btn-outline-primary btn-sm pagar-venta2" title="Pagar" data-id="{{ $model->id }}">{!! $icons['credit-card'] !!} PAGAR</a>
-						@endif
-						<a href="{{ route('output_vouchers.show', $model->id) }}" class="dropdown-item btn btn-outline-secondary btn-sm" title="Ver Doc">{!! $icons['view'] !!} VISUALIZAR</a>
-						@if(in_array($model->status_sunat,['PEND', 'ERROR']))
-						<a href="{{ route( str_replace('index', 'edit', Request::route()->getAction()['as']) , $model) }}" class="dropdown-item btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!} EDITAR</a>
-						@endif
-						<a href="{{ route('planillas.print', $model->id) }}" class="dropdown-item btn btn-outline-success btn-sm" title="Imprimir" target="_blank">{!! $icons['printer'] !!} IMPRIMIR</a>
-					</div>
-				</div>
-				@if(isset($r->links))
-				<div class="dropdown">
-					<button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{!! $icons['email'] !!}</button>
-					<div class="dropdown-menu dropdown-menu-right" style="width:210px !important;">
-						<form class="px-2 py-2 form-inline send_cpe">
-							<div class="form-group">
-								<input type="hidden" value="{{ $model->id }}" name="cpe">
-								<input type="email" class="form-control form-control-sm" placeholder="email@example.com" value="{{ $model->company->email }}" name="email">
-							</div>
-							<button type="submit" class="btn btn-outline-primary btn-sm">{!! $icons['send'] !!}</button>
-						</form>
-					</div>
-				</div>
-				@endif
+				<a href="{{ route('planillas.print', $model->id) }}" target="_blank" class="btn btn-outline-success btn-sm" title="IMPRIMIR">{!! $icons['printer'] !!}</a>
 				@if($model->status_sunat!='ANUL')
 						<a href="#" class="btn-anular btn btn-outline-danger btn-sm" title="ANULAR">{!! $icons['remove'] !!}</a>
 				@endif
-
 			</div>
 			</td>
 		</tr>

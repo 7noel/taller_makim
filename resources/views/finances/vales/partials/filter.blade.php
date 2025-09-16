@@ -199,9 +199,9 @@ $(function () {
 	        .length > 0;
 
 	    if (haySeleccionados) {
-	        $('#btn-enviar-seleccion').removeClass('d-none');
+	        $('#btn-enviar-seleccion').parent('div').parent('div').removeClass('d-none');
 	    } else {
-	        $('#btn-enviar-seleccion').addClass('d-none');
+	        $('#btn-enviar-seleccion').parent('div').parent('div').addClass('d-none');
 	    }
 	}
 

@@ -185,6 +185,7 @@
     <thead>
         <tr>
             <th class="border center">ITEM</th>
+            <th class="border center">FECHA</th>
             <th class="border center">PRESUP.</th>
             <th class="border center">INVENT.</th>
             <th class="border center">CLIENTE</th>
@@ -201,6 +202,7 @@
 		@foreach($model->children as $key => $vale)
 		    <tr>
 			    <td class="border center align-top">{{ $item++ }}</td>
+			    <td class="border center align-top">{{ $vale->created_at->format('d/m/Y') }}</td>
 			    <td class="border center align-top">{{ $vale->order->sn }}</td>
 			    <td class="border center align-top">{{ $vale->order->inventario->sn }}</td>
 			    <td class="border center align-top">
