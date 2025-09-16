@@ -209,7 +209,7 @@
 		    	@if($vale->order->type_service == 'SINIESTRO')
 		    		{{ $vale->order->insurance_company->brand_name }}
 		    	@elseif($vale->order->type_service == 'AMPLIACION')
-		    		{{ $vale->order->mainSiniestro->insurance_company->brand_name }}
+		    		{{ $vale->order->inventario->mainSiniestro->insurance_company->brand_name }}
 		    	@else
 		    		PARTICULAR
 		    	@endif
