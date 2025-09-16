@@ -232,6 +232,14 @@ $neto = $model->total - $detraccion;
 		<br>
 		<table class="table-total">
 			<tbody>
+				@if($model->discount > 0 or $model->discount_items > 0)
+				<tr>
+					<td class="left"> Planilla: {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total_gravada }}</td>
+					<td class="left"> Vale Desc: {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->discount }}</td>
+					<td class="left"> SCTR: {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->discount_items }}</td>
+				</tr>
+				@endif
+				<tr>
 					<td class="left">SUB TOTAL {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->subtotal }}</td>
 					<td class="left">IGV (18%) {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->tax }}</td>
 					<td class="left">TOTAL {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total }}</td>

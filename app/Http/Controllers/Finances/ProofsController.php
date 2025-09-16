@@ -284,11 +284,11 @@ class ProofsController extends Controller {
 	// Genera Planilla a partir de Vales
 	public function generarFromVales()
 	{
-		// $vales_ids = request()->input('ids');
 		$ids = request()->query('ids', '');
+		$descuento = request()->input('descuento');
+		$sctr = request()->input('sctr');
 		$vales_ids = array_filter(explode(',', $ids), fn($v) => is_numeric($v));
-		$planilla = $this->repo->generarPlanillaFromVales($vales_ids);
-		// dd($planilla);
+		$planilla = $this->repo->generarPlanillaFromVales($vales_ids, $descuento, $sctr);
 
 		return response()->json([
 			'status' => 'ok',

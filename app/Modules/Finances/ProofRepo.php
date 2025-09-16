@@ -592,7 +592,7 @@ class ProofRepo extends BaseRepo{
 		return true;
 	}
 
-	public function generarPlanillaFromVales($ids)
+	public function generarPlanillaFromVales($ids, $descuento = 0, $sctr = 0)
 	{
 		$series = 'PLAN';
 		$subtotal = 0;
@@ -621,6 +621,11 @@ class ProofRepo extends BaseRepo{
 			// $vale->status_sunat = 'CERR',
 			// $vale->save();
 		}
+		$data['discount'] = round($descuento, 2);
+		$data['discount_items'] = round($sctr, 2);
+		$data['total_descuento'] = round($descuento + $sctr, 2);
+		$data['total_gravadas'] = round($subtotal, 2);
+		$subtotal = $subtotal - $data['total_descuento'];
 		$data['subtotal'] = round($subtotal, 2);
 		$data['total'] = round($subtotal*1.18, 2);
 		$data['tax'] = round($subtotal*1.18, 2) - round($subtotal, 2);

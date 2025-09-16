@@ -116,6 +116,9 @@ $(function () {
 
         // Recolectar IDs seleccionados (solo visibles + PEND)
         var ids = [];
+        var descuento = $('#descuento').val() || 0;
+        var sctr = $('#sctr').val() || 0;
+
         $tabla.find('tbody tr:visible').each(function () {
             var $row   = $(this);
             var status = String($row.data('status') || '');
@@ -132,7 +135,12 @@ $(function () {
             return;
         }
         // tipo get
-        var url = "{{ route('planillas.generarFromVales') }}" + "?ids=" + ids.join(",");
+        // var url = "{{ route('planillas.generarFromVales') }}" + "?ids=" + ids.join(",");
+        var url = "{{ route('planillas.generarFromVales') }}"
+            + "?ids=" + ids.join(",")
+            + "&descuento=" + encodeURIComponent(descuento)
+            + "&sctr=" + encodeURIComponent(sctr);
+
 
 	    // Opción A: redirigir al backend (recarga la página)
 	    // window.location.href = url;
