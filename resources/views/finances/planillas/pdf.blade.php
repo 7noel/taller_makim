@@ -13,7 +13,7 @@
      ?>
 	<link rel="icon" type="image/jpeg" href="./img/logo_makim_01.jpg" />
 
-	<title>VALE: {{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</title>
+	<title>PLANILLA: {{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
@@ -165,137 +165,76 @@
 	<br>
 	<table class="data">
 		<tr>
-			<td class="label">Tipo de Servicio:</td>
-			<td class="col2">{{ $model->order->type_service }}</td>
 			<td class="label">F. Emisión:</td>
-			<td class="">{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
+			<td class="col2">{{ $model->created_at->format('d/m/Y') }} {{ $model->created_at->format('h:i a') }}</td>
+			<td class="label">Local</td>
+			<td class="">{{ $model->company->mycompany->brand_name }}</td>
 		</tr>
 		<tr>
-			<td class="label">Proveedor:</td>
+			<td class="label">Maestro:</td>
 			<td class="col2">{{ $model->company->company_name }}</td>
 			<td class="label">{{ config('options.client_doc.'.$model->company->id_type) }}:</td>
 			<td class="">{{ $model->company->doc }}</td>
 		</tr>
-		<tr>
-			<td class="label">Local</td>
-			<td class="col2">{{ $model->company->mycompany->brand_name }}</td>
-			<td class="label">Cia Seguro:</td>
-			<td class="">
-		    	@if($model->order->type_service == 'SINIESTRO')
-		    		{{ $model->order->insurance_company->brand_name }}
-		    	@elseif($model->order->type_service == 'AMPLIACION')
-		    		{{ $model->order->mainSiniestro->insurance_company->brand_name }}
-		    	@else
-		    		PARTICULAR
-		    	@endif
-			</td>
-		</tr>
-		<tr>
-			<td class="label">Placa:</td>
-			<td class="col2">{{ $model->car->placa }}</td>
-			<td class="label">Marca:</td>
-			<td class="">{{ $model->car->modelo->brand->name }}</td>
-		</tr>
-		<tr>
-			<td class="label">Modelo:</td>
-			<td class="col2">{{ $model->car->modelo->name }}</td>
-			<td class="label">Año:</td>
-			<td class="">{{ $model->car->year }}</td>
-		</tr>
-		<tr>
-			<td class="label">VIN:</td>
-			<td class="col2">{{ $model->car->vin }}</td>
-			<td class="label">Color:</td>
-			<td class="">{{ $model->car->color }}</td>
-		</tr>
-		@if(trim($model->comment)!="")
-		<tr>
-			<td class="label">Comentario:</td>
-			<td colspan="3">{{$model->comment}}</td>
-		</tr>
-		@endif
 	</table>
 	</div>
 	<br>
 	<div class="container-items">
-@php
-    // Separar los detalles en dos grupos
-    $detalles_normales = $model->order_details->where('is_downloadable', 0)->sortBy('id');
-
-	// Agrupar dinámicamente por comment según orden de ingreso
-	$grupos = [];
-	$comentariosVistos = [];
-
-	foreach ($detalles_normales as $detalle) {
-	    $comment = $detalle->comment;
-	    if (!in_array($comment, $comentariosVistos)) {
-	        $comentariosVistos[] = $comment;
-	        $grupos[$comment] = [];
-	    }
-	    $grupos[$comment][] = $detalle;
-	}
-	
-	$detalles_repuestos = $model->order_details->where('is_downloadable', 1);
-
-    $comentario_actual = null; // Para el control de cambios en comment
-
-    // Filtrar repuestos en dos subgrupos
-    $repuestos_pagados = $detalles_repuestos->where('value', '>', 0);
-    $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
-
-    // Calcular los totales con dos decimales
-    $total_normales = number_format($detalles_normales->sum('total'), 2, '.', ',');
-    $total_repuestos_pagados = number_format($repuestos_pagados->sum('total'), 2, '.', ',');
-    $total_repuestos_compania = number_format($repuestos_compania->sum('total'), 2, '.', ',');
-@endphp
 
 <table class="table-items">
     <thead>
         <tr>
-            <th class="th1 border center">ITEM</th>
-            <th class="th2 border center">DESCRIPCIÓN</th>
-            <th class="th3 border center">CANT.</th>
-            <th class="th4 border center">TOTAL</th>
+            <th class="border center">ITEM</th>
+            <th class="border center">PRESUP.</th>
+            <th class="border center">INVENT.</th>
+            <th class="border center">CLIENTE</th>
+            <th class="border center">PLACA</th>
+            <th class="border center">MARCA</th>
+            <th class="border center">MODELO</th>
+            <th class="border center">COLOR</th>
+            <th class="border center">IMPORTE</th>
         </tr>
     </thead>
     <tbody>
         {{-- Grupo de is_downloadable = 0 --}}
         @php $item = 1; @endphp
-		@foreach($grupos as $comment => $detalles)
-		    <tr>
-		        <td class="border title" colspan="3"><strong>{{ $comment }}</strong></td>
-		        <td class="border center">
-		            <strong>{{ number_format(collect($detalles)->sum('cost'), 2, '.', ',') }}</strong>
-		        </td>
-		    </tr>
-		    @foreach($detalles as $detalle)
+		@foreach($model->children as $key => $vale)
 		    <tr>
 			    <td class="border center align-top">{{ $item++ }}</td>
-			    <td class="border align-top">
-				    @if (!empty($detalle->description))
-				        <strong>{{ $detalle->product->name }}</strong><br>
-				        {!! nl2br(e($detalle->description)) !!}
-				    @else
-				        {{ $detalle->product->name }}
-				    @endif
-				</td>
-			    <td class="border center align-top">{{ $detalle->quantity.' '.$detalle->unit->symbol }}</td>
-			    <td class="border center align-top">{{ $detalle->cost }}</td>
+			    <td class="border center align-top">{{ $vale->order->sn }}</td>
+			    <td class="border center align-top">{{ $vale->order->inventario->sn }}</td>
+			    <td class="border center align-top">
+		    	@if($vale->order->type_service == 'SINIESTRO')
+		    		{{ $vale->order->insurance_company->brand_name }}
+		    	@elseif($vale->order->type_service == 'AMPLIACION')
+		    		{{ $vale->order->mainSiniestro->insurance_company->brand_name }}
+		    	@else
+		    		PARTICULAR
+		    	@endif
+			    </td>
+			    <td class="border center align-top">{{ $vale->order->car->placa }}</td>
+			    <td class="border center align-top">{{ $vale->order->car->brand->name }}</td>
+			    <td class="border center align-top">{{ $vale->order->car->modelo->name }}</td>
+			    <td class="border center align-top">{{ $vale->order->car->color }}</td>
+			    <td class="border center align-top">{{ $vale->subtotal }}</td>
 		    </tr>
-		    @endforeach
 		@endforeach
-
     </tbody>
 </table>
 
 
-
+<?php 
+$detraccion = ($model->total < 700) ? 0 : $model->total*0.12;
+$neto = $model->total - $detraccion;
+ ?>
 		<br>
 		<table class="table-total">
 			<tbody>
 					<td class="left">SUB TOTAL {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->subtotal }}</td>
 					<td class="left">IGV (18%) {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->tax }}</td>
 					<td class="left">TOTAL {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".$model->total }}</td>
+					<td class="left">Detracción {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".number_format($detraccion, 2, '.', ',') }}</td>
+					<td class="left">NETO {{ config('options.table_sunat.moneda_symbol.'.$model->currency_id)." ".number_format($neto, 2, '.', ',') }}</td>
 				</tr>
 			</tbody>
 		</table>

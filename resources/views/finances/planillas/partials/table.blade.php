@@ -1,25 +1,12 @@
-<div class="form-row mb-2">
-		<div class="col-sm-2">
-		    <button id="btn-enviar-seleccion" class="btn btn-outline-info btn-sm d-none"><i class="fa-regular fa-share-from-square"></i> Generar Planilla</button>
-		</div>
-</div>
-
-<table id="tabla-vouchers" class="{{ config('options.styles.table') }}">
+<table class="{{ config('options.styles.table') }}">
 	<thead class="{{ config('options.styles.thead') }}">
 		<tr>
-			<th class="col-select">
-      	<div class="custom-control custom-switch">
-					<input type="checkbox" class="custom-control-input" id="vouchersAll">
-					<label class="custom-control-label" for="vouchersAll" title="Seleccionar Todos"></label>
-				</div>
-			</th>
 			<th>Emisión</th>
 			<th>Documento</th>
 			<th>Cliente</th>
 			<th>Estado</th>
 			<th>Mnd</th>
 			<th>SubTotal</th>
-			<th class="text-center">Presup</th>
 			<th>Acciones</th>
 		</tr>
 	</thead>
@@ -39,33 +26,13 @@
 			$clase = 'badge badge-info';
 		}
 		@endphp
-		<tr data-id="{{ $model->id }}" data-company-id="{{ $model->company_id }}" data-status="{{ $model->status_sunat }}">
-			<td class="col-select">
-	        @if($model->status_sunat === 'PEND')
-	            <div class="custom-control custom-switch">
-	                {!! Form::checkbox("voucher[$model->id]", 'on', false, [
-	                    'class' => 'custom-control-input voucher-individual',
-	                    'id'    => 'customSwitch'.$model->id
-	                ]) !!}
-	                <label class="custom-control-label" for="customSwitch{{$model->id}}"></label>
-	            </div>
-	        @else
-	            <span class="text-muted">—</span>
-	        @endif
-	    </td>
+		<tr data-id="{{ $model->id }}" data-tipo="Comprobante">
 			<td>{{ date('d/m/Y', strtotime($model->issued_at)) }} </td>
 			<td>{{ $model->sn }} </td>
 			<td>{{ $model->company->company_name }} </td>
 			<td class="status"><span class="{{ $clase }}">{{ $model->status_sunat }}</span></td>
 			<td>{{ config('options.table_sunat.moneda_sunat.'.$model->currency_id) }}</td>
 			<td>{{ $model->subtotal }}</td>
-			<td class="text-center">
-				@if($model->order)
-				<a href="{{ '/operations/output_quotes?sn='.$model->order->sn }}" class="btn btn-link btn-sm" title="Ver OT">{{ $model->order->sn }}</a>
-				@else
-				LIBRE
-				@endif
-			</td>
 			<td>
 			<div class="btn-group">
 				<div class="dropdown">
@@ -78,7 +45,7 @@
 						@if(in_array($model->status_sunat,['PEND', 'ERROR']))
 						<a href="{{ route( str_replace('index', 'edit', Request::route()->getAction()['as']) , $model) }}" class="dropdown-item btn btn-outline-primary btn-sm" title="Editar">{!! $icons['edit'] !!} EDITAR</a>
 						@endif
-						<a href="{{ route('vales.print', $model->id) }}" class="dropdown-item btn btn-outline-success btn-sm" title="Imprimir" target="_blank">{!! $icons['printer'] !!} IMPRIMIR</a>
+						<a href="{{ route('planillas.print', $model->id) }}" class="dropdown-item btn btn-outline-success btn-sm" title="Imprimir" target="_blank">{!! $icons['printer'] !!} IMPRIMIR</a>
 					</div>
 				</div>
 				@if(isset($r->links))

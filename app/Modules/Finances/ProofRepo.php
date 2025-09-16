@@ -492,7 +492,7 @@ class ProofRepo extends BaseRepo{
 	{
 		$model = Proof::find($id);
 
-		if ($model->document_type_id == 7) {
+		if ($model->document_type_id == 7 or $model->document_type_id == 0) {
 			$model->status_sunat = 'ANUL';
 		} else {
 			$model->status_sunat = 'PANUL';
@@ -534,19 +534,28 @@ class ProofRepo extends BaseRepo{
 		
 		// dd($r);
 		$model->save();
+		if ($model->series == 'VALE') {
+			OrderDetail::where('voucher_id', $model->id)->update(['voucher_id' => 0]);
+		} elseif ($model->series == 'PLAN') {
+			Proof::where('parent_proof_id', $model->id)->update([
+				'parent_proof_id' => 0,
+				'status_sunat' => 'PEND',
+			]);
+		}
 		Order::where('order_type', 'output_orders')->where('proof_id', $model->id)->update(['status'=>'APROB', 'proof_id'=>0, 'invoiced_at'=>NULL]);
 		return $model;
 	}
 
 	public function generarVouchers($vouchers)
 	{
+		$series = 'VALE';
 		foreach ($vouchers as $key => $voucher) {
 			
-			$last = Proof::where('series', 'VALE')->orderByRaw('CONVERT(number, SIGNED) desc')->first();
+			$last = Proof::where('series', $series)->orderByRaw('CONVERT(number, SIGNED) desc')->first();
 			if ($last) {
-				$next = ['series' => 'VALE', 'number'=> ($last->number + 1)];
+				$next = ['series' => $series, 'number'=> ($last->number + 1)];
 			} else {
-				$next = ['series' => 'VALE', 'number'=> 1];
+				$next = ['series' => $series, 'number'=> 1];
 			}
 
 			$new_voucher = Proof::create([
@@ -557,14 +566,14 @@ class ProofRepo extends BaseRepo{
 				'sn' => $next['series'] . '-' . $next['number'],
 				'my_company' => 1,
 				'currency_id' => 1,
-				'company_id' => $key,
-				'subtotal' => $voucher['total'],
-				'total' => round($voucher['total']*1.18, 2),
-				'tax' => round($voucher['total']*1.18, 2) - $voucher['total'],
-				'car_id' => '',
-				'placa' => '',
+				'company_id' => $voucher['technician_id'],
+				'subtotal' => round($voucher['subtotal'], 2),
+				'total' => round($voucher['subtotal']*1.18, 2),
+				'tax' => round($voucher['subtotal']*1.18, 2) - $voucher['subtotal'],
+				'order_id' => $voucher['order_id'],
+				'car_id' => $voucher['car_id'],
+				'placa' => $voucher['placa'],
 				'status_sunat' => 'PEND',
-
 			]);
 
 	        // Guardar en el resultado los detalle_id asociados a este comprobante
@@ -581,6 +590,49 @@ class ProofRepo extends BaseRepo{
 
 		}
 		return true;
+	}
+
+	public function generarPlanillaFromVales($ids)
+	{
+		$series = 'PLAN';
+		$subtotal = 0;
+		$vales = Proof:: whereIn('id', $ids)->where('status_sunat', 'PEND')->get();
+		$valesIds = $vales->pluck('id')->toArray();
+		$last = Proof::where('series', $series)->orderByRaw('CONVERT(number, SIGNED) desc')->first();
+		if ($last) {
+			$next = ['series' => $series, 'number'=> ($last->number + 1)];
+		} else {
+			$next = ['series' => $series, 'number'=> 1];
+		}
+		$data = [];
+		foreach ($vales as $key => $vale) {
+			if ($data == []) {
+				$data['issued_at'] = date('Y-m-d');
+				$data['proof_type'] = 'planillas';
+				$data['series'] = $next['series'];
+				$data['number'] = $next['number'];
+				$data['sn'] = $next['series'] . '-' . $next['number'];
+				$data['my_company'] = 1;
+				$data['currency_id'] = 1;
+				$data['company_id'] = $vale->company_id;
+				$data['status_sunat'] = 'PEND';
+			}
+			$subtotal += $vale->subtotal;
+			// $vale->status_sunat = 'CERR',
+			// $vale->save();
+		}
+		$data['subtotal'] = round($subtotal, 2);
+		$data['total'] = round($subtotal*1.18, 2);
+		$data['tax'] = round($subtotal*1.18, 2) - round($subtotal, 2);
+		// dd($data);
+
+		$planilla = Proof::create($data);
+		Proof::whereIn('id', $valesIds)->update([
+			'status_sunat' => 'CERR',
+			'parent_proof_id' => $planilla->id,
+		]);
+
+		return $planilla;
 	}
 
 }

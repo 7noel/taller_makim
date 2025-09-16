@@ -47,6 +47,12 @@ class Order extends Model implements Auditable
 		}
 	}
 
+	// Un Presupuesto esta relacionado a varios vales o varios cpes
+	public function proofs()
+	{
+		return $this->hasMany('App\Modules\Operations\Order');
+	}
+
 	//CPE Relacionado
 	public function proof()
 	{

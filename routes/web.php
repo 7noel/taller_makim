@@ -99,6 +99,8 @@ Route::group(['middleware'=>['auth']], function(){
 
 	Route::get('/select_company', ['as' => 'select_company','uses' => 'HomeController@select_company']);
 	Route::post('/change_company', ['as' => 'change_company','uses' => 'HomeController@change_company']);
+
+	Route::get('planillas/generarFromVales', ['as' => 'planillas.generarFromVales', 'uses' => 'Finances\ProofsController@generarFromVales']);
 });
 
 Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'permissions'], 'namespace'=>'Admin'], function(){
@@ -126,11 +128,13 @@ Route::group(['prefix'=>'finances', 'middleware'=>['auth', 'permissions'], 'name
 
 	Route::get('output_vouchers/print/{id}', ['as' => 'output_vouchers.print', 'uses' => 'ProofsController@print2']);
 	Route::get('vales/print/{id}', ['as' => 'vales.print', 'uses' => 'ProofsController@vales_print']);
+	Route::get('planillas/print/{id}', ['as' => 'planillas.print', 'uses' => 'ProofsController@planillas_print']);
 	Route::get('output_vouchers/print2/{id}', ['as' => 'output_vouchers.print2', 'uses' => 'ProofsController@print']);
 	Route::get('output_vouchers/by_order/{order_id}', ['as' => 'output_vouchers.by_order', 'uses' => 'ProofsController@byOrder']);
 	Route::get('input_vouchers/print/{id}', ['as' => 'input_vouchers.print', 'uses' => 'ProofsController@input_vouchers_print']);
 	Route::get('input_vouchers/by_order/{order_id}', ['as' => 'input_vouchers.by_order', 'uses' => 'ProofsController@byOrder']);
 	Route::resource('vales','ProofsController');
+	Route::resource('planillas','ProofsController');
 	Route::resource('output_vouchers','ProofsController');
 	Route::resource('input_vouchers','ProofsController');
 	Route::resource('output_letters','ProofsController');

@@ -42,9 +42,9 @@
 			</td>
 			<td>
 				<!-- <a href="{{ route( 'print_order' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="Imprimir">{!! $icons['printer'] !!}</a> -->
-				<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Items</a>
-				<a href="{{ route( 'output_quotes.print_categories' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Categorías</a>
-				<a href="{{ route( 'output_quotes.print_taller' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Taller</a>
+				<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="PDF por Items">{!! $icons['pdf'] !!} Items</a>
+				<a href="{{ route( 'output_quotes.print_categories' , $model->id ) }}" target="_blank" class="btn btn-outline-success btn-sm" title="PDF por Categorías">{!! $icons['pdf'] !!} Categorías</a>
+				<a href="{{ route( 'output_quotes.print_taller' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="PDF para Taller">{!! $icons['pdf'] !!} Taller</a>
 			@if($model->status=='APROB')
 				<a href="{{ route('orders.by_quote', $model->id) }}" class="btn btn-outline-secondary btn-sm" title="Generar Pedido">{!! $icons['invoice'] !!}</a>
 			@endif

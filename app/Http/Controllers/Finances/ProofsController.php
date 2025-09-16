@@ -52,7 +52,8 @@ class ProofsController extends Controller {
 		// dd(json_decode($models[1]->response_sunat)->success);
 
 		$sellers = $this->companyRepo->getListSellers();
-		return view('partials.filter',compact('models', 'filter', 'sellers'));
+		$masters = $this->companyRepo->getListMaestros();
+		return view('partials.filter',compact('models', 'filter', 'sellers', 'masters'));
 	}
 
 	public function issuanceVouchers()
@@ -256,7 +257,7 @@ class ProofsController extends Controller {
 
 	/**
 	 * CREA UN PDF EN EL NAVEGADOR
-	 * @param  [integer] $id [Es el id de la cotizacion]
+	 * @param  [integer] $id [Es el id del vale]
 	 * @return [pdf]     [Retorna un pdf]
 	 */
 	public function vales_print($id)
@@ -265,5 +266,34 @@ class ProofsController extends Controller {
 		$nombre = $model->sn;
 		$pdf = \PDF::loadView('finances.vales.pdf', compact('model'));
 		return $pdf->stream($nombre.".pdf");
+	}
+
+	/**
+	 * CREA UN PDF EN EL NAVEGADOR
+	 * @param  [integer] $id [Es el id de la planilla]
+	 * @return [pdf]     [Retorna un pdf]
+	 */
+	public function planillas_print($id)
+	{
+		$model = $this->repo->findOrFail($id);
+		$nombre = $model->sn;
+		$pdf = \PDF::loadView('finances.planillas.pdf', compact('model'));
+		return $pdf->stream($nombre.".pdf");
+	}
+
+	// Genera Planilla a partir de Vales
+	public function generarFromVales()
+	{
+		// $vales_ids = request()->input('ids');
+		$ids = request()->query('ids', '');
+		$vales_ids = array_filter(explode(',', $ids), fn($v) => is_numeric($v));
+		$planilla = $this->repo->generarPlanillaFromVales($vales_ids);
+		// dd($planilla);
+
+		return response()->json([
+			'status' => 'ok',
+			'message' => 'Planilla creada correctamente',
+			'planilla' => $planilla,
+		]);
 	}
 }

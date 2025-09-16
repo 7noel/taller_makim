@@ -65,6 +65,7 @@ class MenuController extends Controller
                 ['name' => 'Empleados', 'route' => 'employees.index'],
                 ['name' => 'Cargos', 'route' => 'jobs.index'],
                 ['name' => 'Vales', 'route' => 'vales.index'],
+                ['name' => 'Planillas', 'route' => 'planillas.index'],
             ],
             'Finanzas'=>[
                 // ['name' => 'Emite Canje de Letras', 'route' => 'output_swaps.index'],

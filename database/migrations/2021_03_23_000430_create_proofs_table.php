@@ -25,6 +25,8 @@ class CreateProofsTable extends Migration
             $table->string('placa');
             $table->bigInteger('company_id')->unsigned();
             $table->bigInteger('my_company')->unsigned();
+            $table->bigInteger('order_id')->unsigned();
+            $table->bigInteger('parent_proof_id')->unsigned();
             $table->integer('sunat_transaction')->unsigned();
             $table->integer('igv_code')->unsigned();
             $table->bigInteger('document_type_id')->unsigned();

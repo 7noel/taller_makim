@@ -610,6 +610,65 @@ class OrdersController extends Controller {
 	}
 	public function repair_update($id)
 	{
+	    $data = request()->all();
+
+	    if (!empty($data['details'])) {
+	        $this->orderDetailRepo->repair_update($data['details']);
+	    }
+
+	    $vouchers = [];
+
+	    foreach ($data['details'] as $detailId => $detail) {
+	        // ─────────────────────────────────────────────────────────────
+	        // CAMBIO 1: asegurar flags y datos base
+	        // ─────────────────────────────────────────────────────────────
+	        $tieneVoucher = !empty($detail['voucher']); // "on", 1, true, etc.
+	        $technicianId = $detail['technician_id'] ?? null;
+	        $orderId      = $detail['order_id']      ?? $id; // CAMBIO 2: permitir múltiples orders
+	        $monto        = isset($detail['cost']) ? floatval($detail['cost']) : 0.0;
+
+	        if ($tieneVoucher && $technicianId) {
+	            // ─────────────────────────────────────────────────────────
+	            // CAMBIO 3: clave de agrupación por técnico + order
+	            // ─────────────────────────────────────────────────────────
+	            $groupKey = $technicianId . ':' . $orderId;
+
+	            // ─────────────────────────────────────────────────────────
+	            // CAMBIO 4: inicializar con technician_id y order_id
+	            // ─────────────────────────────────────────────────────────
+	            if (!isset($vouchers[$groupKey])) {
+	                $vouchers[$groupKey] = [
+	                    'technician_id' => $technicianId, // nuevo en el grupo
+	                    'order_id'      => $orderId,      // nuevo en el grupo
+	                    'car_id'      => $detail['car_id'],
+	                    'placa'      => $detail['placa'],
+	                    'subtotal'      => 0.0,
+	                    'items'         => [],
+	                ];
+	            }
+
+	            // Sumar al subtotal del grupo
+	            $vouchers[$groupKey]['subtotal'] += $monto;
+
+	            // Agregar ítem del detalle
+	            $vouchers[$groupKey]['items'][] = [
+	                'detail_id' => $detailId,
+	                'monto'     => $monto,
+	            ];
+	        }
+	    }
+	    // dd($vouchers);
+	    // Si tu repositorio espera un array indexado, descomenta la siguiente línea:
+	    // $vouchers = array_values($vouchers); // CAMBIO 5 (opcional)
+
+	    // Ahora generar vouchers por (technician_id, order_id)
+	    $this->proofRepo->generarVouchers($vouchers);
+
+	    return redirect()->route('vales.index');
+	}
+
+	public function repair_update_old($id)
+	{
 		$data = request()->all();
 		// dd($data);
 		if ($data['details']) {
@@ -625,13 +684,13 @@ class OrdersController extends Controller {
 	            // Inicializar si no existe
 	            if (!isset($vouchers[$tecnicoId])) {
 	                $vouchers[$tecnicoId] = [
-	                    'total' => 0,
+	                    'subtotal' => 0,
 	                    'items' => [],
 	                ];
 	            }
 
 	            // Sumar al total
-	            $vouchers[$tecnicoId]['total'] += $monto;
+	            $vouchers[$tecnicoId]['subtotal'] += $monto;
 
 	            // Agregar ítem
 	            $vouchers[$tecnicoId]['items'][] = [
@@ -641,13 +700,13 @@ class OrdersController extends Controller {
 	        }
 	    }
 
+		// dd($vouchers);
 	    $this->proofRepo->generarVouchers($vouchers);
 	    
 	    return redirect()->route('vales.index');
-		dd($vouchers);
 
 
-		dd('repair_update');
+		// dd('repair_update');
 	}
 	public function controlcalidad_edit($id)
 	{

@@ -165,6 +165,16 @@ class ComposerServiceProvider extends ServiceProvider
                 'edit.update'=>'Actualizar Empresa',
                 'edit.delete'=>'Eliminar Empresa',
             ],
+            'planillas' => [
+                'index'=>'Planillas',
+                'index.create'=>'Crear Planilla',
+                'create'=>'Nuevo Planilla',
+                'create.create'=>'Crear Planilla',
+                'show'=>'Vizualizando Planilla:',
+                'edit'=>'Editar Planilla: ',
+                'edit.update'=>'Actualizar Planilla',
+                'edit.delete'=>'Eliminar Planilla',
+            ],
             'vales' => [
                 'index'=>'Vales',
                 'index.create'=>'Crear Vale',

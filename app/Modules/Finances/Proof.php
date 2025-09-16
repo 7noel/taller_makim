@@ -11,7 +11,7 @@ class Proof extends Model implements Auditable {
 	use \OwenIt\Auditing\Auditable;
 	use SoftDeletes;
 
-	protected $fillable = ['issued_at', 'is_import', 'proof_type', 'mov', 'type_op', 'placa', 'car_id', 'document_type_id', 'sn', 'series', 'number', 'is_downloadable', 'dispatch_note_date', 'dispatch_note_number', 'dam','my_company', 'company_id', 'company_store_id', 'transfer_reason_id', 'shipper_id', 'payment_condition_id', 'expired_at', 'currency_id', 'exchange', 'exchange2', 'discount', 'discount_items', 'with_tax', 'gross_value', 'subtotal', 'tax', 'interest', 'total', 'factor', 'amortization', 'seller_id', 'swap_id', 'swap_letter_id', 'reference_id','status_sunat', 'sunat_transaction', 'igv_code', 'response_sunat', 'response_voided', 'ticket_voided', 'email', 'email_1', 'email_2'];
+	protected $fillable = ['issued_at', 'is_import', 'proof_type', 'mov', 'type_op', 'placa', 'car_id', 'document_type_id', 'sn', 'series', 'number', 'is_downloadable', 'dispatch_note_date', 'dispatch_note_number', 'dam','my_company', 'company_id', 'parent_proof_id', 'order_id', 'company_store_id', 'transfer_reason_id', 'shipper_id', 'payment_condition_id', 'expired_at', 'currency_id', 'exchange', 'exchange2', 'discount', 'discount_items', 'with_tax', 'gross_value', 'subtotal', 'tax', 'interest', 'total', 'factor', 'amortization', 'seller_id', 'swap_id', 'swap_letter_id', 'reference_id','status_sunat', 'sunat_transaction', 'igv_code', 'response_sunat', 'response_voided', 'ticket_voided', 'email', 'email_1', 'email_2'];
 
 	public function scopeName($query, $name){
 		if (trim($name) != "") {
@@ -28,6 +28,23 @@ class Proof extends Model implements Auditable {
 	{
 		return $this->hasMany('App\Modules\Operations\Order');
 	}
+
+	// Un vale esta relacionado a un presupuesto
+    public function order() {
+        return $this->belongsTo('App\Modules\Operations\Order');
+    }
+
+	// Un vale esta relacionado a una planilla
+    public function parent()
+    {
+    	return $this->belongsTo('App\Modules\Finances\Proof', 'parent_proof_id');
+	}
+    // Una planilla está relacionada a varios vales
+    public function children()
+    {
+    	return $this->hasMany('App\Modules\Finances\Proof', 'parent_proof_id');
+    }
+
 	public function document_type()
 	{
 		return $this->belongsTo('App\Modules\Base\Table','document_type_id');

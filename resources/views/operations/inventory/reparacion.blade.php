@@ -30,15 +30,12 @@
 				                    {!! Form::text('modelo', $model->car->modelo->name, ['class'=>'form-control-sm form-control-plaintext', 'id'=>'modelo']) !!}
 				                </div>
 				            </div>
-						</div>
-						<div class="form-row">
 				            <div class="col-md-2 col-sm-4">
 				                <div class="form-group">
 				                {!! Field::text('company', $model->company->company_name, ['label' => 'Propietario', 'class'=>'form-control-sm form-control-plaintext']) !!}
 				                </div>
 				            </div>
 						</div>
-
                         <div class="form-row">
                             <div class="col-md-2 col-sm-4">
                                 {!! Field::select('my_company', $locales, \Auth::user()->my_company, ['label' => 'Local de Trabajos', 'empty'=>'Seleccionar', 'class'=>'form-control-sm', 'required'=>'required']) !!}
@@ -55,6 +52,8 @@
         $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
         @endphp
 
+<a href="{{ route( 'output_quotes.edit' , $quote->id ) }}" class="btn btn-outline-primary btn-sm mb-3" title="Editar Presupuesto {{ $quote->type_service }}">Editar {!! $quote->sn !!} {{ $quote->type_service }}</a>
+
 <table class="{{ config('options.styles.table') }}">
     <thead class="{{ config('options.styles.thead') }}">
         <th>Servicio / Categoría</th>
@@ -62,7 +61,7 @@
         <th>Venta</th>
         <th width="100px">Costo S/</th>
         <th>Asignado a:</th>
-        <th>Generar Voucher</th>
+        <th>¿Generar Voucher?</th>
     </thead>
     <tbody>
         {{-- DETALLES NORMALES agrupados por comment --}}
@@ -77,9 +76,9 @@
                 {{-- Fila resumen del grupo --}}
                 <tr class="table-secondary font-weight-bold">
                     <td>{{ $comentario_actual }}</td>
-                    <td class="grupo-cantidad" data-group="{{ $idGrupo }}">{{ $grupo->sum('quantity') }}</td>
-                    <td class="grupo-total" data-group="{{ $idGrupo }}">{{ number_format($grupo->sum('total'), 2) }}</td>
-                    <td><input type="number" step="0.01" class="form-control form-control-sm costo-total" data-group="{{ $idGrupo }}"></td>
+                    <td class="grupo-cantidad text-right" data-group="{{ $idGrupo }}">{{ $grupo->sum('quantity') }}</td>
+                    <td class="grupo-total text-right" data-group="{{ $idGrupo }}">{{ number_format($grupo->sum('total'), 2) }}</td>
+                    <td><input type="number" step="0.01" class="form-control form-control-sm costo-total text-right" data-group="{{ $idGrupo }}"></td>
                     <td>
                         <select class="form-control form-control-sm asignado-grupo" data-group="{{ $idGrupo }}">
                             <option value="">-- Asignar --</option>
@@ -94,14 +93,17 @@
                 </tr>
             @endif
             <tr class="detalle" data-group="{{ $idGrupo }}">
+                {!! Form::hidden("details[$detail->id][order_id]", $quote->id) !!}
+                {!! Form::hidden("details[$detail->id][car_id]", $quote->car_id) !!}
+                {!! Form::hidden("details[$detail->id][placa]", $quote->placa) !!}
                 <td>{{ $detail->product->name }}</td>
-                <td class="cantidad">{{ $detail->quantity }}</td>
-                <td>{{ $detail->total }}</td>
-                <td>
+                <td class="cantidad text-right">{{ $detail->quantity }}</td>
+                <td class="text-right">{{ $detail->total }}</td>
+                <td class="text-right">
                     @if($detail->voucher_id>0)
-                    {{ $detail->cost }}
+                    {!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item text-right', 'step'=>'0.01', 'disabled']) !!}
                     @else
-                    {!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item', 'step'=>'0.01']) !!}
+                    {!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item text-right', 'step'=>'0.01']) !!}
                     @endif
                 </td>
                 <td>

@@ -9,7 +9,10 @@
 	@if(request()->input('type_service') == 'AMPLIACION')
 		{!! Form::hidden('parent_quote_id', optional($inventory->mainSiniestro)->id, ['id'=>'parent_quote_id']) !!}
 	@endif
-	<a href="{{ route( 'panel', 'DIAG' ) }}" class="btn btn-outline-info btn-sm" title="Tablero"><i class="fa-solid fa-arrow-left"></i> TABLERO</a>
+	@php 
+	$panel_status = ($action == 'create') ? 'DIAG' : $inventory->status ;
+	@endphp
+	<a href="{{ route( 'panel', $panel_status ) }}" class="btn btn-outline-info btn-sm" title="Tablero"><i class="fa-solid fa-arrow-left"></i> TABLERO</a>
 	@if($model->order_type == 'output_quotes')
 		<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Items</a>
 		<a href="{{ route( 'output_quotes.print_categories' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Categorías</a>
