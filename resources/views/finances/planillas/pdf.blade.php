@@ -226,7 +226,7 @@
 
 
 <?php 
-$detraccion = ($model->total < 700) ? 0 : $model->total*0.12;
+$detraccion = ($model->total < 700) ? 0 : round($model->total*0.12);
 $neto = $model->total - $detraccion;
  ?>
 		<br>
