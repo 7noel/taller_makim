@@ -159,7 +159,7 @@
 					<div>INVENTARIO VEHICULAR</div>
 					<div>{{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</div>
 					<div>{{ $model->placa }}</div>
-					<div>{{ optional($model->inventory)->seguro }}</div>
+					<div>{{ optional($model->insurance_company)->brand_name }}</div>
 				</td>
 			</tr>
 		</table>
@@ -200,7 +200,7 @@
 				</tr>
 				<tr>
 					<td class="label2">Cia. de seguro:</td>
-					<td>{{ optional($model->inventory)->seguro }}</td>
+					<td>{{ optional($model->insurance_company)->brand_name }}</td>
 				</tr>
 				<tr>
 					<td class="label2">Conductor:</td>
