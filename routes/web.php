@@ -17,7 +17,8 @@ Route::get('houses', function () {
 });
 
 Route::get('demo2', function () {
-	return view('demo2');
+	return view('checklist');
+	// return view('demo2');
 });
 Route::get('prueba', 'HomeController@prueba');
 Route::get('/', 'HomeController@index');

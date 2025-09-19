@@ -34,12 +34,10 @@
 			<td>{{ config('options.table_sunat.moneda_sunat.'.$model->currency_id) }}</td>
 			<td>{{ $model->subtotal }}</td>
 			<td>
-			<div class="btn-group">
 				<a href="{{ route('planillas.print', $model->id) }}" target="_blank" class="btn btn-outline-success btn-sm" title="IMPRIMIR">{!! $icons['printer'] !!}</a>
 				@if($model->status_sunat!='ANUL')
 						<a href="#" class="btn-anular btn btn-outline-danger btn-sm" title="ANULAR">{!! $icons['remove'] !!}</a>
 				@endif
-			</div>
 			</td>
 		</tr>
 		@endforeach

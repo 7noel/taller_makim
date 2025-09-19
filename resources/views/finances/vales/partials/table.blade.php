@@ -87,13 +87,10 @@
 				@endif
 			</td>
 			<td>
-			<div class="btn-group">
 				<a href="{{ route('vales.print', $model->id) }}" target="_blank" class="btn btn-outline-success btn-sm" title="IMPRIMIR">{!! $icons['printer'] !!}</a>
 				@if($model->status_sunat!='ANUL' and $model->status_sunat!='CIERR')
 						<a href="#" class="btn-anular btn btn-outline-danger btn-sm" title="ANULAR">{!! $icons['remove'] !!}</a>
 				@endif
-
-			</div>
 			</td>
 		</tr>
 		@endforeach

@@ -82,7 +82,7 @@
             border: 1px solid #000;
         }
         .table-items .th1{
-        	width: 6%;
+        	width: 4%;
         	text-align: center;
         }
         .table-items .th2{
@@ -184,7 +184,7 @@
 <table class="table-items">
     <thead>
         <tr>
-            <th class="border center">ITEM</th>
+            <th class="border center th1">#</th>
             <th class="border center">FECHA</th>
             <th class="border center">PRESUP.</th>
             <th class="border center">INVENT.</th>
