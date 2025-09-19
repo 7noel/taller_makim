@@ -29,6 +29,7 @@
       <div style="margin-top:8px">
         <input type="file" id="fileInput" accept="image/*">
         <button id="btnOCR" type="button">Ejecutar OCR</button>
+        <button id="btnLeerClipboard">Pegar imagen del portapapeles</button>
       </div>
     </div>
 
@@ -424,6 +425,7 @@ async function readImageFromClipboard() {
     alert('Clipboard API no soportada o permiso denegado');
   }
 }
+document.getElementById("btnLeerClipboard").addEventListener("click", readImageFromClipboard);
 
   // al cargar, poner foco en la zona de pegado para facilitar Ctrl+V
   pasteZone.focus();
