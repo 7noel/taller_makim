@@ -18,6 +18,6 @@
 		{!! Field::text('placa', ['label'=>'Placa','class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-sm-2">
-		{!! Field::text('sn', ['label'=>'Número Cot','class'=>'form-control-sm']) !!}
+		{!! Field::text('sn', ['label'=>'Serie-Número','class'=>'form-control-sm']) !!}
 	</div>
 </div>

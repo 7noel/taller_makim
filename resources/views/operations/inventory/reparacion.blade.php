@@ -67,71 +67,82 @@
         {{-- DETALLES NORMALES agrupados por comment --}}
         @php $comentario_actual = null; @endphp
         @foreach($detalles_normales as $detail)
-            @if ($comentario_actual !== $detail->comment)
-                @php
-                    $grupo = $detalles_normales->where('comment', $detail->comment);
-                    $comentario_actual = $detail->comment;
-                    $idGrupo = Str::slug($comentario_actual, '_');
-                @endphp
-                {{-- Fila resumen del grupo --}}
-                <tr class="table-secondary font-weight-bold">
-                    <td>{{ $comentario_actual }}</td>
-                    <td class="grupo-cantidad text-right" data-group="{{ $idGrupo }}">{{ $grupo->sum('quantity') }}</td>
-                    <td class="grupo-total text-right" data-group="{{ $idGrupo }}">{{ number_format($grupo->sum('total'), 2) }}</td>
-                    <td><input type="number" step="0.01" class="form-control form-control-sm costo-total text-right" data-group="{{ $idGrupo }}"></td>
-                    <td>
-                        <select class="form-control form-control-sm asignado-grupo" data-group="{{ $idGrupo }}">
-                            <option value="">-- Asignar --</option>
-                        </select>
+            @php
+                $grupo_categoria = Str::slug($detail->comment, '_');
+                $tiene_voucher = $detalles_normales
+                    ->where('comment', $detail->comment)
+                    ->where('voucher_id', '>', 0)
+                    ->isNotEmpty();
+
+                $tiene_maestros = isset($masters[$grupo_categoria]) && count($masters[$grupo_categoria]) > 0;
+            @endphp
+            @if($tiene_maestros || $tiene_maestros)
+                @if ($comentario_actual !== $detail->comment)
+                    @php
+                        $grupo = $detalles_normales->where('comment', $detail->comment);
+                        $comentario_actual = $detail->comment;
+                        $idGrupo = Str::slug($detail->comment, '_') . '_quote_' . $quote->id;
+                    @endphp
+                    {{-- Fila resumen del grupo --}}
+                    <tr class="table-secondary font-weight-bold" data-group="{{ $idGrupo }}">
+                        <td>{{ $comentario_actual }}</td>
+                        <td class="grupo-cantidad text-right" data-group="{{ $idGrupo }}">{{ $grupo->sum('quantity') }}</td>
+                        <td class="grupo-total text-right" data-group="{{ $idGrupo }}">{{ number_format($grupo->sum('total'), 2) }}</td>
+                        <td><input type="number" step="0.01" class="form-control form-control-sm costo-total text-right" data-group="{{ $idGrupo }}"></td>
+                        <td>
+                            <select class="form-control form-control-sm asignado-grupo" data-group="{{ $idGrupo }}">
+                                <option value="">-- Asignar --</option>
+                            </select>
+                        </td>
+                        <td>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input voucher-grupo" id="voucherGrupo{{ $idGrupo }}" data-group="{{ $idGrupo }}">
+                                <label class="custom-control-label" for="voucherGrupo{{ $idGrupo }}">Voucher</label>
+                            </div>
+                        </td>
+                    </tr>
+                @endif
+                <tr class="detalle" data-group="{{ $idGrupo }}">
+                    {!! Form::hidden("details[$detail->id][order_id]", $quote->id) !!}
+                    {!! Form::hidden("details[$detail->id][car_id]", $quote->car_id) !!}
+                    {!! Form::hidden("details[$detail->id][placa]", $quote->placa) !!}
+                    <td>{{ $detail->product->name }}</td>
+                    <td class="cantidad text-right">{{ $detail->quantity }}</td>
+                    <td class="text-right">{{ $detail->total }}</td>
+                    <td class="text-right">
+                        @if($detail->voucher_id > 0)
+                        {!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item text-right', 'step'=>'0.01', 'disabled']) !!}
+                        @else
+                        {!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item text-right', 'step'=>'0.01']) !!}
+                        @endif
                     </td>
                     <td>
+                        @if($detail->voucher_id>0)
+                        {{ $detail->technician->company_name }}
+                        @else
+                        {!! Form::select("details[$detail->id][technician_id]", [$detail->technician_id => $detail->technician_id], $detail->technician_id, ['class'=>'form-control form-control-sm asignado-individual']) !!}
+                        @endif
+                    </td>
+                    <td>
+                        @if($detail->voucher_id>0)
+                        {{ $detail->voucher->sn }}
+                        @else
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input voucher-grupo" id="voucherGrupo{{ $idGrupo }}" data-group="{{ $idGrupo }}">
-                            <label class="custom-control-label" for="voucherGrupo{{ $idGrupo }}">Voucher</label>
+                            {!! Form::checkbox("details[$detail->id][voucher]", 'on', false, [
+                                'class' => 'custom-control-input voucher-individual',
+                                'id' => 'customSwitch'.$detail->id,
+                                'data-group' => $idGrupo
+                            ]) !!}
+                            <label class="custom-control-label" for="customSwitch{{$detail->id}}">Voucher</label>
                         </div>
+                        @endif
                     </td>
                 </tr>
             @endif
-            <tr class="detalle" data-group="{{ $idGrupo }}">
-                {!! Form::hidden("details[$detail->id][order_id]", $quote->id) !!}
-                {!! Form::hidden("details[$detail->id][car_id]", $quote->car_id) !!}
-                {!! Form::hidden("details[$detail->id][placa]", $quote->placa) !!}
-                <td>{{ $detail->product->name }}</td>
-                <td class="cantidad text-right">{{ $detail->quantity }}</td>
-                <td class="text-right">{{ $detail->total }}</td>
-                <td class="text-right">
-                    @if($detail->voucher_id>0)
-                    {!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item text-right', 'step'=>'0.01', 'disabled']) !!}
-                    @else
-                    {!! Form::number("details[$detail->id][cost]", $detail->cost, ['class'=>'form-control form-control-sm costo-item text-right', 'step'=>'0.01']) !!}
-                    @endif
-                </td>
-                <td>
-                    @if($detail->voucher_id>0)
-                    {{ $detail->technician->company_name }}
-                    @else
-                    {!! Form::select("details[$detail->id][technician_id]", [$detail->technician_id => $detail->technician_id], $detail->technician_id, ['class'=>'form-control form-control-sm asignado-individual']) !!}
-                    @endif
-                </td>
-                <td>
-                    @if($detail->voucher_id>0)
-                    {{ $detail->voucher->sn }}
-                    @else
-                    <div class="custom-control custom-switch">
-                        {!! Form::checkbox("details[$detail->id][voucher]", 'on', false, [
-                            'class' => 'custom-control-input voucher-individual',
-                            'id' => 'customSwitch'.$detail->id,
-                            'data-group' => $idGrupo
-                        ]) !!}
-                        <label class="custom-control-label" for="customSwitch{{$detail->id}}">Voucher</label>
-                    </div>
-                    @endif
-                </td>
-            </tr>
         @endforeach
 
         {{-- Repuestos pagados --}}
-        @if($repuestos_pagados->isNotEmpty())
+        @if($repuestos_pagados->isNotEmpty() and 1==0)
             <tr class="table-secondary font-weight-bold">
                 <td colspan="6">REPUESTOS</td>
             </tr>
@@ -148,7 +159,7 @@
         @endif
 
         {{-- Repuestos por compañía --}}
-        @if($repuestos_compania->isNotEmpty())
+        @if($repuestos_compania->isNotEmpty() and 1==0)
             <tr class="table-secondary font-weight-bold">
                 <td colspan="6">REPUESTOS POR COMPAÑÍA</td>
             </tr>
@@ -206,7 +217,8 @@ $(function(){
 
             $select.empty().append(`<option value="">-- Asignar --</option>`);
 
-            const opciones = masters[grupo] || [];
+            const categoria = grupo.replace(/_quote_\d+$/, ''); 
+            const opciones = masters[categoria] || [];
             let encontrado = false;
 
             opciones.forEach(company => {
@@ -249,7 +261,8 @@ $(function(){
             const valorActual = $select.val();
             $select.empty().append(`<option value="">-- Asignar --</option>`);
 
-            const opciones = masters[grupo] || [];
+            const categoria = grupo.replace(/_quote_\d+$/, ''); 
+            const opciones = masters[categoria] || [];
             let seleccionado = false;
 
             opciones.forEach(company => {
@@ -269,15 +282,31 @@ $(function(){
     }
 
     function actualizarTotalesDeGrupo() {
-        $('.costo-total').each(function() {
+        $('.costo-total').each(function () {
             const grupo = $(this).data('group');
-            let total = 0;
+            const $filas = $(`tr[data-group="${grupo}"] .costo-item`);
 
-            $(`tr[data-group="${grupo}"] .costo-item`).each(function() {
-                total += parseFloat($(this).val()) || 0;
+            let total = 0;
+            let todosTienenVoucher = true;
+
+            $filas.each(function () {
+                const valor = parseFloat($(this).val()) || 0;
+                total += valor;
+
+                if (!$(this).prop('disabled')) {
+                    todosTienenVoucher = false;
+                }
             });
 
+            // Mostrar total
             $(this).val(total.toFixed(2));
+
+            // Desactivar input si todos están con voucher
+            if (todosTienenVoucher) {
+                $(this).prop('readonly', true); // también podrías usar .prop('disabled', true)
+            } else {
+                $(this).prop('readonly', false);
+            }
         });
     }
 
@@ -299,26 +328,85 @@ $(function(){
         $(`tr[data-group="${grupo}"] select.asignado-individual`).val(val);
     });
 
-    // Distribuir costo total proporcionalmente
-    $('.costo-total').change(function(){
-        let grupo = $(this).data('group');
-        let costoTotal = parseFloat($(this).val()) || 0;
-
-        let cantidades = [];
-        let totalCantidad = 0;
-
-        $(`tr[data-group="${grupo}"]`).each(function(){
-            let cantidad = parseFloat($(this).find('.cantidad').text()) || 0;
-            cantidades.push(cantidad);
-            totalCantidad += cantidad;
-        });
-
-        $(`tr[data-group="${grupo}"]`).each(function(i){
-            let proporción = cantidades[i] / totalCantidad;
-            let prorrateado = (costoTotal * proporción).toFixed(2);
-            $(this).find('.costo-item').val(prorrateado);
-        });
+    $('.costo-total').on('focus', function () {
+        $(this).data('valor-anterior', $(this).val());
     });
+
+    // Distribuir costo total proporcionalmente
+    $('.costo-total').change(function () {
+        const grupo = $(this).data('group');
+        const nuevoTotal = parseFloat($(this).val()) || 0;
+        const $filas = $(`tr[data-group="${grupo}"]`);
+
+        let totalVoucher = 0;
+        let totalCantidad = 0;
+        const items = [];
+
+        // Recolectar data
+        $filas.each(function () {
+            const $input = $(this).find('.costo-item');
+            const cantidad = parseFloat($(this).find('.cantidad').text()) || 0;
+            const valorActual = parseFloat($input.val()) || 0;
+            const tieneVoucher = $input.prop('disabled');
+
+            totalCantidad += cantidad;
+
+            if (tieneVoucher) {
+                totalVoucher += valorActual;
+            } else {
+                items.push({
+                    $input,
+                    cantidad,
+                    actual: valorActual
+                });
+            }
+        });
+
+        // Validar que el nuevo total no sea menor que el total de ítems con voucher
+        if (nuevoTotal < totalVoucher) {
+            alert(`El monto total no puede ser menor a lo ya asignado: S/ ${totalVoucher.toFixed(2)}`);
+            const valorAnterior = $(this).data('valor-anterior');
+            $(this).val(valorAnterior);
+            return;
+        }
+
+        // Si no hay ítems para distribuir, salir
+        if (items.length === 0) {
+            $(this).val(nuevoTotal.toFixed(2));
+            return;
+        }
+
+        const restante = nuevoTotal - totalVoucher;
+
+        // Calcular distribución proporcional
+        let sumaParcial = 0;
+        const proporciones = [];
+
+        items.forEach(item => {
+            const raw = (item.cantidad / totalCantidad) * restante;
+            const base = Math.floor(raw * 100) / 100;
+            const residuo = raw - base;
+            sumaParcial += base;
+            proporciones.push({ item, valor: base, residuo });
+        });
+
+        // Ajuste de diferencia
+        let diferencia = Math.round((restante - sumaParcial) * 100); // en centavos
+        proporciones.sort((a, b) => b.residuo - a.residuo);
+
+        for (let i = 0; i < diferencia; i++) {
+            proporciones[i % proporciones.length].valor += 0.01;
+        }
+
+        // Asignar a inputs
+        proporciones.forEach(p => {
+            p.item.$input.val(p.valor.toFixed(2));
+        });
+
+        // Mostrar total formateado
+        $(this).val(nuevoTotal.toFixed(2));
+    });
+
 
     // Recalcular el costo total al modificar individualmente los costos
     $('.costo-item').on('change', function() {
@@ -331,6 +419,7 @@ $(function(){
 
         $(`.costo-total[data-group="${grupo}"]`).val(totalGrupo.toFixed(2));
     });
+
 });
 </script>
 @endsection

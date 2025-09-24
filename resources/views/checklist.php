@@ -406,26 +406,26 @@
       setRaw('');
     }
   }
-// lectura de imágenes del clipboard (solo navegadores que soporten ClipboardItem con tipos de imagen)
-async function readImageFromClipboard() {
-  try {
-    const items = await navigator.clipboard.read(); // requiere permisos y contexto seguro
-    for (const item of items) {
-      for (const type of item.types) {
-        if (type.startsWith('image/')) {
-          const blob = await item.getType(type);
-          handleImageFile(blob);
-          return;
+  // lectura de imágenes del clipboard (solo navegadores que soporten ClipboardItem con tipos de imagen)
+  async function readImageFromClipboard() {
+    try {
+      const items = await navigator.clipboard.read(); // requiere permisos y contexto seguro
+      for (const item of items) {
+        for (const type of item.types) {
+          if (type.startsWith('image/')) {
+            const blob = await item.getType(type);
+            handleImageFile(blob);
+            return;
+          }
         }
       }
+      alert('No se encontró imagen en el portapapeles');
+    } catch (e) {
+      console.error(e);
+      alert('Clipboard API no soportada o permiso denegado');
     }
-    alert('No se encontró imagen en el portapapeles');
-  } catch (e) {
-    console.error(e);
-    alert('Clipboard API no soportada o permiso denegado');
   }
-}
-document.getElementById("btnLeerClipboard").addEventListener("click", readImageFromClipboard);
+  document.getElementById("btnLeerClipboard").addEventListener("click", readImageFromClipboard);
 
   // al cargar, poner foco en la zona de pegado para facilitar Ctrl+V
   pasteZone.focus();

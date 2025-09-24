@@ -81,14 +81,14 @@
 			</td>
 			<td class="text-center">
 				@if(optional($model->order)->inventario)
-				<a href="{{ '/operations/inventario?sn='.$model->order->inventario->sn }}" class="btn btn-link btn-sm" title="Ver Inventario">{{ $model->order->inventario->sn }}</a>
+				<a href="{{ '/operations/inventory?sn='.$model->order->inventario->sn }}" class="btn btn-link btn-sm" title="Ver Inventario">{{ $model->order->inventario->sn }}</a>
 				@else
 				LIBRE
 				@endif
 			</td>
 			<td>
 				<a href="{{ route('vales.print', $model->id) }}" target="_blank" class="btn btn-outline-success btn-sm" title="IMPRIMIR">{!! $icons['printer'] !!}</a>
-				@if($model->status_sunat!='ANUL' and $model->status_sunat!='CIERR')
+				@if($model->status_sunat!='ANUL' and $model->status_sunat!='CERR')
 						<a href="#" class="btn-anular btn btn-outline-danger btn-sm" title="ANULAR">{!! $icons['remove'] !!}</a>
 				@endif
 			</td>
