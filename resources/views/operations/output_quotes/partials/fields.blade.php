@@ -1,7 +1,7 @@
 {!! Form::hidden('my_company', auth()->user()->my_company, ['id'=>'my_company']) !!}
 {!! Form::hidden('is_downloadable', 0, ['id'=>'is_downloadable']) !!}
 {!! Form::hidden('with_tax', 0, ['id'=>'with_tax']) !!}
-{!! Form::hidden('company_id', null, ['id'=>'company_id']) !!}
+{!! Form::hidden('company_id', null, ['id'=>'client_id']) !!}
 {!! Form::hidden('car_id', null, ['id'=>'car_id']) !!}
 <!-- {!! Form::hidden('sn', null, ['id'=>'sn']) !!} -->
 
@@ -76,6 +76,9 @@
 	</div>
 	<div class="col-sm-2">
 		{!! Field::select('insurance_company_id', $insurance_companies, ['empty'=>'Seleccionar', 'label'=>'Cia Seguro', 'class'=>'form-control-sm', 'id'=>'seguro']) !!}
+	</div>
+	<div class="col-sm-2">
+		{!! Field::text('claim_number', ['label'=>'#Siniestro', 'class'=>'form-control-sm', 'id'=>'claim_number']) !!}
 	</div>
 	<div class="col-sm-1 d-none">
 		{!! Field::select('preventivo', config('options.preventivos'), ['empty'=>'Seleccionar', 'label'=>'Preventivo', 'class'=>'form-control-sm']) !!}

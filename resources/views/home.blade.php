@@ -34,7 +34,7 @@
             <div class="card-group">
                 <div class="card">
                     <div class="card-body text-center">
-                        <a href="#" class="card-title text-dark">INVENTARIOS
+                        <a href="{{ route('inventory.index') }}" class="card-title text-dark">INVENTARIOS
                         <img src="/img/ordenes.png" class="card-img-top"></a>
                     </div>
                 </div>

@@ -52,7 +52,7 @@
         $repuestos_compania = $detalles_repuestos->where('value', '=', 0);
         @endphp
 
-<a href="{{ route( 'output_quotes.edit' , $quote->id ) }}" class="btn btn-outline-primary btn-sm mb-3" title="Editar Presupuesto {{ $quote->type_service }}">Editar {!! $quote->sn !!} {{ $quote->type_service }}</a>
+<a href="{{ route( 'output_quotes.edit' , $quote->id ) }}" class="btn btn-link btn-sm" title="Editar Presupuesto {{ $quote->type_service }}">EDITAR {!! $quote->sn !!} / {{ $quote->type_service }}</a>
 
 <table class="{{ config('options.styles.table') }}">
     <thead class="{{ config('options.styles.thead') }}">

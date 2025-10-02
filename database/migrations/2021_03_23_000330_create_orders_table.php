@@ -29,6 +29,7 @@ class CreateOrdersTable extends Migration
             $table->string('placa');
             $table->decimal('kilometraje', 12,0);
             $table->string('type_service');
+            $table->string('claim_number');
             $table->string('preventivo');
             $table->bigInteger('branch_id')->unsigned();
             $table->bigInteger('shipper_id')->unsigned();

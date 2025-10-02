@@ -86,6 +86,7 @@ $models_7 = $models->where('status', 'ENTR');
 
 				<div class="tab-pane fade show active" id="recepcion" role="tabpanel" aria-labelledby="pend-tab">
 					<h3>INVENTARIO VEHICULAR <a href="{{ route('inventory.create') }}" type="button" class="btn btn-primary btn-sm btn-circle">{!! $icons['add'] !!}</a></h3>
+					<p>Listado de vehículos cuyos inventarios aún no han sido aprobados por el cliente</p>
 					<div class="row">
 						@foreach ($models_1 as $model)
 						@php
@@ -127,6 +128,7 @@ $models_7 = $models->where('status', 'ENTR');
 				</div>
 				<div class="tab-pane fade" id="diagnostico" role="tabpanel" aria-labelledby="diag-tab">
 					<h3>DIAGNÓSTICO (PRESUPUESTO)</h3>
+					<p>Listado de vehículos cuyos presupuestos aún están incompletos</p>
 					<div class="row">
 						@foreach ($models_2->sortByDesc('diag_at') as $model)
 						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
@@ -173,6 +175,7 @@ $models_7 = $models->where('status', 'ENTR');
 				</div> -->
 				<div class="tab-pane fade" id="pre_aprobacion" role="tabpanel" aria-labelledby="repu-tab">
 					<h3>APROBACIÓN DEL SEGURO</h3>
+					<p>Listado de vehículos cuyos presupuestos aún no han sido aprobados por la compañía de seguros</p>
 					<div class="row">
 						@foreach ($models_3_2->sortByDesc('pre_approved_at') as $model)
 						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
@@ -199,6 +202,7 @@ $models_7 = $models->where('status', 'ENTR');
 				</div>
 				<div class="tab-pane fade" id="aprobacion" role="tabpanel" aria-labelledby="aprob-tab">
 					<h3>APROBACION DEL CLIENTE</h3>
+					<p>Listado de vehículos cuyos presupuestos aún no han sido aprobados por el cliente</p>
 					<div class="row">
 						@foreach ($models_4->sortByDesc('approved_at') as $model)
 						@php
@@ -224,6 +228,7 @@ $models_7 = $models->where('status', 'ENTR');
 				</div>
 				<div class="tab-pane fade" id="reparacion" role="tabpanel" aria-labelledby="repar-tab">
 					<h3>REPARACION</h3>
+					<p>Listado de vehículos que están en proceso de reparación</p>
 					<div class="row">
 						@foreach ($models_5->sortByDesc('repar_at') as $model)
 						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
@@ -245,6 +250,7 @@ $models_7 = $models->where('status', 'ENTR');
 				</div>
 				<div class="tab-pane fade" id="control" role="tabpanel" aria-labelledby="contr-tab">
 					<h3>CONTROL DE CALIDAD</h3>
+					<p>Listado de vehículos ya reparados y están pendientes del control de calidad</p>
 					<div class="row">
 						@foreach ($models_6->sortByDesc('checked_at') as $model)
 						<div class="col-sm-6 col-md-4 item-buscable" data-placa="{{ optional($model->car)->placa }}" data-company="{{ optional($model->company)->company_name }}">
@@ -266,6 +272,7 @@ $models_7 = $models->where('status', 'ENTR');
 				</div>
 				<div class="tab-pane fade" id="entrega" role="tabpanel" aria-labelledby="entr-tab">
 					<h3>ENTREGA</h3>
+					<p>Listado de vehículos listos para entregar al cliente</p>
 					<div class="row">
 						@foreach ($models_7->sortByDesc('sent_at') as $model)
 						@php

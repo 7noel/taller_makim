@@ -336,7 +336,7 @@
 			</tbody>
 		</table>
 		<br>
-		@if($model->type_service=='SINIESTRO' and isset($model->diagnostico->franquicia_min) and isset($model->diagnostico->franquicia_pct) and isset($model->diagnostico->franquicia_total))
+		@if($model->type_service=='SINIESTRO' and isset($model->diagnostico->franquicia_min) and isset($model->diagnostico->franquicia_pct) and isset($model->diagnostico->franquicia_total) and $model->diagnostico->franquicia_min > 0)
 			<?php 
 			$total_oc = 0;
 			foreach ($model->diagnostico->oc as $key => $oc) {

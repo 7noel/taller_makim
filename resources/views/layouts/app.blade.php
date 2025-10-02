@@ -173,30 +173,30 @@ $faviconType = @mime_content_type($faviconPath) ?: 'image/png';
         }
 
         .thumbnail {
-    position: relative;
-    cursor: pointer;
-    margin: 5px;
-    width: 100px; /* Ancho de la miniatura */
-    height: 56.25px; /* Proporción 16:9 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Evitar que se salgan las imágenes */
-    background-color: black; /* Fondo negro */
-    border-radius: 4px; /* Opcional: esquinas redondeadas */
-}
+            position: relative;
+            cursor: pointer;
+            margin: 5px;
+            width: 100px; /* Ancho de la miniatura */
+            height: 56.25px; /* Proporción 16:9 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Evitar que se salgan las imágenes */
+            background-color: black; /* Fondo negro */
+            border-radius: 4px; /* Opcional: esquinas redondeadas */
+        }
 
-.thumbnail img, .thumbnail video {
-    max-width: 100%; /* No exceder el ancho de la miniatura */
-    max-height: 100%; /* No exceder la altura de la miniatura */
-    object-fit: cover; /* Mantener la proporción */
-}
-.thumbnails {
-    display: flex;
-    flex-wrap: wrap; /* Permitir que se envuelvan las miniaturas */
-    justify-content: center; /* Centrar miniaturas */
-    margin-top: 10px; /* Espaciado superior */
-}
+        .thumbnail img, .thumbnail video {
+            max-width: 100%; /* No exceder el ancho de la miniatura */
+            max-height: 100%; /* No exceder la altura de la miniatura */
+            object-fit: cover; /* Mantener la proporción */
+        }
+        .thumbnails {
+            display: flex;
+            flex-wrap: wrap; /* Permitir que se envuelvan las miniaturas */
+            justify-content: center; /* Centrar miniaturas */
+            margin-top: 10px; /* Espaciado superior */
+        }
 
         .remove-btn { position: absolute; top: 5px; right: 5px; }
         .full-screen-btn { position: absolute; bottom: 5px; right: 5px; }
@@ -282,31 +282,31 @@ $faviconType = @mime_content_type($faviconPath) ?: 'image/png';
             color: white;
         }
         .dataTables_length {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.dataTables_length label {
-    margin-bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.dataTables_filter {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.dataTables_filter label {
-    margin-bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter {
-    margin-bottom: 1rem;
-}
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dataTables_length label {
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dataTables_filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dataTables_filter label {
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter {
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -981,16 +981,19 @@ $(document).ready(function () {
     if (type_service === 'PREVENTIVO') {
         $('#preventivo').parent().parent().removeClass("d-none");
         $('#seguro').parent().parent().addClass("d-none");
+        $('#claim_number').parent().parent().addClass("d-none");
         $('#preventivo').attr("required", "required");
         $('#seguro').removeAttr("required");
     } else if (type_service === 'SINIESTRO') {
         $('#preventivo').parent().parent().addClass("d-none");
         $('#seguro').parent().parent().removeClass("d-none");
+        $('#claim_number').parent().parent().removeClass("d-none");
         $('#preventivo').removeAttr("required");
         $('#seguro').attr("required", "required");
     } else {
         $('#preventivo').parent().parent().addClass("d-none");
         $('#seguro').parent().parent().addClass("d-none");
+        $('#claim_number').parent().parent().addClass("d-none");
         // $('#preventivo').removeAttr("required");
         // $('#seguro').removeAttr("required");
     }
@@ -1001,16 +1004,19 @@ $(document).ready(function () {
         if ('PREVENTIVO' == $('#type_service').val()) {
             $('#preventivo').parent().parent().removeClass("d-none")
             $('#seguro').parent().parent().addClass( "d-none")
+            $('#claim_number').parent().parent().addClass("d-none")
             $('#preventivo').attr("required", "required")
             $('#seguro').removeAttr("required", "required")
         } else if ('SINIESTRO' == $('#type_service').val()) {
             $('#preventivo').parent().parent().addClass( "d-none")
             $('#seguro').parent().parent().removeClass( "d-none")
+            $('#claim_number').parent().parent().removeClass("d-none")
             $('#preventivo').removeAttr("required", "required")
             $('#seguro').attr("required", "required")
         } else {
             $('#preventivo').parent().parent().addClass( "d-none")
             $('#seguro').parent().parent().addClass( "d-none")
+            $('#claim_number').parent().parent().addClass("d-none")
             $('#preventivo').removeAttr("required", "required")
             $('#seguro').removeAttr("required", "required")
         }
