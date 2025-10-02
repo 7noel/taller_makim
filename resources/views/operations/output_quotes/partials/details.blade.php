@@ -95,14 +95,14 @@
   </thead>
   <tbody>
     @php $ocs = old('oc', $model->diagnostico->oc ?? []); @endphp
-    @forelse($ocs as $i => $oc)
+    @forelse($ocs as $key => $oc)
       <tr>
         <td>
-          <input type="text" name="diagnostico[oc][{{ $i }}][descripcion]" class="form-control form-control-sm text-uppercase" 
+          <input type="text" name="diagnostico[oc][{{ $key }}][descripcion]" class="form-control form-control-sm text-uppercase" 
                  value="{{ $oc->descripcion ?? '' }}">
         </td>
         <td>
-          <input type="number" step="0.01" min="0" name="diagnostico[oc][{{ $i }}][monto]" 
+          <input type="number" step="0.01" min="0" name="diagnostico[oc][{{ $key }}][monto]" 
                  class="form-control form-control-sm js-oc-monto text-right" 
                  value="{{ $oc->monto ?? 0 }}">
         </td>

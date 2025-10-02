@@ -182,6 +182,7 @@ class OrderRepo extends BaseRepo{
 					$gross_precio += $detail['price'] * $detail['quantity'];
 					$subtotal += round($vt, 2);
 					$total += round($t, 2);
+					// echo('Primer item CODE: '.$detail['product_id'].' VALOR: '.$vt.', SUMA: '.$gross_value.'<br>');
 					
 				}
 				if (isset($data['with_tax']) and $data['with_tax'] == 1) {
@@ -202,6 +203,7 @@ class OrderRepo extends BaseRepo{
 					$data['details'][$key]['stock_id'] = $s->id;
 				}
 			}
+			// dd($gross_value);
 			$data['gross_value'] = round($gross_value, 2);
 			// $data['discount'] = round($discount, 2);
 			$data['subtotal'] = round($subtotal, 2);
@@ -209,6 +211,7 @@ class OrderRepo extends BaseRepo{
 			$data['total'] = round($total, 2);
 			$data['tax'] = $data['total'] - $data['subtotal'];
 		}
+		// dd($data);
 
 		// Actualizando Status
 		if (explode('.', \Request::route()->getName())[0] == 'output_orders') {
