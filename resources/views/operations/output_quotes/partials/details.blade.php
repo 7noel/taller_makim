@@ -60,6 +60,8 @@
 </table>
 </div>
 
+{!! Form::hidden('items', $i, ['id'=>'items']) !!}
+
 <table class="table table-condensed table-sm">
 	<thead class="thead-light">
 		<tr>
@@ -165,8 +167,6 @@
   <div>Mínimo: <span id="minimo_display">0.00</span></div>
 </div>
 
-
-{!! Form::hidden('items', $i, ['id'=>'items']) !!}
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalx" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

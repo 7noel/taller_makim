@@ -46,7 +46,7 @@ $models_7 = $models->where('status', 'ENTR');
 					<button class="nav-link" id="repu-tab" data-toggle="tab" data-target="#repuestos" type="button" role="tab" aria-controls="repuestos" aria-selected="false"><i class="fas fa-box"></i> <br> <span class="badge badge-light">{{ $models_3->count() }}</span> </button>
 				</li> -->
 				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="repu-tab" data-toggle="tab" data-target="#pre_aprobacion" type="button" role="tab" aria-controls="pre_aprobacion" aria-selected="false"><i class="fas fa-check"></i> <br> <span class="badge badge-light">{{ $models_3_2->count() }}</span> </button>
+					<button class="nav-link" id="preap-tab" data-toggle="tab" data-target="#pre_aprobacion" type="button" role="tab" aria-controls="pre_aprobacion" aria-selected="false"><i class="fas fa-check"></i> <br> <span class="badge badge-light">{{ $models_3_2->count() }}</span> </button>
 				</li>
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="aprob-tab" data-toggle="tab" data-target="#aprobacion" type="button" role="tab" aria-controls="aprobacion" aria-selected="false"><i class="fa-solid fa-check-double"></i> <br> <span class="badge badge-light">{{ $models_4->count() }}</span> </button>
@@ -303,139 +303,6 @@ $models_7 = $models->where('status', 'ENTR');
 </div>
 
 <script>
-// (function($){
-//   // === Utils ===
-//   function norm(str){
-//     return (str || '')
-//       .toString()
-//       .normalize('NFD')
-//       .replace(/[\u0300-\u036f]/g, '')
-//       .toUpperCase()
-//       .trim();
-//   }
-
-//   function highlight($el){
-//     $el.addClass('busca-highlight');
-//     setTimeout(function(){ $el.removeClass('busca-highlight'); }, 1800);
-//   }
-
-//   function showTabByPaneId(paneId){
-//     // Busca <button .nav-link data-target="#paneId">
-//     var $btn = $('.nav-tabs .nav-link[data-target="#' + paneId + '"]');
-//     if($btn.length){
-//       $btn.trigger('click'); // Bootstrap 4 tabs
-//       return true;
-//     }
-//     return false;
-//   }
-
-//   function revealItem($item){
-//     var $pane = $item.closest('.tab-pane');
-//     if(!$pane.length) return;
-
-//     var paneId = $pane.attr('id');
-//     if(showTabByPaneId(paneId)){
-//       setTimeout(function(){
-//         $('html,body').animate({ scrollTop: $item.offset().top - 100 }, 300);
-//         highlight($item);
-//       }, 120);
-//     }
-//   }
-
-
-//   // Estado de coincidencias
-//   var matches = [];
-//   var idx = -1;
-
-//   function actualizarNavegacion(){
-//     if(matches.length > 1){
-//       $('#nav-resultados').removeClass('d-none');
-//     } else {
-//       $('#nav-resultados').addClass('d-none');
-//     }
-
-//     var estado = matches.length
-//       ? 'Coincidencias: ' + (idx + 1) + ' / ' + matches.length
-//       : ($('#txt-busqueda').val().trim() ? 'Sin resultados' : '');
-//     if(estado){
-//       $('#busqueda-estado').text(estado).removeClass('d-none');
-//     } else {
-//       $('#busqueda-estado').addClass('d-none').text('');
-//     }
-//   }
-
-//   function irA(i){
-//     if(matches.length === 0) return;
-//     idx = (i + matches.length) % matches.length;
-//     revealItem(matches[idx]);
-//     actualizarNavegacion();
-//   }
-
-//   $('#btn-prev').on('click', function(){ irA(idx - 1); });
-//   $('#btn-next').on('click', function(){ irA(idx + 1); });
-
-//   // === Búsqueda reactiva (sin form) ===
-//   var debounceTimer = null;
-//   function ejecutarBusqueda(q){
-//     matches = [];
-//     idx = -1;
-
-//     if(!q){
-//       actualizarNavegacion();
-//       return;
-//     }
-
-//     $('.item-buscable').each(function(){
-//       var $it = $(this);
-//       var placa = norm($it.data('placa'));
-//       var company = norm($it.data('company'));
-
-//       if(placa.indexOf(q) !== -1 || company.indexOf(q) !== -1){
-//         matches.push($it);
-//       }
-//     });
-
-//     if(matches.length){
-//       irA(0);
-//     } else {
-//       actualizarNavegacion();
-//     }
-//   }
-
-//   // Dispara búsqueda al escribir o pegar (con debounce)
-//   $('#txt-busqueda').on('input paste', function(){
-//     var q = norm($(this).val());
-
-//     clearTimeout(debounceTimer);
-//     debounceTimer = setTimeout(function(){
-//       ejecutarBusqueda(q);
-//     }, 120); // ajusta el delay si deseas
-//   });
-
-//   // Navegación rápida con teclado (opcional):
-//   // Enter -> siguiente; Shift+Enter -> anterior
-//   $('#txt-busqueda').on('keydown', function(e){
-//     if(e.key === 'Enter'){
-//       e.preventDefault();
-//       if(e.shiftKey) irA(idx - 1); else irA(idx + 1);
-//     }
-//   });
-
-//   // CSS highlight
-//   var css = `
-//     .busca-highlight {
-//       animation: buscaFlash 1.2s ease-in-out 1;
-//       outline: 2px solid rgba(255,193,7,.9);
-//       box-shadow: 0 0 0 4px rgba(255,193,7,.35);
-//       transition: outline .2s ease, box-shadow .2s ease;
-//     }
-//     @keyframes buscaFlash {
-//       0%   { background-color: rgba(255,193,7,.25); }
-//       100% { background-color: transparent; }
-//     }
-//   `;
-//   $('<style>').text(css).appendTo(document.head);
-// })(jQuery);
 
 (function($){
   // === Utils (déjalas como las tienes si ya existen) ===

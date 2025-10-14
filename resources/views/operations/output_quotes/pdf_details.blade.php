@@ -20,9 +20,10 @@
 
     <style>
 		@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&family=Roboto:wght@100&display=swap');
-		@page { margin-top: 30px; }
+		@page { margin-top: 30px; margin-bottom: 30px;}
 		body{
-			padding-top: 0px;
+			padding: 0px;
+			margin: 0px;
 			border-top: -10px;
 			/*font-family: 'Montserrat', sans-serif;*/
 			font-family: 'Roboto Condensed', sans-serif;
@@ -34,6 +35,7 @@
 		}
 
         .header{
+        	page-break-after: avoid !important;
 			font-family: 'Arial', sans-serif;
         }
 
@@ -65,6 +67,7 @@
             white-space: normal;
         }
         .data{
+        	page-break-after: avoid !important;
         	font-family: 'Arial', sans-serif;
         	font-size: 10px;
         }
@@ -132,6 +135,19 @@
 		.table-franquicia td{
 			padding-left: 10px;
 		}
+
+	    table, tr, td, th {
+	        page-break-inside: avoid !important;
+	    }
+
+	    .table-items {
+	        page-break-before: auto !important;
+	        page-break-after: auto !important;
+	    }
+
+	    .container-items {
+	        margin-top: 5px !important;
+	    }
     </style>
 </head>
 <body>

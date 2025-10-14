@@ -61,7 +61,7 @@
         <th>Venta</th>
         <th width="100px">Costo S/</th>
         <th>Asignado a:</th>
-        <th>¿Generar Voucher?</th>
+        <th>¿Generar Vale?</th>
     </thead>
     <tbody>
         {{-- DETALLES NORMALES agrupados por comment --}}
@@ -97,7 +97,7 @@
                         <td>
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input voucher-grupo" id="voucherGrupo{{ $idGrupo }}" data-group="{{ $idGrupo }}">
-                                <label class="custom-control-label" for="voucherGrupo{{ $idGrupo }}">Voucher</label>
+                                <label class="custom-control-label" for="voucherGrupo{{ $idGrupo }}">Vales</label>
                             </div>
                         </td>
                     </tr>
@@ -133,7 +133,7 @@
                                 'id' => 'customSwitch'.$detail->id,
                                 'data-group' => $idGrupo
                             ]) !!}
-                            <label class="custom-control-label" for="customSwitch{{$detail->id}}">Voucher</label>
+                            <label class="custom-control-label" for="customSwitch{{$detail->id}}">Vale</label>
                         </div>
                         @endif
                     </td>
@@ -159,7 +159,7 @@
         @endif
 
         {{-- Repuestos por compañía --}}
-        @if($repuestos_compania->isNotEmpty() and 1==0)
+        @if($repuestos_compania->isNotEmpty())
             <tr class="table-secondary font-weight-bold">
                 <td colspan="6">REPUESTOS POR COMPAÑÍA</td>
             </tr>

@@ -307,6 +307,20 @@ $faviconType = @mime_content_type($faviconPath) ?: 'image/png';
         .dataTables_wrapper .dataTables_filter {
             margin-bottom: 1rem;
         }
+
+        /*Para las placas*/
+.is-warning {
+    border-width: 2px !important;
+    border-color: #ff9800 !important;
+    background-color: #fffaf0 !important; /* tono ligeramente amarillento */
+}
+
+.is-warning:focus {
+    border-color: #ff9800 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 152, 0, 0.5) !important;
+}
+
+
     </style>
 </head>
 <body>
@@ -384,10 +398,10 @@ $faviconType = @mime_content_type($faviconPath) ?: 'image/png';
                 </div>
             </div>
         </nav>
-<script> // variables globales
-    let $wrap = $('#clientModal');
-    let $btn = $('#btn-crear-cliente');
-</script>
+        <script> // variables globales
+            let $wrap = $('#clientModal');
+            let $btn = $('#btn-crear-cliente');
+        </script>
         <main class="py-4">
             @yield('content')
         </main>
@@ -464,27 +478,57 @@ $(document).ready(function () {
         }
     });
 
+    // $('#placa, #txtplaca').on('keyup', function (e) {
+    //     let $input = $(this);
+    //     let valor = $input.val().toUpperCase(); // Convertir a mayúsculas
+
+    //     // Filtrar caracteres no permitidos y limitar a 6 caracteres
+    //     let nuevoValor = valor.replace(/[^A-Z0-9]/g, '').slice(0, 6);
+
+    //     // Actualizar el valor del input si hubo modificaciones
+    //     $input.val(nuevoValor);
+
+    //     // Validar estructura (1 letra + 4 o 5 alfanuméricos)
+    //     let regex = /^[A-Z0-9]{5,6}$/;
+
+    //     if (nuevoValor.length === 0) {
+    //         $input[0].setCustomValidity(""); // No mostrar error si está vacío
+    //     } else if (!regex.test(nuevoValor)) {
+    //         $input[0].setCustomValidity("Debe tener 5 o 6 caracteres alfanuméricos.");
+    //     } else {
+    //         $input[0].setCustomValidity("");
+    //     }
+    // });
     $('#placa, #txtplaca').on('keyup', function (e) {
         let $input = $(this);
-        let valor = $input.val().toUpperCase(); // Convertir a mayúsculas
+        let valor = $input.val().toUpperCase();
 
-        // Filtrar caracteres no permitidos y limitar a 6 caracteres
-        let nuevoValor = valor.replace(/[^A-Z0-9]/g, '').slice(0, 6);
+        // Permitir guion solo para lectura, pero eliminarlo internamente
+        let limpio = valor.replace(/[^A-Z0-9-]/g, '');
+        let nuevoValor = limpio.replace(/-/g, '').slice(0, 7); // sin guiones, máx 7 chars
 
-        // Actualizar el valor del input si hubo modificaciones
         $input.val(nuevoValor);
 
-        // Validar estructura (1 letra + 4 o 5 alfanuméricos)
-        let regex = /^[A-Z0-9]{5,6}$/;
+        // Validaciones posibles
+        let regexStandard = /^[A-Z]{3}[0-9]{3}$/; // Ej: BPP900
+        let regexAlt = /^[A-Z]{2}[0-9]{4,5}$/;   // Ej: IL26642 o AB1234
 
         if (nuevoValor.length === 0) {
-            $input[0].setCustomValidity(""); // No mostrar error si está vacío
-        } else if (!regex.test(nuevoValor)) {
-            $input[0].setCustomValidity("Debe tener 5 o 6 caracteres alfanuméricos.");
-        } else {
             $input[0].setCustomValidity("");
+            $input.removeClass('is-warning');
+        } else if (regexStandard.test(nuevoValor)) {
+            $input[0].setCustomValidity("");
+            $input.removeClass('is-warning');
+        } else if (regexAlt.test(nuevoValor)) {
+            // válido pero inusual → advertencia suave
+            $input[0].setCustomValidity("");
+            $input.addClass('is-warning');
+        } else {
+            $input[0].setCustomValidity("Formato no reconocido (revise la placa).");
+            $input.removeClass('is-warning');
         }
     });
+
     // let input = document.getElementById('placa');
     // input.addEventListener('input', function(event) {
     //     let valor = input.value.toUpperCase(); // Convertir a mayúsculas automáticamente
@@ -1931,6 +1975,7 @@ function getCar() {
                 if ($('#company_name').val().length == 0) {
                     // alert("Placa no registrada en el sistema")
                     $('#txtplaca').val($('#placa').val())
+                    $('#txtplaca').val($('#placa').val()).trigger('keyup')
                     $('#spanPlaca').text($('#placa').val())
                     $('#placa').val('')
                     $('#placa').focus()
