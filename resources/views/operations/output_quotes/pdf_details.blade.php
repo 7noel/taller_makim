@@ -148,6 +148,22 @@
 	    .container-items {
 	        margin-top: 5px !important;
 	    }
+	    
+	    /* Evita que una categoría se divida */
+		.table-category, .table-section {
+		  page-break-after: avoid !important;
+		  page-break-before: auto !important;
+		}
+
+		/* Asegura que el encabezado de tabla se repita correctamente */
+		thead { display: table-header-group; }
+		tfoot { display: table-row-group; }
+
+		/* Evita espacio innecesario entre secciones */
+		br + table { margin-top: 5px !important; }
+
+		/* Márgenes del encabezado principal */
+		.header, header { margin-bottom: 10px !important; page-break-after: avoid !important; }
     </style>
 </head>
 <body>
@@ -287,7 +303,7 @@
         {{-- Grupo de is_downloadable = 0 --}}
         @php $item = 1; @endphp
 		@foreach($grupos as $comment => $detalles)
-		    <tr>
+		    <tr class="table-category">
 		        <td class="border title" colspan="5"><strong>{{ $comment }}</strong></td>
 		    </tr>
 		    @foreach($detalles as $detail)
