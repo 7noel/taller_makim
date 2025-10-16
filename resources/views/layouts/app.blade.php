@@ -509,17 +509,23 @@ $(document).ready(function () {
 
         $input.val(nuevoValor);
 
-        // Validaciones posibles
-        let regexStandard = /^[A-Z]{3}[0-9]{3}$/; // Ej: BPP900
-        let regexAlt = /^[A-Z]{2}[0-9]{4,5}$/;   // Ej: IL26642 o AB1234
+        // === Expresiones Regulares ===
+        // 6 caracteres: autos (empieza con letra), motos (termina con letra), debe tener al menos 2 letras
+        const reRegular = /^(?=(?:.*[A-Z]){2,})(?=.*[0-9])[A-Z0-9]{6}$/;
+
+        // 5 caracteres: vehículos del Estado con letras y números (mínimo 2 letras)
+        const reEstado = /^(?=(?:.*[A-Z]){2,})(?=.*[0-9])[A-Z0-9]{5}$/;
+
+        // 7 caracteres: casos excepcionales (empieza con 2 letras)
+        const reExcep = /^[A-Z]{2}[A-Z0-9]{5}$/;
 
         if (nuevoValor.length === 0) {
             $input[0].setCustomValidity("");
             $input.removeClass('is-warning');
-        } else if (regexStandard.test(nuevoValor)) {
+        } else if (reRegular.test(nuevoValor) || reEstado.test(nuevoValor)) {
             $input[0].setCustomValidity("");
             $input.removeClass('is-warning');
-        } else if (regexAlt.test(nuevoValor)) {
+        } else if (reExcep.test(nuevoValor)) {
             // válido pero inusual → advertencia suave
             $input[0].setCustomValidity("");
             $input.addClass('is-warning');
