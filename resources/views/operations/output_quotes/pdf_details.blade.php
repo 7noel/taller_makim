@@ -170,14 +170,14 @@
 	<script type="text/php">
 	if ( isset($pdf) ) {
 	    $pdf->page_script('
-	        $font = $fontMetrics->get_font("helvetica", "normal");
+	        $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
 	        $size = 8;
 	        $pageText = "Página $PAGE_NUM de $PAGE_COUNT";
 	        $width = $fontMetrics->get_text_width($pageText, $font, $size);
 
 	        // Posición centrada en el ancho de la página
 	        $x = ($pdf->get_width() - $width) / 2;
-	        $y = $pdf->get_height() - 40;  // ≈30pt desde el borde inferior
+	        $y = $pdf->get_height() - 25;  // ≈30pt desde el borde inferior
 	        $pdf->text($x, $y, $pageText, $font, $size);
 	    ');
 	}
