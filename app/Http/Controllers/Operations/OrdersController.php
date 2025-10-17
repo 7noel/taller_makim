@@ -340,6 +340,7 @@ class OrdersController extends Controller {
 		// \PDF::setOptions(['isPhpEnabled' => true]);
 		// $pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
 		$pdf = \PDF::loadView('operations.output_quotes.pdf_details', compact('model', 'cuentas'));
+		if (ob_get_length()) ob_end_clean();
 		return $pdf->stream();
 	}
 
