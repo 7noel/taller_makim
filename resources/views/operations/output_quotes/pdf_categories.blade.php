@@ -169,10 +169,17 @@
 <body>
 	<script type="text/php">
 	if ( isset($pdf) ) {
-		$pdf->page_script('
-			$font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-			$pdf->text(270, 810, "Página $PAGE_NUM de $PAGE_COUNT", $font, 8);
-		');
+	    $pdf->page_script('
+	        $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
+	        $size = 8;
+	        $pageText = "Página $PAGE_NUM de $PAGE_COUNT";
+	        $width = $fontMetrics->get_text_width($pageText, $font, $size);
+
+	        // Posición centrada en el ancho de la página
+	        $x = ($pdf->get_width() - $width) / 2;
+	        $y = $pdf->get_height() - 25;  // ≈30pt desde el borde inferior
+	        $pdf->text($x, $y, $pageText, $font, $size);
+	    ');
 	}
 	</script>
 	<div class="header">
@@ -198,7 +205,7 @@
 			</tr>
 		</table>
 	</div>
-	<br>
+
 	<table class="data">
 		<tr>
 			<td class="label">Tipo de Servicio:</td>
@@ -256,7 +263,7 @@
 		@endif
 	</table>
 	</div>
-	<br>
+
 	<div class="container-items">
 @php
     // Separar los detalles en dos grupos

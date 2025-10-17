@@ -11,134 +11,175 @@
 		    $logoAbs = public_path('img/favicon.png');
 		}
      ?>
-	<link rel="icon" type="image/jpeg" href="./img/logo_makim_01.jpg" />
-
 	<title>Presupuesto: {{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 
-    <style>
-		@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&family=Roboto:wght@100&display=swap');
-		@page { margin-top: 30px; }
-		body{
-			padding-top: 0px;
-			border-top: -10px;
-			/*font-family: 'Montserrat', sans-serif;*/
-			font-family: 'Roboto Condensed', sans-serif;
-/*            font-family: Arial, sans-serif;*/
-			/*font-family: 'Roboto', sans-serif;*/
-			font-size: 12px;
-			background: white;
-			/*border: solid 1px black;*/
-		}
+	<style>
+	/* ——— Configuración de página ——— */
+	@page {
+	  margin-top: 30px;
+	  margin-bottom: 30px;
+	}
 
-        .header{
-			font-family: 'Arial', sans-serif;
-        }
+	/* ——— Cuerpo del documento ——— */
+	body {
+	  padding: 0;
+	  margin: 0;
+	  border-top: -10px;
+	  font-family: 'Roboto Condensed', sans-serif;
+	  font-size: 12px;
+	  background: white;
+	}
 
-		footer{
-			/*border: 1px solid red;*/
-			/*position: fixed;*/
-			/*bottom: 60px;*/
-			position: fixed;
-			bottom: 0cm;
-			left: 0cm;
-			right: 0cm;
-			height: 2cm;
-			/*background-color: #2a0927;*/
-			/*color: white;*/
-			/*text-align: center;*/
-			/*line-height: 35px;*/
-		}
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            white-space: nowrap;
-        }
-        td {
-            /*padding: 4px;*/
-            vertical-align: middle;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-        .data{
-        	font-family: 'Arial', sans-serif;
-        	font-size: 10px;
-        }
-        .col2{
-        	width: 50%;
-        }
-        .label{
-        	font-weight: bold;
-        	width: 15%;
-        	text-transform: uppercase;
-        }
-        .table-items{
-            border: 1px solid #000;
-        }
-        .border{
-            border: 1px solid #000;
-        }
-        .table-items .th1{
-        	width: 6%;
-        	text-align: center;
-        }
-        .table-items .th2{
-/*        	width: 5%;*/
-        }
-        .table-items .th3{
-        	width: 10%;
-        	text-align: center;
-        }
-        .table-items .th4{
-        	width: 10%;
-        	text-align: center;
-        }
-        .table-items .th5{
-        	width: 10%;
-        	text-align: center;
-        }
-        .table-items .th6{
-        	width: 10%;
-        	text-align: center;
-        }
+	/* ——— Encabezado ——— */
+	.header {
+	  page-break-after: avoid !important;
+	  font-family: 'Arial', sans-serif;
+	  margin-bottom: 10px !important;
+	}
 
-        .table-items .title{
-        	padding-left: 45px;
-        }
+	/* ——— Pie de página ——— */
+	footer {
+	  position: fixed;
+	  bottom: 0cm;
+	  left: 0cm;
+	  right: 0cm;
+	  height: 2cm;
+	}
 
-        .center{
-        	text-align: center;
-        }
-        .border{
-            border: 1px solid #000;
-        }
+	/* ——— Tablas generales ——— */
+	table {
+	  width: 100%;
+	  border-collapse: collapse;
+	  table-layout: fixed;
+	  white-space: normal;
+	}
 
-		.mt-5{
-			margin-top: 5px;
-		}
-        .header-section {
-        	background-color: lightgray;
-        	text-align: center;
-        	font-weight: bold;
-        	text-transform: uppercase;
-        }
-		td.align-top {
-			vertical-align: top;
-		}
-		
-    </style>
+	td, th {
+	  /* padding: 4px; */
+	  vertical-align: middle;
+	  word-wrap: break-word;
+	  overflow-wrap: break-word;
+	  white-space: normal;
+	  page-break-inside: avoid !important;
+	}
+
+	/* ——— Tabla de datos del vehículo ——— */
+	.data {
+	  page-break-after: avoid !important;
+	  font-family: 'Arial', sans-serif;
+	  font-size: 10px;
+	  margin-bottom: 10px;
+	}
+
+	.col2 {
+	  width: 50%;
+	}
+
+	.label {
+	  font-weight: bold;
+	  width: 15%;
+	  text-transform: uppercase;
+	}
+
+	/* ——— Tabla de ítems ——— */
+	.table-items {
+	  border: 1px solid #000;
+	  page-break-before: auto !important;
+	  page-break-after: auto !important;
+	}
+
+	.table-items .th1 {
+	  width: 6%;
+	  text-align: center;
+	}
+
+	.table-items .th2 {
+	  /* width: 5%; */
+	}
+
+	.table-items .th3,
+	.table-items .th4,
+	.table-items .th5,
+	.table-items .th6 {
+	  width: 10%;
+	  text-align: center;
+	}
+
+	.table-items .title {
+	  padding-left: 45px;
+	}
+
+	/* ——— Utilitarias ——— */
+	.border {
+	  border: 1px solid #000;
+	}
+
+	.center {
+	  text-align: center;
+	}
+
+	.mt-5 {
+	  margin-top: 5px;
+	}
+
+	td.align-top {
+	  vertical-align: top;
+	}
+
+	.table-franquicia td {
+	  padding-left: 10px;
+	}
+
+	.container-items {
+	  margin-top: 5px !important;
+	}
+
+	/* ——— Encabezados de sección ——— */
+	.header-section {
+	  background-color: lightgray;
+	  text-align: center;
+	  font-weight: bold;
+	  text-transform: uppercase;
+	}
+
+	/* ——— Control de saltos de página ——— */
+	.table-category,
+	.table-section {
+	  page-break-after: avoid !important;
+	  page-break-before: auto !important;
+	}
+
+	thead {
+	  display: table-header-group;
+	}
+
+	tfoot {
+	  display: table-row-group;
+	}
+
+	br + table {
+	  margin-top: 5px !important;
+	}
+	</style>
+
 </head>
 <body>
 	<script type="text/php">
 	if ( isset($pdf) ) {
-		$pdf->page_script('
-			$font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-			$pdf->text(270, 810, "Página $PAGE_NUM de $PAGE_COUNT", $font, 8);
-		');
+	    $pdf->page_script('
+	        $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
+	        $size = 8;
+	        $pageText = "Página $PAGE_NUM de $PAGE_COUNT";
+	        $width = $fontMetrics->get_text_width($pageText, $font, $size);
+
+	        // Posición centrada en el ancho de la página
+	        $x = ($pdf->get_width() - $width) / 2;
+	        $y = $pdf->get_height() - 25;  // ≈30pt desde el borde inferior
+	        $pdf->text($x, $y, $pageText, $font, $size);
+	    ');
 	}
 	</script>
 	<div class="header">
@@ -164,7 +205,7 @@
 			</tr>
 		</table>
 	</div>
-	<br>
+
 	<table class="data">
 		<tr>
 			<td class="label">Tipo de Servicio:</td>
@@ -222,7 +263,7 @@
 		@endif
 	</table>
 	</div>
-	<br>
+
 	<div class="container-items">
 @php
     // Separar los detalles en dos grupos
