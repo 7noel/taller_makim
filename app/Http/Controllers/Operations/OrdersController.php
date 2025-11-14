@@ -363,6 +363,7 @@ class OrdersController extends Controller {
 	{
 		$cuentas = $this->bankRepo->mostrar();
 		$model = $this->repo->findOrFail($id);
+		$model->load(['details.product', 'details.unit']);
 		//dd($model->mycompany->company_name);
 		// \PDF::setOptions(['isPhpEnabled' => true]);
 		// $pdf = \PDF::loadView('pdfs.'.$model->order_type, compact('model', 'cuentas'));
