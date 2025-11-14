@@ -273,7 +273,7 @@ class OrderRepo extends BaseRepo{
 	public function filter($filter)
 	{
 		$order_type = explode('.', \Request::route()->getName())[0];
-		$q = Order::with('proof', 'company')->where('order_type', $order_type);
+		$q = Order::with('proof', 'company', 'inventario', 'car.modelo.brand', 'car.brand')->where('order_type', $order_type);
 
 		if (isset($filter->sn) and trim($filter->sn) != '') {
 			return $q->where('sn', 'like', '%'.$filter->sn.'%')->orderBy('id', 'desc')->get();

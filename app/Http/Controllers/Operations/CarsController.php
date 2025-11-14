@@ -87,7 +87,7 @@ class CarsController extends Controller {
 
 	public function index()
 	{
-		$models = $this->repo->index('name', request()->get('name'));
+		$models = [];
 		return view('partials.index',compact('models'));
 	}
 

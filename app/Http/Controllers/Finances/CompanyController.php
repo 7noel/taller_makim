@@ -69,7 +69,7 @@ class CompanyController extends Controller {
 	    	return Company::where('entity_type', $entity)->where('id_type', $id_type)->where('doc', $doc)->first();
 	    }
 
-	    $query = Company::where('entity_type', $type);
+	    $query = Company::with('mycompany', 'job')->where('entity_type', $type);
 
 	    // Búsqueda general
 	    if ($search = $request->input('search.value')) {
