@@ -25,6 +25,32 @@
 	</div>
 </div>
 
+<!-- Modal resultado envío -->
+<div class="modal fade" id="resultadoModal" tabindex="-1" role="dialog" aria-labelledby="resultadoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="resultadoModalLabel">Resultado del envío</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center" id="resultadoMensaje">
+        <!-- mensaje dinámico -->
+      </div>
+      <div class="modal-footer justify-content-center">
+        <a href="{{ route('planillas.index') }}" class="btn btn-outline-success">
+            <i class="fas fa-clipboard-list mr-1"></i> Planilla
+        </a>
+        <button type="button" class="btn btn-outline-secondary" id="btn-recargar">
+            <i class="fas fa-sync-alt mr-1"></i> Recargar página
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <style>
 /* Oculta la primera columna cuando la tabla tiene la clase .hide-select */
 #tabla-vouchers.hide-select th.col-select,
@@ -150,15 +176,20 @@ $(function () {
 	    fetch(url, { method: 'GET' })
 	        .then(res => res.json())
 	        .then(json => {
-	            alert('Enviado: ' + ids.length + ' registros.');
+                // mostrar mensaje de éxito en el modal
+                $('#resultadoMensaje').html(`<p class="text-body">Enviado: ${ids.length} registros.<br>${json.message || ''}</p>`);
+                $('#resultadoModal').modal('show');
+	            // alert('Enviado: ' + ids.length + ' registros.');
 	            $checkAll.prop('checked', false);
 	            $('.voucher-individual').prop('checked', false);
 	            toggleBotonEnviar();
-	            location.reload()
+	            // location.reload()
 	        })
 	        .catch(err => {
 	            console.error(err);
-	            alert('Ocurrió un error al enviar los registros.');
+                $('#resultadoMensaje').html('<p class="text-danger">Ocurrió un error al enviar los registros.</p>');
+                $('#resultadoModal').modal('show');
+	            // alert('Ocurrió un error al enviar los registros.');
 	        });
 	    
         // POST al backend (ajusta la URL a tu ruta)
@@ -191,6 +222,13 @@ $(function () {
         //     console.error(err);
         //     alert('Ocurrió un error al enviar los registros seleccionados.');
         // });
+    });
+    // Recargar la página si se cierra el modal o se presiona el botón
+    $('#resultadoModal').on('hidden.bs.modal', function () {
+      location.reload();
+    });
+    $('#btn-recargar').on('click', function () {
+      location.reload();
     });
 
     // (Inicial) Arrancar con la primera columna oculta

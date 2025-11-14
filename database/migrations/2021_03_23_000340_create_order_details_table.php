@@ -35,6 +35,14 @@ class CreateOrderDetailsTable extends Migration
             $table->decimal('cost',15,2);
             $table->bigInteger('technician_id')->unsigned();
             $table->bigInteger('voucher_id')->unsigned();
+            $table->string('provider');
+            $table->string('guide_number');
+            $table->string('status')->default('REGISTRADO');
+            $table->dateTime('requested_at')->nullable();
+            $table->dateTime('expected_at')->nullable();
+            $table->dateTime('alert_at')->nullable();
+            $table->dateTime('received_at')->nullable();
+            $table->dateTime('delivered_at')->nullable();
             $table->json('data')->nullable();
 
             $table->foreign('my_company')->references('id')->on('companies');

@@ -637,6 +637,11 @@ class ProofRepo extends BaseRepo{
 			'parent_proof_id' => $planilla->id,
 		]);
 
+        // Si la peticion es ajax
+        if (request()->ajax()) {
+            $message = "Los datos se guardaron correctamente";
+            return response()->json(['message' => $message]);
+        }
 		return $planilla;
 	}
 

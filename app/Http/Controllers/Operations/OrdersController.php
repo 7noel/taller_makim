@@ -50,6 +50,7 @@ class OrdersController extends Controller {
 		$this->modeloRepo = $modeloRepo;
 		$this->ubigeoRepo = $ubigeoRepo;
 	}
+
 	public function index()
 	{
 		$filter = (object) request()->all();
@@ -71,6 +72,7 @@ class OrdersController extends Controller {
 		}
 		return view('partials.filter',compact('models', 'filter', 'sellers', 'locals'));
 	}
+
 	public function byQuote($quote_id)
 	{
 		$action = "generar";
@@ -468,6 +470,7 @@ class OrdersController extends Controller {
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
 		return view('operations.taller.recepcion_edit', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
 	}
+
 	public function recepcionByCar($car_id)
 	{
 		$brands = $this->brandRepo->getList2();
@@ -494,11 +497,13 @@ class OrdersController extends Controller {
 		}
 		return view($view, compact('car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies', 'brands', 'modelos', 'modelos', 'bodies', 'ubigeo'));
 	}
+
 	public function changeStatusOrder($id)
 	{
 		$model = $this->repo->findOrFail($id);
 		return view('operations.inventory.change_status', compact('model'));
 	}
+
 	public function updateStatus($id)
 	{
 		$data = request()->all();
@@ -552,6 +557,7 @@ class OrdersController extends Controller {
 		$model = $this->repo->findBySlug($slug);
 		return view('operations.inventory.client_inventory', compact('model', 'action'));
 	}
+
 	public function by_inventory($id)
 	{
 		// dd( request()->input('type_service') );
@@ -576,6 +582,7 @@ class OrdersController extends Controller {
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
 		return view('operations.output_quotes.create_by_inventory', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'inventory', 'action', 'insurance_companies', 'service_types'));
 	}
+
 	public function diagnostico_edit($id)
 	{
 		$action = "edit";
@@ -590,18 +597,22 @@ class OrdersController extends Controller {
 		$bs_shipper = ($model->shipper_id > 0) ? $model->shipper->branches->pluck('company_name', 'id')->prepend('Seleccionar', '') : [''=>'Seleccionar'] ;
 		return view('operations.taller.diagnostico', compact('model', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'quote', 'action'));
 	}
+
 	public function repuestos_edit($id)
 	{
 		dd('repuestos_edit');
 	}
+
 	public function pre_aprobacion_edit($id)
 	{
 		dd('pre_aprobacion_edit');
 	}
+
 	public function aprobacion_edit($id)
 	{
 		dd('aprobacion_edit');
 	}
+
 	public function repair_edit($id)
 	{
 		$model = $this->repo->findOrFail($id);
@@ -609,63 +620,63 @@ class OrdersController extends Controller {
 		$masters = $this->companyRepo->getMastersByCat();
 		return view('operations.inventory.reparacion', compact('model', 'locales', 'masters'));
 	}
+
 	public function repair_update($id)
 	{
-	    $data = request()->all();
+		$data = request()->all();
+		if (!empty($data['repuestos_compania'])) {
+			$this->orderDetailRepo->repair_update($data['repuestos_compania']);
+		}
+		if (!empty($data['details'])) {
+			$this->orderDetailRepo->repair_update($data['details']);
+		}
 
-	    if (!empty($data['details'])) {
-	        $this->orderDetailRepo->repair_update($data['details']);
-	    }
+		$vouchers = [];
+		foreach ($data['details'] as $detailId => $detail) {
+			// CAMBIO 1: asegurar flags y datos base
+			$tieneVoucher = !empty($detail['voucher']); // "on", 1, true, etc.
+			$technicianId = $detail['technician_id'] ?? null;
+			$orderId	  = $detail['order_id']	  ?? $id; // CAMBIO 2: permitir múltiples orders
+			$monto		= isset($detail['cost']) ? floatval($detail['cost']) : 0.0;
 
-	    $vouchers = [];
+			if ($tieneVoucher && $technicianId) {
+				// CAMBIO 3: clave de agrupación por técnico + order
+				$groupKey = $technicianId . ':' . $orderId;
+				// CAMBIO 4: inicializar con technician_id y order_id
+				if (!isset($vouchers[$groupKey])) {
+					$vouchers[$groupKey] = [
+						'technician_id' => $technicianId, // nuevo en el grupo
+						'order_id'	  => $orderId, // nuevo en el grupo
+						'car_id'	  => $detail['car_id'],
+						'placa'	  => $detail['placa'],
+						'subtotal'	  => 0.0,
+						'items'		 => [],
+					];
+				}
 
-	    foreach ($data['details'] as $detailId => $detail) {
-	        // ─────────────────────────────────────────────────────────────
-	        // CAMBIO 1: asegurar flags y datos base
-	        // ─────────────────────────────────────────────────────────────
-	        $tieneVoucher = !empty($detail['voucher']); // "on", 1, true, etc.
-	        $technicianId = $detail['technician_id'] ?? null;
-	        $orderId      = $detail['order_id']      ?? $id; // CAMBIO 2: permitir múltiples orders
-	        $monto        = isset($detail['cost']) ? floatval($detail['cost']) : 0.0;
+				// Sumar al subtotal del grupo
+				$vouchers[$groupKey]['subtotal'] += $monto;
 
-	        if ($tieneVoucher && $technicianId) {
-	            // ─────────────────────────────────────────────────────────
-	            // CAMBIO 3: clave de agrupación por técnico + order
-	            // ─────────────────────────────────────────────────────────
-	            $groupKey = $technicianId . ':' . $orderId;
+				// Agregar ítem del detalle
+				$vouchers[$groupKey]['items'][] = [
+					'detail_id' => $detailId,
+					'monto'	 => $monto,
+				];
+			}
+		}
+		// dd($vouchers);
+		// Si tu repositorio espera un array indexado, descomenta la siguiente línea:
+		// $vouchers = array_values($vouchers); // CAMBIO 5 (opcional)
 
-	            // ─────────────────────────────────────────────────────────
-	            // CAMBIO 4: inicializar con technician_id y order_id
-	            // ─────────────────────────────────────────────────────────
-	            if (!isset($vouchers[$groupKey])) {
-	                $vouchers[$groupKey] = [
-	                    'technician_id' => $technicianId, // nuevo en el grupo
-	                    'order_id'      => $orderId,      // nuevo en el grupo
-	                    'car_id'      => $detail['car_id'],
-	                    'placa'      => $detail['placa'],
-	                    'subtotal'      => 0.0,
-	                    'items'         => [],
-	                ];
-	            }
+		// Ahora generar vouchers por (technician_id, order_id)
+		$this->proofRepo->generarVouchers($vouchers);
 
-	            // Sumar al subtotal del grupo
-	            $vouchers[$groupKey]['subtotal'] += $monto;
-
-	            // Agregar ítem del detalle
-	            $vouchers[$groupKey]['items'][] = [
-	                'detail_id' => $detailId,
-	                'monto'     => $monto,
-	            ];
-	        }
-	    }
-	    // dd($vouchers);
-	    // Si tu repositorio espera un array indexado, descomenta la siguiente línea:
-	    // $vouchers = array_values($vouchers); // CAMBIO 5 (opcional)
-
-	    // Ahora generar vouchers por (technician_id, order_id)
-	    $this->proofRepo->generarVouchers($vouchers);
-
-	    return redirect()->route('vales.index');
+        // Si la peticion es ajax
+        if (request()->ajax()) {
+            $message = "Los datos se guardaron correctamente";
+            return response()->json(['message' => $message]);
+        }
+		return redirect()->route('vales.index');
 	}
 
 	public function repair_update_old($id)
@@ -709,10 +720,12 @@ class OrdersController extends Controller {
 
 		// dd('repair_update');
 	}
+
 	public function controlcalidad_edit($id)
 	{
 		dd('controlcalidad_edit');
 	}
+
 	public function entrega_edit($id)
 	{
 		dd('entrega_edit');
