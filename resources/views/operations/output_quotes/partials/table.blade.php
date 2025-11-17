@@ -5,6 +5,7 @@
 			<th>Fecha</th>
 			<th>Placa</th>
 			<th>Cliente</th>
+			<th>TIpo</th>
 			<th>Estado</th>
 			<th>Mnd</th>
 			<th>Total</th>
@@ -30,6 +31,7 @@
 			<td>{{ $model->created_at->formatLocalized('%d/%m/%Y') }}</td>
 			<td>{{ $model->placa }}</td>
 			<td>{{ $model->company->company_name }} </td>
+			<td>{{ $model->type_service }}</td>
 			<td><span class="{{ $clase }}">{{ $model->status }}</span></td>
 			<td>{{ config('options.table_sunat.moneda_sunat.'.$model->currency_id) }}</td>
 			<td>{{ $model->total}} </td>

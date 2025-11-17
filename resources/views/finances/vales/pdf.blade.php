@@ -184,7 +184,7 @@
 		    	@if($model->order->type_service == 'SINIESTRO')
 		    		{{ $model->order->insurance_company->brand_name }}
 		    	@elseif($model->order->type_service == 'AMPLIACION')
-		    		{{ $model->order->mainSiniestro->insurance_company->brand_name }}
+		    		{{ $model->order->parent->insurance_company->brand_name }}
 		    	@else
 		    		PARTICULAR
 		    	@endif
