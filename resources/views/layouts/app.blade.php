@@ -499,6 +499,7 @@ $(document).ready(function () {
     //         $input[0].setCustomValidity("");
     //     }
     // });
+
     $('#placa, #txtplaca').on('keyup', function (e) {
         let $input = $(this);
         let valor = $input.val().toUpperCase();
@@ -509,27 +510,39 @@ $(document).ready(function () {
 
         $input.val(nuevoValor);
 
-        // === Expresiones Regulares ===
-        // 6 caracteres: autos (empieza con letra), motos (termina con letra), debe tener al menos 2 letras
-        const reRegular = /^(?=(?:.*[A-Z]){2,})(?=.*[0-9])[A-Z0-9]{6}$/;
+        // === Expresiones Regulares AJUSTADAS ===
 
-        // 5 caracteres: vehículos del Estado con letras y números (mínimo 2 letras)
+        // 6 caracteres — Placas REGULARES (autos y motos)
+        // - Al menos 1 letra
+        // - Al menos 1 número
+        const reRegular = /^(?=.*[A-Z])(?=.*[0-9])[A-Z0-9]{6}$/;
+
+        // 5 caracteres — Placas del ESTADO
+        // - Al menos 2 letras
+        // - Al menos 1 número
         const reEstado = /^(?=(?:.*[A-Z]){2,})(?=.*[0-9])[A-Z0-9]{5}$/;
 
-        // 7 caracteres: casos excepcionales (empieza con 2 letras)
+        // 7 caracteres — Placas EXCEPCIONALES
+        // - Deben empezar con 2 letras (advertencia)
         const reExcep = /^[A-Z]{2}[A-Z0-9]{5}$/;
 
+        // === VALIDACIÓN ===
         if (nuevoValor.length === 0) {
             $input[0].setCustomValidity("");
             $input.removeClass('is-warning');
-        } else if (reRegular.test(nuevoValor) || reEstado.test(nuevoValor)) {
+        }
+        else if (reRegular.test(nuevoValor) || reEstado.test(nuevoValor)) {
+            // Válidas al 100%
             $input[0].setCustomValidity("");
             $input.removeClass('is-warning');
-        } else if (reExcep.test(nuevoValor)) {
-            // válido pero inusual → advertencia suave
+        }
+        else if (reExcep.test(nuevoValor)) {
+            // Válida, pero inusual (color naranja)
             $input[0].setCustomValidity("");
             $input.addClass('is-warning');
-        } else {
+        }
+        else {
+            // Totalmente inválida
             $input[0].setCustomValidity("Formato no reconocido (revise la placa).");
             $input.removeClass('is-warning');
         }
