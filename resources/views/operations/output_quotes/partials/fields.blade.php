@@ -9,20 +9,23 @@
 	@if(request()->input('type_service') == 'AMPLIACION')
 		{!! Form::hidden('parent_quote_id', optional($inventory->mainSiniestro)->id, ['id'=>'parent_quote_id']) !!}
 	@endif
-	@php 
-	$panel_status = ($action == 'create') ? 'DIAG' : $inventory->status ;
+	@php
+	//dd($action);
+	$panel_status = ($action == 'create') ? 'DIAG' : ($inventory->status ?? 'DIAG');
 	@endphp
 	<a href="{{ route( 'panel', $panel_status ) }}" class="btn btn-outline-info btn-sm" title="Tablero"><i class="fa-solid fa-arrow-left"></i> TABLERO</a>
 	@if($model->order_type == 'output_quotes')
 		<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Items</a>
 		<a href="{{ route( 'output_quotes.print_categories' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Categorías</a>
 		<a href="{{ route( 'output_quotes.print_taller' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Taller</a>
+
+		@if(optional($inventory)->id)
 		<div class="btn-group">
 			<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 				Otros Presupuestos
 			</button>
 			<div class="dropdown-menu">
-			@if($inventory->mainSiniestro)
+			@if(optional($inventory)->mainSiniestro)
 				<a class="dropdown-item btn-sm" href="{{ route('output_quotes.by_inventory', [$inventory->id, 'type_service'=>'AMPLIACION']) }}">Nuevo Ampliación</a>
 				@if($model->id != $inventory->mainSiniestro->id)
 					<a class="dropdown-item btn-sm" href="{{ route( 'output_quotes.edit' , $inventory->mainSiniestro ) }}" title="Presupuesto Principal">{{ $inventory->mainSiniestro->sn }} {{ $inventory->mainSiniestro->type_service }}</a>
@@ -42,6 +45,8 @@
 				@endforeach
 			</div>
 		</div>
+		@endif
+		
 	@endif
 	<br>
 @endif
