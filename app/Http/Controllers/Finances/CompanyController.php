@@ -136,7 +136,10 @@ class CompanyController extends Controller {
 		$jobs = $this->tableRepo->getListType('jobs');
 		$ubigeo = $this->ubigeoRepo->listUbigeo();
 		$locales = $this->repo->getListMyCompany();
-		return view('partials.create', compact('ubigeo', 'jobs', 'locales'));
+		$brands = [];
+		$modelos = [];
+		$bodies = [];
+		return view('partials.create', compact('ubigeo', 'jobs', 'locales', 'brands', 'modelos', 'bodies'));
 	}
 
     public function store(FormCompanyRequest $request)
