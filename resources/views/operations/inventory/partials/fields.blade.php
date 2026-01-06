@@ -88,6 +88,15 @@
                     @endif
                 </div>
             </div>
+            @if(isset($quote))
+            <div class="col-sm-2">
+                <div class="form-group">
+                    {!! Form::label('quote_sn', 'Presupuesto') !!}
+                    {!! Form::text('quote_sn', $quote->sn, ['class'=>'form-control-sm form-control-plaintext text-center', 'readonly']) !!}
+                    {!! Form::hidden('quote_id', $quote->id) !!}
+                </div>
+            </div>
+            @endif
             <div class="col-md-2 col-sm-4">
                 @if(isset(\Auth::user()->employee->job_id) and (\Auth::user()->employee->job_id == 8 or \Auth::user()->id==3))
                     {!! Field::select('seller_id', [\Auth::user()->employee->id => \Auth::user()->employee->comapny_name], ['empty'=>'Seleccionar', 'label'=>'Asesor', 'class'=>'form-control-sm', 'required']) !!}

@@ -132,6 +132,12 @@ class OrdersController extends Controller {
 	{
 		$data = request()->all();
 		$model = $this->repo->save($data);
+		if (isset($data['quote_id'])) {
+			$quote = $this->repo->findOrFail($data['quote_id']);
+			$quote->order_id = $model->id;
+			// $quote->is_walk_in = 1;
+			$quote->save();
+		}
 		$this->carRepo->update_contact($data);
 		if (explode('.', \Request::route()->getName())[0] == 'output_quotes') {
 			return redirect()->route('output_quotes.edit', $model->id);
@@ -499,6 +505,34 @@ class OrdersController extends Controller {
 			$view = 'operations.inventory.form';
 		}
 		return view($view, compact('car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies', 'brands', 'modelos', 'modelos', 'bodies', 'ubigeo'));
+	}
+
+	public function recepcionByQuote($quote_id)
+	{
+		$quote = $this->repo->findOrFail($quote_id);
+		$brands = $this->brandRepo->getList2();
+		$modelos = [];
+		$bodies = config('options.bodies');
+		$modelos = $this->modeloRepo->getListGroup('brand');
+		$ubigeo = $this->ubigeoRepo->listUbigeo();
+		
+		$action = "create";
+		$insurance_companies = $this->companyRepo->getListInsuranceCompanies();
+		$checklist_details = $this->checklistDetailRepo->all2();
+		$my_companies = $this->companyRepo->getListMyCompany();
+		$payment_conditions = $this->paymentConditionRepo->getList();
+		$sellers = $this->companyRepo->getListSellers();
+		$repairmens = $this->companyRepo->getListRepairmens();
+		$bs = ['' => 'Seleccionar'];
+		$bs_shipper = ['' => 'Seleccionar'];
+		$car = $this->carRepo->findOrFail($quote->car_id);
+		$client = $car->company;
+
+		$view = 'partials.create';
+		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
+			$view = 'operations.inventory.form';
+		}
+		return view($view, compact('car', 'client', 'payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action', 'checklist_details', 'insurance_companies', 'brands', 'modelos', 'modelos', 'bodies', 'ubigeo', 'quote'));
 	}
 
 	public function changeStatusOrder($id)

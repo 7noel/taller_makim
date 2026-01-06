@@ -16,6 +16,10 @@ Route::get('houses', function () {
     return view('welcome');
 });
 
+Route::get('panel2', function () {
+    return view('panel2');
+});
+
 Route::get('demo2', function () {
 	return view('checklist');
 	// return view('demo2');
@@ -207,6 +211,8 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::post('recepcion_store', ['as' => 'reception.store', 'uses' => 'OrdersController@store']);
 	Route::get('recepcion_edit/{id}', ['as' => 'reception.edit', 'uses' => 'OrdersController@recepcion_edit']);
 	Route::get('recepcion_by_car/{car_id}', ['as' => 'inventory.recepcion_by_car', 'uses' => 'OrdersController@recepcionByCar']);
+	Route::get('recepcion_by_quote/{quote_id}', ['as' => 'inventory.recepcion_by_quote', 'uses' => 'OrdersController@recepcionByQuote']);
+
 	Route::get('diagnostico/{id}', ['as' => 'diagnostic.edit', 'uses' => 'OrdersController@diagnostico_edit']);
 	Route::get('repuestos/{id}', ['as' => 'repuestos.edit', 'uses' => 'OrdersController@repuestos_edit']);
 	Route::get('aprobacion/{id}', ['as' => 'aprobacion.edit', 'uses' => 'OrdersController@aprobacion_edit']);
