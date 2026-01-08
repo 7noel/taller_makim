@@ -98,7 +98,7 @@ return array(
 	'quote_status' => ['PEND' => 'PEND', 'APROB' => 'APROB', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
 	'order_status' => ['ENPRG' => 'ENPRG', 'COMP' => 'COMP', 'ANUL' => 'ANUL', 'CERR' => 'CERR'],
 
-	'inventory_status' => ['PEND' => 'RECEPCION', 'DIAG' => 'DIAGNÓSTICO', 'REPU' => 'REPUESTOS', 'APROB' => 'APROBACION', 'REPAR' => 'REPARACIÓN', 'CONTR' => 'CONTROL DE CALIDAD', 'ENTR' => 'ENTREGA', 'ANUL' => 'ANULADO', 'CERR' => 'CERR'],
+	'inventory_status' => ['PEND' => 'RECEPCION', 'DIAG' => 'DIAGNÓSTICO', 'PREAP' => 'APROBACIÓN DEL SEGURO', 'APROB' => 'APROBACION', 'REPAR' => 'REPARACIÓN', 'CONTR' => 'CONTROL DE CALIDAD', 'ENTR' => 'ENTREGA', 'ANUL' => 'ANULADO', 'CERR' => 'CERR'],
 	'inventory_status_PEND' => ['DIAG' => 'DIAGNÓSTICO'],
 	// 'inventory_status_DIAG' => ['REPU' => 'REPUESTOS'],
 	'inventory_status_DIAG' => ['PREAP' => 'APROBACIÓN DEL SEGURO', 'APROB' => 'APROBACION'],
@@ -246,7 +246,8 @@ return array(
 		'SINIESTRO' => 'SINIESTRO',
 		'AMPLIACION' => 'AMPLIACION',
 		'GARANTIA POSTVENTA' => 'GARANTIA POSTVENTA',
-		'INTERNA POSTVENTA' => 'INTERNA POSTVENTA'
+		'INTERNA POSTVENTA' => 'INTERNA POSTVENTA',
+		'TRASLADO' => 'TRASLADO'
 	],
 	'preventivos' => ['5K' => '5,000', '10K' => '10,000', '15K' => '15,000', '20K' => '20,000', '25K' => '25,000', '30K' => '30,000', '35K' => '35,000', '40K' => '40,000', '45K' => '45,000', '50K' => '50,000', '55K' => '55,000', '60K' => '60,000', '65K' => '65,000', '70K' => '70,000', '75K' => '75,000', '80K' => '80,000', '85K' => '85,000', '90K' => '90,000', '95K' => '95,000', '100K' => '100,000', '105k' => '105,000', '110k' => '110,000', '115k' => '115,000', '120k' => '120,000', '125k' => '125,000', '130k' => '130,000', '135k' => '135,000', '140k' => '140,000', '145k' => '145,000', '150k' => '150,000', '155k' => '155,000', '160k' => '160,000', '165k' => '165,000', '170k' => '170,000', '175k' => '175,000', '180k' => '180,000', '185k' => '185,000', '190k' => '190,000', '195k' => '195,000', '200k' => '200,000', '205k' => '205,000', '210k' => '210,000', '215k' => '215,000', '220k' => '220,000', '225k' => '225,000', '230k' => '230,000', '235k' => '235,000', '240k' => '240,000', '245k' => '245,000', '250k' => '250,000', '255k' => '255,000', '260k' => '260,000', '265k' => '265,000', '270k' => '270,000', '275k' => '275,000', '280k' => '280,000', '285k' => '285,000', '290k' => '290,000', '295k' => '295,000', '300k' => '300,000'],
 	'docs_mov' => [1 => 'Apertura', 2 => 'Ajuste de Inventario - Disminución', 3 => 'Entrada por Compra', 4 => 'Entrada por Producción', 5 => 'Salida por Consumo', 6 => 'Ajuste por inventario - Incremento'],
