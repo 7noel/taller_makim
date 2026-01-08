@@ -3,9 +3,14 @@
 	<a href="#" id="btnAddService" class="btn btn-outline-info btn-sm mb-3" data-toggle="modal" data-target="#exampleModalx" title="Agregar Servicio">{!! $icons['add'] !!} Agregar Servicio</a>
 	<a href="#" id="btnAddProduct" class="btn btn-outline-info btn-sm mb-3" data-toggle="modal" data-target="#exampleModalx" title="Agregar Producto">{!! $icons['add'] !!} Agregar Repuestos</a>
 	<!-- Botón en tu tiles.blade o donde listes los ítems -->
-	<button type="button" class="btn btn-sm btn-outline-primary mb-3" id="btnAjustarHoras">
+	{{--<button type="button" class="btn btn-sm btn-outline-primary mb-3" id="btnAjustarHoras">
 	  <i class="fa-regular fa-clock"></i> Ajustar Cantidades
+	</button>--}}
+	<!-- Botón Ajustar Precio -->
+	<button type="button" class="btn btn-sm btn-outline-primary mb-3" id="btnAjustarPrecio">
+	  <i class="fas fa-dollar-sign"></i> Ajustar precio
 	</button>
+
 @endif
 <div class="table-responsive">
 <table class="table table-sm table-hover">
@@ -272,6 +277,52 @@
       <div class="modal-footer py-2">
         <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary btn-sm" id="ajAplicar">Aplicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ajustar Precio -->
+<div class="modal fade" id="modalAjustarPrecio" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header py-2">
+        <h5 class="modal-title">Ajustar precio por categoría</h5>
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+
+      <div class="modal-body py-3">
+        <div class="form-group mb-2">
+          <label class="mb-1">Categoría</label>
+          <select id="apCat" class="form-control form-control-sm">
+            <option value="">SELECCIONAR</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-6 mb-2">
+            <label class="mb-1">Precio actual (S/)</label>
+            <input type="text" id="apPrecioActual" class="form-control form-control-sm text-right" readonly>
+          </div>
+          <div class="form-group col-6 mb-2">
+            <label class="mb-1">Precio objetivo (S/)</label>
+            <input type="number" step="0.01" min="0" id="apPrecioObjetivo" class="form-control form-control-sm text-right" placeholder="Ej: 1520.00">
+          </div>
+        </div>
+{{--
+        <div class="custom-control custom-checkbox mb-2">
+          <input type="checkbox" class="custom-control-input" id="apPermitHalf">
+          <label class="custom-control-label" for="apPermitHalf">Permitir medias horas (0.5)</label>
+        </div>
+
+        <small class="text-muted d-block">
+          Ajusta cantidades proporcionalmente (1.0 o 0.5). Si queda un residuo, se corrige automáticamente ajustando la cantidad de un ítem para cuadrar exacto.
+        </small>
+      </div>
+--}}
+      <div class="modal-footer py-2">
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-warning btn-sm" id="apAplicar">Aplicar</button>
       </div>
     </div>
   </div>
@@ -701,4 +752,308 @@ function addOCRow(focusTarget = 'descripcion'){
   $(document).on('click', '#ajAplicar', applyAdjustment);
 
 })(jQuery);
+</script>
+
+<script>
+(function (w, $) {
+  // Evita doble inicialización si el bloque se inyecta 2 veces
+  if (w.__AP_INIT_PRICE_QP_FULL__) return;
+  w.__AP_INIT_PRICE_QP_FULL__ = true;
+
+  /* =========================================================
+     AJUSTAR PRECIO POR CATEGORÍA (2 DECIMALES EN TODO)
+     Flujo:
+       1) Cantidades (0.01) proporcional + snap
+       2) Ajustar P.U. de 1 ítem
+       3) Ajustar qty y P.U. del mismo ítem (ventana corta)
+       4) Fallback: qty = 1.00 y P.U. exacto en ese ítem
+     ========================================================= */
+
+  // ===== Selectores / Constantes =====
+  const ROW_SELECTOR      = '.js-det-row';
+  const CAT_ATTR          = 'data-category';
+  const VISIBLE_QTY_SEL   = 'span.spanCantidad';   // ej: "2.96 und"
+  const HIDDEN_QTY_SEL    = 'input.txtCantidad';   // backend
+  const PRICE_INPUT_VALUE = 'input.txtValue';      // P.U. preferido
+  const PRICE_INPUT_ALT   = 'input.txtPrecio';
+  const PRICE_SPAN_SEL    = 'span.spanValue';
+
+  const STEP_QTY          = 0.01; // cantidades a 2 dec
+  const WINDOW_STEPS      = 50;   // ±0.50 para la búsqueda fina
+
+  // ===== Helpers numéricos =====
+  const q2      = x => +(Math.round((x ?? 0) * 100) / 100).toFixed(2); // a 2 dec
+  const money2  = n => (Number(n || 0)).toFixed(2);
+  const toNumber= v => parseFloat(('' + (v ?? '')).replace(/,/g, '')) || 0;
+
+  function parseNumLoose(s) {
+    if (s == null) return 0;
+    const cleaned = String(s).replace(/[^\d.,-]/g, '').replace(',', '.');
+    const n = parseFloat(cleaned);
+    return isNaN(n) ? 0 : n;
+  }
+  function parseQtyVisible(txt){ return q2(parseNumLoose(txt)); }
+
+  function readUnit($span, $row) {
+    let unit = ($span.data('unit') || $row.data('unit') || '').toString().trim();
+    if (!unit) {
+      const txt = ($span.text() || '').trim();
+      const m = txt.match(/^\s*[-+]?\d+(?:[.,]\d+)?\s*([^\d\s].*)$/);
+      if (m) unit = m[1].trim();
+    }
+    return unit || 'hr';
+  }
+
+  // ===== Lecturas estrictas (2 dec) =====
+  function readPU($row) {
+    const $v = $row.find(PRICE_INPUT_VALUE).first();
+    if ($v.length) { const n = parseNumLoose($v.val()); if (n >= 0) return q2(n); }
+    const $a = $row.find(PRICE_INPUT_ALT).first();
+    if ($a.length) { const n = parseNumLoose($a.val()); if (n >= 0) return q2(n); }
+    const $spdp = $row.find(`${PRICE_SPAN_SEL}[data-pu]`).first();
+    if ($spdp.length) { const n = parseNumLoose(String($spdp.data('pu'))); if (n >= 0) return q2(n); }
+    const $sp = $row.find(PRICE_SPAN_SEL).first();
+    if ($sp.length) { const n = parseNumLoose($sp.text()); if (n >= 0) return q2(n); }
+    throw new Error('Falta P.U. (txtValue/txtPrecio/spanValue).');
+  }
+
+  function readQty($row) {
+    const $s = $row.find(VISIBLE_QTY_SEL).first();
+    const $h = $row.find(HIDDEN_QTY_SEL).first();
+    const qs = $s.length ? parseQtyVisible($s.text()) : 0;
+    if (qs > 0) return qs;
+    if ($h.length) return q2(parseNumLoose($h.val()));
+    return 0;
+  }
+
+  // ===== Colección / categorías =====
+  function collectCategories() {
+    const set = new Set();
+    $(ROW_SELECTOR).each(function(){
+      const c = (($(this).attr(CAT_ATTR)) || '').trim();
+      if (c) set.add(c);
+    });
+    return Array.from(set).sort((a,b)=> a.localeCompare(b));
+  }
+
+  function rowsByCategory(cat) {
+    return $(ROW_SELECTOR).filter(function(){
+      return (($(this).attr(CAT_ATTR)) || '').trim() === cat;
+    });
+  }
+
+  function collectItems($rows) {
+    const items = [];
+    $rows.each(function(idx){
+      const $row  = $(this);
+      const $qtyS = $row.find(VISIBLE_QTY_SEL);
+      const qty   = readQty($row);     // 2 dec
+      const pu    = readPU($row);      // 2 dec
+      const unit  = readUnit($qtyS, $row);
+      items.push({
+        id: $row.data('id') || idx,
+        $row,
+        $qtyS,
+        $qtyH: $row.find(HIDDEN_QTY_SEL),
+        $puS:  $row.find(PRICE_SPAN_SEL),
+        $puH:  $row.find(PRICE_INPUT_VALUE),
+        unit,
+        currentQty: qty,
+        unitPrice:  pu,
+        newQty: qty,
+        newPU:  pu
+      });
+    });
+    return items;
+  }
+
+  const total2 = items => q2(items.reduce((a,it)=> a + it.newQty * it.newPU, 0));
+
+  // ===== 1) Ajuste solo cantidades (proporcional + snap) =====
+  function adjustQtyOnly_2dec(items, target) {
+    // base con current
+    items.forEach(it => { it.newQty = it.currentQty; it.newPU = it.unitPrice; });
+
+    const current = total2(items);
+    if (current === 0) {
+      const vivos = items.filter(it => it.newPU > 0);
+      if (!vivos.length) return false;
+      const perVal = q2(target / vivos.length);
+      vivos.forEach(it => { it.newQty = q2(perVal / it.newPU); });
+    } else {
+      const factor = target / current;
+      items.forEach(it => { it.newQty = q2(it.currentQty * factor); });
+    }
+
+    // Snap moviendo 1 ítem en pasos de 0.01 qty
+    let tot = total2(items);
+    if (money2(tot) === money2(target)) return true;
+
+    const targetC = Math.round(target * 100);
+    let   totalC  = Math.round(tot    * 100);
+    const resid   = targetC - totalC;
+
+    let best = {err: Infinity, idx: -1, k: 0, newQty: 0};
+    items.forEach((it, idx) => {
+      const stepC = Math.round((it.newPU * STEP_QTY) * 100); // p.ej. 180*0.01=1.80 => 180 centavos
+      if (stepC <= 0) return;
+      let k = Math.round(resid / stepC);
+      [k-1,k,k+1].forEach(kk => {
+        const cand  = q2(it.newQty + kk * STEP_QTY);
+        if (cand < 0) return;
+        const newTC = totalC + kk * stepC;
+        const err   = Math.abs(targetC - newTC);
+        if (err < best.err) best = {err, idx, k: kk, newQty: cand};
+      });
+    });
+
+    if (best.idx >= 0) {
+      items[best.idx].newQty = best.newQty;
+      tot = total2(items);
+      if (money2(tot) === money2(target)) return true;
+    }
+    return false;
+  }
+
+  // ===== Elegir ítem “parche” (cerca 1.00; empate → mayor impacto) =====
+  function pickPatchItemIndex(items) {
+    let best = 0;
+    let bestScore = Infinity;
+    items.forEach((it, idx) => {
+      const score = Math.abs(it.newQty - 1) - (it.newQty * it.newPU) * 1e-6;
+      if (score < bestScore) { bestScore = score; best = idx; }
+    });
+    return best;
+  }
+
+  // ===== 2) Ajustar SOLO el precio de 1 ítem =====
+  function adjustPriceOneItem(items, target) {
+    const idx = pickPatchItemIndex(items);
+    const it  = items[idx];
+
+    const others = q2(items.reduce((a,el,ii)=> a + (ii===idx ? 0 : el.newQty*el.newPU), 0));
+    if (q2(it.newQty) <= 0) return false;
+
+    let pu = q2((target - others) / it.newQty);
+    if (pu < 0) return false;
+    it.newPU = pu;
+
+    return money2(total2(items)) === money2(target);
+  }
+
+  // ===== 3) Ajustar qty y precio del MISMO ítem (ventana ±0.50) =====
+  function adjustQtyAndPriceOneItem(items, target) {
+    const idx = pickPatchItemIndex(items);
+    const it  = items[idx];
+
+    const others = q2(items.reduce((a,el,ii)=> a + (ii===idx ? 0 : el.newQty*el.newPU), 0));
+    const baseQ  = it.newQty;
+
+    for (let k = -WINDOW_STEPS; k <= WINDOW_STEPS; k++) {
+      const q = q2(baseQ + k * STEP_QTY);
+      if (q <= 0) continue;
+      let pu = q2((target - others) / q);
+      if (pu < 0) continue;
+
+      it.newQty = q;
+      it.newPU  = pu;
+
+      if (money2(total2(items)) === money2(target)) return true;
+    }
+    return false;
+  }
+
+  // ===== 4) Fallback: qty=1.00 y precio exacto en ese ítem =====
+  function forceQty1AndPrice(items, target) {
+    const idx = pickPatchItemIndex(items);
+    const it  = items[idx];
+
+    const others = q2(items.reduce((a,el,ii)=> a + (ii===idx ? 0 : el.newQty*el.newPU), 0));
+    const q = 1.00;
+    let pu  = q2(target - others);
+    if (pu < 0) return false;
+
+    it.newQty = q2(q);
+    it.newPU  = pu;
+    return true;
+  }
+
+  // ===== UI =====
+  function fillCategories() {
+    const cats = collectCategories();
+    const $sel = $('#apCat').empty().append('<option value="">SELECCIONAR</option>');
+    cats.forEach(c => $sel.append(new Option(c, c)));
+  }
+
+  // Abrir modal
+  $(document).on('click', '#btnAjustarPrecio', function () {
+    fillCategories();
+    $('#apPrecioActual').val('');
+    $('#apPrecioObjetivo').val('');
+    $('#modalAjustarPrecio').modal('show');
+  });
+
+  // Al cambiar categoría, calcular precio actual (2 dec)
+  $(document).on('change', '#apCat', function () {
+    const cat = $(this).val();
+    if (!cat) { $('#apPrecioActual').val(''); return; }
+
+    try {
+      const items = collectItems( rowsByCategory(cat) );
+      const total = q2(items.reduce((a,it)=> a + it.currentQty * it.unitPrice, 0));
+      $('#apPrecioActual').val(money2(total));
+    } catch (e) {
+      console.error(e);
+      alert('Falta P.U. o Cantidad en alguna fila.');
+      $('#apPrecioActual').val('');
+    }
+  });
+
+  // Aplicar ajuste
+  $(document).on('click', '#apAplicar', function () {
+    const cat = $('#apCat').val();
+    if (!cat) { alert('Es necesario seleccionar la categoría.'); $('#apCat').focus(); return; }
+
+    const target = toNumber($('#apPrecioObjetivo').val());
+    if (target < 0) { alert('El precio objetivo no puede ser negativo.'); return; }
+
+    try {
+      const items = collectItems( rowsByCategory(cat) );
+
+      // 1) cantidades
+      let ok = adjustQtyOnly_2dec(items, target);
+
+      // 2) ajustar precio de 1 ítem
+      if (!ok) ok = adjustPriceOneItem(items, target);
+
+      // 3) ajustar qty + precio del mismo ítem
+      if (!ok) ok = adjustQtyAndPriceOneItem(items, target);
+
+      // 4) qty=1 y precio exacto
+      if (!ok) ok = forceQty1AndPrice(items, target);
+
+      // === Escribir al DOM (visibles 2 dec; hidden cantidad 4 dec) ===
+      items.forEach(it => {
+        // Cantidad
+        if (it.$qtyH && it.$qtyH.length) it.$qtyH.val( (+it.newQty).toFixed(4) );
+        if (it.$qtyS && it.$qtyS.length) it.$qtyS.text( `${(+it.newQty).toFixed(2)} ${it.unit || 'hr'}` );
+
+        // Precio unitario
+        if (it.$puH && it.$puH.length) it.$puH.val( (+it.newPU).toFixed(2) );
+        if (it.$puS && it.$puS.length) {
+          it.$puS.text( (+it.newPU).toFixed(2) );
+          it.$puS.attr('data-pu', (+it.newPU).toFixed(2));
+        }
+      });
+
+      if (typeof w.calcTotal === 'function') w.calcTotal();
+      $('#modalAjustarPrecio').modal('hide');
+
+    } catch (e) {
+      console.error(e);
+      alert('No se pudo leer P.U. o Cantidad en una fila. Verifique txtValue/spanValue y spanCantidad/txtCantidad.');
+    }
+  });
+
+})(window, jQuery);
 </script>
