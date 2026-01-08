@@ -12,11 +12,21 @@
 		}
      ?>
 	<title>Presupuesto: {{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</title>
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 
 	<style>
+	@font-face {
+	  font-family: "Roboto Condensed";
+	  font-style: normal;
+	  font-weight: 400;
+	  src: url("{{ public_path('fonts/roboto-condensed/RobotoCondensed-Regular.ttf') }}") format("truetype");
+	}
+	@font-face {
+	  font-family: "Roboto Condensed";
+	  font-style: normal;
+	  font-weight: 700;
+	  src: url("{{ public_path('fonts/roboto-condensed/RobotoCondensed-Bold.ttf') }}") format("truetype");
+	}
+
 	/* ——— Configuración de página ——— */
 	@page {
 	  margin-top: 30px;
