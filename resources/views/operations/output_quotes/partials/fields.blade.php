@@ -54,7 +54,7 @@
 			</div>
 		</div>
 		@endif
-		<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle">Sig. Estado <i class="fa-solid fa-arrow-right"></i></a>
+		<a href="{{ route( 'change_status_order' , $model) }}" type="button" class="btn btn-outline-info btn-sm btn-circle d-none">Sig. Estado <i class="fa-solid fa-arrow-right"></i></a>
 		
 	@endif
 	<br>
