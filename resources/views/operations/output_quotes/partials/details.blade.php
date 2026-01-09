@@ -309,20 +309,20 @@
             <input type="number" step="0.01" min="0" id="apPrecioObjetivo" class="form-control form-control-sm text-right" placeholder="Ej: 1520.00">
           </div>
         </div>
-{{--
-        <div class="custom-control custom-checkbox mb-2">
+
+        <div class="custom-control custom-checkbox mb-2 d-none">
           <input type="checkbox" class="custom-control-input" id="apPermitHalf">
           <label class="custom-control-label" for="apPermitHalf">Permitir medias horas (0.5)</label>
         </div>
 
-        <small class="text-muted d-block">
+        <small class="text-muted d-none">
           Ajusta cantidades proporcionalmente (1.0 o 0.5). Si queda un residuo, se corrige automáticamente ajustando la cantidad de un ítem para cuadrar exacto.
         </small>
       </div>
---}}
+
       <div class="modal-footer py-2">
         <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-warning btn-sm" id="apAplicar">Aplicar</button>
+        <button type="button" class="btn btn-primary btn-sm" id="apAplicar">Aplicar</button>
       </div>
     </div>
   </div>
