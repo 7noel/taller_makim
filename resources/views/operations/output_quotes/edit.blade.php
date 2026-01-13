@@ -61,6 +61,8 @@
 			@endif
 		</div>
 	</div>
+	@include('operations.cars.modals')
+	
 </div>
 
 @endsection

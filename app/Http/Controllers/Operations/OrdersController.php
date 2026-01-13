@@ -121,7 +121,7 @@ class OrdersController extends Controller {
 		$checklist_details = $this->checklistDetailRepo->all2();
 		// return view('operations.inventory.create', compact('payment_conditions', 'sellers', 'repairmens', 'my_companies', 'bs', 'bs_shipper', 'action'));
 		// dd(\Str::before(request()->route()->getName(), '.'));
-		$view = 'partials.create';
+		$view = 'operations.output_quotes.create';
 		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
 			$view = 'operations.inventory.form';
 		}
@@ -177,7 +177,7 @@ class OrdersController extends Controller {
 		// $car = $this->carRepo->findOrFail($car_id);
 		$client = $car->company;
 
-		$view = 'partials.show';
+		$view = 'operations.output_quotes.show';
 		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
 			$view = 'operations.inventory.form';
 		}
@@ -233,7 +233,7 @@ class OrdersController extends Controller {
 		// $checklist_details = $this->checklistDetailRepo->all2();
 		// dd($checklist_details);
 
-		$view = 'partials.edit';
+		$view = 'operations.output_quotes.edit';
 		if ('inventory' == \Str::before(request()->route()->getName(), '.')) {
 			$view = 'operations.inventory.form';
 		}
