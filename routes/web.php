@@ -17,13 +17,10 @@ Route::get('houses', function () {
 });
 
 Route::get('demo3', function () {
-	return view('demo3');
-	// return view('demo2');
-});
+	return view('demo3');});
 
 Route::get('demo2', function () {
 	return view('demo2');
-	// return view('demo2');
 });
 Route::get('prueba', 'HomeController@prueba');
 Route::get('/', 'HomeController@index');
