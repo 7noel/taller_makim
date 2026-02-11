@@ -10,6 +10,38 @@
 		if (!$logoAbs || !is_file($logoAbs)) {
 		    $logoAbs = public_path('img/favicon.png');
 		}
+    // ... tu código del logo ...
+
+    // SVGs para leyenda de daños (compatibles con Dompdf)
+    $svgTriangle = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><polygon points="7,1 13,13 1,13" fill="none" stroke="#008000" stroke-width="2"/></svg>');
+    $svgCircle   = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="none" stroke="#FF0000" stroke-width="2"/></svg>');
+    $svgX        = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><line x1="2" y1="2" x2="12" y2="12" stroke="#0000FF" stroke-width="2"/><line x1="12" y1="2" x2="2" y2="12" stroke="#0000FF" stroke-width="2"/></svg>');
+
+    // ICONOS checklist (SVG embebidos)
+$svgCheckGood = 'data:image/svg+xml;base64,' . base64_encode(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+        <path d="M2 6.5 L5 9.5 L10 2.5" fill="none" stroke="#008000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>'
+);
+
+$svgCheckRegular = 'data:image/svg+xml;base64,' . base64_encode(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+        <polygon points="6,1 11,11 1,11" fill="none" stroke="#FFA500" stroke-width="2" stroke-linejoin="round"/>
+    </svg>'
+);
+
+$svgCheckBad = 'data:image/svg+xml;base64,' . base64_encode(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+        <line x1="2" y1="2" x2="10" y2="10" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
+        <line x1="10" y1="2" x2="2" y2="10" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
+    </svg>'
+);
+
+$svgCheckNA = 'data:image/svg+xml;base64,' . base64_encode(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+        <circle cx="6" cy="6" r="4" fill="#000000"/>
+    </svg>'
+);
      ?>
 	<title>INVENTARIO: {{ $model->sn }}</title>
 	<!-- <title>INVENTARIO: {{ $model->sn }}-{{ $model->created_at->formatLocalized('%Y') }}</title> -->
@@ -130,6 +162,18 @@
         	font-weight: bold;
         	text-transform: uppercase;
         }
+.legend-icon{
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+.icon-dot{
+    width: 10px;
+    height: 10px;
+    vertical-align: middle;
+}
+
     </style>
 </head>
 <body>
@@ -281,12 +325,12 @@
 		<td style=" border: none;">
 			<div class='div_img'>
 			    <table class="legend-table" style="padding: 0 0 0 25px; border: none;">
-			        <tr>
-			            <td><span class="circle-small green"></span>Rayón</td>
-			            <td><span class="circle-small red"></span>Abolladura</td>
-			            <td><span class="circle-small blue"></span>Quiñe</td>
-			        </tr>
-			    </table>
+				    <tr>
+						<td><img src="{{ $svgTriangle }}" class="legend-icon">Rayón</td>
+						<td><img src="{{ $svgCircle }}" class="legend-icon">Abolladura</td>
+						<td><img src="{{ $svgX }}" class="legend-icon">Quiñe</td>
+				    </tr>
+				</table>
 				<img src="{{ (\Storage::disk('public')->exists('ot_'.$model->id.'.jpg'))?asset('/storage/ot_'.$model->id.'.jpg'):asset('/img/inventory.jpeg') }}" alt="" class="inventory-image">
 			</div>
 			
@@ -300,15 +344,15 @@
 	</tr>
 </table>
 <br>
-    <table class="legend-table mt-5">
-        <tr>
-            <th>Leyenda Checklist:</th>
-            <td><span class="circle green"></span> Bueno</td>
-            <td><span class="circle amber"></span> Regular</td>
-            <td><span class="circle red"></span> Malo</td>
-            <td><span class="circle black"></span> No aplica</td>
-        </tr>
-    </table>
+	<table class="legend-table mt-5">
+	    <tr>
+	        <th>Leyenda Checklist:</th>
+	        <td><img src="{{ $svgCheckGood }}" class="icon-dot"> Bueno</td>
+	        <td><img src="{{ $svgCheckRegular }}" class="icon-dot"> Regular</td>
+	        <td><img src="{{ $svgCheckBad }}" class="icon-dot"> Malo</td>
+	        <td><img src="{{ $svgCheckNA }}" class="icon-dot"> No aplica</td>
+	    </tr>
+	</table>
     <table class="mt-5" style="font-size: 9px;">
     	@if($checklist_details->isNotEmpty())
             @php
@@ -325,7 +369,18 @@
                             $statusClass = $item ? ($item['status'] == 'correcto' ? 'green' : ($item['status'] == 'recomendable' ? 'amber' : ($item['status'] == 'urgente' ? 'red' : 'black'))) : '';
                         @endphp
                         <td class="desc-col">{{ $item['name'] ?? '' }}</td>
-                        <td class="circle-col">@if($item)<span class="circle {{ $statusClass }}"></span>@endif</td>
+                        <td class="circle-col">
+						    @if($item)
+						        @php
+						            $icon = ($item['status'] == 'correcto') ? $svgCheckGood
+						                  : (($item['status'] == 'recomendable') ? $svgCheckRegular
+						                  : (($item['status'] == 'urgente') ? $svgCheckBad
+						                  : $svgCheckNA));
+						        @endphp
+						        <img src="{{ $icon }}" class="icon-dot">
+						    @endif
+						</td>
+
                         <td class="comment-col">{{ $item['comment'] ?? '' }}</td>
                     @endfor
                 </tr>

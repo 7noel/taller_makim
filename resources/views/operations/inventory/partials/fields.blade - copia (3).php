@@ -360,15 +360,15 @@
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="undoLastMark()"><i class="fas fa-undo"></i> Deshacer</button>
                 <div class="d-inline-block ml-3">
                     <div class="form-check form-check-inline radio-green">
-                        <input class="form-check-input" type="radio" name="damageType" id="rayon" value="rayon" checked>
+                        <input class="form-check-input" type="radio" name="damageType" id="rayon" value="green" checked>
                         <label class="form-check-label" for="rayon">Rayón</label>
                     </div>
                     <div class="form-check form-check-inline radio-red">
-                        <input class="form-check-input" type="radio" name="damageType" id="abolladura" value="abolladura">
+                        <input class="form-check-input" type="radio" name="damageType" id="abolladura" value="red">
                         <label class="form-check-label" for="abolladura">Abolladura</label>
                     </div>
                     <div class="form-check form-check-inline radio-blue">
-                        <input class="form-check-input" type="radio" name="damageType" id="quine" value="quine">
+                        <input class="form-check-input" type="radio" name="damageType" id="quine" value="blue">
                         <label class="form-check-label" for="quine">Quiñe</label>
                     </div>
                 </div>
@@ -458,64 +458,19 @@
             let scaleY = canvas.height / rect.height;
             let x = (event.clientX - rect.left) * scaleX;
             let y = (event.clientY - rect.top) * scaleY;
-            let type = document.querySelector('input[name="damageType"]:checked').value;
-            marks.push({ x, y, type });
+            let color = document.querySelector('input[name="damageType"]:checked').value;
+            // let color = document.getElementById("damageType").value;
+            marks.push({ x, y, color });
             redrawCanvas();
             updateImageData();
         });
         
-        const DAMAGE_STYLE = {
-          rayon:      { shape: 'triangle', color: '#008000' }, // verde
-          abolladura: { shape: 'circle',   color: '#FF0000' }, // rojo
-          quine:      { shape: 'x',        color: '#0000FF' }  // azul
-        };
-
-        function drawMark(x, y, type) {
-          const cfg = DAMAGE_STYLE[type];
-          if (!cfg) return;
-
-          const size = 8;     // tamaño del símbolo
-          const lw   = 3;      // grosor de línea (para que se vea en impresión)
-
-          ctx.save();
-          ctx.strokeStyle = cfg.color;
-          ctx.lineWidth = lw;
-
-          if (cfg.shape === 'triangle') {
-            drawTriangleOutline(x, y, size);
-          } else if (cfg.shape === 'circle') {
-            drawCircleOutline(x, y, size);
-          } else if (cfg.shape === 'x') {
-            drawX(x, y, size);
-          }
-
-          ctx.restore();
+        function drawMark(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, 2 * Math.PI);
+            ctx.fill();
         }
-
-        function drawTriangleOutline(x, y, s) {
-          ctx.beginPath();
-          ctx.moveTo(x, y - s);
-          ctx.lineTo(x - s, y + s);
-          ctx.lineTo(x + s, y + s);
-          ctx.closePath();
-          ctx.stroke();
-        }
-
-        function drawCircleOutline(x, y, r) {
-          ctx.beginPath();
-          ctx.arc(x, y, r, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-
-        function drawX(x, y, s) {
-          ctx.beginPath();
-          ctx.moveTo(x - s, y - s);
-          ctx.lineTo(x + s, y + s);
-          ctx.moveTo(x + s, y - s);
-          ctx.lineTo(x - s, y + s);
-          ctx.stroke();
-        }
-
         
         function undoLastMark() {
             if (marks.length > 0) {
@@ -534,7 +489,7 @@
         function redrawCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            marks.forEach(mark => drawMark(mark.x, mark.y, mark.type));
+            marks.forEach(mark => drawMark(mark.x, mark.y, mark.color));
         }
         
         function updateImageData() {
