@@ -24,6 +24,39 @@
     .radio-black input[type="radio"] + label { color: black; }
     .radio-blue input[type="radio"] + label { color: blue; }
 
+    /* Alinear en una sola línea para PC */
+    @media (min-width: 768px) {
+      .checklist-item {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        align-items: start;
+        gap: 10px;
+        padding: 5px 0;
+        transition: background-color 0.2s;
+      }
+      .checklist-item:hover {
+        background-color: rgba(0, 0, 0, 0.075); /* Similar al efecto de .table-hover */
+      }
+      .checklist-item .item-name {
+        word-wrap: break-word;
+        max-width: 100%;
+      }
+      .checklist-item .options {
+        display: flex;
+        justify-content: space-evenly;
+      }
+    }
+
+    /* Separación entre ítems en móviles */
+    @media (max-width: 767px) {
+      .checklist-item {
+        margin-bottom: 20px;
+      }
+    }
+
+    .comment {
+      max-width: 100%;
+    }
     nvas-container {
         position: relative;
         width: 100%;
@@ -35,75 +68,6 @@
         width: 100%;
         height: auto;
     }
-/* ===== CHECKLIST (nuevo) ===== */
-.checklist-item{
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:10px;
-  margin-bottom:10px;
-  background:#fff;
-}
-.checklist-item:hover{
-  background-color: rgba(0,0,0,0.03);
-}
-
-/* Cabecera: nombre alineado verticalmente con botones */
-.checklist-head{
-  display:flex;
-  align-items:center; /* <-- esto alinea verticalmente */
-  gap:10px;
-}
-
-.checklist-name{
-  font-weight:700;
-  text-transform:uppercase;
-  font-size:14px;
-  line-height:1.2;
-  margin:0;
-}
-
-/* Botones con símbolos */
-.btn-state{display:flex; flex-wrap:nowrap;}
-.btn-state .btn{
-  height:40px;
-  min-width:44px;
-  padding:0 !important;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  font-size:18px;
-  line-height:1;
-  user-select:none;
-}
-
-/* Comentario siempre visible */
-.checklist-comment{ margin-top:8px; }
-
-/* Leyenda */
-.legend{
-  border:2px solid #000;
-  padding:10px 12px;
-  margin-bottom:10px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  font-size:14px;
-}
-.legend-left{display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
-.legend .title{font-weight:bold;}
-.legend-items{display:flex; gap:18px; align-items:center; flex-wrap:wrap;}
-.sym{display:inline-flex;align-items:center;justify-content:center;width:18px;font-weight:900;}
-.sym.good{color:#128a2e}
-.sym.reg{color:#e08b00}
-.sym.bad{color:#d10000}
-.sym.na{color:#000}
-
-@media (max-width:575px){
-  .btn-state .btn{height:42px; min-width:46px; font-size:19px;}
-  .checklist-name{font-size:13px;}
-}
 </style>
 
 {!! Form::hidden('my_company', \Auth::user()->my_company, ['id'=>'my_company_id']) !!}
@@ -330,34 +294,15 @@
 
 <br>
 <!-- Checklist -->
-<div class="d-flex align-items-center mb-2 flex-wrap">
-  <h5 class="mb-0"><strong>Checklist Vehicular</strong></h5>
+<h5><strong>CheckList</strong></h5>
+        <div class="form-row">
+            <div class="col-sm-12">
 
-  <div class="ml-auto custom-control custom-switch">
-    <input type="checkbox" class="custom-control-input" id="onlyIssues">
-    <label class="custom-control-label" for="onlyIssues">Solo Regular/Malo</label>
-  </div>
-</div>
-
-<div class="legend">
-  <div class="legend-left">
-    <div class="title">Leyenda:</div>
-    <div class="legend-items">
-      <span><span class="sym good">✓</span> Bueno</span>
-      <span><span class="sym reg">△</span> Regular</span>
-      <span><span class="sym bad">✖</span> Malo</span>
-      <span><span class="sym na">●</span> No aplica</span>
-    </div>
-  </div>
-</div>
-
-        <div class="row">
-        @foreach($checklist_details as $index => $checklist)
-            @php
-            $checkeds = ['correcto' => '', 'recomendable' => '', 'urgente' => '', 'no_aplica' => '', '' => '']; 
-            $checkeds[$checklist->status] = 'checked';
-            @endphp
-            <div class="col-lg-4 col-md-6 col-12" data-col="1">
+            @foreach($checklist_details as $index => $checklist)
+                @php
+                $checkeds = ['correcto' => '', 'recomendable' => '', 'urgente' => '', 'no_aplica' => '', '' => '']; 
+                $checkeds[$checklist->status] = 'checked';
+                @endphp
                 <div class="checklist-item">
                     <input type="hidden" name="order_checklist_details[{{ $index }}][id]" value="">
                     <input type="hidden" name="order_checklist_details[{{ $index }}][order_id]" value="{{ (isset($model)) ? $model->id : '' }}">
@@ -366,53 +311,29 @@
                     <input type="hidden" name="order_checklist_details[{{ $index }}][name]" value="{{ $checklist->name }}">
                     <input type="hidden" name="order_checklist_details[{{ $index }}][type]" value="{{ $checklist->type }}">
                     <input type="hidden" name="order_checklist_details[{{ $index }}][category]" value="{{ $checklist->category }}">
-<div class="checklist-head">
-  <div class="checklist-name flex-grow-1 pr-2">{{ $checklist->name }}</div>
-@php
-    $estado = $checklist->status ?? 'correcto'; // ← AQUÍ el default
-@endphp
-
-  <div class="btn-group btn-group-toggle btn-state" data-toggle="buttons" role="group" aria-label="estado">
-    <label class="btn btn-outline-success {{ $estado == 'correcto' ? 'active' : '' }}">
-      <input class="check-status" type="radio"
-             name="order_checklist_details[{{ $index }}][status]"
-             value="correcto" {{ $estado == 'correcto' ? 'checked' : '' }}>
-      ✓
-    </label>
-
-    <label class="btn btn-outline-warning {{ $estado == 'recomendable' ? 'active' : '' }}">
-      <input class="check-status" type="radio"
-             name="order_checklist_details[{{ $index }}][status]"
-             value="recomendable" {{ $estado == 'recomendable' ? 'checked' : '' }}>
-      △
-    </label>
-
-    <label class="btn btn-outline-danger {{ $estado == 'urgente' ? 'active' : '' }}">
-      <input class="check-status" type="radio"
-             name="order_checklist_details[{{ $index }}][status]"
-             value="urgente" {{ $estado == 'urgente' ? 'checked' : '' }}>
-      ✖
-    </label>
-
-    <label class="btn btn-outline-dark {{ $estado == 'no_aplica' ? 'active' : '' }}">
-      <input class="check-status" type="radio"
-             name="order_checklist_details[{{ $index }}][status]"
-             value="no_aplica" {{ $estado == 'no_aplica' ? 'checked' : '' }}>
-      ●
-    </label>
-  </div>
-</div>
-
-<div class="checklist-comment">
-  <input class="form-control form-control-sm py-1"
-         type="text"
-         name="order_checklist_details[{{ $index }}][comment]"
-         value="{{ $checklist->comment }}">
-</div>
-
+                    <span class="item-name">{{ $checklist->name }}</span>
+                    <div class="options">
+                        <div class="form-check radio-green">
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="correcto-{{ $index }}" value="correcto" {{ $checkeds['correcto'] }} required>
+                            <label class="form-check-label" for="correcto-{{ $index }}">Bueno</label>
+                        </div>
+                        <div class="form-check radio-amber">
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="recomendable-{{ $index }}" value="recomendable" {{ $checkeds['recomendable'] }} required>
+                            <label class="form-check-label" for="recomendable-{{ $index }}">Regular</label>
+                        </div>
+                        <div class="form-check radio-red">
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="urgente-{{ $index }}" value="urgente" {{ $checkeds['urgente'] }} required>
+                            <label class="form-check-label" for="urgente-{{ $index }}">Malo</label>
+                        </div>
+                        <div class="form-check radio-black">
+                            <input class="form-check-input" type="radio" name="order_checklist_details[{{ $index }}][status]" id="no-aplica-{{ $index }}" value="no_aplica" {{ $checkeds['no_aplica'] }} required>
+                            <label class="form-check-label" for="no-aplica-{{ $index }}">No Aplica</label>
+                        </div>
+                    </div>
+                    <input class="form-control form-control-sm comment" type="text" name="order_checklist_details[{{ $index }}][comment]" value="{{ $checklist->comment }}" placeholder="">
                 </div>
+            @endforeach
             </div>
-        @endforeach
         </div>
         <div class="form-row">
             <div class="col-sm-12">
@@ -504,40 +425,6 @@
 
 
 <script>
-// ===== CHECKLIST: filtro Solo Regular/Malo =====
-function applyOnlyIssues() {
-  var only = $('#onlyIssues').is(':checked');
-
-  $('.checklist-item').each(function(){
-    var $item = $(this);
-    var status = $item.find('input.check-status:checked').val() || '';
-    $item.attr('data-status', status);
-
-    if(!only){
-      $item.closest('[data-col]').show();
-    }else{
-      var show = (status === 'recomendable' || status === 'urgente');
-      $item.closest('[data-col]').toggle(show);
-    }
-  });
-}
-
-$(document).ready(function(){
-  // En edit, ya vienen marcados desde backend: aplicamos de frente
-  applyOnlyIssues();
-
-  // Si cambian el estado, recalculamos filtro
-  $(document).on('change', 'input.check-status', function(){
-    applyOnlyIssues();
-  });
-
-  $('#onlyIssues').on('change', function(){
-    applyOnlyIssues();
-  });
-
-  // Tooltips en PC (si Bootstrap JS está cargado)
-  $('[title]').tooltip({container:'body', trigger:'hover'});
-});
 
         let canvas = document.getElementById("damageCanvas");
         let ctx = canvas.getContext("2d");
