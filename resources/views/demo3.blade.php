@@ -14,7 +14,7 @@
   .section-title{font-weight:800; text-transform:uppercase; letter-spacing:.3px;}
   .small-muted{font-size:12px;color:#6c757d;}
   .sticky-save{
-    position:fixed; left:0; right:0; bottom:0; z-index:9998;
+    position:fixed; left:0; right:0; bottom:0; z-index:10000;
     background:#fff; border-top:2px solid #e9ecef;
     padding:10px 12px;
   }
@@ -100,11 +100,19 @@
 
   /* Barra contextual checklist (solo aparece en checklist) */
   #checklistBar{
-    position:fixed; left:0; right:0; bottom:56px; /* encima del save global */
+    position:fixed; left:0; right:0; bottom:72px; /* encima del save global */
+    z-index:10050;
     background:#fff; border-top:2px solid #000;
     padding:10px 12px; z-index:9999;
     display:none;
   }
+#checklistBar{
+  bottom:72px;        /* más arriba para que no lo tape la barra global */
+  z-index:10050;      /* por encima de todo */
+}
+.sticky-save{
+  z-index:10000;
+}
 
   /* Save global */
   .save-row{
