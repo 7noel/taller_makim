@@ -110,7 +110,7 @@
 
 <body>
 <div class="container-fluid page mt-3">
-
+<a href="/demo2" class="btn btn-outline-info mb-3">Ver Actual Formato</a>
   <!-- Título + Switch alineados -->
   <div class="d-flex align-items-center mb-2 flex-wrap">
     <h5 class="mb-0"><strong>Checklist Vehicular</strong></h5>

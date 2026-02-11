@@ -312,6 +312,7 @@ html, body { height: 100%; overflow: hidden; margin: 0; }
   <div id="clienteFields">
 
 <div class="container">
+        <a href="/demo3" class="btn btn-outline-info mb-3">Ver Nuevo Formato</a>
   <div class="row">
     <div class="col-md-12">
       <div class="card">
