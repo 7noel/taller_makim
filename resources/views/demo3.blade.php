@@ -112,9 +112,19 @@
 <body>
 <div class="container-fluid page mt-3">
 
-  <h5 class="mb-2"><strong>Checklist Vehicular</strong></h5>
+  <!-- Título + Switch alineados -->
+  <div class="d-flex align-items-center mb-2 flex-wrap">
+    <h5 class="mb-0"><strong>Checklist Vehicular</strong></h5>
 
-  <!-- Leyenda + switch cerca (sin barra inferior) -->
+    <div class="ml-auto custom-control custom-switch">
+      <input type="checkbox" class="custom-control-input" id="onlyIssues">
+      <label class="custom-control-label" for="onlyIssues">
+        Solo Regular/Malo
+      </label>
+    </div>
+  </div>
+
+  <!-- Solo Leyenda -->
   <div class="legend">
     <div class="legend-left">
       <div class="title">Leyenda:</div>
@@ -123,13 +133,6 @@
         <span><span class="sym reg">△</span> Regular</span>
         <span><span class="sym bad">✖</span> Malo</span>
         <span><span class="sym na">●</span> No aplica</span>
-      </div>
-    </div>
-
-    <div class="legend-right">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" id="onlyIssues">
-        <label class="custom-control-label" for="onlyIssues">Solo Regular/Malo</label>
       </div>
     </div>
   </div>
