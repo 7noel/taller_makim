@@ -95,7 +95,6 @@
 
   /* Comentario siempre visible */
   .comment{margin-top:8px;}
-  .comment input{height:40px;}
 
   /* Mejor UX móvil */
   .no-select, .btn, .item{ -webkit-user-select:none; user-select:none; }
