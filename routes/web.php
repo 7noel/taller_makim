@@ -16,8 +16,9 @@ Route::get('houses', function () {
     return view('welcome');
 });
 
-Route::get('panel2', function () {
-    return view('panel2');
+Route::get('demo3', function () {
+	return view('demo3');
+	// return view('demo2');
 });
 
 Route::get('demo2', function () {
