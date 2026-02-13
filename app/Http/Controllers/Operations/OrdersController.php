@@ -103,6 +103,8 @@ class OrdersController extends Controller {
 				$service_types = ['AMPLIACION' => 'AMPLIACION'];
 			} elseif (request()->input('type_service') == 'PARTICULAR') {
 				unset($service_types['SINIESTRO']);
+			} elseif (request()->input('type_service') == 'SINIESTRO') {
+				$service_types = ['SINIESTRO' => 'SINIESTRO'];
 			}
 		}
 		$brands = $this->brandRepo->getList2();

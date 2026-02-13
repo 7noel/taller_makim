@@ -254,7 +254,7 @@
         <tr>
             <th class="th1 border center">ITEM</th>
             <th class="th2 border center">DESCRIPCIÓN</th>
-            <th class="th3 border center">CANT.</th>
+            {{-- <th class="th3 border center">CANT.</th> --}}
             <th class="th4 border center">TOTAL</th>
         </tr>
     </thead>
@@ -263,7 +263,7 @@
         @php $item = 1; @endphp
 		@foreach($grupos as $comment => $detalles)
 		    <tr>
-		        <td class="border title" colspan="3"><strong>{{ $comment }}</strong></td>
+		        <td class="border title" colspan="2"><strong>{{ $comment }}</strong></td>
 		        <td class="border center">
 		            <strong>{{ number_format(collect($detalles)->sum('cost'), 2, '.', ',') }}</strong>
 		        </td>
@@ -279,8 +279,9 @@
 				        {{ $detalle->product->name }}
 				    @endif
 				</td>
-			    <td class="border center align-top">{{ $detalle->quantity.' '.$detalle->unit->symbol }}</td>
-			    <td class="border center align-top">{{ $detalle->cost }}</td>
+			    {{-- <td class="border center align-top">{{ $detalle->quantity.' '.$detalle->unit->symbol }}</td> --}}
+			    {{-- <td class="border center align-top">{{ $detalle->cost }}</td> --}}
+			    <td class="border"></td>
 		    </tr>
 		    @endforeach
 		@endforeach

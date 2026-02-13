@@ -10,6 +10,7 @@
 			<th class="text-center">Mnd</th>
 			<th class="text-center">Total</th>
 			<th class="text-center">OT</th>
+			<th class="text-center">Referencia</th>
 			<th class="text-center">Acciones</th>
 		</tr>
 	</thead>
@@ -48,6 +49,11 @@
 				<a href="{{ route('inventory.recepcion_by_quote', $model->id) }}" class="btn btn-link btn-sm" title="Crear Inventario">Crear</a>
 				@else
 				SIN OT
+				@endif
+			</td>
+			<td>
+				@if($model->type_service=='AMPLIACION')
+					{{ optional($model->parent)->sn}}
 				@endif
 			</td>
 			<td class="nowrap">

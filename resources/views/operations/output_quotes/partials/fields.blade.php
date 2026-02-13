@@ -46,6 +46,7 @@
 			@endif
 				<!-- <div class="dropdown-divider"></div> -->
 				<a class="dropdown-item btn-sm" href="{{ route('output_quotes.by_inventory', [$inventory->id, 'type_service'=>'PARTICULAR']) }}">Nuevo Particular</a>
+				<a class="dropdown-item btn-sm" href="{{ route('output_quotes.by_inventory', [$inventory->id, 'type_service'=>'SINIESTRO']) }}">Nuevo Siniestro</a>
 				@foreach($inventory->particulares as $quote)
 					@if($model->id != $quote->id)
 						<a class="dropdown-item btn-sm" href="{{ route('output_quotes.edit', $quote->id) }}">{{ $quote->sn }}  {{ $quote->type_service }}</a>
