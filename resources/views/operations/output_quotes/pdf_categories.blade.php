@@ -292,7 +292,7 @@
 	    $grupos[$comment][] = $detalle;
 	}
 	
-	$detalles_repuestos = $model->details->where('is_downloadable', 1);
+	$detalles_repuestos = $model->details->where('is_downloadable', 1)->sortBy('id');
 
     $comentario_actual = null; // Para el control de cambios en comment
 
