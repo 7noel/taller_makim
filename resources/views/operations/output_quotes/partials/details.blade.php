@@ -141,35 +141,103 @@
   </tfoot>
 </table>
 
-<hr class="my-2">
+<hr class="my-2"><div class="card border-0 shadow-sm mb-2">
+  <div class="card-body py-3">
 
-<div class="form-row">
-  <div class="form-group col-md-4">
-    <label>Monto mínimo de franquicia (sin igv)</label>
-    <input type="number" step="0.01" min="0" class="form-control form-control-sm" 
-           id="franquicia_min" name="diagnostico[franquicia_min]" value="{{ old('franquicia_min', optional($model->diagnostico)->franquicia_min ?? 0) }}">
-  </div>
-  <div class="form-group col-md-4">
-    <label>% de franquicia</label>
-    <div class="input-group input-group-sm">
-      <input type="number" step="0.01" min="0" max="100" class="form-control" 
-             id="franquicia_pct" name="diagnostico[franquicia_pct]" value="{{ old('franquicia_pct', optional($model->diagnostico)->franquicia_pct ?? 10) }}">
-      <div class="input-group-append"><span class="input-group-text">%</span></div>
+    <div class="form-row align-items-end">
+
+      <!-- Monto mínimo -->
+			<div class="form-group col-md-3 mb-2">
+
+			  <label class="d-flex justify-content-between align-items-center mb-1">
+			    <span>Monto mínimo</span>
+
+					@php
+					  // Valor desde BD (si existe) o default (0 = NO incluye IGV)
+					  $incluyeIgvBD = optional($model->diagnostico)->franquicia_min_incluye_igv ?? 0;
+
+					  // Si hubo error de validación y vuelve con old(), respeta eso.
+					  // old() puede venir como '1' o '0'
+					  $incluyeIgv = old('diagnostico.franquicia_min_incluye_igv', $incluyeIgvBD);
+					@endphp
+					
+			    <span class="custom-control custom-switch mb-0">
+			    	{{-- Para que SIEMPRE se envíe algo, aunque esté apagado --}}
+  					<input type="hidden" name="diagnostico[franquicia_min_incluye_igv]" value="0">
+			      <input type="checkbox"
+			             class="custom-control-input"
+			             id="franquicia_min_incluye_igv"
+			             name="diagnostico[franquicia_min_incluye_igv]"
+			             value="1"
+         					{{ (int)$incluyeIgv === 1 ? 'checked' : '' }}>
+			      <label class="custom-control-label small"
+			             for="franquicia_min_incluye_igv">
+			        Incluye IGV
+			      </label>
+			    </span>
+			  </label>
+
+			  <input type="number"
+			         step="0.01"
+			         min="0"
+			         class="form-control form-control-sm"
+			         id="franquicia_min"
+			         name="diagnostico[franquicia_min]"
+			         value="{{ old('franquicia_min', optional($model->diagnostico)->franquicia_min ?? 0) }}">
+
+			</div>
+
+
+      <!-- Mínimo sin IGV -->
+      <div class="form-group col-md-3 mb-2">
+        <label class="mb-1">Mínimo sin IGV</label>
+        <input type="text"
+               class="form-control form-control-sm bg-light text-right"
+               id="franquicia_min_sin_igv_display"
+			         name="diagnostico[franquicia_min_sin_igv]"
+               value="0.00"
+               readonly>
+      </div>
+
+      <!-- % franquicia -->
+      <div class="form-group col-md-3 mb-2">
+        <label class="mb-1">% Franquicia</label>
+        <div class="input-group input-group-sm">
+          <input type="number" step="0.01" min="0" max="100"
+                 class="form-control text-right"
+                 id="franquicia_pct"
+                 name="diagnostico[franquicia_pct]"
+                 value="{{ old('franquicia_pct', optional($model->diagnostico)->franquicia_pct ?? 10) }}">
+          <div class="input-group-append">
+            <span class="input-group-text">%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Franquicia a pagar -->
+      <div class="form-group col-md-3 mb-2">
+        <label class="mb-1 font-weight-bold">Franquicia a pagar (sin IGV)</label>
+        <input type="text"
+               readonly
+               class="form-control form-control-sm text-right font-weight-bold franquicia-total"
+               id="franquicia_total_display"
+               value="0.00">
+        <input type="hidden" name="diagnostico[franquicia_total]" id="franquicia_total" value="0">
+      </div>
+
     </div>
-  </div>
-  <div class="form-group col-md-4">
-    <label>Franquicia a pagar (calculada sin igv)</label>
-    <input type="text" readonly class="form-control form-control-sm font-weight-bold" 
-           id="franquicia_total_display" value="0.00">
-    <input type="hidden" name="diagnostico[franquicia_total]" id="franquicia_total" value="0">
-  </div>
-</div>
 
-<div class="small text-muted mb-2">
-  <div>Suma OCs: <span id="sum_oc_display">0.00</span></div>
-  <div>Base (Presupuesto + OCs): <span id="base_display">0.00</span></div>
-  <div>% aplicado: <span id="pct_aplicado_display">0.00</span></div>
-  <div>Mínimo: <span id="minimo_display">0.00</span></div>
+    <!-- Resumen -->
+    <div class="mt-2 p-2 bg-light rounded small">
+      <div class="d-flex flex-wrap justify-content-between">
+        <div class="mr-3">Suma OCs: <strong><span id="sum_oc_display">0.00</span></strong></div>
+        <div class="mr-3">Base: <strong><span id="base_display">0.00</span></strong></div>
+        <div class="mr-3">% Aplicado: <strong><span id="pct_aplicado_display">0.00</span></strong></div>
+        <div>Mínimo usado: <strong><span id="minimo_display">0.00</span></strong></div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 
@@ -348,7 +416,7 @@ $(document).ready(function () {
 	});
 
 	// Recalcular en cambios
-	$(document).on('input change', '#presupuesto_total, #franquicia_min, #franquicia_pct, .js-oc-monto', recalcFranquicia);
+	$(document).on('input change', '#presupuesto_total, #franquicia_min, #franquicia_pct, .js-oc-monto, #franquicia_min_incluye_igv', recalcFranquicia);
 
 	// Primer cálculo
 	recalcFranquicia();
@@ -435,31 +503,31 @@ function toNumber(v){
 function fmt(n){ return (Math.round(n * 100) / 100).toFixed(2); }
 
 // ---- Recalcular franquicia ----
-function recalcFranquicia(){
-  var presupuesto = parseFloat($('#mSubTotal').text());
-  var sumOC = 0;
-  $('.js-oc-monto').each(function(){ sumOC += parseFloat($(this).val()); });
+// function recalcFranquicia(){
+//   var presupuesto = parseFloat($('#mSubTotal').text());
+//   var sumOC = 0;
+//   $('.js-oc-monto').each(function(){ sumOC += parseFloat($(this).val()); });
 
-  var base = presupuesto + sumOC;
-  console.log(`subtotal: ${$('#mSubTotal').text()}, presupuesto: ${presupuesto} | sumaOC: ${sumOC} | base: ${base}`)
-  var pct = parseFloat($('#franquicia_pct').val());
-  if (pct < 0) pct = 0;
-  if (pct > 100) pct = 100;
+//   var base = presupuesto + sumOC;
+//   console.log(`subtotal: ${$('#mSubTotal').text()}, presupuesto: ${presupuesto} | sumaOC: ${sumOC} | base: ${base}`)
+//   var pct = parseFloat($('#franquicia_pct').val());
+//   if (pct < 0) pct = 0;
+//   if (pct > 100) pct = 100;
 
-  var minimo = parseFloat($('#franquicia_min').val());
-  if (minimo < 0) minimo = 0;
+//   var minimo = parseFloat($('#franquicia_min').val());
+//   if (minimo < 0) minimo = 0;
 
-  var porPct = base * (pct/100.0);
-  var result = Math.max(porPct, minimo);
+//   var porPct = base * (pct/100.0);
+//   var result = Math.max(porPct, minimo);
 
-  // pintar
-  $('#sum_oc_display').text(fmt(sumOC));
-  $('#base_display').text(fmt(base));
-  $('#pct_aplicado_display').text(fmt(porPct));
-  $('#minimo_display').text(fmt(minimo));
-  $('#franquicia_total_display').val(fmt(result));
-  $('#franquicia_total').val(fmt(result));
-}
+//   // pintar
+//   $('#sum_oc_display').text(fmt(sumOC));
+//   $('#base_display').text(fmt(base));
+//   $('#pct_aplicado_display').text(fmt(porPct));
+//   $('#minimo_display').text(fmt(minimo));
+//   $('#franquicia_total_display').val(fmt(result));
+//   $('#franquicia_total').val(fmt(result));
+// }
 
 // ---- Agregar fila de OC ----
 function addOCRow(focusTarget = 'descripcion'){
@@ -1056,4 +1124,54 @@ function addOCRow(focusTarget = 'descripcion'){
   });
 
 })(window, jQuery);
+
+function moneyToFloat(v){
+  if (v === null || v === undefined) return 0;
+  v = String(v).replace(/,/g,'').trim();
+  var n = parseFloat(v);
+  return isNaN(n) ? 0 : n;
+}
+
+function getMinimoSinIGV(){
+  var minimoIngresado = moneyToFloat($('#franquicia_min').val());
+  var incluyeIGV = $('#franquicia_min_incluye_igv').is(':checked');
+
+  var igvFactor = 1.18; // si algún día cambia, lo parametrizamos
+  var minimoSin = incluyeIGV ? (minimoIngresado / igvFactor) : minimoIngresado;
+
+  // Mostrar el mínimo sin IGV (para cálculos)
+  $('#franquicia_min_sin_igv_display').val(fmt(minimoSin));
+
+  return minimoSin;
+}
+
+function recalcFranquicia(){
+  var presupuesto = moneyToFloat($('#mSubTotal').text());
+
+  var sumOC = 0;
+  $('.js-oc-monto').each(function(){
+    sumOC += moneyToFloat($(this).val());
+  });
+
+  var base = presupuesto + sumOC;
+
+  var pct = moneyToFloat($('#franquicia_pct').val());
+  if (pct < 0) pct = 0;
+  if (pct > 100) pct = 100;
+
+  var minimo = getMinimoSinIGV(); // <-- aquí ya entra el switch IGV
+
+  var porPct = base * (pct/100.0);
+  var result = Math.max(porPct, minimo);
+
+  // pintar
+  $('#sum_oc_display').text(fmt(sumOC));
+  $('#base_display').text(fmt(base));
+  $('#pct_aplicado_display').text(fmt(porPct));   // monto aplicado
+  $('#minimo_display').text(fmt(minimo));         // mínimo usado (sin IGV)
+
+  $('#franquicia_total_display').val(fmt(result));
+  $('#franquicia_total').val(fmt(result));
+}
+
 </script>
