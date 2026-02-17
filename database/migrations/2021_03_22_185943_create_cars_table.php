@@ -41,6 +41,7 @@ class CreateCarsTable extends Migration
             $table->string('operator_company');
             $table->string('operator_name');
             $table->string('operator_mobile', 50);
+            $table->string('operator_email', 50);
             $table->string('slug');
 
             $table->foreign('my_company')->references('id')->on('companies');

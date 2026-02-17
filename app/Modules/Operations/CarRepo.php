@@ -68,6 +68,9 @@ class CarRepo extends BaseRepo{
 		if (isset($data['operator_mobile'])) {
 			$dataupdate['operator_mobile'] = $data['operator_mobile'];
 		}
+		if (isset($data['operator_email'])) {
+			$dataupdate['operator_email'] = $data['operator_email'];
+		}
 
 		if ($dataupdate === []) {
 			return false;

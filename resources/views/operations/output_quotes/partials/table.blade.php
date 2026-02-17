@@ -28,7 +28,7 @@
 		}
 		@endphp
 		<tr data-id="{{ $model->id }}" data-tipo="COT">
-			@if($model->is_walk_in)
+			@if($model->is_walk_in and !isset($model->inventario))
 			<td class="text-center walk-in-cell" title="TRANSITO" style="white-space: nowrap;">
 			@else
 			<td class="text-center" style="white-space: nowrap;">

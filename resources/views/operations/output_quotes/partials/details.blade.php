@@ -145,7 +145,7 @@
 
 <div class="form-row">
   <div class="form-group col-md-4">
-    <label>Monto mínimo de franquicia</label>
+    <label>Monto mínimo de franquicia (sin igv)</label>
     <input type="number" step="0.01" min="0" class="form-control form-control-sm" 
            id="franquicia_min" name="diagnostico[franquicia_min]" value="{{ old('franquicia_min', optional($model->diagnostico)->franquicia_min ?? 0) }}">
   </div>
@@ -158,7 +158,7 @@
     </div>
   </div>
   <div class="form-group col-md-4">
-    <label>Franquicia a pagar (calculada)</label>
+    <label>Franquicia a pagar (calculada sin igv)</label>
     <input type="text" readonly class="form-control form-control-sm font-weight-bold" 
            id="franquicia_total_display" value="0.00">
     <input type="hidden" name="diagnostico[franquicia_total]" id="franquicia_total" value="0">

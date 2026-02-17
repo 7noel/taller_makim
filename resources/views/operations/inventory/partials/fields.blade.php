@@ -275,6 +275,10 @@
                 {!! Field::text('inventory[operator_mobile]', (isset($model->inventory->operator_mobile
                 ) ? $model->inventory->operator_mobile : (isset($car) ? $car->operator_mobile : '')), ['label' => 'Operador Celular', 'class'=>'form-control-sm text-uppercase']) !!}
             </div>
+            <div class="col-md-2 col-sm-4">
+                {!! Field::text('inventory[operator_email]', (isset($model->inventory->operator_email
+                ) ? $model->inventory->operator_email : (isset($car) ? $car->operator_email : '')), ['label' => 'Operador Email', 'class'=>'form-control-sm']) !!}
+            </div>
         </div>
 
         <div class="form-row">
@@ -906,6 +910,7 @@ $(document).ready(function () {
         $('#inventory_operator_company').val(data.operator_company)
         $('#inventory_operator_name').val(data.operator_name)
         $('#inventory_operator_mobile').val(data.operator_mobile)
+        $('#inventory_operator_email').val(data.operator_email)
         $('#inventory_combustible').focus()
         // aquí puedes limpiar, cerrar modal, recargar tabla, etc.
         // Object.keys(payload).forEach(n => $wrap.find(`[name="${n}"]`).val(''));

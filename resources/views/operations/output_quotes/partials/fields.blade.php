@@ -6,6 +6,7 @@
 <!-- {!! Form::hidden('sn', null, ['id'=>'sn']) !!} -->
 
 @if(isset($model))
+
 	@if(request()->input('type_service') == 'AMPLIACION')
 		{!! Form::hidden('parent_quote_id', optional($inventory->mainSiniestro)->id, ['id'=>'parent_quote_id']) !!}
 	@endif
@@ -20,9 +21,6 @@
 		<a href="{{ route( 'panel', $panel_status ) }}" class="btn btn-outline-info btn-sm" title="Listado"><i class="fa-solid fa-list"></i></i> Listado</a>
 	@endif
 	@if($model->order_type == 'output_quotes')
-		@if(! optional($inventory)->id)
-			{!! Form::hidden('is_walk_in', 1) !!}
-		@endif
 		<a href="{{ route( 'output_quotes.print_details' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF por Items">{!! $icons['pdf'] !!} PDF Items</a>
 		<a href="{{ route( 'output_quotes.print_categories' , $model->id ) }}" target="_blank" class="btn btn-outline-danger btn-sm" title="PDF por Categorias">{!! $icons['pdf'] !!} PDF Categorías</a>
 		<a href="{{ route( 'output_quotes.print_taller' , $model->id ) }}" target="_blank" class="btn btn-outline-secondary btn-sm" title="PDF">{!! $icons['pdf'] !!} PDF Taller</a>
@@ -59,6 +57,10 @@
 		
 	@endif
 	<br>
+@else
+	@if(!isset($inventory))
+		{!! Form::hidden('is_walk_in', 1) !!}
+	@endif
 @endif
 <br>
 <div class="form-row">

@@ -156,13 +156,16 @@
 		{!! Field::email('driver_email', null, ['label' => 'Conductor Email', 'class'=>'form-control-sm']) !!}
 	</div>
 	<div class="col-md-2 col-sm-4">
-		{!! Field::email('operator_company', null, ['label' => 'Operador Empresa', 'class'=>'form-control-sm']) !!}
+		{!! Field::text('operator_company', null, ['label' => 'Operador Empresa', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
 	<div class="col-md-2 col-sm-4">
 		{!! Field::text('operator_name', null, ['label' => 'Operador Contacto', 'class'=>'form-control-sm text-uppercase']) !!}
 	</div>
 	<div class="col-md-2 col-sm-4">
 		{!! Field::text('operator_mobile', null, ['label' => 'Operador Celular', 'class'=>'form-control-sm text-uppercase']) !!}
+	</div>
+	<div class="col-md-2 col-sm-4">
+		{!! Field::email('operator_email', null, ['label' => 'Operador Email', 'class'=>'form-control-sm']) !!}
 	</div>
 </div>
 
