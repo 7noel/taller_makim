@@ -301,11 +301,11 @@
 
         <div class="form-row">
           <div class="form-group col-6 mb-2">
-            <label class="mb-1">Precio actual (S/)</label>
+            <label class="mb-1">Precio actual</label>
             <input type="text" id="apPrecioActual" class="form-control form-control-sm text-right" readonly>
           </div>
           <div class="form-group col-6 mb-2">
-            <label class="mb-1">Precio objetivo (S/)</label>
+            <label class="mb-1">Precio objetivo</label>
             <input type="number" step="0.01" min="0" id="apPrecioObjetivo" class="form-control form-control-sm text-right" placeholder="Ej: 1520.00">
           </div>
         </div>

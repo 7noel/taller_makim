@@ -207,12 +207,14 @@
 					<div>Correo: {{ $model->mycompany->email }}</div>
 				</td>
 				<td class="border" width="39" align="center" style="font-size: 18px; font-weight: bold;">
-					<div>RUC: {{ $model->mycompany->doc }}</div>
+					{{--<div>RUC: {{ $model->mycompany->doc }}</div>--}}
 					<div>PRESUPUESTO</div>
 					<div>{{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</div>
 					@if($model->type_service=='AMPLIACION')
 						<div style="font-size:13px;">AMPLIACION DE {{ optional($model->parent)->series }}-{{ str_pad(optional($model->parent)->number, 7, '0', STR_PAD_LEFT) }}</div>
 					@endif
+					<div>{{ $model->placa }}</div>
+					<div>{{ optional($model->insurance_company)->brand_name }}</div>
 				</td>
 			</tr>
 		</table>

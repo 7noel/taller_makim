@@ -197,9 +197,11 @@
 					<div>Correo: {{ $model->mycompany->email }}</div>
 				</td>
 				<td class="border" width="39" align="center" style="font-size: 18px; font-weight: bold;">
-					<div>RUC: {{ $model->mycompany->doc }}</div>
+					{{--<div>RUC: {{ $model->mycompany->doc }}</div>--}}
 					<div>PRESUPUESTO</div>
 					<div>{{ $model->series }}-{{ str_pad($model->number, 7, '0', STR_PAD_LEFT) }}</div>
+					<div>{{ $model->placa }}</div>
+					<div>{{ optional($model->insurance_company)->brand_name }}</div>
 					
 				</td>
 			</tr>
