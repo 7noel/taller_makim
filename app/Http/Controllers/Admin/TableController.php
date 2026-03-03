@@ -43,8 +43,9 @@ class TableController extends Controller {
 		$list = $this->list;
 		$units_service = $this->repo->getListUnitSer()->pluck('symbol', 'id')->toArray();
 		$units_product = $this->repo->getListUnitPro()->pluck('symbol', 'id')->toArray();
+		$maestros = $this->companyRepo->getListMaestros();
 		// dd($units_service);
-		return view('partials.create', compact('list', 'units_service', 'units_product'));
+		return view('partials.create', compact('list', 'units_service', 'units_product', 'maestros'));
 	}
 
 	public function store()

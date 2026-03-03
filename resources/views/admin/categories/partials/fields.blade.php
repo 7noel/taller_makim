@@ -27,7 +27,11 @@ if (isset($model)) {
 	<label for="">Seleccionar los maestros</label>
 </div>
 <div class="form-row">
-{!! Form::checkboxes('data', $maestros, $model->data) !!}
+	@if(isset($model))
+		{!! Form::checkboxes('data', $maestros, $model->data) !!}
+	@else
+		{!! Form::checkboxes('data', $maestros) !!}
+	@endif
 
 </div>
 <br>
@@ -57,7 +61,7 @@ if (isset($model)) {
     });
 </script>
 
-@include('admin.categories.partials.details')
+<!-- @include('admin.categories.partials.details') -->
 
 @section('scripts')
 	@include('admin.categories.scripts')

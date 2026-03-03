@@ -141,8 +141,8 @@
   </tfoot>
 </table>
 
-<hr class="my-2"><div class="card border-0 shadow-sm mb-2">
-  <div class="card-body py-3">
+<hr class="my-2">
+<div>
 
     <div class="form-row align-items-end">
 
@@ -160,7 +160,7 @@
 					  // old() puede venir como '1' o '0'
 					  $incluyeIgv = old('diagnostico.franquicia_min_incluye_igv', $incluyeIgvBD);
 					@endphp
-					
+
 			    <span class="custom-control custom-switch mb-0">
 			    	{{-- Para que SIEMPRE se envíe algo, aunque esté apagado --}}
   					<input type="hidden" name="diagnostico[franquicia_min_incluye_igv]" value="0">
@@ -237,7 +237,6 @@
       </div>
     </div>
 
-  </div>
 </div>
 
 
