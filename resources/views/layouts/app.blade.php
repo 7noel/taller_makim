@@ -520,7 +520,7 @@ $(document).ready(function () {
         // 5 caracteres — Placas del ESTADO
         // - Al menos 2 letras
         // - Al menos 1 número
-        const reEstado = /^(?=(?:.*[A-Z]){2,})(?=.*[0-9])[A-Z0-9]{5}$/;
+        //const reEstado = /^(?=(?:.*[A-Z]){2,})(?=.*[0-9])[A-Z0-9]{5}$/;
 
         // 7 caracteres — Placas EXCEPCIONALES
         // - Deben empezar con 2 letras (advertencia)
@@ -531,11 +531,11 @@ $(document).ready(function () {
             $input[0].setCustomValidity("");
             $input.removeClass('is-warning');
         }
-        else if (reRegular.test(nuevoValor) || reEstado.test(nuevoValor)) {
+        //else if (reRegular.test(nuevoValor) || reEstado.test(nuevoValor)) {
             // Válidas al 100%
-            $input[0].setCustomValidity("");
-            $input.removeClass('is-warning');
-        }
+        //    $input[0].setCustomValidity("");
+        //    $input.removeClass('is-warning');
+        //}
         else if (reExcep.test(nuevoValor)) {
             // Válida, pero inusual (color naranja)
             $input[0].setCustomValidity("");
