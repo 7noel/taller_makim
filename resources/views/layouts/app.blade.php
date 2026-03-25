@@ -407,6 +407,37 @@ $faviconType = @mime_content_type($faviconPath) ?: 'image/png';
         </main>
     </div>
     <script>
+setInterval(function () {
+
+    $.ajax({
+        url: "{{ route('keep.alive') }}",
+        type: "GET",
+        cache: false
+    });
+
+}, 300000); // cada 5 minutos
+
+// setInterval(function () {
+
+//     $.get('/csrf-token', function (data) {
+
+//         // actualizar meta
+//         $('meta[name="csrf-token"]').attr('content', data.token);
+
+//         // actualizar header AJAX
+//         $.ajaxSetup({
+//             headers: {
+//                 'X-CSRF-TOKEN': data.token
+//             }
+//         });
+
+//         // actualizar TODOS los formularios
+//         $('input[name="_token"]').val(data.token);
+
+//     });
+
+// }, 60000); // cada 10 minutos
+
 $(function () {
   // Bloquea reenvíos múltiples
   $(document).on('submit', 'form.form-loading', function (e) {

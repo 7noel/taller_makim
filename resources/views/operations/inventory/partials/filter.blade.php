@@ -39,6 +39,7 @@ $('#btnExcel').on('click', function () {
 		status_id: $('select[name="status_id"]').val(),
 		placa: $('input[name="placa"]').val(),
 		sn: $('input[name="sn"]').val(),
+		documents: "inventory",
 		excel: 1
 	};
 

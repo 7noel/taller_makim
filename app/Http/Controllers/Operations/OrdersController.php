@@ -68,7 +68,101 @@ class OrdersController extends Controller {
 		$sellers = $this->companyRepo->getListSellers();
 		$locals = $this->companyRepo->getListMyCompany();
 		if (isset($filter->excel)) {
-	        return \Excel::download(new OrdersExport('operations.inventory.export_excel', $models), 'inventarios_vehiculares_'.date("Ymd_His").'.xlsx');
+			if($filter->documents=='inventory'){
+	        	return \Excel::download(new OrdersExport('operations.inventory.export_excel', $models), 'inventarios_vehiculares_'.date("Ymd_His").'.xlsx');
+	        } elseif ($filter->documents=='output_quotes') {
+
+			 /** INVENTARIOS **/
+
+			    $inventarios = Order::with([
+			            'quotes' => function ($q) {
+			                $q->where('order_type', 'output_orders')
+			                  ->with([
+			                      'company',
+			                      'insurance_company',
+			                      'car.brand',
+			                      'car.modelo'
+			                  ]);
+			            },
+			            'company',
+			            'insurance_company',
+			            'car.brand',
+			            'car.modelo'
+			        ])
+			        ->where('order_type', 'inventory')
+			        ->get();
+
+
+
+			    /** PRESUPUESTOS SIN INVENTARIO **/
+
+			    $quotesWithoutInventory = Order::with([
+			            'company',
+			            'insurance_company',
+			            'car.brand',
+			            'car.modelo'
+			        ])
+			        ->where('order_type', 'output_orders')
+			        ->whereNull('order_id')
+			        ->get();
+
+
+
+			    /** ARMAR MODELS (filas del excel) **/
+
+			    $models = collect();
+
+
+
+			    /** INVENTARIOS **/
+
+			    foreach ($inventarios as $inv) {
+
+			        if ($inv->quotes->count()) {
+
+			            foreach ($inv->quotes as $quote) {
+
+			                $models->push((object)[
+			                    'inventory' => $inv,
+			                    'quote' => $quote,
+			                ]);
+
+			            }
+
+			        } else {
+
+			            $models->push((object)[
+			                'inventory' => $inv,
+			                'quote' => null,
+			            ]);
+
+			        }
+
+			    }
+
+
+
+			    /** PRESUPUESTOS SIN INVENTARIO **/
+
+			    foreach ($quotesWithoutInventory as $quote) {
+
+			        $models->push((object)[
+			            'inventory' => null,
+			            'quote' => $quote,
+			        ]);
+
+			    }
+
+
+
+			    return \Excel::download(
+			        new OrdersExport(
+			            'operations.output_quotes.export_excel',
+			            $models
+			        ),
+			        'inventarios_presupuestos_'.date("Ymd_His").'.xlsx'
+			    );
+	        }
 		}
 		return view('partials.filter',compact('models', 'filter', 'sellers', 'locals'));
 	}

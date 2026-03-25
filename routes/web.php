@@ -26,6 +26,16 @@ Route::get('prueba', 'HomeController@prueba');
 Route::get('/', 'HomeController@index');
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 
+Route::get('/keep-alive', function () {
+    return response()->json(['status' => 'alive']);
+})->name('keep.alive');
+
+// Route::get('/csrf-token', function () {
+//     return response()->json([
+//         'token' => csrf_token()
+//     ]);
+// });
+
 // Route::get('cambio1/{y}/{m}', function ($y, $m) {
 // 	$last_tc = Exchange::orderBy('fecha', 'desc')->first();
 // 	if (is_null($last_tc) or $last_tc->fecha < date('Y-m-d')) {
