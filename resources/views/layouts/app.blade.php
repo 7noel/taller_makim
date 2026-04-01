@@ -562,11 +562,12 @@ $(document).ready(function () {
             $input[0].setCustomValidity("");
             $input.removeClass('is-warning');
         }
-        //else if (reRegular.test(nuevoValor) || reEstado.test(nuevoValor)) {
-            // Válidas al 100%
-        //    $input[0].setCustomValidity("");
-        //    $input.removeClass('is-warning');
-        //}
+        // else if (reRegular.test(nuevoValor) || reEstado.test(nuevoValor)) {
+        else if (reRegular.test(nuevoValor)) {
+            Válidas al 100%
+           $input[0].setCustomValidity("");
+           $input.removeClass('is-warning');
+        }
         else if (reExcep.test(nuevoValor)) {
             // Válida, pero inusual (color naranja)
             $input[0].setCustomValidity("");
