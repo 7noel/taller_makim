@@ -20,11 +20,11 @@
 	<div class="col-sm-2">
 		{!! Field::text('sn', ['label'=>'Serie-Número','class'=>'form-control-sm']) !!}
 	</div>
-	<div class="col-sm-2 align-self-end">
+	<!-- <div class="col-sm-2 align-self-end">
 		<div class="form-group">
 			<a href="#" target="_blank" id="btnExcel" class="btn btn-sm btn-outline-info">{!! $icons['excel'] !!} Descargar Excel</a>
 		</div>
-	</div>
+	</div> -->
 </div>
 
 <script>

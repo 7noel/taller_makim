@@ -5,6 +5,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use App\Modules\Operations\Order;
 use App\Modules\Operations\ChecklistDetailRepo;
 use App\Modules\Operations\OrderChecklistDetailRepo;
 use App\Modules\Operations\OrderRepo;
@@ -68,101 +69,81 @@ class OrdersController extends Controller {
 		$sellers = $this->companyRepo->getListSellers();
 		$locals = $this->companyRepo->getListMyCompany();
 		if (isset($filter->excel)) {
-			if($filter->documents=='inventory'){
-	        	return \Excel::download(new OrdersExport('operations.inventory.export_excel', $models), 'inventarios_vehiculares_'.date("Ymd_His").'.xlsx');
-	        } elseif ($filter->documents=='output_quotes') {
-
-			 /** INVENTARIOS **/
-
-			    $inventarios = Order::with([
-			            'quotes' => function ($q) {
-			                $q->where('order_type', 'output_orders')
-			                  ->with([
-			                      'company',
-			                      'insurance_company',
-			                      'car.brand',
-			                      'car.modelo'
-			                  ]);
-			            },
-			            'company',
-			            'insurance_company',
-			            'car.brand',
-			            'car.modelo'
-			        ])
-			        ->where('order_type', 'inventory')
-			        ->get();
-
-
-
-			    /** PRESUPUESTOS SIN INVENTARIO **/
-
-			    $quotesWithoutInventory = Order::with([
-			            'company',
-			            'insurance_company',
-			            'car.brand',
-			            'car.modelo'
-			        ])
-			        ->where('order_type', 'output_orders')
-			        ->whereNull('order_id')
-			        ->get();
-
-
-
-			    /** ARMAR MODELS (filas del excel) **/
-
+			// if($filter->documents=='inventory'){
+	        // 	return \Excel::download(new OrdersExport('operations.inventory.export_excel', $models), 'inventarios_vehiculares_'.date("Ymd_His").'.xlsx');
+	        // } elseif ($filter->documents=='output_quotes') {
 			    $models = collect();
 
+			    /** INVENTARIOS (procesados por chunks) */
+			    Order::with([
+			            'quotes' => function ($q) use ($filter) {
+			                $q->where('order_type', 'output_quotes')
+							->whereBetween('created_at', [
+								$filter->f1.' 00:00:00',
+								$filter->f2.' 23:59:59'
+							])
+			                ->with([
+			                    'company', 'insurance_company', 'car.brand', 'car.modelo'
+			                ]);
+			            },
+			            'company', 'insurance_company', 'car.brand', 'car.modelo'
+			        ])
+			        ->where('order_type', 'inventory')
+	                ->whereBetween('created_at', [
+	                      $filter->f1.' 00:00:00',
+	                      $filter->f2.' 23:59:59'
+	                ])
+			        ->orderBy('id')
+			        ->chunk(500, function ($inventarios) use (&$models) {
+			            foreach ($inventarios as $inv) {
+			                // Si tiene presupuestos
+			                if ($inv->quotes->count()) {
+			                    foreach ($inv->quotes as $quote) {
+			                        $models->push((object)[
+			                            'inventory' => $inv,
+			                            'quote' => $quote,
+			                        ]);
+			                    }
+			                }
+			                // Si no tiene presupuesto
+			                else {
+			                    $models->push((object)[
+			                        'inventory' => $inv,
+			                        'quote' => null,
+			                    ]);
+			                }
+			            }
+			        });
 
-
-			    /** INVENTARIOS **/
-
-			    foreach ($inventarios as $inv) {
-
-			        if ($inv->quotes->count()) {
-
-			            foreach ($inv->quotes as $quote) {
-
+			    /** PRESUPUESTOS SIN INVENTARIO */
+			    Order::with([
+			            'company', 'insurance_company', 'car.brand', 'car.modelo'
+			        ])
+			        ->where('order_type', 'output_quotes')
+			        ->where('order_id', 0)
+					->whereBetween('created_at', [
+						$filter->f1.' 00:00:00',
+						$filter->f2.' 23:59:59'
+					])
+			        ->orderBy('id')
+			        ->chunk(500, function ($quotes) use (&$models) {
+			            foreach ($quotes as $quote) {
 			                $models->push((object)[
-			                    'inventory' => $inv,
+			                    'inventory' => null,
 			                    'quote' => $quote,
 			                ]);
-
 			            }
-
-			        } else {
-
-			            $models->push((object)[
-			                'inventory' => $inv,
-			                'quote' => null,
-			            ]);
-
-			        }
-
-			    }
-
-
-
-			    /** PRESUPUESTOS SIN INVENTARIO **/
-
-			    foreach ($quotesWithoutInventory as $quote) {
-
-			        $models->push((object)[
-			            'inventory' => null,
-			            'quote' => $quote,
-			        ]);
-
-			    }
-
-
-
+			        });
+			        
+			    /** EXPORT */
 			    return \Excel::download(
 			        new OrdersExport(
 			            'operations.output_quotes.export_excel',
 			            $models
 			        ),
-			        'inventarios_presupuestos_'.date("Ymd_His").'.xlsx'
+			        'inventarios_presupuestos_' . date("Ymd_His") . '.xlsx'
 			    );
-	        }
+	        // }
 		}
 		return view('partials.filter',compact('models', 'filter', 'sellers', 'locals'));
 	}
