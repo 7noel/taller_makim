@@ -18,7 +18,7 @@
 <th><strong>Estado</strong></th>
 <th><strong>Presupuesto</strong></th>
 <th><strong>Fecha Presupuesto</strong></th>
-<th><strong>Importe Presupuesto</strong></th>
+<th><strong>Importe Presupuesto (Sin igv)</strong></th>
 <th><strong>Fecha Aprobación</strong></th>
 <th><strong>Siniestro</strong></th>
 <!-- <th><strong>Estado Presupuesto</strong></th> -->
@@ -103,7 +103,7 @@ if ($status=='APROB') {
 <td>
     @if($quote)
         {{ config('options.table_sunat.moneda_sunat.'.$quote->currency_id) }}
-        {{ optional($quote)->total }}
+        {{ optional($quote)->subtotal }}
     @endif
 </td>
 
