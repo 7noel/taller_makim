@@ -36,4 +36,10 @@ class Car extends Model implements Auditable
 	{
 		return $this->belongsto('App\Modules\Operations\Brand');
 	}
+    public function inventories() {
+        return $this->hasMany('App\Modules\Operations\Order', 'car_id')->where('order_type','inventory');
+    }
+    public function quotes() {
+        return $this->hasMany('App\Modules\Operations\Order', 'car_id')->where('order_type','output_quotes');
+    }
 }

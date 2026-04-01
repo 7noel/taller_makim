@@ -47,6 +47,12 @@ class Company extends Model implements Auditable {
 	{
 		return $this->hasMany('App\Modules\Operations\Car', 'company_id');
 	}
+    public function inventories() {
+        return $this->hasMany('App\Modules\Operations\Order', 'company_id')->where('order_type','inventory');
+    }
+    public function quotes() {
+        return $this->hasMany('App\Modules\Operations\Order', 'company_id')->where('order_type','output_quotes');
+    }
 	public function scopeName($query, $name){
 		if (trim($name) != "") {
 			// $query->where(function ($q) use ($a,$b) {

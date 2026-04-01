@@ -398,56 +398,32 @@ $faviconType = @mime_content_type($faviconPath) ?: 'image/png';
                 </div>
             </div>
         </nav>
-<div class="modal fade" 
-     id="sessionExpiredModal" 
-     tabindex="-1" 
-     role="dialog" 
-     aria-labelledby="sessionExpiredLabel" 
-     aria-hidden="true"
-     data-backdrop="static"
-     data-keyboard="false">
-
-    <div class="modal-dialog modal-dialog-centered" role="document">
-
-        <div class="modal-content">
-
-            <div class="modal-header bg-warning text-dark">
-
-                <h5 class="modal-title" id="sessionExpiredLabel">
-                    Sesión expirada
-                </h5>
-
+        <div class="modal fade" id="sessionExpiredModal" tabindex="-1" role="dialog" aria-labelledby="sessionExpiredLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning text-dark">
+                        <h5 class="modal-title" id="sessionExpiredLabel">
+                            Sesión expirada
+                        </h5>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p class="mb-2">
+                            Tu sesión ha caducado.
+                        </p>
+                        <p class="mb-0">
+                            Serás redirigido al login en unos segundos...
+                        </p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button"
+                                class="btn btn-primary"
+                                onclick="window.location.href='{{ route('login') }}'">
+                            Ir al login ahora
+                        </button>
+                    </div>
+                </div>
             </div>
-
-            <div class="modal-body text-center">
-
-                <p class="mb-2">
-                    Tu sesión ha caducado.
-                </p>
-
-                <p class="mb-0">
-                    Serás redirigido al login en unos segundos...
-                </p>
-
-            </div>
-
-            <div class="modal-footer justify-content-center">
-
-                <button type="button"
-                        class="btn btn-primary"
-                        onclick="window.location.href='{{ route('login') }}'">
-
-                    Ir al login ahora
-
-                </button>
-
-            </div>
-
         </div>
-
-    </div>
-
-</div>
         <script> // variables globales
             let $wrap = $('#clientModal');
             let $btn = $('#btn-crear-cliente');
@@ -457,6 +433,18 @@ $faviconType = @mime_content_type($faviconPath) ?: 'image/png';
         </main>
     </div>
     <script>
+$(document).ready(function () {
+    setTimeout(function () {
+        $('.alert-auto-hide').fadeOut('slow');
+    }, 5000); // 5000 ms = 5 segundos
+});
+
+$(document).on('click', '.btn-delete', function(e) {
+    if (!confirm('¿Seguro que deseas eliminar este registro?')) {
+        e.preventDefault();
+    }
+});
+
 var userLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
 
 function checkSession() {
@@ -889,7 +877,7 @@ $(document).ready(function () {
         var data = form.serializeArray();
         // row.fadeOut();
 
-        if (!confirm(`Seguro que desea anular ${tipo} ?`)) {
+        if (!confirm(`Seguro que desea anular el ${tipo} ?`)) {
             e.preventDefault();
             return false;
         }

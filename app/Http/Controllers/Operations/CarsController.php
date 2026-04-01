@@ -200,9 +200,42 @@ class CarsController extends Controller {
 
 	public function destroy($id)
 	{
-		$model = $this->repo->destroy($id);
-		if (request()->ajax()) {	return $model; }
-		return redirect()->route('cars.index');
+	    $model = $this->repo->findOrFail($id);
+	    // Verificar inventarios
+	    if ($model->inventories()->exists()) {
+	        if (request()->ajax()) {
+	            return response()->json([
+	                'status' => 'error',
+	                'message' => 'No se puede eliminar el vehículo porque tiene inventarios registrados.'
+	            ]);
+	        }
+	        return redirect()
+	            ->back()
+	            ->with('error', 'No se puede eliminar el vehículo porque tiene inventarios registrados.');
+	    }
+	    // Verificar presupuestos
+	    if ($model->quotes()->exists()) {
+	        if (request()->ajax()) {
+	            return response()->json([
+	                'status' => 'error',
+	                'message' => 'No se puede eliminar el vehículo porque tiene presupuestos registrados.'
+	            ]);
+	        }
+	        return redirect()
+	            ->back()
+	            ->with('error', 'No se puede eliminar el vehículo porque tiene presupuestos registrados.');
+	    }
+	    // Si no tiene registros relacionados → eliminar
+	    $model->delete();
+	    if (request()->ajax()) {
+	        return response()->json([
+	            'status' => 'success',
+	            'message' => 'Vehículo eliminado correctamente.'
+	        ]);
+	    }
+	    return redirect()
+	        ->route('cars.index')
+	        ->with('message', 'Vehículo eliminado correctamente.');
 	}
 
 	public function modelosByWarehouse($warehouse_id)

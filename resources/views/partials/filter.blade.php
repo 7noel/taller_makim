@@ -6,6 +6,11 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
+				@if (Session::has('message'))
+					<p class="alert alert-success alert-auto-hide">{{ Session::get('message') }}</p>
+				@elseif (Session::has('error'))
+					<p class="alert alert-danger alert-auto-hide">{{ Session::get('error') }}</p>
+				@endif
 				<div class="{{ config('options.styles.card_header') }}">CONSULTAR {{ strtoupper($labels['index']) }}
 				</div>
 				<div class="card-body">

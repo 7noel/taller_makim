@@ -5,6 +5,9 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
+				@if(Session::has('error'))
+					<p class="alert alert-success">{{ Session::get('message') }}</p>
+				@endif
 				<h5 class="{{ config('options.styles.card_header') }}"> {{ $labels['edit'] }}
 				</h5>
 				<div class="card-body padding-0">

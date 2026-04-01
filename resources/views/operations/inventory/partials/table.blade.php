@@ -25,7 +25,7 @@
 			$clase = 'badge badge-info';
 		}
 		@endphp
-		<tr data-id="{{ $model->id }}" data-tipo="OT">
+		<tr data-id="{{ $model->id }}" data-tipo="Inventario Vehicular">
 			<td class="text-center">{{ $model->sn }}</td>
 			<td class="text-center">{{ $model->created_at->format('d/m/Y') }}</td>
 			<td class="text-center">{{ $model->created_at->format('H:i:s') }}</td>

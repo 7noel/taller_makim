@@ -5,8 +5,10 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
-				@if(Session::has('message'))
-					<p class="alert alert-success">{{ Session::get('message') }}</p>
+				@if (Session::has('message'))
+					<p class="alert alert-success alert-auto-hide">{{ Session::get('message') }}</p>
+				@elseif (Session::has('error'))
+					<p class="alert alert-danger alert-auto-hide">{{ Session::get('error') }}</p>
 				@endif
 				<h5 class="{{ config('options.styles.card_header') }}">
 					{{ $labels['index'] }}

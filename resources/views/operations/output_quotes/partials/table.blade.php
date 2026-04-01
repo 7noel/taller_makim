@@ -27,7 +27,7 @@
 			$clase = 'badge badge-info';
 		}
 		@endphp
-		<tr data-id="{{ $model->id }}" data-tipo="COT">
+		<tr data-id="{{ $model->id }}" data-tipo="Presupuesto">
 			@if($model->is_walk_in and !isset($model->inventario))
 			<td class="text-center walk-in-cell" title="TRANSITO" style="white-space: nowrap;">
 			@else
