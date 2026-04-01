@@ -398,6 +398,56 @@ $faviconType = @mime_content_type($faviconPath) ?: 'image/png';
                 </div>
             </div>
         </nav>
+<div class="modal fade" 
+     id="sessionExpiredModal" 
+     tabindex="-1" 
+     role="dialog" 
+     aria-labelledby="sessionExpiredLabel" 
+     aria-hidden="true"
+     data-backdrop="static"
+     data-keyboard="false">
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-warning text-dark">
+
+                <h5 class="modal-title" id="sessionExpiredLabel">
+                    Sesión expirada
+                </h5>
+
+            </div>
+
+            <div class="modal-body text-center">
+
+                <p class="mb-2">
+                    Tu sesión ha caducado.
+                </p>
+
+                <p class="mb-0">
+                    Serás redirigido al login en unos segundos...
+                </p>
+
+            </div>
+
+            <div class="modal-footer justify-content-center">
+
+                <button type="button"
+                        class="btn btn-primary"
+                        onclick="window.location.href='{{ route('login') }}'">
+
+                    Ir al login ahora
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
         <script> // variables globales
             let $wrap = $('#clientModal');
             let $btn = $('#btn-crear-cliente');
@@ -407,36 +457,34 @@ $faviconType = @mime_content_type($faviconPath) ?: 'image/png';
         </main>
     </div>
     <script>
-setInterval(function () {
+var userLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
 
-    $.ajax({
-        url: "{{ route('keep.alive') }}",
+function checkSession() {
+    if (!userLoggedIn) return;
+    return $.ajax({
+        url: "{{ route('session.check') }}",
         type: "GET",
         cache: false
+    })
+    .done(function (data) {
+        if (!data.active) {
+            $('#sessionExpiredModal').modal('show');
+            setTimeout(function () {
+                window.location.href = "{{ route('login') }}";
+            }, 5000);
+        }
     });
+}
 
-}, 300000); // cada 5 minutos
+setInterval(function () {
+    checkSession();
+}, 300000);
 
-// setInterval(function () {
-
-//     $.get('/csrf-token', function (data) {
-
-//         // actualizar meta
-//         $('meta[name="csrf-token"]').attr('content', data.token);
-
-//         // actualizar header AJAX
-//         $.ajaxSetup({
-//             headers: {
-//                 'X-CSRF-TOKEN': data.token
-//             }
-//         });
-
-//         // actualizar TODOS los formularios
-//         $('input[name="_token"]').val(data.token);
-
-//     });
-
-// }, 60000); // cada 10 minutos
+document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) {
+        checkSession();
+    }
+});
 
 $(function () {
   // Bloquea reenvíos múltiples
@@ -564,7 +612,7 @@ $(document).ready(function () {
         }
         // else if (reRegular.test(nuevoValor) || reEstado.test(nuevoValor)) {
         else if (reRegular.test(nuevoValor)) {
-            Válidas al 100%
+           // Válidas al 100%
            $input[0].setCustomValidity("");
            $input.removeClass('is-warning');
         }
