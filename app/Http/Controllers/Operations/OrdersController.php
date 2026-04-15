@@ -837,7 +837,18 @@ class OrdersController extends Controller {
 
 	public function controlcalidad_edit($id)
 	{
-		dd('controlcalidad_edit');
+		$model = $this->repo->findOrFail($id);
+		return view('operations.inventory.control', compact('model'));
+	}
+	public function controlcalidad_update($id)
+	{
+		$data = request()->all();
+		$model = $this->repo->findOrFail($id);
+		$model->control_calidad = $data['control_calidad'];
+		$model->save();
+
+		return redirect()->route('qc.edit', $id);
+		// dd($data);
 	}
 
 	public function entrega_edit($id)

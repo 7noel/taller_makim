@@ -42,11 +42,6 @@ Route::get('/refresh-csrf', function () {
     return response()->json(['token' => csrf_token()]);
 })->name('refresh.csrf');
 
-// Route::get('/csrf-token', function () {
-//     return response()->json([
-//         'token' => csrf_token()
-//     ]);
-// });
 
 // Route::get('cambio1/{y}/{m}', function ($y, $m) {
 // 	$last_tc = Exchange::orderBy('fecha', 'desc')->first();
@@ -240,6 +235,7 @@ Route::group(['prefix'=>'operations', 'middleware'=>['auth', 'permissions'], 'na
 	Route::get('reparacion/{id}', ['as' => 'repair.edit', 'uses' => 'OrdersController@repair_edit']);
 	Route::put('repair_update/{id}', ['as' => 'repair.update', 'uses' => 'OrdersController@repair_update']);
 	Route::get('controlcalidad/{id}', ['as' => 'qc.edit', 'uses' => 'OrdersController@controlcalidad_edit']);
+	Route::put('controlcalidad_update/{id}', ['as' => 'qc.update', 'uses' => 'OrdersController@controlcalidad_update']);
 	Route::get('entrega/{id}', ['as' => 'entrega.edit', 'uses' => 'OrdersController@entrega_edit']);
 	Route::get('change_status_order/{id}', ['as' => 'change_status_order', 'uses' => 'OrdersController@changeStatusOrder']);
 	Route::put('update_status/{id}', ['as' => 'update_status_order', 'uses' => 'OrdersController@updateStatus']);
