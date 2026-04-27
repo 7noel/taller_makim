@@ -44,6 +44,7 @@ class CreateOrderDetailsTable extends Migration
             $table->dateTime('received_at')->nullable();
             $table->dateTime('delivered_at')->nullable();
             $table->json('data')->nullable();
+            $table->bigInteger('my_company')->unsigned();
 
             $table->foreign('my_company')->references('id')->on('companies');
             $table->foreign('order_id')->references('id')->on('orders');
