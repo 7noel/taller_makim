@@ -621,6 +621,17 @@ class OrdersController extends Controller {
 	public function updateStatus($id)
 	{
 		$data = request()->all();
+array:9 [
+  "_method" => "PUT"
+  "_token" => "Tai03fo08FoGtazVdBJI8Li6vchzol3QfJNk2pDd"
+  "last_page" => "http://taller_makim.test/operations/panel"
+  "action" => ""
+  "placa" => "CDJ046"
+  "brand" => "CITROEN"
+  "modelo" => "C4"
+  "company" => "ESTRELLA MESTANZA CHRISTIAN DAMIAN"
+  "status" => "ENTR"
+]
 		// dd($data['status']);
 		if (isset($data['action']) and $data['action'] == 'cliente') {
 			$mensaje['DIAG'][0] = 'Lamentamos que no estés de acuerdo con tu orden de trabajo, ahora tu asesor encargado se comunicará contigo, recuerda que estamos para servirte';
