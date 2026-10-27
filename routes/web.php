@@ -20,7 +20,7 @@ Route::get('demo3', function () {
 	return view('demo3');});
 
 Route::get('demo2', function () {
-	return view('demo2');
+	return view('checklist');
 });
 Route::get('prueba', 'HomeController@prueba');
 Route::get('/', 'HomeController@index');
